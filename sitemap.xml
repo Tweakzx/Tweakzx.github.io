@@ -3,15 +3,26 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>http://tweakzx.github.io/categories/</loc>
+    <loc>https://tweakzx.github.io/posts/first-post/</loc>
+    <lastmod>2021-01-05T20:57:59+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://tweakzx.github.io/</loc>
+    <loc>https://tweakzx.github.io/</loc>
+    <lastmod>2021-01-05T20:57:59+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://tweakzx.github.io/tags/</loc>
+    <loc>https://tweakzx.github.io/posts/</loc>
+    <lastmod>2021-01-05T20:57:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tweakzx.github.io/categories/</loc>
+  </url>
+  
+  <url>
+    <loc>https://tweakzx.github.io/tags/</loc>
   </url>
   
 </urlset>
