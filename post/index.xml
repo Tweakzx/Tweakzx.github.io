@@ -17,21 +17,21 @@
     </item>
     
     <item>
+      <title>First</title>
+      <link>https://tweakzx.github.io/p/first/</link>
+      <pubDate>Fri, 08 Mar 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://tweakzx.github.io/p/first/</guid>
+      <description>Hello World </description>
+    </item>
+    
+    <item>
       <title>Math Typesetting</title>
       <link>https://tweakzx.github.io/p/math-typesetting/</link>
       <pubDate>Fri, 08 Mar 2019 00:00:00 +0000</pubDate>
       
       <guid>https://tweakzx.github.io/p/math-typesetting/</guid>
       <description>&lt;p&gt;Mathematical notation in a Hugo project can be enabled by using third party JavaScript libraries.&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title></title>
-      <link>https://tweakzx.github.io/p/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://tweakzx.github.io/p/</guid>
-      <description>Hello World </description>
     </item>
     
   </channel>

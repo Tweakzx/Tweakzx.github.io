@@ -154,6 +154,15 @@
 &lt;/section&gt;</description>
         </item>
         <item>
+        <title>First</title>
+        <link>https://tweakzx.github.io/p/first/</link>
+        <pubDate>Fri, 08 Mar 2019 00:00:00 +0000</pubDate>
+        
+        <guid>https://tweakzx.github.io/p/first/</guid>
+        <description>&lt;h3 id=&#34;hello-world&#34;&gt;Hello World&lt;/h3&gt;
+</description>
+        </item>
+        <item>
         <title>Math Typesetting</title>
         <link>https://tweakzx.github.io/p/math-typesetting/</link>
         <pubDate>Fri, 08 Mar 2019 00:00:00 +0000</pubDate>
@@ -184,15 +193,6 @@
 $$
 \varphi = 1+\frac{1} {1+\frac{1} {1+\frac{1} {1+\cdots} } }
 $$&lt;/p&gt;</description>
-        </item>
-        <item>
-        <title></title>
-        <link>https://tweakzx.github.io/p/</link>
-        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-        
-        <guid>https://tweakzx.github.io/p/</guid>
-        <description>&lt;h3 id=&#34;hello-world&#34;&gt;Hello World&lt;/h3&gt;
-</description>
         </item>
         
     </channel>
