@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='记录自己的字节面试失败过程'><title>字节实习面试凉经</title>
+
+<link rel='canonical' href='https://tweakzx.github.io/p/%E5%AD%97%E8%8A%82%E5%AE%9E%E4%B9%A0%E9%9D%A2%E8%AF%95%E5%87%89%E7%BB%8F/'>
+
+<link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='字节实习面试凉经'>
+<meta property='og:description' content='记录自己的字节面试失败过程'>
+<meta property='og:url' content='https://tweakzx.github.io/p/%E5%AD%97%E8%8A%82%E5%AE%9E%E4%B9%A0%E9%9D%A2%E8%AF%95%E5%87%89%E7%BB%8F/'>
+<meta property='og:site_name' content='Tweakzx'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='“面试”' /><meta property='article:tag' content='“字节跳动”' /><meta property='article:published_time' content='2021-11-29T16:52:26&#43;08:00'/><meta property='article:modified_time' content='2021-11-29T16:52:26&#43;08:00'/><meta property='og:image' content='https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/bytedance.jpg' />
+<meta name="twitter:title" content="字节实习面试凉经">
+<meta name="twitter:description" content="记录自己的字节面试失败过程"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/bytedance.jpg' />
+    </head>
+    <body class="">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.body.dataset.scheme = 'dark';
+        } else {
+            document.body.dataset.scheme = 'light';
+        }
+    })();
+</script><div class="container main-container flex on-phone--column extended article-page with-toolbar">
+            <aside class="sidebar left-sidebar sticky">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header class="site-info">
+        
+            <figure class="site-avatar">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hub9031624c18173d1bd8c36bc90463120_68275_300x0_resize_box_2.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+
+                
+                    <span class="emoji">🎈</span>
+                
+            </figure>
+        
+        <h1 class="site-name"><a href="https://tweakzx.github.io/">Tweakzx</a></h1>
+        <h2 class="site-description">简而言之  一个废物</h2>
+    </header>
+
+    <ol class="menu" id="main-menu">
+        
+        
+        
+
+        <li >
+            <a href='/'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>Home</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/about'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>About</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/archives'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>Archives</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/search'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>Search</span>
+            </a>
+        </li>
+        
+
+        
+            <li id="dark-mode-toggle">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                <span>Dark Mode</span>
+            </li>
+        
+    </ol>
+</aside>
+
+            <main class="main full-width">
+    <div id="article-toolbar">
+        <a href="https://tweakzx.github.io/" class="back-home">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="15 6 9 12 15 18" />
+</svg>
+
+
+
+            <span>Back</span>
+        </a>
+    </div>
+
+    <article class="has-image main-article">
+    <header class="article-header">
+        <div class="article-image">
+            <a href="/p/%E5%AD%97%E8%8A%82%E5%AE%9E%E4%B9%A0%E9%9D%A2%E8%AF%95%E5%87%89%E7%BB%8F/">
+                
+                    <img src="https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/bytedance.jpg" loading="lazy" alt="Featured image of post 字节实习面试凉经" />
+                
+            </a>
+        </div>
+    
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/%E9%9D%A2%E8%AF%95/" >
+                “面试”
+            </a>
+        
+    </header>
+    
+
+    <h2 class="article-title">
+        <a href="/p/%E5%AD%97%E8%8A%82%E5%AE%9E%E4%B9%A0%E9%9D%A2%E8%AF%95%E5%87%89%E7%BB%8F/">字节实习面试凉经</a>
+    </h2>
+
+    
+    <h3 class="article-subtitle">
+        记录自己的字节面试失败过程
+    </h3>
+    <footer class="article-time">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+        <time class="article-time--published">Nov 29, 2021</time>
+    </footer></div>
+</header>
+
+    <section class="article-content">
+    <blockquote>
+<p>时间：2021-11-29下午三点</p>
+<p>方式：飞书视频面试</p>
+<p>岗位：后端开发实习生-业务中台职位</p>
+</blockquote>
+<h2 id="1-为什么会投递字节实习">1. 为什么会投递字节实习</h2>
+<p>​		因为中科院的研究所大多不让实习，研二想去实习是一定不行的。但是研一在雁栖湖，课题组在海淀，我研一基本不参与科研，所以想要趁没人管的时候出去实习。因为将来大概率是做软开，所以想找一份后端开发的工作。在校友群里问了一下，有学长给了一个内推的机会，所以就有了这次一面。</p>
+<h2 id="2-面试过程">2. 面试过程</h2>
+<p>​		面试官上来让我做了自我介绍之后就让我写代码做题。</p>
+<blockquote>
+<p>题目一：链表1-&gt;2-&gt;3-&gt;4-&gt;5-&gt;6 转变成 链表1-&gt;6-&gt;2-&gt;5-&gt;3-&gt;4</p>
+<p>大概意思就是将链表平分成两部分，前一部分顺序不变，后一部分反转后插空插入前一部分链表。</p>
+</blockquote>
+<p>​		说实话，自己的代码能力确实有点差，原本打算使用c++来写后来改成了Java，因为我想起Java里有LinkedList这个数据结构。理由有点荒诞哈，其实是我没有意识到要自己定义节点来实现链表，所以在想要写指针的时候就卡住了，完全不知道怎么给LinkedList的链表写指针。然后就尬住了，面试官无奈说那就换一道吧。</p>
+<blockquote>
+<p>题目二：判断一个二叉树是否是平衡树</p>
+</blockquote>
+<p>​		题目不是很难，但是自己太久不写代码有些生疏了，写出来的程序不知道为什么没有编译通过。说实话，面试官让我自己实现一个单例来测试程序，其中爆出的各种错误，无一不揭示了我完全没有什么开发经验的事实，例如内部类放错了位置，static的编译问题，还有一个空指针异常。无疑是再次尬死了。</p>
+<p>​		之后面试官让我讲一讲自己的项目经历，主要问了一下大三在华为的实习。可惜自己虽然实习了，但实际的工作很少，含金量也不高，面试官兴趣不大。</p>
+<p>​		之后就是问我有没有什么想问他的，我已经不想说话了，就没问。</p>
+<p>​		草草结束。</p>
+<h2 id="3-总结">3. 总结</h2>
+<h3 id="31-首先还是把这两道题的代码写写吧">3.1 首先还是把这两道题的代码写写吧</h3>
+<h4 id="311-题目一">3.1.1 题目一</h4>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java">
+
+</code></pre></div><h4 id="312-题目二">3.1.2 题目二</h4>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java">
+
+</code></pre></div><h3 id="32-一些知识点">3.2 一些知识点</h3>
+<ul>
+<li>
+<p>java内部类：</p>
+<p>​</p>
+</li>
+<li>
+<p>java的static关键字</p>
+</li>
+</ul>
+<h3 id="33-反思">3.3 反思</h3>
+<ul>
+<li>自己还是缺乏代码经验，代码写不出来，面试官明显十分失望，失去耐心之后多次叹气捂脸，说实话压力还是挺大的，毕竟确实挺丢脸的。以后也要多写一点代码。</li>
+<li>打算把自己的学习总结下来，于是也有了这篇博客，希望自己可以坚持写博客，说实话，面试完压力挺大，感觉自己就是一个无敌铁废物，写博客写出来感觉好一些了。</li>
+</ul>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/%E9%9D%A2%E8%AF%95/">“面试”</a>
+        
+            <a href="/tags/%E5%AD%97%E8%8A%82%E8%B7%B3%E5%8A%A8/">“字节跳动”</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+    
+</article>
+
+    <aside class="related-contents--wrapper">
+    
+    
+</aside>
+
+
+    
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "hugo-theme-stack" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (DISQUS) {
+            DISQUS.reset({
+                reload: true
+            });
+        }
+    })
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2021 Tweakzx
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="2.0.1">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css">
+            </main>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"
+    integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g=" crossorigin="anonymous"></script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>
