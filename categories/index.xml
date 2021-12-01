@@ -2,26 +2,26 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Categories on Tweakzx</title>
-    <link>/categories/</link>
+    <link>https://tweakzx.github.io/categories/</link>
     <description>Recent content in Categories on Tweakzx</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 01 Dec 2021 20:56:54 +0800</lastBuildDate><atom:link href="/categories/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 01 Dec 2021 20:56:54 +0800</lastBuildDate><atom:link href="https://tweakzx.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>“面试”</title>
-      <link>/categories/%E9%9D%A2%E8%AF%95/</link>
+      <link>https://tweakzx.github.io/categories/%E9%9D%A2%E8%AF%95/</link>
       <pubDate>Wed, 01 Dec 2021 20:56:54 +0800</pubDate>
       
-      <guid>/categories/%E9%9D%A2%E8%AF%95/</guid>
+      <guid>https://tweakzx.github.io/categories/%E9%9D%A2%E8%AF%95/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Test</title>
-      <link>/categories/test/</link>
+      <link>https://tweakzx.github.io/categories/test/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>/categories/test/</guid>
+      <guid>https://tweakzx.github.io/categories/test/</guid>
       <description></description>
     </item>
     
