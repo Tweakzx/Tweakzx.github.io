@@ -2,9 +2,9 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Test on Tweakzx</title>
-    <link>https://tweakzx.github.io/categories/test/</link>
+    <link>/categories/test/</link>
     <description>Recent content in Test on Tweakzx</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language><atom:link href="https://tweakzx.github.io/categories/test/index.xml" rel="self" type="application/rss+xml" />
+    <language>en-us</language><atom:link href="/categories/test/index.xml" rel="self" type="application/rss+xml" />
   </channel>
 </rss>
