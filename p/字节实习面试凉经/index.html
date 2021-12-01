@@ -250,19 +250,176 @@
 <h2 id="3-总结">3. 总结</h2>
 <h3 id="31-首先还是把这两道题的代码写写吧">3.1 首先还是把这两道题的代码写写吧</h3>
 <h4 id="311-题目一">3.1.1 题目一</h4>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java">
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="cm">/**
+</span><span class="cm"> * @author lizhixuan
+</span><span class="cm"> * @version 1.0
+</span><span class="cm"> * @date 2021/12/1 15:50
+</span><span class="cm"> */</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ReverseList2</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">ListNode</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">val</span><span class="o">;</span>
+        <span class="n">ListNode</span> <span class="n">next</span><span class="o">;</span>
+        <span class="n">ListNode</span><span class="o">()</span> <span class="o">{}</span>
+        <span class="n">ListNode</span><span class="o">(</span><span class="kt">int</span> <span class="n">val</span><span class="o">)</span> <span class="o">{</span> <span class="k">this</span><span class="o">.</span><span class="na">val</span> <span class="o">=</span> <span class="n">val</span><span class="o">;</span> <span class="o">}</span>
+        <span class="n">ListNode</span><span class="o">(</span><span class="kt">int</span> <span class="n">val</span><span class="o">,</span> <span class="n">ListNode</span> <span class="n">next</span><span class="o">)</span> <span class="o">{</span> <span class="k">this</span><span class="o">.</span><span class="na">val</span> <span class="o">=</span> <span class="n">val</span><span class="o">;</span> <span class="k">this</span><span class="o">.</span><span class="na">next</span> <span class="o">=</span> <span class="n">next</span><span class="o">;</span> <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="n">ListNode</span> <span class="nf">createInstance</span><span class="o">(</span><span class="kt">int</span> <span class="n">n</span><span class="o">){</span>
+        <span class="n">ListNode</span> <span class="n">head</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ListNode</span><span class="o">(</span><span class="n">1</span><span class="o">);</span>
+        <span class="n">ListNode</span> <span class="n">current</span> <span class="o">=</span> <span class="n">head</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">2</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="n">current</span><span class="o">.</span><span class="na">next</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ListNode</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
+            <span class="n">current</span> <span class="o">=</span> <span class="n">current</span><span class="o">.</span><span class="na">next</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">head</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">printList</span><span class="o">(</span><span class="n">ListNode</span> <span class="n">head</span><span class="o">){</span>
+        <span class="n">ListNode</span> <span class="n">current</span> <span class="o">=</span> <span class="n">head</span><span class="o">;</span>
+        <span class="k">while</span><span class="o">(</span><span class="n">current</span><span class="o">.</span><span class="na">next</span><span class="o">!=</span><span class="kc">null</span><span class="o">){</span>
+            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="n">current</span><span class="o">.</span><span class="na">val</span><span class="o">);</span>
+            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="s">&#34;-&gt;&#34;</span><span class="o">);</span>
+            <span class="n">current</span> <span class="o">=</span> <span class="n">current</span><span class="o">.</span><span class="na">next</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">current</span><span class="o">.</span><span class="na">val</span><span class="o">);</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="n">ListNode</span> <span class="nf">reverse</span><span class="o">(</span><span class="n">ListNode</span> <span class="n">head</span><span class="o">){</span>
+        <span class="n">ListNode</span> <span class="n">pre</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+        <span class="n">ListNode</span> <span class="n">current</span> <span class="o">=</span> <span class="n">head</span><span class="o">;</span>
+        <span class="n">ListNode</span> <span class="n">next</span><span class="o">;</span>
+        <span class="k">while</span><span class="o">(</span><span class="n">current</span><span class="o">!=</span><span class="kc">null</span><span class="o">){</span>
+            <span class="n">next</span> <span class="o">=</span> <span class="n">current</span><span class="o">.</span><span class="na">next</span><span class="o">;</span>
+            <span class="n">current</span><span class="o">.</span><span class="na">next</span> <span class="o">=</span> <span class="n">pre</span><span class="o">;</span>
+            <span class="n">pre</span> <span class="o">=</span> <span class="n">current</span><span class="o">;</span>
+            <span class="n">current</span> <span class="o">=</span> <span class="n">next</span><span class="o">;</span>
+        <span class="o">}</span>
+       <span class="k">return</span> <span class="n">pre</span><span class="o">;</span>
+    <span class="o">}</span>
 
+    <span class="kd">public</span> <span class="kd">static</span> <span class="n">ListNode</span> <span class="nf">mergeList</span><span class="o">(</span><span class="n">ListNode</span> <span class="n">l1</span><span class="o">,</span><span class="n">ListNode</span> <span class="n">l2</span><span class="o">){</span>
+        <span class="n">ListNode</span> <span class="n">head</span> <span class="o">=</span> <span class="n">l1</span><span class="o">;</span>
+        <span class="n">ListNode</span> <span class="n">l1Next</span><span class="o">;</span>
+        <span class="n">ListNode</span> <span class="n">l2Next</span><span class="o">;</span>
+        <span class="k">while</span><span class="o">(</span><span class="n">l1</span><span class="o">!=</span><span class="kc">null</span><span class="o">&amp;&amp;</span><span class="n">l2</span><span class="o">!=</span><span class="kc">null</span><span class="o">){</span>
+            <span class="n">l1Next</span> <span class="o">=</span> <span class="n">l1</span><span class="o">.</span><span class="na">next</span><span class="o">;</span>
+            <span class="n">l2Next</span> <span class="o">=</span> <span class="n">l2</span><span class="o">.</span><span class="na">next</span><span class="o">;</span>
+
+            <span class="n">l1</span><span class="o">.</span><span class="na">next</span> <span class="o">=</span> <span class="n">l2</span><span class="o">;</span>
+            <span class="n">l2</span><span class="o">.</span><span class="na">next</span> <span class="o">=</span> <span class="n">l1Next</span><span class="o">;</span>
+
+            <span class="n">l1</span> <span class="o">=</span> <span class="n">l1Next</span><span class="o">;</span>
+            <span class="n">l2</span> <span class="o">=</span> <span class="n">l2Next</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">head</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="n">ListNode</span> <span class="nf">reverseHalf</span><span class="o">(</span><span class="n">ListNode</span> <span class="n">head</span><span class="o">){</span>
+        <span class="n">ListNode</span> <span class="n">fast</span> <span class="o">=</span> <span class="n">head</span><span class="o">;</span>
+        <span class="n">ListNode</span> <span class="n">slow</span> <span class="o">=</span> <span class="n">head</span><span class="o">;</span>
+        <span class="k">while</span><span class="o">(</span><span class="n">fast</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">){</span>
+            <span class="k">if</span><span class="o">(</span><span class="n">fast</span><span class="o">.</span><span class="na">next</span> <span class="o">==</span> <span class="kc">null</span><span class="o">){</span>
+                <span class="k">break</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="k">if</span><span class="o">(</span><span class="n">fast</span><span class="o">.</span><span class="na">next</span><span class="o">.</span><span class="na">next</span> <span class="o">==</span> <span class="kc">null</span><span class="o">){</span>
+                <span class="k">break</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="n">fast</span> <span class="o">=</span> <span class="n">fast</span><span class="o">.</span><span class="na">next</span><span class="o">.</span><span class="na">next</span><span class="o">;</span>
+            <span class="n">slow</span> <span class="o">=</span> <span class="n">slow</span><span class="o">.</span><span class="na">next</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="n">ListNode</span> <span class="n">half</span> <span class="o">=</span> <span class="n">reverse</span><span class="o">(</span><span class="n">slow</span><span class="o">.</span><span class="na">next</span><span class="o">);</span>
+        <span class="n">slow</span><span class="o">.</span><span class="na">next</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+
+        <span class="k">return</span> <span class="n">mergeList</span><span class="o">(</span><span class="n">head</span><span class="o">,</span><span class="n">half</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">ListNode</span> <span class="n">head</span> <span class="o">=</span> <span class="n">createInstance</span><span class="o">(</span><span class="n">7</span><span class="o">);</span>
+        <span class="n">printList</span><span class="o">(</span><span class="n">head</span><span class="o">);</span>
+        <span class="n">head</span> <span class="o">=</span> <span class="n">reverseHalf</span><span class="o">(</span><span class="n">head</span><span class="o">);</span>
+        <span class="n">printList</span><span class="o">(</span><span class="n">head</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
 </code></pre></div><h4 id="312-题目二">3.1.2 题目二</h4>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java">
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">import</span> <span class="nn">java.util.LinkedList</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Queue</span><span class="o">;</span>
 
+<span class="cm">/**
+</span><span class="cm"> * @author lizhixuan
+</span><span class="cm"> * @version 1.0
+</span><span class="cm"> * @date 2021/12/1 17:24
+</span><span class="cm"> */</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">BalanceCheck</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">TreeNode</span><span class="o">{</span>
+        <span class="kt">int</span> <span class="n">val</span><span class="o">;</span>
+        <span class="n">TreeNode</span> <span class="n">left</span><span class="o">;</span>
+        <span class="n">TreeNode</span> <span class="n">right</span><span class="o">;</span>
+        <span class="n">TreeNode</span><span class="o">(</span><span class="kt">int</span> <span class="n">val</span><span class="o">){</span><span class="k">this</span><span class="o">.</span><span class="na">val</span> <span class="o">=</span> <span class="n">val</span><span class="o">;}</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="n">TreeNode</span> <span class="nf">listToTree</span><span class="o">(</span><span class="n">String</span> <span class="n">src</span><span class="o">){</span>
+        <span class="n">src</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="na">substring</span><span class="o">(</span><span class="n">1</span><span class="o">,</span><span class="n">src</span><span class="o">.</span><span class="na">length</span><span class="o">()-</span><span class="n">1</span><span class="o">);</span>
+        <span class="n">String</span><span class="o">[]</span> <span class="n">strList</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="na">split</span><span class="o">(</span><span class="s">&#34;,&#34;</span><span class="o">);</span>
+
+        <span class="n">TreeNode</span> <span class="n">root</span>  <span class="o">;</span>
+        <span class="n">TreeNode</span> <span class="n">result</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+        <span class="n">Queue</span><span class="o">&lt;</span><span class="n">TreeNode</span><span class="o">&gt;</span> <span class="n">queue</span> <span class="o">=</span> <span class="k">new</span> <span class="n">LinkedList</span><span class="o">&lt;&gt;();</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span><span class="n">0</span> <span class="o">;</span> <span class="n">i</span><span class="o">&lt;</span> <span class="n">strList</span><span class="o">.</span><span class="na">length</span> <span class="o">;</span> <span class="n">i</span><span class="o">++){</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">i</span> <span class="o">==</span> <span class="n">0</span><span class="o">){</span>
+                <span class="n">root</span> <span class="o">=</span> <span class="k">new</span> <span class="n">TreeNode</span><span class="o">(</span><span class="n">Integer</span><span class="o">.</span><span class="na">parseInt</span><span class="o">(</span><span class="n">strList</span><span class="o">[</span><span class="n">i</span><span class="o">]));</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="n">root</span><span class="o">;</span>
+                <span class="n">queue</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">root</span><span class="o">);</span>
+            <span class="o">}</span>
+            <span class="k">if</span> <span class="o">(!</span><span class="n">queue</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">()){</span>
+                <span class="n">root</span> <span class="o">=</span> <span class="n">queue</span><span class="o">.</span><span class="na">poll</span><span class="o">();</span>
+            <span class="o">}</span><span class="k">else</span> <span class="o">{</span>
+                <span class="k">break</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="k">if</span> <span class="o">(</span> <span class="n">i</span><span class="o">+</span><span class="n">1</span> <span class="o">&lt;</span> <span class="n">strList</span><span class="o">.</span><span class="na">length</span>  <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">strList</span><span class="o">[</span><span class="n">i</span><span class="o">+</span><span class="n">1</span><span class="o">].</span><span class="na">equals</span><span class="o">(</span> <span class="s">&#34;null&#34;</span><span class="o">)){</span>
+                <span class="n">root</span><span class="o">.</span><span class="na">left</span> <span class="o">=</span> <span class="k">new</span> <span class="n">TreeNode</span><span class="o">(</span><span class="n">Integer</span><span class="o">.</span><span class="na">parseInt</span><span class="o">(</span><span class="n">strList</span><span class="o">[</span><span class="n">i</span> <span class="o">+</span><span class="n">1</span><span class="o">]));</span>
+                <span class="n">queue</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">left</span><span class="o">);</span>
+            <span class="o">}</span>
+            <span class="k">if</span> <span class="o">(</span> <span class="n">i</span> <span class="o">+</span> <span class="n">2</span> <span class="o">&lt;</span> <span class="n">strList</span><span class="o">.</span><span class="na">length</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">strList</span><span class="o">[</span><span class="n">i</span><span class="o">+</span><span class="n">2</span><span class="o">].</span><span class="na">equals</span><span class="o">(</span> <span class="s">&#34;null&#34;</span><span class="o">)){</span>
+                <span class="n">root</span><span class="o">.</span><span class="na">right</span> <span class="o">=</span> <span class="k">new</span> <span class="n">TreeNode</span><span class="o">(</span><span class="n">Integer</span><span class="o">.</span><span class="na">parseInt</span><span class="o">(</span><span class="n">strList</span><span class="o">[</span><span class="n">i</span> <span class="o">+</span><span class="n">2</span><span class="o">]));</span>
+                <span class="n">queue</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">right</span><span class="o">);</span>
+            <span class="o">}</span>
+            <span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span><span class="n">1</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">result</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">int</span> <span class="nf">getHeight</span><span class="o">(</span><span class="n">TreeNode</span> <span class="n">root</span><span class="o">){</span>
+        <span class="k">if</span><span class="o">(</span><span class="n">root</span><span class="o">==</span><span class="kc">null</span><span class="o">){</span>
+            <span class="k">return</span> <span class="n">0</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">getHeight</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">left</span><span class="o">),</span><span class="n">getHeight</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">right</span><span class="o">))+</span><span class="n">1</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">boolean</span> <span class="nf">isBalanced</span><span class="o">(</span><span class="n">TreeNode</span> <span class="n">root</span><span class="o">){</span>
+        <span class="k">if</span><span class="o">(</span><span class="n">root</span><span class="o">==</span><span class="kc">null</span><span class="o">){</span>
+            <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="kt">int</span> <span class="n">leftHeight</span> <span class="o">=</span> <span class="n">getHeight</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">left</span><span class="o">);</span>
+        <span class="kt">int</span> <span class="n">rightHeight</span> <span class="o">=</span> <span class="n">getHeight</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">right</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">Math</span><span class="o">.</span><span class="na">abs</span><span class="o">(</span><span class="n">leftHeight</span><span class="o">-</span><span class="n">rightHeight</span><span class="o">)&lt;=</span><span class="n">1</span> <span class="o">&amp;&amp;</span> <span class="n">isBalanced</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">left</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="n">isBalanced</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">right</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">String</span> <span class="n">tree</span> <span class="o">=</span> <span class="s">&#34;[3,9,20,null,null,15,7]&#34;</span><span class="o">;</span>
+        <span class="n">TreeNode</span> <span class="n">root</span> <span class="o">=</span> <span class="n">listToTree</span><span class="o">(</span><span class="n">tree</span><span class="o">);</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">isBalanced</span><span class="o">(</span><span class="n">root</span><span class="o">));</span>
+    <span class="o">}</span>
+<span class="o">}</span>
 </code></pre></div><h3 id="32-一些知识点">3.2 一些知识点</h3>
 <ul>
 <li>
 <p>java内部类：</p>
-<p>​</p>
+<ul>
+<li>成员内部类中不能存在任何static的变量和方法</li>
+<li>成员内部类是依附于外围类的，所以只有先创建了外围类才能够创建内部类</li>
+</ul>
 </li>
 <li>
 <p>java的static关键字</p>
+<ul>
+<li>static变量也称作静态变量，静态变量被所有的对象所共享，在内存中只有一个副本，它当且仅当在类初次加载时会被初始化。</li>
+<li>为什么说static块可以用来优化程序性能，是因为它的特性:只会在类加载的时候执行一次。</li>
+<li>在C/C++中static是可以作用域局部变量的，但是在Java中切记：static是不允许用来修饰局部变量。</li>
+</ul>
 </li>
 </ul>
 <h3 id="33-反思">3.3 反思</h3>
