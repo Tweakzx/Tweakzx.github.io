@@ -16,8 +16,8 @@
       <description>时间：2021-11-29下午三点
 方式：飞书视频面试
 岗位：后端开发实习生-业务中台职位
- 1. 为什么会投递字节实习 ​	因为中科院的研究所大多不让实习，研二想去实习是一定不行的。但是研一在雁栖湖，课题组在海淀，我研一基本不参与科研，所以想要趁没人管的时候出去实习。因为将来大概率是做软开，所以想找一份后端开发的工作。在校友群里问了一下，有学长给了一个内推的机会，所以就有了这次一面。
-2. 面试过程 ​	面试官上来让我做了自我介绍之后就让我写代码做题。
+ 为什么会投递字节实习 ​	因为中科院的研究所大多不让实习，研二想去实习是一定不行的。但是研一在雁栖湖，课题组在海淀，我研一基本不参与科研，所以想要趁没人管的时候出去实习。因为将来大概率是做软开，所以想找一份后端开发的工作。在校友群里问了一下，有学长给了一个内推的机会，所以就有了这次一面。
+面试过程 ​	面试官上来让我做了自我介绍之后就让我写代码做题。
  题目一：链表1-&amp;gt;2-&amp;gt;3-&amp;gt;4-&amp;gt;5-&amp;gt;6 转变成 链表1-&amp;gt;6-&amp;gt;2-&amp;gt;5-&amp;gt;3-&amp;gt;4
 大概意思就是将链表平分成两部分，前一部分顺序不变，后一部分反转后插空插入前一部分链表。
  ​	说实话，自己的代码能力确实有点差，原本打算使用c++来写后来改成了Java，因为我想起Java里有LinkedList这个数据结构。理由有点荒诞哈，其实是我没有意识到要自己定义节点来实现链表，所以在想要写指针的时候就卡住了，完全不知道怎么给LinkedList的链表写指针。然后就尬住了，面试官无奈说那就换一道吧。
@@ -26,7 +26,7 @@
 ​	之后面试官让我讲一讲自己的项目经历，主要问了一下大三在华为的实习。可惜自己虽然实习了，但实际的工作很少，含金量也不高，面试官兴趣不大。
 ​	之后就是问我有没有什么想问他的，我已经不想说话了，就没问。
 ​	草草结束。
-3. 总结 3.1 首先还是把这两道题的代码写写吧 3.1.1 题目一 /** * @author lizhixuan * @version 1.0 * @date 2021/12/1 15:50 */ public class ReverseList2 { public static class ListNode { int val; ListNode next; ListNode() {} ListNode(int val) { this.val = val; } ListNode(int val, ListNode next) { this.</description>
+总结 首先还是把这两道题的代码写写吧 题目一 /** * @author lizhixuan * @version 1.0 * @date 2021/12/1 15:50 */ public class ReverseList2 { public static class ListNode { int val; ListNode next; ListNode() {} ListNode(int val) { this.val = val; } ListNode(int val, ListNode next) { this.</description>
     </item>
     
   </channel>
