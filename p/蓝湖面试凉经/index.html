@@ -140,44 +140,42 @@
 <h2 id="面试的过程">面试的过程</h2>
 <p>面试官还是很温柔的，上来先让我做了一下自我介绍，我介绍了一下本科和硕士，以及一段实习经历，一段比赛经历。让说一下觉得最有有挑战性的工作？实习和比赛都很水，所以实话实说没啥亮点。</p>
 <p>算法题一道，写一下快排。当时代码没有跑起来，因为vscode好像更新了code runner的配置，所以没有跑起来，不过写的代码大概率全是bug，代码能力也是硬伤。</p>
-<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="cp">#include</span><span class="cpf">&lt;bits/stdc++.h&gt;</span><span class="cp">
-</span><span class="cp"></span>
-<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="kt">int</span> <span class="n">qsort</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">,</span><span class="kt">int</span> <span class="n">left</span><span class="p">,</span><span class="kt">int</span> <span class="n">right</span><span class="p">){</span>
+        <span class="kt">int</span> <span class="n">l</span> <span class="o">=</span> <span class="n">left</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">r</span> <span class="o">=</span> <span class="n">right</span><span class="p">;</span>
 
-<span class="kt">void</span> <span class="nf">swap</span><span class="p">(</span><span class="kt">int</span><span class="o">*</span> <span class="n">nums</span><span class="p">,</span> <span class="kt">int</span> <span class="n">l</span><span class="p">,</span><span class="kt">int</span> <span class="n">r</span><span class="p">){</span>
-    <span class="kt">int</span> <span class="n">temp</span> <span class="o">=</span> <span class="n">nums</span><span class="p">[</span><span class="n">l</span><span class="p">];</span>
-    <span class="n">nums</span><span class="p">[</span><span class="n">l</span><span class="p">]</span> <span class="o">=</span> <span class="n">nums</span><span class="p">[</span><span class="n">r</span><span class="p">];</span>
-    <span class="n">nums</span><span class="p">[</span><span class="n">r</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp</span><span class="p">;</span>
-<span class="p">}</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">l</span><span class="o">&gt;=</span><span class="n">r</span><span class="p">){</span>
+            <span class="k">return</span> <span class="n">l</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="kt">int</span> <span class="n">randNum</span> <span class="o">=</span> <span class="n">rand</span><span class="p">()</span><span class="o">%</span><span class="p">(</span><span class="n">r</span><span class="o">-</span><span class="n">l</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">+</span><span class="n">l</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">temp</span> <span class="o">=</span> <span class="n">nums</span><span class="p">[</span><span class="n">randNum</span><span class="p">];</span>
+        <span class="n">nums</span><span class="p">[</span><span class="n">randNum</span><span class="p">]</span> <span class="o">=</span> <span class="n">nums</span><span class="p">[</span><span class="n">l</span><span class="p">];</span>
+        <span class="n">nums</span><span class="p">[</span><span class="n">l</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp</span><span class="p">;</span>
 
-<span class="kt">void</span> <span class="nf">qsort</span><span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="n">nums</span><span class="p">,</span> <span class="kt">int</span> <span class="n">left</span><span class="p">,</span><span class="kt">int</span> <span class="n">right</span><span class="p">){</span>
-    <span class="kt">int</span> <span class="n">pivot</span> <span class="o">=</span> <span class="n">nums</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
-    <span class="kt">int</span> <span class="n">l</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
-    <span class="kt">int</span> <span class="n">r</span><span class="o">=</span><span class="n">right</span><span class="p">;</span>
-    <span class="k">while</span><span class="p">(</span><span class="n">l</span><span class="o">&lt;</span><span class="n">r</span><span class="p">){</span>
-        <span class="k">while</span><span class="p">(</span><span class="n">nums</span><span class="p">[</span><span class="n">l</span><span class="p">]</span><span class="o">&lt;</span><span class="n">pivot</span><span class="p">){</span>
-            <span class="n">l</span><span class="o">++</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">pivot</span> <span class="o">=</span> <span class="n">nums</span><span class="p">[</span><span class="n">l</span><span class="p">];</span>
+        <span class="k">while</span><span class="p">(</span><span class="n">l</span><span class="o">&lt;</span><span class="n">r</span><span class="p">){</span>
+            <span class="k">while</span><span class="p">(</span><span class="n">l</span><span class="o">&lt;</span><span class="n">r</span><span class="o">&amp;&amp;</span><span class="n">nums</span><span class="p">[</span><span class="n">r</span><span class="p">]</span><span class="o">&gt;</span><span class="n">pivot</span><span class="p">){</span>
+                <span class="n">r</span><span class="o">--</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="n">nums</span><span class="p">[</span><span class="n">l</span><span class="p">]</span> <span class="o">=</span> <span class="n">nums</span><span class="p">[</span><span class="n">r</span><span class="p">];</span>
+            <span class="k">while</span><span class="p">(</span><span class="n">l</span><span class="o">&lt;</span><span class="n">r</span><span class="o">&amp;&amp;</span><span class="n">nums</span><span class="p">[</span><span class="n">l</span><span class="p">]</span><span class="o">&lt;=</span><span class="n">pivot</span><span class="p">){</span>
+                <span class="n">l</span><span class="o">++</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="n">nums</span><span class="p">[</span><span class="n">r</span><span class="p">]</span> <span class="o">=</span> <span class="n">nums</span><span class="p">[</span><span class="n">l</span><span class="p">];</span>
         <span class="p">}</span>
-        <span class="k">while</span><span class="p">(</span><span class="n">nums</span><span class="p">[</span><span class="n">r</span><span class="p">]</span><span class="o">&gt;=</span><span class="n">pivot</span><span class="p">){</span>
-           <span class="n">r</span><span class="o">--</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">if</span><span class="p">(</span><span class="n">l</span><span class="o">&lt;</span><span class="n">r</span><span class="p">){</span>
-            <span class="n">swap</span><span class="p">(</span><span class="n">nums</span><span class="p">,</span><span class="n">l</span><span class="p">,</span><span class="n">r</span><span class="p">);</span>
-        <span class="p">}</span>
+        <span class="n">nums</span><span class="p">[</span><span class="n">l</span><span class="p">]</span> <span class="o">=</span> <span class="n">pivot</span><span class="p">;</span>
+        <span class="n">qsort</span><span class="p">(</span><span class="n">nums</span><span class="p">,</span><span class="n">left</span><span class="p">,</span><span class="n">l</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+        <span class="n">qsort</span><span class="p">(</span><span class="n">nums</span><span class="p">,</span><span class="n">l</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">right</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">l</span><span class="p">;</span>
     <span class="p">}</span>
-    
-    <span class="n">qsort</span><span class="p">(</span><span class="n">nums</span><span class="p">,</span><span class="n">left</span><span class="p">,</span><span class="n">l</span><span class="p">);</span>
-    <span class="n">qsort</span><span class="p">(</span><span class="n">nums</span><span class="p">,</span><span class="n">l</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">right</span><span class="p">);</span>
-<span class="p">}</span>
-
-<span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
-    <span class="kt">int</span> <span class="n">nums</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">};</span>
-    <span class="n">qsort</span><span class="p">(</span><span class="n">nums</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">5</span><span class="p">);</span>
-    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="mi">5</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">){</span>
-        <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">&lt;&lt;</span><span class="s">&#34; &#34;</span><span class="p">;</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">sortArray</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">srand</span><span class="p">((</span><span class="kt">unsigned</span><span class="p">)</span><span class="n">time</span><span class="p">(</span><span class="nb">NULL</span><span class="p">));</span>
+        <span class="n">qsort</span><span class="p">(</span><span class="n">nums</span><span class="p">,</span><span class="mi">0</span><span class="p">,(</span><span class="kt">int</span><span class="p">)</span><span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">()</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">nums</span><span class="p">;</span>
     <span class="p">}</span>
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
+<span class="p">};</span>
 </code></pre></div><p>然后问了一些基础问题：</p>
 <ul>
 <li>

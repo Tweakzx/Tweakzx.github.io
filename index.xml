@@ -6,7 +6,442 @@
         <description>Recent content on Tweakzx</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Sat, 04 Dec 2021 18:31:16 +0800</lastBuildDate><atom:link href="https://tweakzx.github.io/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Tue, 07 Dec 2021 14:21:24 +0800</lastBuildDate><atom:link href="https://tweakzx.github.io/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>分布式巩固类作业</title>
+        <link>https://tweakzx.github.io/p/%E5%88%86%E5%B8%83%E5%BC%8F%E5%B7%A9%E5%9B%BA%E7%B1%BB%E4%BD%9C%E4%B8%9A/</link>
+        <pubDate>Tue, 07 Dec 2021 14:21:24 +0800</pubDate>
+        
+        <guid>https://tweakzx.github.io/p/%E5%88%86%E5%B8%83%E5%BC%8F%E5%B7%A9%E5%9B%BA%E7%B1%BB%E4%BD%9C%E4%B8%9A/</guid>
+        <description>&lt;img src="https://img2.baidu.com/it/u=1163044150,1040852846&fm=26&fmt=auto" alt="Featured image of post 分布式巩固类作业" /&gt;&lt;h2 id=&#34;1-逻辑时钟与一致割集&#34;&gt;1 逻辑时钟与一致割集&lt;/h2&gt;
+&lt;p&gt;下图中，直线上小黑点给出了时钟计数，请分别用Lamport 逻辑时钟和向量时钟给图上的事件设置时间戳，并给出一致割集和非一致割集的例子。&lt;/p&gt;
+&lt;p&gt;&lt;figure 
+	&gt;
+	&lt;a href=&#34;https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/image-20211207143003084.png&#34; &gt;
+		&lt;img src=&#34;https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/image-20211207143003084.png&#34;
+			
+			
+			
+			loading=&#34;lazy&#34;
+			alt=&#34;事件时钟计数&#34;&gt;
+	&lt;/a&gt;
+	
+	&lt;figcaption&gt;事件时钟计数&lt;/figcaption&gt;
+	
+&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;答：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;设置时间戳&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Lamport逻辑时钟&lt;/p&gt;
+&lt;p&gt;&lt;figure 
+	&gt;
+	&lt;a href=&#34;https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/image-20211207155413530.png&#34; &gt;
+		&lt;img src=&#34;https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/image-20211207155413530.png&#34;
+			
+			
+			
+			loading=&#34;lazy&#34;
+			alt=&#34;Lamport逻辑时钟&#34;&gt;
+	&lt;/a&gt;
+	
+	&lt;figcaption&gt;Lamport逻辑时钟&lt;/figcaption&gt;
+	
+&lt;/figure&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;向量时钟&lt;/p&gt;
+&lt;p&gt;&lt;figure 
+	&gt;
+	&lt;a href=&#34;https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/image-20211207160453425.png&#34; &gt;
+		&lt;img src=&#34;https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/image-20211207160453425.png&#34;
+			
+			
+			
+			loading=&#34;lazy&#34;
+			alt=&#34;向量时钟&#34;&gt;
+	&lt;/a&gt;
+	
+	&lt;figcaption&gt;向量时钟&lt;/figcaption&gt;
+	
+&lt;/figure&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;割集的例子&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;一致割集&lt;/p&gt;
+&lt;p&gt;&lt;figure 
+	&gt;
+	&lt;a href=&#34;https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/image-20211207165240421.png&#34; &gt;
+		&lt;img src=&#34;https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/image-20211207165240421.png&#34;
+			
+			
+			
+			loading=&#34;lazy&#34;
+			alt=&#34;一致割集&#34;&gt;
+	&lt;/a&gt;
+	
+	&lt;figcaption&gt;一致割集&lt;/figcaption&gt;
+	
+&lt;/figure&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;非一致割集&lt;/p&gt;
+&lt;p&gt;&lt;figure 
+	&gt;
+	&lt;a href=&#34;https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/image-20211207165430054.png&#34; &gt;
+		&lt;img src=&#34;https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/image-20211207165430054.png&#34;
+			
+			
+			
+			loading=&#34;lazy&#34;
+			alt=&#34;非一致割集&#34;&gt;
+	&lt;/a&gt;
+	
+	&lt;figcaption&gt;非一致割集&lt;/figcaption&gt;
+	
+&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;包含$e_1^2$这个接收事件但是不包含$e_3^1$这个发送事件。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;2-异步分布式系统的故障类型&#34;&gt;2 异步分布式系统的故障类型&lt;/h2&gt;
+&lt;p&gt;考虑在异步分布式系统中使用的两个通信服务。在服务A中，消息可能丢失、被复制或延迟，校验和仅应用到消息头。在服务B中，消息可能丢失、延迟或发送地太快以致接收方无法处理它，但到达目的地的消息其内容一定正确。描述每个服务会有的故障类型。根据对有效性和完整性的影响将故障分类。服务B能被描述成一个可靠的通信服务吗？&lt;/p&gt;
+&lt;p&gt;答：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;服务A会有的故障类型&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;遗漏故障
+&lt;ul&gt;
+&lt;li&gt;消息丢失&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;拜占庭故障
+&lt;ul&gt;
+&lt;li&gt;checksum仅仅应用到消息的head，消息的body可能发生损坏&lt;/li&gt;
+&lt;li&gt;消息重复&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;因为这是异步分布式系统，所以不会有时序故障。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;遗漏故障的消息丢失破坏了有效性。拜占庭故障的可能损坏的消息以及重复的消息破坏了完整性。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;服务B会有的故障类型&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;遗漏故障
+&lt;ul&gt;
+&lt;li&gt;消息丢失&lt;/li&gt;
+&lt;li&gt;发送地太快以致接收方无法处理它，接收遗漏&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;因为这是异步分布式系统，所以不会有时序故障。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;服务B满足完整性，但是服务B消息发生的遗漏故障，不满足有效性，所以不是可靠的通信服务。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;3-ricart-and-agrawala-算法&#34;&gt;3 Ricart and Agrawala 算法&lt;/h2&gt;
+&lt;p&gt;请证明Ricart-Agrawala的互斥算法满足ME2和ME3。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;ME2:进入或退出临界区的请求最终都会成功&lt;/p&gt;
+&lt;p&gt;ME3:如果一个进入临界区的请求发生在先，那么进入临界区也按此顺序&lt;/p&gt;
+&lt;p&gt;Ricart-Agrawala算法：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;一个进程申请资源时向所有其他进程发出带有时间戳的申请报文；&lt;/li&gt;
+&lt;li&gt;一个进程收到申请报文后，答复这个申请，当且仅当：1）若不在临界区并且自己未申请进入临界区,或者2)自己虽然发出了申请报文，但自己的报文的时间戳大于收到的申请报文。如果已经在临界区，或者自己的申请发送在前，则在出临界区之前将所有的申请挂起。&lt;/li&gt;
+&lt;li&gt;申请资源的进程仅在收到其它所有进程的回答报文后才进入临界区使用资源；&lt;/li&gt;
+&lt;li&gt;一个进程使用完资源后，它向所有挂起的申请发送回答报文。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;证明：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;证明满足ME2
+&lt;ul&gt;
+&lt;li&gt;一个进程$p_i$要进入临界区向其他进程发送请求，不想进入临界区的进程，或者已经发送了请求但是发送时间戳大于接收请求时间戳$T_i$的进程都会回复。所以进程$p_i$要等待逻辑时间戳$T_i$之前发送了请求的进程以及正在临界区的进程的答复。&lt;/li&gt;
+&lt;li&gt;在逻辑时间戳$T_i$之前发出请求的进程所等待进程的数量依次递减到1。等正在临界区的进程使用完资源并退出后，所有在等待的进程所需等待进程数量全都减1。此时有一个进程得到了全部的答复，进入临界区。&lt;/li&gt;
+&lt;li&gt;按照这个过程，只要前边的进程依次进入临界区并退出之后，进程$p_i$就可以成功进入临界区，毕竟没有进程可以插队，所需等待进程数量只能递减。&lt;/li&gt;
+&lt;li&gt;由于使用完资源后退出临界区不需要等待答复，所以可以成功退出。所以，满足ME2。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;证明满足ME3
+&lt;ul&gt;
+&lt;li&gt;当进$p_i$给其他进程发送进入临界区的申请时&lt;/li&gt;
+&lt;li&gt;如果进程$p_j$也想进入临界区，发送的申请的时间戳小于收到的$T_i$，那么$p_j$不会发送答复给$p_i$,这样$p_i$就必须等待$p_j$进入并退出临界区之后才能得到答复，才有可能进入临界区。&lt;/li&gt;
+&lt;li&gt;如果进程$p_j$也想进入临界区，发送的申请的时间戳大于收到的$T_i$，那么他会回复$p_i$的申请，$p_i$无需等待$p_j$，且当$p_i$收到$p_j$的请求之后不会回复，$p_j$等待$p_i$。&lt;/li&gt;
+&lt;li&gt;所以，满足ME3&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;4-改进ricart-and-agrawala-算法&#34;&gt;4 改进Ricart and Agrawala 算法&lt;/h2&gt;
+&lt;p&gt;在Ricart-Agrawala的互斥算法中，原始假定系统的进程是不出故障的。请修改算法增加处理一个进程崩溃的情况。&lt;/p&gt;
+&lt;p&gt;答：如果有进程崩溃，那么它永远不会回复，则发送请求的进程需要一直盲等。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;所以每当接收到消息之后要做出答复，回复&lt;strong&gt;同意&lt;/strong&gt;，当且仅当：1）若不在临界区并且自己未申请进入临界区,或者2)自己虽然发出了申请报文，但自己的报文的时间戳大于收到的申请报文。或者回复&lt;strong&gt;拒绝&lt;/strong&gt;，当1）自己处在临界区，或者2）自己的临界区申请的逻辑时间戳小于收到的申请，把回复拒绝的进程缓存起来，等待回复。&lt;/li&gt;
+&lt;li&gt;如果超出timeout没有收到答复则认为机器故障，只需等待其余的机器全部回复同意&lt;/li&gt;
+&lt;li&gt;当一个进程退出临界区之后，要向所有回复拒绝的进程回复同意。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;5改进基于环的互斥算法&#34;&gt;5改进基于环的互斥算法&lt;/h2&gt;
+&lt;p&gt;改进基于环的互斥算法使得它能检测权标的丢失并重新生成权标。&lt;/p&gt;
+&lt;p&gt;答：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;一个进程发出申请之后，如果长时间没有拿到权标，则向下一个节点发送一个请求reqest确认权标是否还在。&lt;/li&gt;
+&lt;li&gt;一个进程收到了确认权标存在的请求request，如果权标在自己手里则向下一个节点发送一个exist，如果权标不在自己手里，则将requst传递给下一个节点&lt;/li&gt;
+&lt;li&gt;一个进程收到了一个exist消息则将它传递到下一个节点&lt;/li&gt;
+&lt;li&gt;如果发出申请的进程收到request请求，则认为权标丢失，重新生成权标。如果收到exist，则说明一切正常。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;6-双向环结构的选举算法&#34;&gt;6 双向环结构的选举算法&lt;/h2&gt;
+&lt;p&gt;基于环的选举算法是建立在单向环的假设之上的，为了获得更快的选举速度，现采用双向环结构，即每个节点可以同时向顺时针和逆时针两个方向发送选举消息，请列出新算法的高层描述，并用一个四节点的双向环来说明你的方法。&lt;/p&gt;
+&lt;p&gt;答：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;最初，所有进程标记为非参与者，任意一个进程发起选举，发起选举后，置自己为参与者（$elected_i = ⊥$)，向上下游发送一个选举消息，包含自己的标识符。&lt;/li&gt;
+&lt;li&gt;一个进程收到选举消息后，那么比较自己的标识符与收到消息中的标识符，
+&lt;ul&gt;
+&lt;li&gt;如果自己的标识符小于消息中的标识符，那么顺消息来的方向传递选举消息；&lt;/li&gt;
+&lt;li&gt;如果自己的标识符大于消息中的标识符
+&lt;ul&gt;
+&lt;li&gt;如果自己是非参与者，将消息中的标识符改为自己标识符，顺消息来的方向传递选举消息。&lt;/li&gt;
+&lt;li&gt;如果自己是参与者，则不转发消息。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;如果自己的标识符等于消息中的标识符，那么说明自己的标识符最大，如果还未当选，则当选为协调者，向上游和下游发送一个当选消息，包含自己的标识符P&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;一个进程收到一个当选消息，如果自己是参与者，设置$elected_i = P$，置自己为非参与者，并且按照消息发送的方向传递给自己的邻居；如果自己已经知晓当选消息，则不转发。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code class=&#34;language-pseudocode&#34; data-lang=&#34;pseudocode&#34;&gt;Init elected != ⊥ for process i (i = 1,2,...N)
+
+in the process which start an election:
+	function startElection():
+		electingMSG &amp;lt;- MSG(type = &amp;quot;electing&amp;quot;, value = Local.id)
+		Local.elected = &#39;⊥&#39;
+		send(msg = electingMSG ,direction = clockwise)
+		send(msg = electingMSG , direction = counterclockwise)
+	
+in process i:
+	function handleMSG(MSG msg, Direction direction):
+		if msg.type = &amp;quot;electing&amp;quot;:
+			if Local.id &amp;lt; msg.id:
+				send(msg,direction)
+				Local.elected = &#39;⊥&#39;
+			else if Local.id &amp;gt; msg.id:
+				if Local.elected != &#39;⊥&#39;:
+					msg.value = Local.id
+					send(msg, direction)
+					Local.elected = &#39;⊥&#39;
+				end
+			else
+				if(process i is not Coordinator)
+                	setCoordinator(process i)
+                	Local.elected = &#39;⊥&#39;
+                	electdeMSG &amp;lt;- MSG(type = &amp;quot;elected&amp;quot;, value = Local.id)
+                	send(msg = electedMSG, direction = clockwise)
+                	send(msg = electedMSG, direction = counterclockwise)
+                end
+            end
+		end      
+			
+		if msg.type = &amp;quot;elected&amp;quot;
+			if Local.elected == &#39;⊥&#39;:
+				Local.elected = msg.value
+				send(msg, direction)
+			end
+		end
+
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;figure 
+	&gt;
+	&lt;a href=&#34;https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/image-20211209165145519.png&#34; &gt;
+		&lt;img src=&#34;https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/image-20211209165145519.png&#34;
+			
+			
+			
+			loading=&#34;lazy&#34;
+			alt=&#34;image-20211209165145519&#34;&gt;
+	&lt;/a&gt;
+	
+	&lt;figcaption&gt;image-20211209165145519&lt;/figcaption&gt;
+	
+&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;图中:	白色表示初始非参与者，黄色表示参与者，红色表示知道当选结果。蓝色是选举消息，绿色是当选消息。从13号开始发起选举，最终选出23为协调者。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;网络带宽：找到最大标识符最多需要N个消息，确认最大标识符最多需要2N个消息，通知当选最多需要N+1个消息，则最多需要消息为 4N+1&lt;/li&gt;
+&lt;li&gt;回转时间：第一轮寻找花费最多(N/2)个消息，第二轮确认需要最多花费N个消息，第三轮通知最多需要花费(N/2)+1个消息，所以最多需要花费2N+1个消息的回转时间。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;7-基于生成树的选举算法&#34;&gt;7 基于生成树的选举算法&lt;/h2&gt;
+&lt;p&gt;节点之间按照生成树方式连接，仅有边相连的节点能通信，请基于此网络拓扑，设计一个选举算法，给出其伪码。当仅有一个进程发起选举，你的选举算法所需的消息量是多少？&lt;/p&gt;
+&lt;p&gt;答：假定是有向生成树，每个节点有父节点和子节点，每个节点可以向子节点或者父节点发送消息。任何一个进程都可以发起选举。算法如下：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;收到选举消息，将发送消息的标识符和自己的标识符作比较，更改消息中的信息为较大值；如果有子节点，则向子节点发送这个选举消息；如果是叶子节点，则父亲节点返回一个回复消息，包含当前的较大标识符。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;等到收到所有子节点的回复消息，选出最大的标识符，返回给父亲节点&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;当根节点收到最大的 标识符，则向所有的子节点发送当选信息，直到叶节点。如果有子节点发现自己的标识符等于消息中的的标识符，则成为协调者。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;我的选举算法所需的消息量选举有N-1个，回复有N-1个，当选有N-1个，所以总共有3N-3个。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-pseudocode&#34; data-lang=&#34;pseudocode&#34;&gt;Init Local.elected != ⊥ for process i (i = 1,2,...N)
+	 Local.count =0 for process i (i = 1,2,...N)
+
+in the process p0 which start an election:
+	function startElection():
+		electingMSG &amp;lt;- MSG(type = &amp;quot;electing&amp;quot;, value = Local.id)
+		Local.elected = &#39;⊥&#39;
+		for i in son(p0):
+			send(electingMSG, dest = i)
+		end
+
+in process p:
+	function handleMSG(MSG msg):
+		if msg.type = &amp;quot;electing&amp;quot;:
+			Local.elected = &#39;⊥&#39;
+			if !isEmpty(son(p):
+				msg.value = max(Local.id,msg.value)
+				for i in son(p):
+					send(msg, dest = i)
+				end
+			else
+				replyMSG = MSG(type = &amp;quot;reply&amp;quot;, value = max(Local.id,msg.value)
+				send(relpyMSG, dest = father(p))
+            end
+            
+		if msg.type = &amp;quot;reply&amp;quot;:
+			Local.count++;
+			msg.value = max(Local.id, msg.value)
+			if(Local.count == son(p).size()):
+				if !isEmpty(father(p)):
+					send(msg, dest = father(p))
+				else
+					electedMSG = MSG(type = &amp;quot;elected&amp;quot;,value = msg.value)
+					for i in son(p):
+						send(electedMSG, dest = i)
+					end
+					Local.elected = msg.value
+					if Local.ip == msg.value:
+						setCoordinator(process = p)
+					end
+				end
+			end
+		end
+					
+		
+		if msg.type = &amp;quot;elected&amp;quot;:
+			if Local.ip == msg.value:
+				setCoordinator(process = p)
+			end
+			if !isEmpty(son(p)):
+				for i in son(p):
+					send(msg, dest = i)
+				end
+			end
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;8-法定数共识复制&#34;&gt;8 法定数共识复制&lt;/h2&gt;
+&lt;p&gt;在服务器X、Y和Z上使用法定数共识进行复制，这些服务器都有数据项A和B的副本。A和B副本的初始值是100，并且在X、Y和Z上A和B的选票是1。同样对于A和B，R＝W＝2。一个客户读A的值然后将它写到B上。&lt;/p&gt;
+&lt;p&gt;1）当客户执行这些操作时，出现了一个分区，将服务器X和Y与服务器Z分隔开了。描述当客户能访问服务器X和Y时，获得的法定数和发生的操作。&lt;/p&gt;
+&lt;p&gt;2）描述当客户仅能访问服务器Z时，获得的法定数和发生的操作。&lt;/p&gt;
+&lt;p&gt;3）分区修复了，然后另一个分区发生了，结果X和Z与Y分隔开了。描述当客户能访问服务器X和Z时，获得的法定数和发生的操作。&lt;/p&gt;
+&lt;p&gt;答：&lt;/p&gt;
+&lt;p&gt;1）在数据的v0版本时，A和B副本的初始值是100，出现了一个分区，将服务器X和Y与服务器Z分隔开。&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style=&#34;text-align:center&#34;&gt;X&lt;/th&gt;
+&lt;th style=&#34;text-align:center&#34;&gt;Y&lt;/th&gt;
+&lt;th style=&#34;text-align:center&#34;&gt;Z&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;A = 100（v0)&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;A = 100（v0)&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;A = 100（v0)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;B = 100（v0)&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;B = 100（v0)&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;B = 100（v0)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;​	客户可能从X或者Y上读取A，R = 1+1 =2，读取成功。&lt;/p&gt;
+&lt;p&gt;​	客户需要在X和Y上写B，W = 1+1 = 2， 写成功。&lt;/p&gt;
+&lt;p&gt;2)客户只能访问服务器Z，R = 1，客户无法读取；W = 1，客户无法写。&lt;/p&gt;
+&lt;p&gt;3)当分区被修复后，因为之前的分区导致X和Y的数据要比Z上的数据更新，例如&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style=&#34;text-align:center&#34;&gt;X&lt;/th&gt;
+&lt;th style=&#34;text-align:center&#34;&gt;Y&lt;/th&gt;
+&lt;th style=&#34;text-align:center&#34;&gt;Z&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;A = 200（v1)&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;A = 200（v1)&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;A = 100（v0)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;B = 300（v1)&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;B = 300（v1)&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;B = 100（v0)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;此时，另一个分区出现，X和Z与Y分隔开，当客户试图获取法定数的时候，发现Z的数据版本过时，于是Z根据X上的最新数据更新自己。之后客户获取读法定数，R = 1+1 =2，然后读成功。客户获取写法定数，W = 1+1 =2，写成功。&lt;/p&gt;
+&lt;h2 id=&#34;9-串行等价的交错执行&#34;&gt;9 串行等价的交错执行&lt;/h2&gt;
+&lt;p&gt;一个服务器管理对象a1, a2, &amp;hellip; an ，它为客户提供下面两种操作：read (i)返回对象ai的值。write(i, Value)将对象ai设置为值Value。&lt;/p&gt;
+&lt;p&gt;事务T和U定义如下：&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;T&lt;/em&gt;: &lt;em&gt;x&lt;/em&gt; = &lt;em&gt;read&lt;/em&gt;(&lt;em&gt;j&lt;/em&gt;); &lt;em&gt;y&lt;/em&gt; = &lt;em&gt;read&lt;/em&gt; (&lt;em&gt;i&lt;/em&gt;); &lt;em&gt;write&lt;/em&gt;(&lt;em&gt;j&lt;/em&gt;, 44); &lt;em&gt;write&lt;/em&gt;(&lt;em&gt;i&lt;/em&gt;, 33)&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;U&lt;/em&gt;: &lt;em&gt;x&lt;/em&gt; = &lt;em&gt;read&lt;/em&gt;(&lt;em&gt;k&lt;/em&gt;); &lt;em&gt;write&lt;/em&gt;(&lt;em&gt;i&lt;/em&gt;, 55); &lt;em&gt;y&lt;/em&gt; = &lt;em&gt;read&lt;/em&gt; (&lt;em&gt;j&lt;/em&gt;); &lt;em&gt;write&lt;/em&gt;(&lt;em&gt;k&lt;/em&gt;, 66)&lt;/p&gt;
+&lt;p&gt;请给出事务T和U的3个串行化等价的交错执行。&lt;/p&gt;
+&lt;p&gt;答：我们给每一步分别表上序号：&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;T&lt;/em&gt;: ①&lt;em&gt;x&lt;/em&gt; = &lt;em&gt;read&lt;/em&gt;(&lt;em&gt;j&lt;/em&gt;); ②&lt;em&gt;y&lt;/em&gt; = &lt;em&gt;read&lt;/em&gt; (&lt;em&gt;i&lt;/em&gt;); ③&lt;em&gt;write&lt;/em&gt;(&lt;em&gt;j&lt;/em&gt;, 44); ④&lt;em&gt;write&lt;/em&gt;(&lt;em&gt;i&lt;/em&gt;, 33)&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;U&lt;/em&gt;: ⑤&lt;em&gt;x&lt;/em&gt; = &lt;em&gt;read&lt;/em&gt;(&lt;em&gt;k&lt;/em&gt;); ⑥&lt;em&gt;write&lt;/em&gt;(&lt;em&gt;i&lt;/em&gt;, 55); ⑦&lt;em&gt;y&lt;/em&gt; = &lt;em&gt;read&lt;/em&gt; (&lt;em&gt;j&lt;/em&gt;); ⑧&lt;em&gt;write&lt;/em&gt;(&lt;em&gt;k&lt;/em&gt;, 66)&lt;/p&gt;
+&lt;p&gt;如果按照先T后U的顺序依次执行一个事务的话，我们发现①和⑤，②和⑦，④和⑥有写后写依赖；③和⑦有写后读依赖，①和③，②和④，②和⑥，⑤和⑧有读后写依赖，所以，我们要保证这些依赖的逻辑顺序，串行化等价的交错执行如下：&lt;/p&gt;
+&lt;p&gt;①⑤②③④⑥⑦⑧&lt;/p&gt;
+&lt;p&gt;①③⑤②④⑦⑧⑥&lt;/p&gt;
+&lt;p&gt;①⑤③②⑧⑦④⑥&lt;/p&gt;
+&lt;h2 id=&#34;10-乐观并发控制&#34;&gt;10 乐观并发控制&lt;/h2&gt;
+&lt;p&gt;考虑将乐观并发控制应用于下列事务T和U的情况：&lt;/p&gt;
+&lt;p&gt;​    &lt;em&gt;T&lt;/em&gt;: &lt;em&gt;x&lt;/em&gt; = &lt;em&gt;read&lt;/em&gt;(&lt;em&gt;i&lt;/em&gt;); &lt;em&gt;write&lt;/em&gt;(&lt;em&gt;j&lt;/em&gt;, 44);&lt;/p&gt;
+&lt;p&gt;​    &lt;em&gt;U&lt;/em&gt;: &lt;em&gt;write&lt;/em&gt;(&lt;em&gt;i&lt;/em&gt;, 55); &lt;em&gt;write&lt;/em&gt;(&lt;em&gt;j&lt;/em&gt;, 66);&lt;/p&gt;
+&lt;p&gt;如果事务T和U同时处于活动状态，试描述以下几种情况的结果如何：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;服务器首先处理T的提交请求，使用向后验证方式。&lt;/li&gt;
+&lt;li&gt;服务器首先处理U的提交请求，使用向后验证方式。&lt;/li&gt;
+&lt;li&gt;服务器首先处理T的提交请求，使用向前验证方式。&lt;/li&gt;
+&lt;li&gt;服务器首先处理U的提交请求，使用向前验证方式。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;对于上面的每种情况，描述事务T和U的操作顺序，注意写操作在验证通过之后才真正起作用。&lt;/p&gt;
+&lt;p&gt;答：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;服务器首先处理T的提交请求，使用向后验证方式。&lt;/p&gt;
+&lt;p&gt;T先开始所以T的验证阶段无事发生，U进入验证阶段之后，U没有读集，所以没有冲突，可以顺利提交。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;服务器首先处理U的提交请求，使用向后验证方式。&lt;/p&gt;
+&lt;p&gt;T进入验证阶段，发现T的读集{i}与U的写集{i, j}有冲突，T事务被放弃。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;服务器首先处理T的提交请求，使用向前验证方式。&lt;/p&gt;
+&lt;p&gt;U进入验证阶段，发现U的写集{i,j}与T的读集{i}有冲突，所以推迟验证，等T的读集执行完毕之后再提交U。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;服务器首先处理U的提交请求，使用向前验证方式。&lt;/p&gt;
+&lt;p&gt;T进入验证阶段，发现U无读集，所以可以通过验证。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+</description>
+        </item>
+        <item>
         <title>阿里实习二面</title>
         <link>https://tweakzx.github.io/p/%E9%98%BF%E9%87%8C%E5%AE%9E%E4%B9%A0%E4%BA%8C%E9%9D%A2/</link>
         <pubDate>Sat, 04 Dec 2021 18:31:16 +0800</pubDate>
@@ -119,44 +554,42 @@
 &lt;h2 id=&#34;面试的过程&#34;&gt;面试的过程&lt;/h2&gt;
 &lt;p&gt;面试官还是很温柔的，上来先让我做了一下自我介绍，我介绍了一下本科和硕士，以及一段实习经历，一段比赛经历。让说一下觉得最有有挑战性的工作？实习和比赛都很水，所以实话实说没啥亮点。&lt;/p&gt;
 &lt;p&gt;算法题一道，写一下快排。当时代码没有跑起来，因为vscode好像更新了code runner的配置，所以没有跑起来，不过写的代码大概率全是bug，代码能力也是硬伤。&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-c++&#34; data-lang=&#34;c++&#34;&gt;&lt;span class=&#34;cp&#34;&gt;#include&lt;/span&gt;&lt;span class=&#34;cpf&#34;&gt;&amp;lt;bits/stdc++.h&amp;gt;&lt;/span&gt;&lt;span class=&#34;cp&#34;&gt;
-&lt;/span&gt;&lt;span class=&#34;cp&#34;&gt;&lt;/span&gt;
-&lt;span class=&#34;k&#34;&gt;using&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;namespace&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;std&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-c++&#34; data-lang=&#34;c++&#34;&gt;&lt;span class=&#34;k&#34;&gt;class&lt;/span&gt; &lt;span class=&#34;nc&#34;&gt;Solution&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;span class=&#34;k&#34;&gt;public&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt;
+    &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;qsort&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;vector&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;&amp;amp;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;nums&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;left&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;right&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;){&lt;/span&gt;
+        &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;l&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;left&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+        &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;r&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;right&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
 
-&lt;span class=&#34;kt&#34;&gt;void&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;swap&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;*&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;nums&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;l&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;r&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;){&lt;/span&gt;
-    &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;temp&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;nums&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;l&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;];&lt;/span&gt;
-    &lt;span class=&#34;n&#34;&gt;nums&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;l&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;nums&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;r&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;];&lt;/span&gt;
-    &lt;span class=&#34;n&#34;&gt;nums&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;r&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;temp&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
-&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+        &lt;span class=&#34;k&#34;&gt;if&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;l&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;=&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;r&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;){&lt;/span&gt;
+            &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;l&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+        &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+        &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;randNum&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;rand&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;%&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;r&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;l&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;l&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+        &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;temp&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;nums&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;randNum&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;];&lt;/span&gt;
+        &lt;span class=&#34;n&#34;&gt;nums&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;randNum&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;nums&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;l&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;];&lt;/span&gt;
+        &lt;span class=&#34;n&#34;&gt;nums&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;l&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;temp&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
 
-&lt;span class=&#34;kt&#34;&gt;void&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;qsort&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;nums&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;left&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;right&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;){&lt;/span&gt;
-    &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;pivot&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;nums&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;];&lt;/span&gt;
-    &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;l&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
-    &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;r&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;right&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
-    &lt;span class=&#34;k&#34;&gt;while&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;l&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;r&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;){&lt;/span&gt;
-        &lt;span class=&#34;k&#34;&gt;while&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;nums&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;l&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;pivot&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;){&lt;/span&gt;
-            &lt;span class=&#34;n&#34;&gt;l&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;++&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+        &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;pivot&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;nums&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;l&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;];&lt;/span&gt;
+        &lt;span class=&#34;k&#34;&gt;while&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;l&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;r&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;){&lt;/span&gt;
+            &lt;span class=&#34;k&#34;&gt;while&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;l&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;r&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;nums&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;r&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;pivot&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;){&lt;/span&gt;
+                &lt;span class=&#34;n&#34;&gt;r&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;--&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+            &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+            &lt;span class=&#34;n&#34;&gt;nums&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;l&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;nums&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;r&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;];&lt;/span&gt;
+            &lt;span class=&#34;k&#34;&gt;while&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;l&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;r&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;nums&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;l&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;lt;=&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;pivot&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;){&lt;/span&gt;
+                &lt;span class=&#34;n&#34;&gt;l&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;++&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+            &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+            &lt;span class=&#34;n&#34;&gt;nums&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;r&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;nums&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;l&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;];&lt;/span&gt;
         &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
-        &lt;span class=&#34;k&#34;&gt;while&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;nums&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;r&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;=&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;pivot&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;){&lt;/span&gt;
-           &lt;span class=&#34;n&#34;&gt;r&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;--&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
-        &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
-        &lt;span class=&#34;k&#34;&gt;if&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;l&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;r&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;){&lt;/span&gt;
-            &lt;span class=&#34;n&#34;&gt;swap&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;nums&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;l&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;r&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
-        &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+        &lt;span class=&#34;n&#34;&gt;nums&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;l&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;pivot&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+        &lt;span class=&#34;n&#34;&gt;qsort&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;nums&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;left&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;l&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+        &lt;span class=&#34;n&#34;&gt;qsort&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;nums&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;l&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;right&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+        &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;l&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
     &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
-    
-    &lt;span class=&#34;n&#34;&gt;qsort&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;nums&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;left&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;l&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
-    &lt;span class=&#34;n&#34;&gt;qsort&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;nums&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;l&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;right&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
-&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
-
-&lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;main&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(){&lt;/span&gt;
-    &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;nums&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[]&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;3&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;2&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;4&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;5&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;};&lt;/span&gt;
-    &lt;span class=&#34;n&#34;&gt;qsort&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;nums&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;5&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
-    &lt;span class=&#34;k&#34;&gt;for&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;5&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;++&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;){&lt;/span&gt;
-        &lt;span class=&#34;n&#34;&gt;cout&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;nums&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34; &amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+    &lt;span class=&#34;n&#34;&gt;vector&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;sortArray&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;vector&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;&amp;amp;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;nums&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+        &lt;span class=&#34;n&#34;&gt;srand&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;((&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;unsigned&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;time&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;NULL&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;));&lt;/span&gt;
+        &lt;span class=&#34;n&#34;&gt;qsort&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;nums&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,(&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;nums&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;size&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+        &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;nums&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
     &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
-    &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
-&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;span class=&#34;p&#34;&gt;};&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;然后问了一些基础问题：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;
