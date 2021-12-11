@@ -6,7 +6,22 @@
     <description>Recent content in Posts on Tweakzx</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 07 Dec 2021 14:21:24 +0800</lastBuildDate><atom:link href="https://tweakzx.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 10 Dec 2021 11:28:33 +0800</lastBuildDate><atom:link href="https://tweakzx.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>并行作业 1</title>
+      <link>https://tweakzx.github.io/p/%E5%B9%B6%E8%A1%8C%E4%BD%9C%E4%B8%9A-1/</link>
+      <pubDate>Fri, 10 Dec 2021 11:28:33 +0800</pubDate>
+      
+      <guid>https://tweakzx.github.io/p/%E5%B9%B6%E8%A1%8C%E4%BD%9C%E4%B8%9A-1/</guid>
+      <description>1矩阵向量乘法（4分） 讲义55页所示结果Y，如果要作为下一次矩阵向量乘法的输入X，切分到不同的列进程，并且复制到每一行进程，应如何操作？可写出伪代码，或用语言描述。
+即图(a)中的Y，变成下图(b)中的X。假设每行有P个进程，每列也是P个进程，一共P*P个进程。
+image-20211210120943046
+答：进程$P_{ij}$和所控制的矩阵进行矩阵向量乘之后，将结果存入进程$P_{ji}$。
+2 代码填空（3分） 在测量程序性能时，我们经常要记录整个程序或程序中某一部分的运行时间。在MPI程序中，由于每个进程的运行时间不同，一般需要取各个进程运行时间的最大值，然后由0号进程保存和打印（其他进程不需要保存）。以下程序完成了这个功能，请在横线处填上函数调用语句。
+int main(int argc, char * argv) { double total_time; double time0, time1; int procs, rank; MPI_init(argc, argv); MPI_Comm_size(MPI_COMM_WORLD, &amp;amp;procs); MPI_Comm_rank(MPI_COMM_WORLD, &amp;amp;rank); time0 = MPI_Wtime(); //do some computation 	time1 = MPI_Wtime() – time0; _______________________________________________________________ if(rank == 0) { Printf(“Total execution time is %f seconds\n”, total_time); } } 答：
+MPI_Reduce(&amp;amp;time1,&amp;amp;total_time,1,MPI_DOUBLE,MPI_MAX,0,MPI_COMM_WORLD) 3 以下程序相当于哪个MPI聚合操作？（3分） #define N 16384 double *send_buff, *recv_buff; MPI_Status status; int i, nprocs, myid, count=N/num_procs; send_buff = (double*)malloc(N*sizeof(double)); recv_buff = (double*)malloc(N*sizeof(double)); MPI_Comm_size(MPI_COMM_WORLD, &amp;amp;nprocs); MPI_Comm_rank(MPI_COMM_WORLD, &amp;amp;myid); //此处省略send_buff中数据的初始化 memcpy((void*)(recv_buff + myid * count), (void*)(send_buff + myid * count), count*sizeof(double)); for(int i = 0; i &amp;lt; nprocs;i++) { if(i!</description>
+    </item>
+    
     <item>
       <title>分布式巩固类作业</title>
       <link>https://tweakzx.github.io/p/%E5%88%86%E5%B8%83%E5%BC%8F%E5%B7%A9%E5%9B%BA%E7%B1%BB%E4%BD%9C%E4%B8%9A/</link>

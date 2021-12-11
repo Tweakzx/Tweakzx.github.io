@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>作业 on Tweakzx</title>
-    <link>https://tweakzx.github.io/categories/%E4%BD%9C%E4%B8%9A/</link>
-    <description>Recent content in 作业 on Tweakzx</description>
+    <title>并行计算 on Tweakzx</title>
+    <link>https://tweakzx.github.io/tags/%E5%B9%B6%E8%A1%8C%E8%AE%A1%E7%AE%97/</link>
+    <description>Recent content in 并行计算 on Tweakzx</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 10 Dec 2021 11:28:33 +0800</lastBuildDate><atom:link href="https://tweakzx.github.io/categories/%E4%BD%9C%E4%B8%9A/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 10 Dec 2021 11:28:33 +0800</lastBuildDate><atom:link href="https://tweakzx.github.io/tags/%E5%B9%B6%E8%A1%8C%E8%AE%A1%E7%AE%97/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>并行作业 1</title>
       <link>https://tweakzx.github.io/p/%E5%B9%B6%E8%A1%8C%E4%BD%9C%E4%B8%9A-1/</link>
@@ -20,33 +20,6 @@
 2 代码填空（3分） 在测量程序性能时，我们经常要记录整个程序或程序中某一部分的运行时间。在MPI程序中，由于每个进程的运行时间不同，一般需要取各个进程运行时间的最大值，然后由0号进程保存和打印（其他进程不需要保存）。以下程序完成了这个功能，请在横线处填上函数调用语句。
 int main(int argc, char * argv) { double total_time; double time0, time1; int procs, rank; MPI_init(argc, argv); MPI_Comm_size(MPI_COMM_WORLD, &amp;amp;procs); MPI_Comm_rank(MPI_COMM_WORLD, &amp;amp;rank); time0 = MPI_Wtime(); //do some computation 	time1 = MPI_Wtime() – time0; _______________________________________________________________ if(rank == 0) { Printf(“Total execution time is %f seconds\n”, total_time); } } 答：
 MPI_Reduce(&amp;amp;time1,&amp;amp;total_time,1,MPI_DOUBLE,MPI_MAX,0,MPI_COMM_WORLD) 3 以下程序相当于哪个MPI聚合操作？（3分） #define N 16384 double *send_buff, *recv_buff; MPI_Status status; int i, nprocs, myid, count=N/num_procs; send_buff = (double*)malloc(N*sizeof(double)); recv_buff = (double*)malloc(N*sizeof(double)); MPI_Comm_size(MPI_COMM_WORLD, &amp;amp;nprocs); MPI_Comm_rank(MPI_COMM_WORLD, &amp;amp;myid); //此处省略send_buff中数据的初始化 memcpy((void*)(recv_buff + myid * count), (void*)(send_buff + myid * count), count*sizeof(double)); for(int i = 0; i &amp;lt; nprocs;i++) { if(i!</description>
-    </item>
-    
-    <item>
-      <title>分布式巩固类作业</title>
-      <link>https://tweakzx.github.io/p/%E5%88%86%E5%B8%83%E5%BC%8F%E5%B7%A9%E5%9B%BA%E7%B1%BB%E4%BD%9C%E4%B8%9A/</link>
-      <pubDate>Tue, 07 Dec 2021 14:21:24 +0800</pubDate>
-      
-      <guid>https://tweakzx.github.io/p/%E5%88%86%E5%B8%83%E5%BC%8F%E5%B7%A9%E5%9B%BA%E7%B1%BB%E4%BD%9C%E4%B8%9A/</guid>
-      <description>1 逻辑时钟与一致割集 下图中，直线上小黑点给出了时钟计数，请分别用Lamport 逻辑时钟和向量时钟给图上的事件设置时间戳，并给出一致割集和非一致割集的例子。
-事件时钟计数
-答：
-  设置时间戳
-  Lamport逻辑时钟
-Lamport逻辑时钟
-  向量时钟
-向量时钟
-    割集的例子
-  一致割集
-一致割集
-  非一致割集
-非一致割集
-包含$e_1^2$这个接收事件但是不包含$e_3^1$这个发送事件。
-    2 异步分布式系统的故障类型 考虑在异步分布式系统中使用的两个通信服务。在服务A中，消息可能丢失、被复制或延迟，校验和仅应用到消息头。在服务B中，消息可能丢失、延迟或发送地太快以致接收方无法处理它，但到达目的地的消息其内容一定正确。描述每个服务会有的故障类型。根据对有效性和完整性的影响将故障分类。服务B能被描述成一个可靠的通信服务吗？
-答：
-  服务A会有的故障类型
- 遗漏故障  消息丢失   拜占庭故障  checksum仅仅应用到消息的head，消息的body可能发生损坏 消息重复   因为这是异步分布式系统，所以不会有时序故障。  遗漏故障的消息丢失破坏了有效性。拜占庭故障的可能损坏的消息以及重复的消息破坏了完整性。
-  服务B会有的故障类型</description>
     </item>
     
   </channel>
