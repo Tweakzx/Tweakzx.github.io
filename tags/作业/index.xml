@@ -19,6 +19,15 @@
     </item>
     
     <item>
+      <title>CUDA加速课程题目</title>
+      <link>https://tweakzx.github.io/p/cuda%E5%8A%A0%E9%80%9F%E8%AF%BE%E7%A8%8B%E9%A2%98%E7%9B%AE/</link>
+      <pubDate>Mon, 13 Dec 2021 19:03:20 +0800</pubDate>
+      
+      <guid>https://tweakzx.github.io/p/cuda%E5%8A%A0%E9%80%9F%E8%AF%BE%E7%A8%8B%E9%A2%98%E7%9B%AE/</guid>
+      <description>1 加速向量加法 #include &amp;lt;stdio.h&amp;gt;#include &amp;lt;assert.h&amp;gt; inline cudaError_t checkCuda(cudaError_t result) { if (result != cudaSuccess) { fprintf(stderr, &amp;#34;CUDA Runtime Error: %s\n&amp;#34;, cudaGetErrorString(result)); assert(result == cudaSuccess); } return result; } void initWith(float num, float *a, int N) { for(int i = 0; i &amp;lt; N; ++i) { a[i] = num; } } __global__ void addVectorsInto(float *result, float *a, float *b, int N) { int initIndex = threadIdx.x + blockIdx.x * blockDim.x; int gridStride = gridDim.</description>
+    </item>
+    
+    <item>
       <title>并行作业 2</title>
       <link>https://tweakzx.github.io/p/%E5%B9%B6%E8%A1%8C%E4%BD%9C%E4%B8%9A-2/</link>
       <pubDate>Sat, 11 Dec 2021 18:01:26 +0800</pubDate>
