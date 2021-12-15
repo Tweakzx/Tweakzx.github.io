@@ -119,7 +119,7 @@
 
 
                 <time class="article-time--reading">
-                    3 minute read
+                    5 minute read
                 </time>
             </div>
         
@@ -286,7 +286,146 @@
     <span class="n">cudaFree</span><span class="p">(</span> <span class="n">a</span> <span class="p">);</span> <span class="n">cudaFree</span><span class="p">(</span> <span class="n">b</span> <span class="p">);</span> <span class="n">cudaFree</span><span class="p">(</span> <span class="n">c</span> <span class="p">);</span>
 <span class="p">}</span>
 
-</code></pre></div><h2 id="3-证书">3 证书</h2>
+</code></pre></div><h2 id="3-n-body">3 N-body</h2>
+<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="cp">#include</span> <span class="cpf">&lt;math.h&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&#34;timer.h&#34;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&#34;files.h&#34;</span><span class="cp">
+</span><span class="cp"></span>
+<span class="cp">#define SOFTENING 1e-9f
+</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;assert.h&gt;</span><span class="cp">
+</span><span class="cp"></span><span class="kr">inline</span> <span class="n">cudaError_t</span> <span class="nf">checkCuda</span><span class="p">(</span><span class="n">cudaError_t</span> <span class="n">result</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">result</span> <span class="o">!=</span> <span class="n">cudaSuccess</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&#34;CUDA Runtime Error: %s</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">cudaGetErrorString</span><span class="p">(</span><span class="n">result</span><span class="p">));</span>
+    <span class="n">assert</span><span class="p">(</span><span class="n">result</span> <span class="o">==</span> <span class="n">cudaSuccess</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/*
+</span><span class="cm"> * Each body contains x, y, and z coordinate positions,
+</span><span class="cm"> * as well as velocities in the x, y, and z directions.
+</span><span class="cm"> */</span>
+
+<span class="k">typedef</span> <span class="k">struct</span> <span class="p">{</span> <span class="kt">float</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">vx</span><span class="p">,</span> <span class="n">vy</span><span class="p">,</span> <span class="n">vz</span><span class="p">;</span> <span class="p">}</span> <span class="n">Body</span><span class="p">;</span>
+
+<span class="cm">/*
+</span><span class="cm"> * Calculate the gravitational impact of all bodies in the system
+</span><span class="cm"> * on all others.
+</span><span class="cm"> */</span>
+<span class="n">__global__</span>
+<span class="kt">void</span> <span class="nf">bodyForce</span><span class="p">(</span><span class="n">Body</span> <span class="o">*</span><span class="n">p</span><span class="p">,</span> <span class="kt">float</span> <span class="n">dt</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kt">int</span> <span class="n">index</span> <span class="o">=</span> <span class="n">blockIdx</span><span class="p">.</span><span class="n">x</span> <span class="o">*</span> <span class="n">blockDim</span><span class="p">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">threadIdx</span><span class="p">.</span><span class="n">x</span><span class="p">;</span>
+  <span class="kt">int</span> <span class="n">stride</span> <span class="o">=</span> <span class="n">gridDim</span><span class="p">.</span><span class="n">x</span> <span class="o">*</span> <span class="n">blockDim</span><span class="p">.</span><span class="n">x</span><span class="p">;</span>
+  <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">index</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">+=</span><span class="n">stride</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">float</span> <span class="n">Fx</span> <span class="o">=</span> <span class="mf">0.0f</span><span class="p">;</span> <span class="kt">float</span> <span class="n">Fy</span> <span class="o">=</span> <span class="mf">0.0f</span><span class="p">;</span> <span class="kt">float</span> <span class="n">Fz</span> <span class="o">=</span> <span class="mf">0.0f</span><span class="p">;</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+      <span class="kt">float</span> <span class="n">dx</span> <span class="o">=</span> <span class="n">p</span><span class="p">[</span><span class="n">j</span><span class="p">].</span><span class="n">x</span> <span class="o">-</span> <span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">x</span><span class="p">;</span>
+      <span class="kt">float</span> <span class="n">dy</span> <span class="o">=</span> <span class="n">p</span><span class="p">[</span><span class="n">j</span><span class="p">].</span><span class="n">y</span> <span class="o">-</span> <span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">y</span><span class="p">;</span>
+      <span class="kt">float</span> <span class="n">dz</span> <span class="o">=</span> <span class="n">p</span><span class="p">[</span><span class="n">j</span><span class="p">].</span><span class="n">z</span> <span class="o">-</span> <span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">z</span><span class="p">;</span>
+      <span class="kt">float</span> <span class="n">distSqr</span> <span class="o">=</span> <span class="n">dx</span><span class="o">*</span><span class="n">dx</span> <span class="o">+</span> <span class="n">dy</span><span class="o">*</span><span class="n">dy</span> <span class="o">+</span> <span class="n">dz</span><span class="o">*</span><span class="n">dz</span> <span class="o">+</span> <span class="n">SOFTENING</span><span class="p">;</span>
+      <span class="kt">float</span> <span class="n">invDist</span> <span class="o">=</span> <span class="n">rsqrtf</span><span class="p">(</span><span class="n">distSqr</span><span class="p">);</span>
+      <span class="kt">float</span> <span class="n">invDist3</span> <span class="o">=</span> <span class="n">invDist</span> <span class="o">*</span> <span class="n">invDist</span> <span class="o">*</span> <span class="n">invDist</span><span class="p">;</span>
+
+      <span class="n">Fx</span> <span class="o">+=</span> <span class="n">dx</span> <span class="o">*</span> <span class="n">invDist3</span><span class="p">;</span> <span class="n">Fy</span> <span class="o">+=</span> <span class="n">dy</span> <span class="o">*</span> <span class="n">invDist3</span><span class="p">;</span> <span class="n">Fz</span> <span class="o">+=</span> <span class="n">dz</span> <span class="o">*</span> <span class="n">invDist3</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">vx</span> <span class="o">+=</span> <span class="n">dt</span><span class="o">*</span><span class="n">Fx</span><span class="p">;</span> <span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">vy</span> <span class="o">+=</span> <span class="n">dt</span><span class="o">*</span><span class="n">Fy</span><span class="p">;</span> <span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">vz</span> <span class="o">+=</span> <span class="n">dt</span><span class="o">*</span><span class="n">Fz</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="k">const</span> <span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span><span class="o">**</span> <span class="n">argv</span><span class="p">)</span> <span class="p">{</span>
+
+  <span class="c1">// The assessment will test against both 2&lt;11 and 2&lt;15.
+</span><span class="c1"></span>  <span class="c1">// Feel free to pass the command line argument 15 when you gernate ./nbody report files
+</span><span class="c1"></span>  <span class="kt">int</span> <span class="n">nBodies</span> <span class="o">=</span> <span class="mi">2</span><span class="o">&lt;&lt;</span><span class="mi">11</span><span class="p">;</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">argc</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="n">nBodies</span> <span class="o">=</span> <span class="mi">2</span><span class="o">&lt;&lt;</span><span class="n">atoi</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+
+  <span class="c1">// The assessment will pass hidden initialized values to check for correctness.
+</span><span class="c1"></span>  <span class="c1">// You should not make changes to these files, or else the assessment will not work.
+</span><span class="c1"></span>  <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">initialized_values</span><span class="p">;</span>
+  <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">solution_values</span><span class="p">;</span>
+
+  <span class="k">if</span> <span class="p">(</span><span class="n">nBodies</span> <span class="o">==</span> <span class="mi">2</span><span class="o">&lt;&lt;</span><span class="mi">11</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">initialized_values</span> <span class="o">=</span> <span class="s">&#34;files/initialized_4096&#34;</span><span class="p">;</span>
+    <span class="n">solution_values</span> <span class="o">=</span> <span class="s">&#34;files/solution_4096&#34;</span><span class="p">;</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span> <span class="c1">// nBodies == 2&lt;&lt;15
+</span><span class="c1"></span>    <span class="n">initialized_values</span> <span class="o">=</span> <span class="s">&#34;files/initialized_65536&#34;</span><span class="p">;</span>
+    <span class="n">solution_values</span> <span class="o">=</span> <span class="s">&#34;files/solution_65536&#34;</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="k">if</span> <span class="p">(</span><span class="n">argc</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">)</span> <span class="n">initialized_values</span> <span class="o">=</span> <span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">argc</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">)</span> <span class="n">solution_values</span> <span class="o">=</span> <span class="n">argv</span><span class="p">[</span><span class="mi">3</span><span class="p">];</span>
+
+  <span class="k">const</span> <span class="kt">float</span> <span class="n">dt</span> <span class="o">=</span> <span class="mf">0.01f</span><span class="p">;</span> <span class="c1">// Time step
+</span><span class="c1"></span>  <span class="k">const</span> <span class="kt">int</span> <span class="n">nIters</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>  <span class="c1">// Simulation iterations
+</span><span class="c1"></span>
+  <span class="kt">int</span> <span class="n">bytes</span> <span class="o">=</span> <span class="n">nBodies</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">Body</span><span class="p">);</span>
+  <span class="kt">float</span> <span class="o">*</span><span class="n">buf</span><span class="p">;</span>
+
+  <span class="n">cudaMallocManaged</span><span class="p">(</span><span class="o">&amp;</span><span class="n">buf</span><span class="p">,</span> <span class="n">bytes</span><span class="p">);</span>
+
+  <span class="n">Body</span> <span class="o">*</span><span class="n">p</span> <span class="o">=</span> <span class="p">(</span><span class="n">Body</span><span class="o">*</span><span class="p">)</span><span class="n">buf</span><span class="p">;</span>
+
+  <span class="n">read_values_from_file</span><span class="p">(</span><span class="n">initialized_values</span><span class="p">,</span> <span class="n">buf</span><span class="p">,</span> <span class="n">bytes</span><span class="p">);</span>
+
+  <span class="kt">double</span> <span class="n">totalTime</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
+
+  <span class="cm">/*
+</span><span class="cm">   * This simulation will run for 10 cycles of time, calculating gravitational
+</span><span class="cm">   * interaction amongst bodies, and adjusting their positions to reflect.
+</span><span class="cm">   */</span>
+
+  <span class="kt">int</span> <span class="n">deviceId</span><span class="p">;</span>
+  <span class="kt">int</span> <span class="n">numberOfSMs</span><span class="p">;</span>
+  <span class="n">cudaGetDevice</span><span class="p">(</span><span class="o">&amp;</span><span class="n">deviceId</span><span class="p">);</span>
+  <span class="n">cudaDeviceGetAttribute</span><span class="p">(</span><span class="o">&amp;</span><span class="n">numberOfSMs</span><span class="p">,</span> <span class="n">cudaDevAttrMultiProcessorCount</span><span class="p">,</span> <span class="n">deviceId</span><span class="p">);</span>
+  <span class="kt">int</span> <span class="n">threads_per_block</span> <span class="o">=</span> <span class="mi">128</span><span class="p">;</span>
+  <span class="kt">int</span> <span class="n">number_of_blocks</span> <span class="o">=</span> <span class="n">numberOfSMs</span> <span class="o">*</span> <span class="mi">25</span> <span class="p">;</span>
+  
+  <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">iter</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">iter</span> <span class="o">&lt;</span> <span class="n">nIters</span><span class="p">;</span> <span class="n">iter</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">StartTimer</span><span class="p">();</span>
+
+  <span class="cm">/*
+</span><span class="cm">   * You will likely wish to refactor the work being done in `bodyForce`,
+</span><span class="cm">   * and potentially the work to integrate the positions.
+</span><span class="cm">   */</span>
+
+    <span class="n">bodyForce</span><span class="o">&lt;&lt;&lt;</span><span class="n">threads_per_block</span><span class="p">,</span><span class="n">number_of_blocks</span><span class="o">&gt;&gt;&gt;</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">nBodies</span><span class="p">);</span> <span class="c1">// compute interbody forces
+</span><span class="c1"></span>    <span class="n">checkCuda</span><span class="p">(</span><span class="n">cudaGetLastError</span><span class="p">());</span>
+    <span class="n">checkCuda</span><span class="p">(</span><span class="n">cudaDeviceSynchronize</span><span class="p">());</span>
+  <span class="cm">/*
+</span><span class="cm">   * This position integration cannot occur until this round of `bodyForce` has completed.
+</span><span class="cm">   * Also, the next round of `bodyForce` cannot begin until the integration is complete.
+</span><span class="cm">   */</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span> <span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">nBodies</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// integrate position
+</span><span class="c1"></span>      <span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">x</span> <span class="o">+=</span> <span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">vx</span><span class="o">*</span><span class="n">dt</span><span class="p">;</span>
+      <span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">y</span> <span class="o">+=</span> <span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">vy</span><span class="o">*</span><span class="n">dt</span><span class="p">;</span>
+      <span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">z</span> <span class="o">+=</span> <span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">vz</span><span class="o">*</span><span class="n">dt</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">const</span> <span class="kt">double</span> <span class="n">tElapsed</span> <span class="o">=</span> <span class="n">GetTimer</span><span class="p">()</span> <span class="o">/</span> <span class="mf">1000.0</span><span class="p">;</span>
+    <span class="n">totalTime</span> <span class="o">+=</span> <span class="n">tElapsed</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="kt">double</span> <span class="n">avgTime</span> <span class="o">=</span> <span class="n">totalTime</span> <span class="o">/</span> <span class="p">(</span><span class="kt">double</span><span class="p">)(</span><span class="n">nIters</span><span class="p">);</span>
+  <span class="kt">float</span> <span class="n">billionsOfOpsPerSecond</span> <span class="o">=</span> <span class="mf">1e-9</span> <span class="o">*</span> <span class="n">nBodies</span> <span class="o">*</span> <span class="n">nBodies</span> <span class="o">/</span> <span class="n">avgTime</span><span class="p">;</span>
+  <span class="n">write_values_to_file</span><span class="p">(</span><span class="n">solution_values</span><span class="p">,</span> <span class="n">buf</span><span class="p">,</span> <span class="n">bytes</span><span class="p">);</span>
+
+  <span class="c1">// You will likely enjoy watching this value grow as you accelerate the application,
+</span><span class="c1"></span>  <span class="c1">// but beware that a failure to correctly synchronize the device might result in
+</span><span class="c1"></span>  <span class="c1">// unrealistically high values.
+</span><span class="c1"></span>  <span class="n">printf</span><span class="p">(</span><span class="s">&#34;%0.3f Billion Interactions / second&#34;</span><span class="p">,</span> <span class="n">billionsOfOpsPerSecond</span><span class="p">);</span>
+
+  <span class="n">cudaFree</span><span class="p">(</span><span class="n">buf</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div><h2 id="4-证书">4 证书</h2>
 <p><figure 
 	>
 	<a href="https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/image-20211215143330246.png" >
@@ -582,7 +721,8 @@
   <ol>
     <li><a href="#1-加速向量加法">1 加速向量加法</a></li>
     <li><a href="#2-加速saxpy">2 加速SAXPY</a></li>
-    <li><a href="#3-证书">3 证书</a></li>
+    <li><a href="#3-n-body">3 N-body</a></li>
+    <li><a href="#4-证书">4 证书</a></li>
   </ol>
 </nav>
                 </div>
