@@ -180,23 +180,5 @@ class Solution { public: int qsort(vector&amp;lt;int&amp;gt;&amp;amp; nums,int l
 总结 首先还是把这两道题的代码写写吧 题目一 /** * @author lizhixuan * @version 1.0 * @date 2021/12/1 15:50 */ public class ReverseList2 { public static class ListNode { int val; ListNode next; ListNode() {} ListNode(int val) { this.val = val; } ListNode(int val, ListNode next) { this.</description>
     </item>
     
-    <item>
-      <title>PolarDB</title>
-      <link>https://tweakzx.github.io/p/polardb/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://tweakzx.github.io/p/polardb/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>PolarDB</title>
-      <link>https://tweakzx.github.io/p/polardb/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://tweakzx.github.io/p/polardb/</guid>
-      <description></description>
-    </item>
-    
   </channel>
 </rss>
