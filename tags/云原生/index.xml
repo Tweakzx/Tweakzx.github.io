@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>云原生 on Tweakzx</title>
+    <link>https://tweakzx.github.io/tags/%E4%BA%91%E5%8E%9F%E7%94%9F/</link>
+    <description>Recent content in 云原生 on Tweakzx</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 22 Dec 2021 14:17:12 +0800</lastBuildDate><atom:link href="https://tweakzx.github.io/tags/%E4%BA%91%E5%8E%9F%E7%94%9F/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>PolarDB Serverless论文阅读报告</title>
+      <link>https://tweakzx.github.io/p/polardb-serverless%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E6%8A%A5%E5%91%8A/</link>
+      <pubDate>Wed, 22 Dec 2021 14:17:12 +0800</pubDate>
+      
+      <guid>https://tweakzx.github.io/p/polardb-serverless%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E6%8A%A5%E5%91%8A/</guid>
+      <description>PolarDB Serverless论文阅读报告 摘要 数据库管理系统的上云是近期很火的研究趋势，因为这样可以获得更高的弹性，可用性以及更低的成本，传统的独块的数据库架构很难满足这样的要求。高速网络与新的内存技术（例如RDMA）的发展，给分散式数据库带来了可能：它将原先的独块的服务器资源分离解耦到资源池中，再通过高速网络连接起来。下一代的云原生数据库就是为了分散化的数据中心而设计。
+PolarDB Serverless 遵循分散式的设计范式而设计，解耦了计算节点的CPU，内存，存储资源。
+ 每种资源可以随需求而独立的增长或缩小，保障可靠性的同时，可以进行多维度的按需供应。 同时采用了优化策略如乐观锁和预取策略来改善性能。 还可以实现更快的故障恢复。  介绍 使用云数据库的三个好处：  按需付费可以使得用户减小开支。 更高的资源弹性可以应对短暂的资源使用高峰期。 更快的升级与更快的错误修复。快速的升级迭代可以保证产品竞争力，错误修复可以在不影响产品可用性的前提下进行。  经典的云数据库的架构  monolithic machine 独块的机器  特点：所有的资源都是紧耦合的 问题：  在进行数据库实例到机器的分发过程中要解决一个装箱问题 总是有碎片化的资源，难以达到高的使用率 运行时不能根据负载调整资源 资源间的命运共享，一个资源的故障会导致其他资源的故障，不能独立透明地修复故障，导致修复时间很长     存算分离的架构：  两种：  virtual machine with remote disk 搭载远程硬盘的虚拟机 shared storage 共享存储   优点  DBaaS可以提高存储池的使用率 共享存储可以进一步减少成本：原数据与只读备份可以共享存储   问题  CPU和内存的装箱问题依旧存在 缺乏灵活可放缩的内存资源 每个只读备份在内存中都要有冗余的内存开销      本文提出了一种新架构，分散架构（disaggragation architecture)  运行在分散的数据中心（DDC），CPU、内存和存储解耦，资源间通过高速网络连接 效果  每一种资源都可以提高其利用率，可以独立地放缩其资源量 解决了资源间的命运共享问题，资源故障可以被独立修复 数据页可以在远程内存池中被共享，所以解决了备份的内存冗余问题    云原生数据库 多数的云数据库是基于共享存储的架构，内存和CPU绑成最小的资源单元，只能按照最小资源单元的粒度来增长和释放资源，这会带来很多的资源浪费。</description>
+    </item>
+    
+  </channel>
+</rss>

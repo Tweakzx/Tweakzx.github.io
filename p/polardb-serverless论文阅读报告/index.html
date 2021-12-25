@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='PolarDB Serverless 是无服务的云原生数据库'><title>PolarDB Serverless论文阅读报告</title>
+
+<link rel='canonical' href='https://tweakzx.github.io/p/polardb-serverless%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E6%8A%A5%E5%91%8A/'>
+
+<link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='PolarDB Serverless论文阅读报告'>
+<meta property='og:description' content='PolarDB Serverless 是无服务的云原生数据库'>
+<meta property='og:url' content='https://tweakzx.github.io/p/polardb-serverless%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E6%8A%A5%E5%91%8A/'>
+<meta property='og:site_name' content='Tweakzx'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='论文' /><meta property='article:tag' content='云原生' /><meta property='article:tag' content='数据库' /><meta property='article:published_time' content='2021-12-22T14:17:12&#43;08:00'/><meta property='article:modified_time' content='2021-12-22T14:17:12&#43;08:00'/><meta property='og:image' content='https://2021.sigmod.org/images/2021sigmod-logo1.jpg' />
+<meta name="twitter:title" content="PolarDB Serverless论文阅读报告">
+<meta name="twitter:description" content="PolarDB Serverless 是无服务的云原生数据库"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='https://2021.sigmod.org/images/2021sigmod-logo1.jpg' />
+    </head>
+    <body class="
+    article-page has-toc
+">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex 
+    
+        extended
+    
+">
+    
+        <div id="article-toolbar">
+            <a href="/" class="back-home">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="15 6 9 12 15 18" />
+</svg>
+
+
+
+                <span>Back</span>
+            </a>
+        </div>
+    
+<main class="main full-width">
+    <article class="has-image main-article">
+    <header class="article-header">
+        <div class="article-image">
+            <a href="/p/polardb-serverless%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E6%8A%A5%E5%91%8A/">
+                
+                    <img src="https://2021.sigmod.org/images/2021sigmod-logo1.jpg" loading="lazy" alt="Featured image of post PolarDB Serverless论文阅读报告" />
+                
+            </a>
+        </div>
+    
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/%E8%AE%BA%E6%96%87/" >
+                论文
+            </a>
+        
+    </header>
+    
+
+    <h2 class="article-title">
+        <a href="/p/polardb-serverless%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E6%8A%A5%E5%91%8A/">PolarDB Serverless论文阅读报告</a>
+    </h2>
+
+    
+    <h3 class="article-subtitle">
+        PolarDB Serverless 是无服务的云原生数据库
+    </h3>
+    
+
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Dec 22, 2021</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    2 minute read
+                </time>
+            </div>
+        
+    </footer>
+    
+</div>
+</header>
+
+    <section class="article-content">
+    <h1 id="polardb-serverless论文阅读报告">PolarDB Serverless论文阅读报告</h1>
+<h2 id="摘要">摘要</h2>
+<p>数据库管理系统的上云是近期很火的研究趋势，因为这样可以获得更高的弹性，可用性以及更低的成本，传统的独块的数据库架构很难满足这样的要求。高速网络与新的内存技术（例如RDMA）的发展，给分散式数据库带来了可能：它将原先的独块的服务器资源分离解耦到资源池中，再通过高速网络连接起来。下一代的云原生数据库就是为了分散化的数据中心而设计。</p>
+<p>PolarDB Serverless 遵循分散式的设计范式而设计，解耦了计算节点的CPU，内存，存储资源。</p>
+<ul>
+<li>每种资源可以随需求而独立的增长或缩小，保障可靠性的同时，可以进行多维度的按需供应。</li>
+<li>同时采用了优化策略如乐观锁和预取策略来改善性能。</li>
+<li>还可以实现更快的故障恢复。</li>
+</ul>
+<h2 id="介绍">介绍</h2>
+<h3 id="使用云数据库的三个好处">使用云数据库的三个好处：</h3>
+<ul>
+<li>按需付费可以使得用户减小开支。</li>
+<li>更高的资源弹性可以应对短暂的资源使用高峰期。</li>
+<li>更快的升级与更快的错误修复。快速的升级迭代可以保证产品竞争力，错误修复可以在不影响产品可用性的前提下进行。</li>
+</ul>
+<h3 id="经典的云数据库的架构">经典的云数据库的架构</h3>
+<ul>
+<li>monolithic machine 独块的机器
+<ul>
+<li>特点：所有的资源都是紧耦合的</li>
+<li>问题：
+<ul>
+<li>在进行数据库实例到机器的分发过程中要解决一个装箱问题</li>
+<li>总是有碎片化的资源，难以达到高的使用率</li>
+<li>运行时不能根据负载调整资源</li>
+<li>资源间的命运共享，一个资源的故障会导致其他资源的故障，不能独立透明地修复故障，导致修复时间很长</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>存算分离的架构：
+<ul>
+<li>两种：
+<ul>
+<li>virtual machine with remote disk 搭载远程硬盘的虚拟机</li>
+<li>shared storage 共享存储</li>
+</ul>
+</li>
+<li>优点
+<ul>
+<li>DBaaS可以提高存储池的使用率</li>
+<li>共享存储可以进一步减少成本：原数据与只读备份可以共享存储</li>
+</ul>
+</li>
+<li>问题
+<ul>
+<li>CPU和内存的装箱问题依旧存在</li>
+<li>缺乏灵活可放缩的内存资源</li>
+<li>每个只读备份在内存中都要有冗余的内存开销</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="本文提出了一种新架构分散架构disaggragation-architecture">本文提出了一种新架构，分散架构（disaggragation architecture)</h3>
+<ul>
+<li>运行在分散的数据中心（DDC），CPU、内存和存储解耦，资源间通过高速网络连接</li>
+<li>效果
+<ul>
+<li>每一种资源都可以提高其利用率，可以独立地放缩其资源量</li>
+<li>解决了资源间的命运共享问题，资源故障可以被独立修复</li>
+<li>数据页可以在远程内存池中被共享，所以解决了备份的内存冗余问题</li>
+</ul>
+</li>
+</ul>
+<h3 id="云原生数据库">云原生数据库</h3>
+<p>多数的云数据库是基于共享存储的架构，内存和CPU绑成最小的资源单元，只能按照最小资源单元的粒度来增长和释放资源，这会带来很多的资源浪费。</p>
+<p>PolarDB Serverless则是遵循分散架构的一个云原生数据库</p>
+<ul>
+<li>
+<p>引入了多租户可放缩的内存池，可以进行内存页的分配与生命周期管理</p>
+</li>
+<li>
+<p>节点组成：</p>
+<ul>
+<li>一个 RW node(存原数据页节点)</li>
+<li>多个 RO node（存只读备份节点）</li>
+</ul>
+</li>
+<li>
+<p>面临的挑战</p>
+<ul>
+<li>添加远程内存之后，系统可以正确地处理事务
+<ul>
+<li>当写后读时，系统不应该错过任何一个update。使用缓存失效机制来保证写后所有地节点会更新</li>
+<li>在更新B+树地索引的时候，使用global latch全局页锁来保证RO节点不能看到不一致的索引结构</li>
+<li>使用读视图来确保RO节点不会读到未提交的事务</li>
+</ul>
+</li>
+<li>高效地执行事务
+<ul>
+<li>广泛使用了RDMA操作，尤其是one-sided RDMA verbs</li>
+<li>为了提高并发，使用了乐观锁</li>
+<li>存储方面使用了page materialization offloading技术，使用redo日志生成page</li>
+<li>利用了预取来提高本地命中率</li>
+</ul>
+</li>
+<li>构建可信系统
+<ul>
+<li>对不同的节点都设计了策略来处理单点故障</li>
+<li>因为内存和存储的状态是解耦的，所以修复崩溃的速度比独块架构要快5.3倍</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="背景">背景</h2>
+<h3 id="polardb">PolarDB</h3>
+<p>PolarDB是一个基于共享内存架构云原生数据库</p>
+<ul>
+<li>PolarFS是一个持久化的原子操作的可伸缩的分布式共享存储。是统一的存储资源池，其提供虚拟的volume，每个volume划分为10GB大小的chunk分布在不同的节点。每个volume最多10000个chunk，即100T的容量。每个chunk三副本，用parallel raft提供线性一致性。</li>
+<li>RW和RO节点之间通过redo日志来同步内存状态，通过LSN（log sequence number）来协调一致性。RW和RO节点上有负责处理SQL语句的处理器和事务引擎（InnoDB，X-Engine），以及一个缓存池来服务查询与事务。</li>
+<li>有多个无状态的代理节点负责透明的负载均衡</li>
+</ul>
+<p><figure 
+	>
+	<a href="https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/image-20211222201006368.png" >
+		<img src="https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/image-20211222201006368.png"
+			
+			
+			
+			loading="lazy"
+			alt="image-20211222201006368">
+	</a>
+	
+	<figcaption>image-20211222201006368</figcaption>
+	
+</figure></p>
+<h3 id="分散化的数据中心ddc">分散化的数据中心DDC</h3>
+<ul>
+<li>
+<p>连接技术</p>
+<ul>
+<li>
+<p>在分散化的数据中心，计算节点、内存结点以及存储节点都是由高速网络连接。</p>
+</li>
+<li>
+<p>RDMA（Remote Direct Memory Access）技术给大型的DDC带来了可能</p>
+</li>
+</ul>
+</li>
+<li>
+<p>层级结构</p>
+<ul>
+<li>分为三层：spine layer、leaf layer、ToR layer</li>
+<li>每一个ToR节点链接48台主机，ToR的交换机分别连接Leaf节点的交换机，然后Leaf的交换机又去链接Spine层的交换机。</li>
+<li>每台主机都会配有双端口的RDMA网卡，用于链接两个ToR节点来避免单点故障。</li>
+<li>一个leaf 交换机组包含互为备份的同时工作的多个leaf交换机</li>
+<li>由一个leaf交换机组管理控制的所有的交换机与服务器称为一个PoD（Point of Delivery）。一个PoD最多有32个leaf交换机。</li>
+</ul>
+</li>
+<li>
+<p>资源部署方式</p>
+<ul>
+<li>单个数据库实例所需的内存和存储会部署在一个PoD下</li>
+<li>不同实例部署在不同的PoD下</li>
+<li>计算和内存资源总是倾向于部署在同一个ToR下，以获得更低的延迟与更少的页抖动</li>
+</ul>
+</li>
+</ul>
+<p><figure 
+	>
+	<a href="https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/image-20211222201043429.png" >
+		<img src="https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/image-20211222201043429.png"
+			
+			
+			
+			loading="lazy"
+			alt="image-20211222201043429">
+	</a>
+	
+	<figcaption>image-20211222201043429</figcaption>
+	
+</figure></p>
+<h3 id="无服务数据库">无服务数据库</h3>
+<p>无服务数据库是云原生数据库的高弹性变种，主要目的是为了实现资源的按需分配</p>
+<ul>
+<li>自动扩缩 auto-scaling
+<ul>
+<li>现存的无服务数据库的扩缩容因为是基于共享存储的架构，所以扩缩容受到限制。由于内存和CPU资源总是深度绑定在一个资源单位上，扩缩容也只能按照资源单位作为调动粒度。所以CPU和内存资源总是不能得到充分利用。</li>
+<li>分析性数据库对内存的要求比较高，只需要少量的CPU资源来定期同步更新数据</li>
+<li>事务性数据库少量的内存就可以保证缓存命中率，但需要更多的CPU资源来应对访问的高峰时刻</li>
+</ul>
+</li>
+<li>自动暂停 auto-pause
+<ul>
+<li>现存的无服务数据库的自动暂停也是受限的，CPU和内存资源必须被同时释放</li>
+<li>在分散式架构下，CPU和内存不再共享命运。业务低峰期，内存可以不必释放，避免了重新加载。</li>
+</ul>
+</li>
+<li>扩容透明性 scaling transparency
+<ul>
+<li>透明性即在扩缩容的时候需要保证客户的场景不能中断或者性能出现严重影响</li>
+<li>分散式架构下，中间临时状态如脏页、事务状态如版本信息timestamp、逻辑锁、query中间结果都可以保存在共享内存层，给实现扩缩容的透明性提供了更好的条件。</li>
+<li>PolarDB Serverless 目前将脏页存在共享内存里，其他的临时状态期待后续的工作。</li>
+</ul>
+</li>
+</ul>
+<h2 id="设计">设计</h2>
+<p>PolarDB Serverless 基于PolarDB开发的分散式架构的云原生数据库。</p>
+<ul>
+<li>组成：多个代理节点，一个RW节点，多个RO节点</li>
+<li>使用PolarFS来做共享存储</li>
+<li>和PolarDB的最大不同在于使用了远程内存池（共享内存）</li>
+</ul>
+<p>使用共享内存</p>
+<ul>
+<li>好处
+<ul>
+<li>RW和RO共用数据页，省去了每个节点自己保存副本，提高了内存的使用效率</li>
+</ul>
+</li>
+<li>坏处（performance penalty）
+<ul>
+<li>远程内存的访问速度远远低于本地内存；解决方案：分层内存系统和预取技术</li>
+<li>私有数据放在公共资源上，需要有跨节点的互斥保护；解决方案：广泛使用单边的RDMA谓词和乐观协议来避免使用全局锁（global latch）</li>
+<li>页的传输和网络带来了负担。解决方案：先将redo log写到存储层，再异步地通过日志将页物质化</li>
+</ul>
+</li>
+</ul>
+<h3 id="分散化内存">分散化内存</h3>
+<h4 id="远程内存访问接口">远程内存访问接口</h4>
+<ul>
+<li><strong>page_register</strong>: 页的引用计数增一</li>
+<li><strong>page_unregister</strong>: 页的引用计数减一</li>
+<li><strong>page_read</strong>: 使用单边RDMA谓词将页从远程内存读取到本地</li>
+<li><strong>page_write</strong>: 使用单边RDMA谓词将页从本地写到远程内存</li>
+<li><strong>page_invalidation</strong>: 使所有RO节点的本地的内存副本失效</li>
+</ul>
+<h4 id="远程内存管理">远程内存管理</h4>
+<p>内存的分配单元是一个slab，一个slab的大小是1GB</p>
+<p>几种数据结构如下：</p>
+<ul>
+<li><strong>Page Array（PA）</strong>
+<ul>
+<li>每一个slab由页数组组成，页数组是物理地址连续的由16KB的页组成的数组。</li>
+<li>PA的地址会注册到RDMA的网卡上，所以可以被RDMA远程访问</li>
+<li>负责提供slab访问的节点也叫slab node，第一个slab node 也叫home node</li>
+</ul>
+</li>
+<li><strong>Page Address Table（PAT）</strong>
+<ul>
+<li>一个哈希表，存储每一页的位置（slab id 与物理地址）</li>
+</ul>
+</li>
+<li><strong>Page Invalidation Bitmap (PIB)</strong>
+<ul>
+<li>一个位图，对应PAT的每一项记录invalidation bit，0表示内存中的是最新版本，1表示不是最新版本</li>
+</ul>
+</li>
+<li><strong>Page Reference Directory(PRD)</strong>
+<ul>
+<li>一个map，对应于每个PAT项，记录引用了这个页的节点</li>
+</ul>
+</li>
+<li><strong>Page Latch Table(PLT)</strong>
+<ul>
+<li>对于PAT中的每一项，管理其页锁（page latch）。</li>
+<li>是一个全局的物理锁，用于多个数据库节点之间进行保护与同步读写</li>
+<li>尤其用于保护B+树的结构一致性</li>
+</ul>
+</li>
+</ul>
+<p>page分配过程：</p>
+<ul>
+<li>数据库向home node 发送page register请求</li>
+<li>如果不存在，则遍历slab找到有空闲的slab，如果都没有空闲则使用LRU算法淘汰掉一些page</li>
+<li>写入后，将page的为位置信息写入到PAT，返回page的远程地址和page latch</li>
+</ul>
+<p>扩缩容：</p>
+<ul>
+<li>扩容：home node 请求DBaaS分配新的slab，扩展buffer pool，PAT，PIB和PRD</li>
+<li>缩容：page通过LRU进行淘汰，无用的slab将被回收</li>
+</ul>
+<h4 id="本地缓存">本地缓存</h4>
+<ul>
+<li>以page为单位将远程内存缓存到本地</li>
+<li>如果page不在远程内存上，进程会从Polar FS读取内容到本地缓存，然后再写回到远程内存。（存储和内存不发生直接接触）</li>
+<li>不是所有的page都要写入远程内存，例如全表扫描，这些page不太会再次访问</li>
+<li>本地发生miss，进程要等待读取远程内存（可以利用预取技术）</li>
+<li>本地的缓存写满后使用LRU算法进行淘汰。如果page没有修改过可以直接释放。如果page修改过，那就写回后再释放。引用计数减一。</li>
+</ul>
+<h4 id="缓存一致性">缓存一致性</h4>
+<ul>
+<li>RO节点不能直接访问RW节点的本地缓存，只能通过获取最新的redo log来在本地物质化page来获取最新的数据。</li>
+<li>如果RW节点将修改过的数据写回远程内存后，RO节点自然是不需要读取redo log，可是系统如果每次修改都要立刻写回，网络开销会很大。所以RW节点不会立刻写回，而是使用了页失效的方法。</li>
+</ul>
+<p><figure 
+	>
+	<a href="https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/image-20211225120332727.png" >
+		<img src="https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/image-20211225120332727.png"
+			
+			
+			
+			loading="lazy"
+			alt="image-20211225120332727">
+	</a>
+	
+	<figcaption>image-20211225120332727</figcaption>
+	
+</figure></p>
+<ul>
+<li>具体过程如下：
+<ol>
+<li>RW修改page后，调用page_invalidation</li>
+<li>发送请求到home node</li>
+<li>PIB中对应页项设置为1</li>
+<li>查询PRD，查看page在哪些RO节点上存在</li>
+<li>向所有的存在这个page的RO发送请求，将PIB设置为1</li>
+<li>设置PIB过期是一个同步阻塞操作</li>
+<li>只有全部的RO节点设置成功才返回成功</li>
+<li>如果有个RO节点超时，那么就把他踢出集群来保证该操作成功</li>
+</ol>
+</li>
+<li>在写回到Polar FS（远程存储）的时候，同样会使用page_invalid来保证远程内存中不会存在比远程存储中更老版本的数据。</li>
+</ul>
+<h3 id="b树结构一致性">B+树结构一致性</h3>
+<ul>
+<li>
+<p>物理一致性</p>
+<p>问题是：多线程访问B+树的Index的时候如何做到并发控制</p>
+<p>解决方案：</p>
+<ul>
+<li>
+<p>只有RW节点可以修改page，所以不需要管理多节点的写冲突。但是SMO（结构修改操作）会同时修改多个page，其他节点在遍历B+树的时候，不同的RO节点可能看到不一致的物理B+树结构。</p>
+<ul>
+<li>我们使用全局页锁来解决这个问题，使用共享锁（S）和排他锁（X）。</li>
+<li>区别于本地页锁，全局页锁用于保证多节点下的B+树索引结构一致性。使用crabbhing/lock coupling算法实现</li>
+<li>所有参与SMO的节点会加上X锁，直到SMO结束。RO节点读取的时候要检查PLT，查看是否有X锁，并且向被读的页上加S锁。</li>
+</ul>
+</li>
+<li>
+<p>对于RW节点要进行的insert和delete操作，我们采取两阶段做法</p>
+<ul>
+<li>采用乐观并发控制，假设没有SMO操作，那就只需要本地的锁来作单节点并发控制。如果确实不需要进行SMO，那就顺利插入或者删除。</li>
+<li>如果发现B+树的叶子节点相对空或者相对满，即很有可能要发生SMO操作，就启用悲观策略，这时候会对所有可能参与SMO的page加上X锁，直到SMO结束释放锁。这样锁的排序可以保证RO节点只能看到SMO之前或者之后的树结构，而不会是SMO的中间状态。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>逻辑一致性</p>
+<ul>
+<li>相同的数据可能会有多个事务进行并发处理，如何保证满足不同的快照隔离级别。</li>
+</ul>
+</li>
+</ul>
+<h3 id="快照隔离">快照隔离</h3>
+<p>PolarDB Serverless 提供基于MVCC的快照隔离。事务的实现机制，是由快照的时间戳来控制事务能看到数据的版本信息。RW节点会维护一个中心化的的时间戳叫CTS，来为所有数据库节点分配全局单调递增的时间戳。</p>
+<p>一次读写事务需要获取两次时间戳（cts_read和cts_commit）；提交事务的时候所有记录和undo log中的记录都需要额外维护一个列来保存cts_commit;一个读写事务内的read总会返回一个cts_commit比cts_read要小的记录;每个记录都会有一个事务id字段来记录修改该记录的事务。</p>
+<p>一个只读事务则只需要在事务开始的时候获取cts_read时间戳即可。</p>
+<p>但是对于一些比较heavy的事务，无法迅速对所有记录更新cts_commit，因为这会在提交事务的时候带来大量的随机写。因此这个cts_commit的更新是异步执行的。这就导致了在并发事务处理的时候，无法得知该记录的cts_commit是否已经被写或者是否要被写，即无法得知先前的事务是否已经完成或者该记录是否与先前事务有关。</p>
+<p>解决方案：通过查询RW上的CTS Log数据结构，其是一个环形数组：记录着最近若干个的读写事务的提交时间戳(cts_commit)。如果先前事务没有完成，这个数组上的commit timestamp就会为null，每当一个节点读取到一个cts_commit为空的记录，就可以去查询这个全局的环形数组来得知这个记录对应的事务是否已经提交了。</p>
+<p>同样要去全局查这个时间戳要对应一次network request，本系统还是采用RDMA 来加速环形数组的访问获取时间戳的过程，RDMA CAS技术能够原子递增获取时间戳，并且这个数组的地址也会被注册到RDMA 的网卡上。和用RPC相比，直接走网卡不需要占用RW节点的CPU资源。</p>
+<h3 id="page-materialization-offloading">Page Materialization Offloading</h3>
+<p>传统的DB会周期性的将脏页写入到持久性的存储中。Aurora提出了日志即数据库的概念，通过使用redo log来物质化页数据来获取最新版本的数据。Socrates在此基础上，则做到了将log与数据分离存储。</p>
+<p>PolarrDB Serverless和Socrates类似，将logs和pages分开存储在不同的chunks中。</p>
+<ul>
+<li>redo logs先存储在logs chunks中</li>
+<li>异步发送到page chunks</li>
+<li>为了PolarFS组件的重用和最小化更改，logs仅仅送到leader node。</li>
+<li>然后leader node 重做并使用ParallelRaft保证副本的一致性</li>
+</ul>
+<h3 id="自动扩缩">自动扩缩</h3>
+<p>在版本的升级和重启过程中，用户对Serverless服务是无感知的，断开连接，事务中断，请求超时是不允许的。</p>
+<p>所以在本系统中，当发生版本升级和跨节点迁移的时候，代理节点负责保持客户端连接，发送请求后会等待旧的RW节点处理掉正在进行的事务。之后把就节点的脏页flush到共享的内存池中，再关闭就RW节点。新的RW节点连接内存池，预热缓存，重做undo log来构建事务的列表。之后代理节点将连接还给新的RW节点。</p>
+<h2 id="性能优化">性能优化</h2>
+<p>使用分散式架构会带来性能的损失，所以要使用一些性能优化手段来进行优化。</p>
+<h3 id="乐观锁">乐观锁</h3>
+<p>使用乐观锁可以尽可能避免并发操作对全局锁的获取，进而提高并行效率。</p>
+<p>RW节点会维护一个SMO counter，每次发生SMO的时候counter++；并且所有被修改的Page也会维护这个更新后的counter（SMO RW）</p>
+<p>每次query执行的时候去拿这个SMO counter（SMO query），一旦RO上的query发现某个Page的SMO counter比SMO query还要大，说明在query执行过程中发生了SMO。这个时候就要回滚到悲观并发控制，即获取全局PL来锁住整个B+ Tree的SMO更新。</p>
+<h3 id="预取">预取</h3>
+<p>在PolarDB Serverless中，我们提出了批处理密钥预处理(BKP)。BKP从分解的内存和存储中预取包含有趣的元组的页面，以隐藏远程I/O延迟。BKP的接口接受一组要预取的密钥。当调用该接口时，引擎将启动一个后台预取任务，从目标索引中检索所需的密钥，并在必要时从远程内存/存储中获取相应的数据页。BKP还可以优化分析工作负载。</p>
+<h2 id="容错与恢复策略">容错与恢复策略</h2>
+<h3 id="数据库节点恢复">数据库节点恢复</h3>
+<p>本系统采用的是ARIES的恢复算法（Algorithm for Recovery and Isolation Exploiting Semantics. ）</p>
+<ul>
+<li>RO节点的恢复：由于页数据再远程内存上，所以可以轻松地使用新的RO节点代替旧的RO节点</li>
+<li>RW节点的恢复
+<ul>
+<li>无预期的节点故障
+<ul>
+<li>RW节点挂掉之后，集群的manager（CM）会通过心跳信号探测到，然后RO节点就可以晋升为RW节点。</li>
+</ul>
+</li>
+<li>有预期的节点故障
+<ul>
+<li>例如版本升级，前文已经讲过，不再赘述。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="内存结点恢复">内存结点恢复</h3>
+<p>内存节点的数据缓存Page，在把dirty page写到内存节点前，对应的redo log已经flush到存储层了，因此内存节点重启可以用PolarFS上的redolog来进行恢复数据。</p>
+<p>home node上因为包含重要的metadata如PAT，PIB，PRD和PLT；这些数据会同步备份在从副本；home node负责检测slab node上的故障，然后home node根据PAT上的信息来重建重启的slab node即可。</p>
+<h3 id="集群恢复">集群恢复</h3>
+<p>在极少数情况下，当主节点的所有副本都不可用时，需要通过集群恢复来恢复服务。所有数据库节点和内存节点将从清除状态重新启动，所有内存状态将从存储重新启动。初始化后（连接到远程内存和存储器等），RW节点执行第5.1节中所述的并行REDO恢复，然后扫描撤销头以查找所有未完成的事务。之后，RW节点将启动服务，并在后台回滚未提交的事务。在集群恢复过程中，缓存在远程内存中的页面将被清除，因此它将忍受冷缓存问题。</p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/%E8%AE%BA%E6%96%87/">论文</a>
+        
+            <a href="/tags/%E4%BA%91%E5%8E%9F%E7%94%9F/">云原生</a>
+        
+            <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+        <link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.css"integrity="sha384-RZU/ijkSsFbcmivfdRBQDtwuwVqK7GMOw6IMvKyeWL2K5UAlyp6WonmB8m7Jd0Hn"crossorigin="anonymous"
+            ><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.js"integrity="sha384-pK1WpvzWVBQiP0/GjnvRxV4mOb0oxFuyRxJlk6vVw146n3egcN5C925NCP7a7BY8"crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/contrib/auto-render.min.js"integrity="sha384-vZTG03m&#43;2yp6N6BNi5iM4rW4oIwk5DfcNdFfxkk9ZWpDriOkXX8voJBFrAO7MpVl"crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        renderMathInElement(document.querySelector(`.article-content`), {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ]
+        });})
+</script>
+    
+</article>
+
+    <aside class="related-contents--wrapper">
+    
+    
+</aside>
+
+     
+    
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "hugo-theme-stack" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (DISQUS) {
+            DISQUS.reset({
+                reload: true
+            });
+        }
+    })
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2021 Tweakzx
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.5.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
+            >
+
+            </main>
+    
+        <aside class="sidebar right-sidebar sticky">
+            <section class="widget archives">
+                <div class="widget-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+                </div>
+                <h2 class="widget-title section-title">Table of contents</h2>
+                
+                <div class="widget--toc">
+                    <nav id="TableOfContents">
+  <ol>
+    <li><a href="#摘要">摘要</a></li>
+    <li><a href="#介绍">介绍</a>
+      <ol>
+        <li><a href="#使用云数据库的三个好处">使用云数据库的三个好处：</a></li>
+        <li><a href="#经典的云数据库的架构">经典的云数据库的架构</a></li>
+        <li><a href="#本文提出了一种新架构分散架构disaggragation-architecture">本文提出了一种新架构，分散架构（disaggragation architecture)</a></li>
+        <li><a href="#云原生数据库">云原生数据库</a></li>
+      </ol>
+    </li>
+    <li><a href="#背景">背景</a>
+      <ol>
+        <li><a href="#polardb">PolarDB</a></li>
+        <li><a href="#分散化的数据中心ddc">分散化的数据中心DDC</a></li>
+        <li><a href="#无服务数据库">无服务数据库</a></li>
+      </ol>
+    </li>
+    <li><a href="#设计">设计</a>
+      <ol>
+        <li><a href="#分散化内存">分散化内存</a>
+          <ol>
+            <li><a href="#远程内存访问接口">远程内存访问接口</a></li>
+            <li><a href="#远程内存管理">远程内存管理</a></li>
+            <li><a href="#本地缓存">本地缓存</a></li>
+            <li><a href="#缓存一致性">缓存一致性</a></li>
+          </ol>
+        </li>
+        <li><a href="#b树结构一致性">B+树结构一致性</a></li>
+        <li><a href="#快照隔离">快照隔离</a></li>
+        <li><a href="#page-materialization-offloading">Page Materialization Offloading</a></li>
+        <li><a href="#自动扩缩">自动扩缩</a></li>
+      </ol>
+    </li>
+    <li><a href="#性能优化">性能优化</a>
+      <ol>
+        <li><a href="#乐观锁">乐观锁</a></li>
+        <li><a href="#预取">预取</a></li>
+      </ol>
+    </li>
+    <li><a href="#容错与恢复策略">容错与恢复策略</a>
+      <ol>
+        <li><a href="#数据库节点恢复">数据库节点恢复</a></li>
+        <li><a href="#内存结点恢复">内存结点恢复</a></li>
+        <li><a href="#集群恢复">集群恢复</a></li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+                </div>
+            </section>
+        </aside>
+    
+
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
+                defer="false"
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

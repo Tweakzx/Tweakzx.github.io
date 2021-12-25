@@ -6,7 +6,415 @@
         <description>Recent content on Tweakzx</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Tue, 14 Dec 2021 13:55:35 +0800</lastBuildDate><atom:link href="https://tweakzx.github.io/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Wed, 22 Dec 2021 14:17:12 +0800</lastBuildDate><atom:link href="https://tweakzx.github.io/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>PolarDB Serverless论文阅读报告</title>
+        <link>https://tweakzx.github.io/p/polardb-serverless%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E6%8A%A5%E5%91%8A/</link>
+        <pubDate>Wed, 22 Dec 2021 14:17:12 +0800</pubDate>
+        
+        <guid>https://tweakzx.github.io/p/polardb-serverless%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E6%8A%A5%E5%91%8A/</guid>
+        <description>&lt;img src="https://2021.sigmod.org/images/2021sigmod-logo1.jpg" alt="Featured image of post PolarDB Serverless论文阅读报告" /&gt;&lt;h1 id=&#34;polardb-serverless论文阅读报告&#34;&gt;PolarDB Serverless论文阅读报告&lt;/h1&gt;
+&lt;h2 id=&#34;摘要&#34;&gt;摘要&lt;/h2&gt;
+&lt;p&gt;数据库管理系统的上云是近期很火的研究趋势，因为这样可以获得更高的弹性，可用性以及更低的成本，传统的独块的数据库架构很难满足这样的要求。高速网络与新的内存技术（例如RDMA）的发展，给分散式数据库带来了可能：它将原先的独块的服务器资源分离解耦到资源池中，再通过高速网络连接起来。下一代的云原生数据库就是为了分散化的数据中心而设计。&lt;/p&gt;
+&lt;p&gt;PolarDB Serverless 遵循分散式的设计范式而设计，解耦了计算节点的CPU，内存，存储资源。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;每种资源可以随需求而独立的增长或缩小，保障可靠性的同时，可以进行多维度的按需供应。&lt;/li&gt;
+&lt;li&gt;同时采用了优化策略如乐观锁和预取策略来改善性能。&lt;/li&gt;
+&lt;li&gt;还可以实现更快的故障恢复。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;介绍&#34;&gt;介绍&lt;/h2&gt;
+&lt;h3 id=&#34;使用云数据库的三个好处&#34;&gt;使用云数据库的三个好处：&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;按需付费可以使得用户减小开支。&lt;/li&gt;
+&lt;li&gt;更高的资源弹性可以应对短暂的资源使用高峰期。&lt;/li&gt;
+&lt;li&gt;更快的升级与更快的错误修复。快速的升级迭代可以保证产品竞争力，错误修复可以在不影响产品可用性的前提下进行。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;经典的云数据库的架构&#34;&gt;经典的云数据库的架构&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;monolithic machine 独块的机器
+&lt;ul&gt;
+&lt;li&gt;特点：所有的资源都是紧耦合的&lt;/li&gt;
+&lt;li&gt;问题：
+&lt;ul&gt;
+&lt;li&gt;在进行数据库实例到机器的分发过程中要解决一个装箱问题&lt;/li&gt;
+&lt;li&gt;总是有碎片化的资源，难以达到高的使用率&lt;/li&gt;
+&lt;li&gt;运行时不能根据负载调整资源&lt;/li&gt;
+&lt;li&gt;资源间的命运共享，一个资源的故障会导致其他资源的故障，不能独立透明地修复故障，导致修复时间很长&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;存算分离的架构：
+&lt;ul&gt;
+&lt;li&gt;两种：
+&lt;ul&gt;
+&lt;li&gt;virtual machine with remote disk 搭载远程硬盘的虚拟机&lt;/li&gt;
+&lt;li&gt;shared storage 共享存储&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;优点
+&lt;ul&gt;
+&lt;li&gt;DBaaS可以提高存储池的使用率&lt;/li&gt;
+&lt;li&gt;共享存储可以进一步减少成本：原数据与只读备份可以共享存储&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;问题
+&lt;ul&gt;
+&lt;li&gt;CPU和内存的装箱问题依旧存在&lt;/li&gt;
+&lt;li&gt;缺乏灵活可放缩的内存资源&lt;/li&gt;
+&lt;li&gt;每个只读备份在内存中都要有冗余的内存开销&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;本文提出了一种新架构分散架构disaggragation-architecture&#34;&gt;本文提出了一种新架构，分散架构（disaggragation architecture)&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;运行在分散的数据中心（DDC），CPU、内存和存储解耦，资源间通过高速网络连接&lt;/li&gt;
+&lt;li&gt;效果
+&lt;ul&gt;
+&lt;li&gt;每一种资源都可以提高其利用率，可以独立地放缩其资源量&lt;/li&gt;
+&lt;li&gt;解决了资源间的命运共享问题，资源故障可以被独立修复&lt;/li&gt;
+&lt;li&gt;数据页可以在远程内存池中被共享，所以解决了备份的内存冗余问题&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;云原生数据库&#34;&gt;云原生数据库&lt;/h3&gt;
+&lt;p&gt;多数的云数据库是基于共享存储的架构，内存和CPU绑成最小的资源单元，只能按照最小资源单元的粒度来增长和释放资源，这会带来很多的资源浪费。&lt;/p&gt;
+&lt;p&gt;PolarDB Serverless则是遵循分散架构的一个云原生数据库&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;引入了多租户可放缩的内存池，可以进行内存页的分配与生命周期管理&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;节点组成：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;一个 RW node(存原数据页节点)&lt;/li&gt;
+&lt;li&gt;多个 RO node（存只读备份节点）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;面临的挑战&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;添加远程内存之后，系统可以正确地处理事务
+&lt;ul&gt;
+&lt;li&gt;当写后读时，系统不应该错过任何一个update。使用缓存失效机制来保证写后所有地节点会更新&lt;/li&gt;
+&lt;li&gt;在更新B+树地索引的时候，使用global latch全局页锁来保证RO节点不能看到不一致的索引结构&lt;/li&gt;
+&lt;li&gt;使用读视图来确保RO节点不会读到未提交的事务&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;高效地执行事务
+&lt;ul&gt;
+&lt;li&gt;广泛使用了RDMA操作，尤其是one-sided RDMA verbs&lt;/li&gt;
+&lt;li&gt;为了提高并发，使用了乐观锁&lt;/li&gt;
+&lt;li&gt;存储方面使用了page materialization offloading技术，使用redo日志生成page&lt;/li&gt;
+&lt;li&gt;利用了预取来提高本地命中率&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;构建可信系统
+&lt;ul&gt;
+&lt;li&gt;对不同的节点都设计了策略来处理单点故障&lt;/li&gt;
+&lt;li&gt;因为内存和存储的状态是解耦的，所以修复崩溃的速度比独块架构要快5.3倍&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;背景&#34;&gt;背景&lt;/h2&gt;
+&lt;h3 id=&#34;polardb&#34;&gt;PolarDB&lt;/h3&gt;
+&lt;p&gt;PolarDB是一个基于共享内存架构云原生数据库&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;PolarFS是一个持久化的原子操作的可伸缩的分布式共享存储。是统一的存储资源池，其提供虚拟的volume，每个volume划分为10GB大小的chunk分布在不同的节点。每个volume最多10000个chunk，即100T的容量。每个chunk三副本，用parallel raft提供线性一致性。&lt;/li&gt;
+&lt;li&gt;RW和RO节点之间通过redo日志来同步内存状态，通过LSN（log sequence number）来协调一致性。RW和RO节点上有负责处理SQL语句的处理器和事务引擎（InnoDB，X-Engine），以及一个缓存池来服务查询与事务。&lt;/li&gt;
+&lt;li&gt;有多个无状态的代理节点负责透明的负载均衡&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;figure 
+	&gt;
+	&lt;a href=&#34;https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/image-20211222201006368.png&#34; &gt;
+		&lt;img src=&#34;https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/image-20211222201006368.png&#34;
+			
+			
+			
+			loading=&#34;lazy&#34;
+			alt=&#34;image-20211222201006368&#34;&gt;
+	&lt;/a&gt;
+	
+	&lt;figcaption&gt;image-20211222201006368&lt;/figcaption&gt;
+	
+&lt;/figure&gt;&lt;/p&gt;
+&lt;h3 id=&#34;分散化的数据中心ddc&#34;&gt;分散化的数据中心DDC&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;连接技术&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;在分散化的数据中心，计算节点、内存结点以及存储节点都是由高速网络连接。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;RDMA（Remote Direct Memory Access）技术给大型的DDC带来了可能&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;层级结构&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;分为三层：spine layer、leaf layer、ToR layer&lt;/li&gt;
+&lt;li&gt;每一个ToR节点链接48台主机，ToR的交换机分别连接Leaf节点的交换机，然后Leaf的交换机又去链接Spine层的交换机。&lt;/li&gt;
+&lt;li&gt;每台主机都会配有双端口的RDMA网卡，用于链接两个ToR节点来避免单点故障。&lt;/li&gt;
+&lt;li&gt;一个leaf 交换机组包含互为备份的同时工作的多个leaf交换机&lt;/li&gt;
+&lt;li&gt;由一个leaf交换机组管理控制的所有的交换机与服务器称为一个PoD（Point of Delivery）。一个PoD最多有32个leaf交换机。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;资源部署方式&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;单个数据库实例所需的内存和存储会部署在一个PoD下&lt;/li&gt;
+&lt;li&gt;不同实例部署在不同的PoD下&lt;/li&gt;
+&lt;li&gt;计算和内存资源总是倾向于部署在同一个ToR下，以获得更低的延迟与更少的页抖动&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;figure 
+	&gt;
+	&lt;a href=&#34;https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/image-20211222201043429.png&#34; &gt;
+		&lt;img src=&#34;https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/image-20211222201043429.png&#34;
+			
+			
+			
+			loading=&#34;lazy&#34;
+			alt=&#34;image-20211222201043429&#34;&gt;
+	&lt;/a&gt;
+	
+	&lt;figcaption&gt;image-20211222201043429&lt;/figcaption&gt;
+	
+&lt;/figure&gt;&lt;/p&gt;
+&lt;h3 id=&#34;无服务数据库&#34;&gt;无服务数据库&lt;/h3&gt;
+&lt;p&gt;无服务数据库是云原生数据库的高弹性变种，主要目的是为了实现资源的按需分配&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;自动扩缩 auto-scaling
+&lt;ul&gt;
+&lt;li&gt;现存的无服务数据库的扩缩容因为是基于共享存储的架构，所以扩缩容受到限制。由于内存和CPU资源总是深度绑定在一个资源单位上，扩缩容也只能按照资源单位作为调动粒度。所以CPU和内存资源总是不能得到充分利用。&lt;/li&gt;
+&lt;li&gt;分析性数据库对内存的要求比较高，只需要少量的CPU资源来定期同步更新数据&lt;/li&gt;
+&lt;li&gt;事务性数据库少量的内存就可以保证缓存命中率，但需要更多的CPU资源来应对访问的高峰时刻&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;自动暂停 auto-pause
+&lt;ul&gt;
+&lt;li&gt;现存的无服务数据库的自动暂停也是受限的，CPU和内存资源必须被同时释放&lt;/li&gt;
+&lt;li&gt;在分散式架构下，CPU和内存不再共享命运。业务低峰期，内存可以不必释放，避免了重新加载。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;扩容透明性 scaling transparency
+&lt;ul&gt;
+&lt;li&gt;透明性即在扩缩容的时候需要保证客户的场景不能中断或者性能出现严重影响&lt;/li&gt;
+&lt;li&gt;分散式架构下，中间临时状态如脏页、事务状态如版本信息timestamp、逻辑锁、query中间结果都可以保存在共享内存层，给实现扩缩容的透明性提供了更好的条件。&lt;/li&gt;
+&lt;li&gt;PolarDB Serverless 目前将脏页存在共享内存里，其他的临时状态期待后续的工作。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;设计&#34;&gt;设计&lt;/h2&gt;
+&lt;p&gt;PolarDB Serverless 基于PolarDB开发的分散式架构的云原生数据库。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;组成：多个代理节点，一个RW节点，多个RO节点&lt;/li&gt;
+&lt;li&gt;使用PolarFS来做共享存储&lt;/li&gt;
+&lt;li&gt;和PolarDB的最大不同在于使用了远程内存池（共享内存）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;使用共享内存&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;好处
+&lt;ul&gt;
+&lt;li&gt;RW和RO共用数据页，省去了每个节点自己保存副本，提高了内存的使用效率&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;坏处（performance penalty）
+&lt;ul&gt;
+&lt;li&gt;远程内存的访问速度远远低于本地内存；解决方案：分层内存系统和预取技术&lt;/li&gt;
+&lt;li&gt;私有数据放在公共资源上，需要有跨节点的互斥保护；解决方案：广泛使用单边的RDMA谓词和乐观协议来避免使用全局锁（global latch）&lt;/li&gt;
+&lt;li&gt;页的传输和网络带来了负担。解决方案：先将redo log写到存储层，再异步地通过日志将页物质化&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;分散化内存&#34;&gt;分散化内存&lt;/h3&gt;
+&lt;h4 id=&#34;远程内存访问接口&#34;&gt;远程内存访问接口&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;page_register&lt;/strong&gt;: 页的引用计数增一&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;page_unregister&lt;/strong&gt;: 页的引用计数减一&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;page_read&lt;/strong&gt;: 使用单边RDMA谓词将页从远程内存读取到本地&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;page_write&lt;/strong&gt;: 使用单边RDMA谓词将页从本地写到远程内存&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;page_invalidation&lt;/strong&gt;: 使所有RO节点的本地的内存副本失效&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;远程内存管理&#34;&gt;远程内存管理&lt;/h4&gt;
+&lt;p&gt;内存的分配单元是一个slab，一个slab的大小是1GB&lt;/p&gt;
+&lt;p&gt;几种数据结构如下：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Page Array（PA）&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;每一个slab由页数组组成，页数组是物理地址连续的由16KB的页组成的数组。&lt;/li&gt;
+&lt;li&gt;PA的地址会注册到RDMA的网卡上，所以可以被RDMA远程访问&lt;/li&gt;
+&lt;li&gt;负责提供slab访问的节点也叫slab node，第一个slab node 也叫home node&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Page Address Table（PAT）&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;一个哈希表，存储每一页的位置（slab id 与物理地址）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Page Invalidation Bitmap (PIB)&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;一个位图，对应PAT的每一项记录invalidation bit，0表示内存中的是最新版本，1表示不是最新版本&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Page Reference Directory(PRD)&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;一个map，对应于每个PAT项，记录引用了这个页的节点&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Page Latch Table(PLT)&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;对于PAT中的每一项，管理其页锁（page latch）。&lt;/li&gt;
+&lt;li&gt;是一个全局的物理锁，用于多个数据库节点之间进行保护与同步读写&lt;/li&gt;
+&lt;li&gt;尤其用于保护B+树的结构一致性&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;page分配过程：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;数据库向home node 发送page register请求&lt;/li&gt;
+&lt;li&gt;如果不存在，则遍历slab找到有空闲的slab，如果都没有空闲则使用LRU算法淘汰掉一些page&lt;/li&gt;
+&lt;li&gt;写入后，将page的为位置信息写入到PAT，返回page的远程地址和page latch&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;扩缩容：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;扩容：home node 请求DBaaS分配新的slab，扩展buffer pool，PAT，PIB和PRD&lt;/li&gt;
+&lt;li&gt;缩容：page通过LRU进行淘汰，无用的slab将被回收&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;本地缓存&#34;&gt;本地缓存&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;以page为单位将远程内存缓存到本地&lt;/li&gt;
+&lt;li&gt;如果page不在远程内存上，进程会从Polar FS读取内容到本地缓存，然后再写回到远程内存。（存储和内存不发生直接接触）&lt;/li&gt;
+&lt;li&gt;不是所有的page都要写入远程内存，例如全表扫描，这些page不太会再次访问&lt;/li&gt;
+&lt;li&gt;本地发生miss，进程要等待读取远程内存（可以利用预取技术）&lt;/li&gt;
+&lt;li&gt;本地的缓存写满后使用LRU算法进行淘汰。如果page没有修改过可以直接释放。如果page修改过，那就写回后再释放。引用计数减一。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;缓存一致性&#34;&gt;缓存一致性&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;RO节点不能直接访问RW节点的本地缓存，只能通过获取最新的redo log来在本地物质化page来获取最新的数据。&lt;/li&gt;
+&lt;li&gt;如果RW节点将修改过的数据写回远程内存后，RO节点自然是不需要读取redo log，可是系统如果每次修改都要立刻写回，网络开销会很大。所以RW节点不会立刻写回，而是使用了页失效的方法。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;figure 
+	&gt;
+	&lt;a href=&#34;https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/image-20211225120332727.png&#34; &gt;
+		&lt;img src=&#34;https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/image-20211225120332727.png&#34;
+			
+			
+			
+			loading=&#34;lazy&#34;
+			alt=&#34;image-20211225120332727&#34;&gt;
+	&lt;/a&gt;
+	
+	&lt;figcaption&gt;image-20211225120332727&lt;/figcaption&gt;
+	
+&lt;/figure&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;具体过程如下：
+&lt;ol&gt;
+&lt;li&gt;RW修改page后，调用page_invalidation&lt;/li&gt;
+&lt;li&gt;发送请求到home node&lt;/li&gt;
+&lt;li&gt;PIB中对应页项设置为1&lt;/li&gt;
+&lt;li&gt;查询PRD，查看page在哪些RO节点上存在&lt;/li&gt;
+&lt;li&gt;向所有的存在这个page的RO发送请求，将PIB设置为1&lt;/li&gt;
+&lt;li&gt;设置PIB过期是一个同步阻塞操作&lt;/li&gt;
+&lt;li&gt;只有全部的RO节点设置成功才返回成功&lt;/li&gt;
+&lt;li&gt;如果有个RO节点超时，那么就把他踢出集群来保证该操作成功&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;在写回到Polar FS（远程存储）的时候，同样会使用page_invalid来保证远程内存中不会存在比远程存储中更老版本的数据。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;b树结构一致性&#34;&gt;B+树结构一致性&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;物理一致性&lt;/p&gt;
+&lt;p&gt;问题是：多线程访问B+树的Index的时候如何做到并发控制&lt;/p&gt;
+&lt;p&gt;解决方案：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;只有RW节点可以修改page，所以不需要管理多节点的写冲突。但是SMO（结构修改操作）会同时修改多个page，其他节点在遍历B+树的时候，不同的RO节点可能看到不一致的物理B+树结构。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;我们使用全局页锁来解决这个问题，使用共享锁（S）和排他锁（X）。&lt;/li&gt;
+&lt;li&gt;区别于本地页锁，全局页锁用于保证多节点下的B+树索引结构一致性。使用crabbhing/lock coupling算法实现&lt;/li&gt;
+&lt;li&gt;所有参与SMO的节点会加上X锁，直到SMO结束。RO节点读取的时候要检查PLT，查看是否有X锁，并且向被读的页上加S锁。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;对于RW节点要进行的insert和delete操作，我们采取两阶段做法&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;采用乐观并发控制，假设没有SMO操作，那就只需要本地的锁来作单节点并发控制。如果确实不需要进行SMO，那就顺利插入或者删除。&lt;/li&gt;
+&lt;li&gt;如果发现B+树的叶子节点相对空或者相对满，即很有可能要发生SMO操作，就启用悲观策略，这时候会对所有可能参与SMO的page加上X锁，直到SMO结束释放锁。这样锁的排序可以保证RO节点只能看到SMO之前或者之后的树结构，而不会是SMO的中间状态。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;逻辑一致性&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;相同的数据可能会有多个事务进行并发处理，如何保证满足不同的快照隔离级别。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;快照隔离&#34;&gt;快照隔离&lt;/h3&gt;
+&lt;p&gt;PolarDB Serverless 提供基于MVCC的快照隔离。事务的实现机制，是由快照的时间戳来控制事务能看到数据的版本信息。RW节点会维护一个中心化的的时间戳叫CTS，来为所有数据库节点分配全局单调递增的时间戳。&lt;/p&gt;
+&lt;p&gt;一次读写事务需要获取两次时间戳（cts_read和cts_commit）；提交事务的时候所有记录和undo log中的记录都需要额外维护一个列来保存cts_commit;一个读写事务内的read总会返回一个cts_commit比cts_read要小的记录;每个记录都会有一个事务id字段来记录修改该记录的事务。&lt;/p&gt;
+&lt;p&gt;一个只读事务则只需要在事务开始的时候获取cts_read时间戳即可。&lt;/p&gt;
+&lt;p&gt;但是对于一些比较heavy的事务，无法迅速对所有记录更新cts_commit，因为这会在提交事务的时候带来大量的随机写。因此这个cts_commit的更新是异步执行的。这就导致了在并发事务处理的时候，无法得知该记录的cts_commit是否已经被写或者是否要被写，即无法得知先前的事务是否已经完成或者该记录是否与先前事务有关。&lt;/p&gt;
+&lt;p&gt;解决方案：通过查询RW上的CTS Log数据结构，其是一个环形数组：记录着最近若干个的读写事务的提交时间戳(cts_commit)。如果先前事务没有完成，这个数组上的commit timestamp就会为null，每当一个节点读取到一个cts_commit为空的记录，就可以去查询这个全局的环形数组来得知这个记录对应的事务是否已经提交了。&lt;/p&gt;
+&lt;p&gt;同样要去全局查这个时间戳要对应一次network request，本系统还是采用RDMA 来加速环形数组的访问获取时间戳的过程，RDMA CAS技术能够原子递增获取时间戳，并且这个数组的地址也会被注册到RDMA 的网卡上。和用RPC相比，直接走网卡不需要占用RW节点的CPU资源。&lt;/p&gt;
+&lt;h3 id=&#34;page-materialization-offloading&#34;&gt;Page Materialization Offloading&lt;/h3&gt;
+&lt;p&gt;传统的DB会周期性的将脏页写入到持久性的存储中。Aurora提出了日志即数据库的概念，通过使用redo log来物质化页数据来获取最新版本的数据。Socrates在此基础上，则做到了将log与数据分离存储。&lt;/p&gt;
+&lt;p&gt;PolarrDB Serverless和Socrates类似，将logs和pages分开存储在不同的chunks中。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;redo logs先存储在logs chunks中&lt;/li&gt;
+&lt;li&gt;异步发送到page chunks&lt;/li&gt;
+&lt;li&gt;为了PolarFS组件的重用和最小化更改，logs仅仅送到leader node。&lt;/li&gt;
+&lt;li&gt;然后leader node 重做并使用ParallelRaft保证副本的一致性&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;自动扩缩&#34;&gt;自动扩缩&lt;/h3&gt;
+&lt;p&gt;在版本的升级和重启过程中，用户对Serverless服务是无感知的，断开连接，事务中断，请求超时是不允许的。&lt;/p&gt;
+&lt;p&gt;所以在本系统中，当发生版本升级和跨节点迁移的时候，代理节点负责保持客户端连接，发送请求后会等待旧的RW节点处理掉正在进行的事务。之后把就节点的脏页flush到共享的内存池中，再关闭就RW节点。新的RW节点连接内存池，预热缓存，重做undo log来构建事务的列表。之后代理节点将连接还给新的RW节点。&lt;/p&gt;
+&lt;h2 id=&#34;性能优化&#34;&gt;性能优化&lt;/h2&gt;
+&lt;p&gt;使用分散式架构会带来性能的损失，所以要使用一些性能优化手段来进行优化。&lt;/p&gt;
+&lt;h3 id=&#34;乐观锁&#34;&gt;乐观锁&lt;/h3&gt;
+&lt;p&gt;使用乐观锁可以尽可能避免并发操作对全局锁的获取，进而提高并行效率。&lt;/p&gt;
+&lt;p&gt;RW节点会维护一个SMO counter，每次发生SMO的时候counter++；并且所有被修改的Page也会维护这个更新后的counter（SMO RW）&lt;/p&gt;
+&lt;p&gt;每次query执行的时候去拿这个SMO counter（SMO query），一旦RO上的query发现某个Page的SMO counter比SMO query还要大，说明在query执行过程中发生了SMO。这个时候就要回滚到悲观并发控制，即获取全局PL来锁住整个B+ Tree的SMO更新。&lt;/p&gt;
+&lt;h3 id=&#34;预取&#34;&gt;预取&lt;/h3&gt;
+&lt;p&gt;在PolarDB Serverless中，我们提出了批处理密钥预处理(BKP)。BKP从分解的内存和存储中预取包含有趣的元组的页面，以隐藏远程I/O延迟。BKP的接口接受一组要预取的密钥。当调用该接口时，引擎将启动一个后台预取任务，从目标索引中检索所需的密钥，并在必要时从远程内存/存储中获取相应的数据页。BKP还可以优化分析工作负载。&lt;/p&gt;
+&lt;h2 id=&#34;容错与恢复策略&#34;&gt;容错与恢复策略&lt;/h2&gt;
+&lt;h3 id=&#34;数据库节点恢复&#34;&gt;数据库节点恢复&lt;/h3&gt;
+&lt;p&gt;本系统采用的是ARIES的恢复算法（Algorithm for Recovery and Isolation Exploiting Semantics. ）&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;RO节点的恢复：由于页数据再远程内存上，所以可以轻松地使用新的RO节点代替旧的RO节点&lt;/li&gt;
+&lt;li&gt;RW节点的恢复
+&lt;ul&gt;
+&lt;li&gt;无预期的节点故障
+&lt;ul&gt;
+&lt;li&gt;RW节点挂掉之后，集群的manager（CM）会通过心跳信号探测到，然后RO节点就可以晋升为RW节点。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;有预期的节点故障
+&lt;ul&gt;
+&lt;li&gt;例如版本升级，前文已经讲过，不再赘述。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;内存结点恢复&#34;&gt;内存结点恢复&lt;/h3&gt;
+&lt;p&gt;内存节点的数据缓存Page，在把dirty page写到内存节点前，对应的redo log已经flush到存储层了，因此内存节点重启可以用PolarFS上的redolog来进行恢复数据。&lt;/p&gt;
+&lt;p&gt;home node上因为包含重要的metadata如PAT，PIB，PRD和PLT；这些数据会同步备份在从副本；home node负责检测slab node上的故障，然后home node根据PAT上的信息来重建重启的slab node即可。&lt;/p&gt;
+&lt;h3 id=&#34;集群恢复&#34;&gt;集群恢复&lt;/h3&gt;
+&lt;p&gt;在极少数情况下，当主节点的所有副本都不可用时，需要通过集群恢复来恢复服务。所有数据库节点和内存节点将从清除状态重新启动，所有内存状态将从存储重新启动。初始化后（连接到远程内存和存储器等），RW节点执行第5.1节中所述的并行REDO恢复，然后扫描撤销头以查找所有未完成的事务。之后，RW节点将启动服务，并在后台回滚未提交的事务。在集群恢复过程中，缓存在远程内存中的页面将被清除，因此它将忍受冷缓存问题。&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>并行作业 3</title>
         <link>https://tweakzx.github.io/p/%E5%B9%B6%E8%A1%8C%E4%BD%9C%E4%B8%9A-3/</link>
         <pubDate>Tue, 14 Dec 2021 13:55:35 +0800</pubDate>
@@ -1430,6 +1838,22 @@ in process p:
 &lt;li&gt;打算把自己的学习总结下来，于是也有了这篇博客，希望自己可以坚持写博客，说实话，面试完压力挺大，感觉自己就是一个无敌铁废物，写博客写出来感觉好一些了。&lt;/li&gt;
 &lt;/ul&gt;
 </description>
+        </item>
+        <item>
+        <title>PolarDB</title>
+        <link>https://tweakzx.github.io/p/polardb/</link>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        
+        <guid>https://tweakzx.github.io/p/polardb/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>PolarDB</title>
+        <link>https://tweakzx.github.io/p/polardb/</link>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        
+        <guid>https://tweakzx.github.io/p/polardb/</guid>
+        <description></description>
         </item>
         
     </channel>
