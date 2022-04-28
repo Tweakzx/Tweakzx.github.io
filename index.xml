@@ -6,7 +6,59 @@
         <description>Recent content on Tweakzx</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Sat, 12 Mar 2022 16:59:39 +0800</lastBuildDate><atom:link href="https://tweakzx.github.io/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Thu, 28 Apr 2022 13:36:00 +0800</lastBuildDate><atom:link href="https://tweakzx.github.io/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>安装环境</title>
+        <link>https://tweakzx.github.io/p/%E5%AE%89%E8%A3%85%E7%8E%AF%E5%A2%83/</link>
+        <pubDate>Thu, 28 Apr 2022 13:36:00 +0800</pubDate>
+        
+        <guid>https://tweakzx.github.io/p/%E5%AE%89%E8%A3%85%E7%8E%AF%E5%A2%83/</guid>
+        <description>&lt;h1 id=&#34;安装环境&#34;&gt;安装环境&lt;/h1&gt;
+&lt;h2 id=&#34;安装-git&#34;&gt;安装 git&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;yum install git
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;安装-docker&#34;&gt;安装 docker&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;curl -fsSL https://get.docker.com &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; bash -s docker --mirror Aliyun
+systemctl start docker
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;安装-make&#34;&gt;安装 make&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;yum -y install gcc automake autoconf libtool make
+yum install gcc gcc-c++
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;安装-k8s&#34;&gt;安装 K8s&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;curl -LO &lt;span class=&#34;s2&#34;&gt;&amp;#34;https://dl.k8s.io/release/&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;$(&lt;/span&gt;curl -L -s https://dl.k8s.io/release/stable.txt&lt;span class=&#34;k&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;/bin/linux/amd64/kubectl&amp;#34;&lt;/span&gt;
+curl -LO &lt;span class=&#34;s2&#34;&gt;&amp;#34;https://dl.k8s.io/&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;$(&lt;/span&gt;curl -L -s https://dl.k8s.io/release/stable.txt&lt;span class=&#34;k&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;/bin/linux/amd64/kubectl.sha256&amp;#34;&lt;/span&gt;
+&lt;span class=&#34;nb&#34;&gt;echo&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;$(&lt;/span&gt;cat kubectl.sha256&lt;span class=&#34;k&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;  kubectl&amp;#34;&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; sha256sum --check
+sudo install -o root -g root -m &lt;span class=&#34;m&#34;&gt;0755&lt;/span&gt; kubectl /usr/local/bin/kubectl
+kubectl version --client
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;安装-go&#34;&gt;安装 go&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;ol&gt;
+&lt;li&gt;Remove any previous Go installation&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;by deleting the /usr/local/go folder (if it exists), then extract the archive you just downloaded into /usr/local, creating a fresh Go tree in /usr/local/go:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ rm -rf /usr/local/go &amp;amp;&amp;amp; tar -C /usr/local -xzf go1.18.1.linux-amd64.tar.gz
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;(You may need to run the command as root or through &lt;code&gt;sudo&lt;/code&gt;).&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Do not&lt;/strong&gt; untar the archive into an existing /usr/local/go tree. This is known to produce broken Go installations.&lt;/p&gt;
+&lt;ol start=&#34;2&#34;&gt;
+&lt;li&gt;Add /usr/local/go/bin to the&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code&gt;PATH
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;environment variable.&lt;/p&gt;
+&lt;p&gt;You can do this by adding the following line to your $HOME/.profile or /etc/profile (for a system-wide installation):&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;export PATH=$PATH:/usr/local/go/bin
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;strong&gt;Note:&lt;/strong&gt; Changes made to a profile file may not apply until the next time you log into your computer. To apply the changes immediately, just run the shell commands directly or execute them from the profile using a command such as &lt;code&gt;source $HOME/.profile&lt;/code&gt;.&lt;/p&gt;
+&lt;ol start=&#34;3&#34;&gt;
+&lt;li&gt;Verify that you&amp;rsquo;ve installed Go by opening a command prompt and typing the following command:&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code&gt;$ go version
+&lt;/code&gt;&lt;/pre&gt;&lt;ol start=&#34;4&#34;&gt;
+&lt;li&gt;Confirm that the command prints the installed version of Go.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/blockquote&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;wget https://go.dev/dl/go1.18.1.linux-amd64.tar.gz
+rm -rf /usr/local/go &lt;span class=&#34;o&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; tar -C /usr/local -xzf go1.18.1.linux-amd64.tar.gz
+&lt;span class=&#34;nb&#34;&gt;export&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;PATH&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;$PATH&lt;/span&gt;:/usr/local/go/bin
+go version
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
+        </item>
+        <item>
         <title>自动机的实现</title>
         <link>https://tweakzx.github.io/p/%E8%87%AA%E5%8A%A8%E6%9C%BA%E7%9A%84%E5%AE%9E%E7%8E%B0/</link>
         <pubDate>Sat, 12 Mar 2022 16:59:39 +0800</pubDate>
@@ -2458,6 +2510,22 @@ in process p:
 &lt;li&gt;打算把自己的学习总结下来，于是也有了这篇博客，希望自己可以坚持写博客，说实话，面试完压力挺大，感觉自己就是一个无敌铁废物，写博客写出来感觉好一些了。&lt;/li&gt;
 &lt;/ul&gt;
 </description>
+        </item>
+        <item>
+        <title>安装环境</title>
+        <link>https://tweakzx.github.io/p/%E5%AE%89%E8%A3%85%E7%8E%AF%E5%A2%83/</link>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        
+        <guid>https://tweakzx.github.io/p/%E5%AE%89%E8%A3%85%E7%8E%AF%E5%A2%83/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>安装环境</title>
+        <link>https://tweakzx.github.io/p/%E5%AE%89%E8%A3%85%E7%8E%AF%E5%A2%83/</link>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        
+        <guid>https://tweakzx.github.io/p/%E5%AE%89%E8%A3%85%E7%8E%AF%E5%A2%83/</guid>
+        <description></description>
         </item>
         
     </channel>
