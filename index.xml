@@ -6,7 +6,346 @@
         <description>Recent content on Tweakzx</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Thu, 28 Apr 2022 13:36:00 +0800</lastBuildDate><atom:link href="https://tweakzx.github.io/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Mon, 13 Jun 2022 14:57:42 +0800</lastBuildDate><atom:link href="https://tweakzx.github.io/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Ubuntu安装k8s集群</title>
+        <link>https://tweakzx.github.io/p/ubuntu%E5%AE%89%E8%A3%85k8s%E9%9B%86%E7%BE%A4/</link>
+        <pubDate>Mon, 13 Jun 2022 14:57:42 +0800</pubDate>
+        
+        <guid>https://tweakzx.github.io/p/ubuntu%E5%AE%89%E8%A3%85k8s%E9%9B%86%E7%BE%A4/</guid>
+        <description>&lt;h1 id=&#34;在ubuntu上搭建k8s集群&#34;&gt;在ubuntu上搭建k8s集群&lt;/h1&gt;
+&lt;h2 id=&#34;一机器配置&#34;&gt;一、机器配置&lt;/h2&gt;
+&lt;h3 id=&#34;配置主机名&#34;&gt;配置主机名&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;sudo hostnamectl set-hostname &lt;span class=&#34;s2&#34;&gt;&amp;#34;k8s-master&amp;#34;&lt;/span&gt;    // Run this &lt;span class=&#34;nb&#34;&gt;command&lt;/span&gt; on masternode
+cat /etc/hostname
+sudo hostnamectl set-hostname &lt;span class=&#34;s2&#34;&gt;&amp;#34;k8s-node1&amp;#34;&lt;/span&gt;     // Run this &lt;span class=&#34;nb&#34;&gt;command&lt;/span&gt; on node-0
+sudo hostnamectl set-hostname &lt;span class=&#34;s2&#34;&gt;&amp;#34;k8s-node2&amp;#34;&lt;/span&gt;     // Run this &lt;span class=&#34;nb&#34;&gt;command&lt;/span&gt; on node-1
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;配置etchosts&#34;&gt;配置/etc/hosts&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;sudo vi /etc/hosts 
+
+10.1.13.106    k8s-master
+
+&lt;span class=&#34;c1&#34;&gt;#10.1.13.107    k8s-node1&lt;/span&gt;
+
+&lt;span class=&#34;c1&#34;&gt;#10.1.13.108    k8s-node1&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;配置免密登录&#34;&gt;配置免密登录&lt;/h3&gt;
+&lt;p&gt;想让机器 A 访问机器 B，就把机器 A 的公钥放到机器 B 的&lt;code&gt;~/.ssh/authorized_keys&lt;/code&gt; 文件里就行了。&lt;/p&gt;
+&lt;p&gt;首先我们在&lt;code&gt;worker&lt;/code&gt;上生成一个密钥，输入下述命令后&lt;strong&gt;一路回车&lt;/strong&gt;即可：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;ssh-keygen
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;然后登录&lt;code&gt;master&lt;/code&gt;，并依次输入下述两条命令将其复制并写入到&lt;code&gt;master&lt;/code&gt;的&lt;code&gt;authorized_keys&lt;/code&gt;中，注意我下面的&lt;code&gt;scp&lt;/code&gt;命令中使用了&lt;code&gt;worker&lt;/code&gt;别名，要提前进行配置：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# 复制到 master 主机&lt;/span&gt;
+scp root@worker:~/.ssh/id_rsa.pub /home
+&lt;span class=&#34;c1&#34;&gt;# 写入到 authorized_keys 中&lt;/span&gt;
+cat /home/id_rsa.pub &amp;gt;&amp;gt; ~/.ssh/authorized_keys
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;然后再次使用&lt;code&gt;ssh worker&lt;/code&gt;登录就可以发现直接连接上而不需要密码了。&lt;/p&gt;
+&lt;h3 id=&#34;关闭防火墙&#34;&gt;关闭防火墙&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;sudo systemctl stop firewalld
+sudo systemctl disable firewalld
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;禁用swap&#34;&gt;禁用swap&lt;/h3&gt;
+&lt;p&gt;这个swap其实可以类比成 windows 上的虚拟内存，它可以让服务器在内存吃满的情况下可以保持低效运行，而不是直接卡死。但是 k8s 的较新版本都要求关闭swap。所以咱们直接动手，修改/etc/fstab文件：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;sudo vi /etc/fstab
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;你应该可以看到如下内容，把第二条用#注释掉就好了，注意第一条别注释了，不然重启之后系统有可能会报file system read-only错误。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span class=&#34;nv&#34;&gt;UUID&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;e2048966-750b-4795-a9a2-7b477d6681bf /   ext4    &lt;span class=&#34;nv&#34;&gt;errors&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;remount-ro &lt;span class=&#34;m&#34;&gt;0&lt;/span&gt;    &lt;span class=&#34;m&#34;&gt;1&lt;/span&gt;
+&lt;span class=&#34;c1&#34;&gt;# /dev/fd0        /media/floppy0  auto    rw,user,noauto,exec,utf8 0       0&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;然后输入reboot重启即可，重启后使用top命令查看任务管理器，如果看到如下KiB Swap后均为 0 就说明关闭成功了。&lt;/p&gt;
+&lt;p&gt;关闭swap之后使用top命令看到 KiB Swap 全部为0&lt;/p&gt;
+&lt;p&gt;&lt;figure 
+	&gt;
+	&lt;a href=&#34;https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/image-20220613000133107.png&#34; &gt;
+		&lt;img src=&#34;https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/image-20220613000133107.png&#34;
+			
+			
+			
+			loading=&#34;lazy&#34;
+			alt=&#34;image-20220613000133107&#34;&gt;
+	&lt;/a&gt;
+	
+	&lt;figcaption&gt;image-20220613000133107&lt;/figcaption&gt;
+	
+&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;上面说的是永久关闭swap内存，其实也可以暂时关闭，使用swapoff -a命令即可，效果会在重启后消失。&lt;/p&gt;
+&lt;h3 id=&#34;禁用selinux&#34;&gt;禁用Selinux&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;sudo apt install selinux-utils
+setenforce &lt;span class=&#34;m&#34;&gt;0&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;确保时区和时间正确&#34;&gt;确保时区和时间正确&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;sudo timedatectl set-timezone Asia/Shanghai
+sudo systemctl restart rsyslog
+sudo apt-get install ntpdate –y
+sudo ntpdate time.windows.com
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;配置netbridgebridge-nf-call-iptables&#34;&gt;配置net.bridge.bridge-nf-call-iptables&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;cat &lt;span class=&#34;s&#34;&gt;&amp;lt;&amp;lt;EOF | sudo tee /etc/modules-load.d/k8s.conf
+&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;br_netfilter
+&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;EOF&lt;/span&gt;
+
+cat &lt;span class=&#34;s&#34;&gt;&amp;lt;&amp;lt;EOF | sudo tee /etc/sysctl.d/k8s.conf
+&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;net.bridge.bridge-nf-call-ip6tables = 1
+&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;net.bridge.bridge-nf-call-iptables = 1
+&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;EOF&lt;/span&gt;
+
+sudo sysctl --system
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;设置rp_filter的值&#34;&gt;设置rp_filter的值&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;sudo vi /etc/sysctl.d/10-network-security.conf
+
+&lt;span class=&#34;c1&#34;&gt;# 将下面两个参数的值从2修改为1&lt;/span&gt;
+&lt;span class=&#34;c1&#34;&gt;# net.ipv4.conf.default.rp_filter=1&lt;/span&gt;
+&lt;span class=&#34;c1&#34;&gt;# net.ipv4.conf.all.rp_filter=1&lt;/span&gt;
+
+sudo sysctl --system
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;二安装docker&#34;&gt;二、安装docker&lt;/h2&gt;
+&lt;p&gt;docker 是 k8s 的基础，在安装完成之后也需要修改一些配置来适配 k8s ，所以本章分为 &lt;strong&gt;docker 的安装&lt;/strong&gt; 与 &lt;strong&gt;docker 的配置&lt;/strong&gt; 两部分。如果你已经安装并使用了一段时间的 docker 了话，建议使用&lt;code&gt;docker -v&lt;/code&gt;查看已安装的 docker 版本，并在 k8s 官网上查询适合该版本的 k8s 进行安装。这一步两台主机都需要进行安装。&lt;/p&gt;
+&lt;h3 id=&#34;安装docker&#34;&gt;安装docker&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;sudo apt install docker.io
+
+sudo apt install docker.io&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;18.09.1-0ubuntu1 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;启动docker&#34;&gt;启动docker&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;sudo systemctl start docker
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;配置docker&#34;&gt;配置docker&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;sudo mkdir -p /etc/docker
+
+sudo tee /etc/docker/daemon.json &lt;span class=&#34;s&#34;&gt;&amp;lt;&amp;lt;-&amp;#39;EOF&amp;#39;
+&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;{
+&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;  &amp;#34;registry-mirrors&amp;#34;: [&amp;#34;https://n73pm3wf.mirror.aliyuncs.com&amp;#34;],
+&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;  &amp;#34;exec-opts&amp;#34;: [ &amp;#34;native.cgroupdriver=systemd&amp;#34; ]
+&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;}
+&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;EOF&lt;/span&gt;
+
+sudo systemctl daemon-reload
+sudo systemctl restart docker
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;设置开机自启动&#34;&gt;设置开机自启动&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;$ sudo systemctl &lt;span class=&#34;nb&#34;&gt;enable&lt;/span&gt; docker
+或
+$ sudo systemctl &lt;span class=&#34;nb&#34;&gt;enable&lt;/span&gt; docker.service --now
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;验证docker&#34;&gt;验证docker&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;systemctl status docker
+docker --version
+docker info &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; grep Cgroup
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;修改后的 docker cgroup 状态，发现变为&lt;code&gt;systemd&lt;/code&gt;即为修改成功。&lt;/p&gt;
+&lt;h3 id=&#34;重启docker当有配置改动后执行&#34;&gt;重启docker（当有配置改动后执行）&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;sudo pkill -SIGHUP dockerd
+sudo systemctl restart docker
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;卸载docker&#34;&gt;卸载docker&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;sudo apt-get remove docker.io
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;三安装k8s&#34;&gt;三、安装k8s&lt;/h2&gt;
+&lt;h3 id=&#34;安装k8s&#34;&gt;安装k8s&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# 使得 apt 支持 ssl 传输&lt;/span&gt;
+apt-get update &lt;span class=&#34;o&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; apt-get install -y apt-transport-https
+&lt;span class=&#34;c1&#34;&gt;# 下载 gpg 密钥   这个需要root用户否则会报错&lt;/span&gt;
+curl https://mirrors.aliyun.com/kubernetes/apt/doc/apt-key.gpg &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; apt-key add - 
+&lt;span class=&#34;c1&#34;&gt;# 添加 k8s 镜像源 这个需要root用户否则会报错&lt;/span&gt;
+cat &lt;span class=&#34;s&#34;&gt;&amp;lt;&amp;lt;EOF &amp;gt;/etc/apt/sources.list.d/kubernetes.list
+&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;deb https://mirrors.aliyun.com/kubernetes/apt/ kubernetes-xenial main
+&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;EOF&lt;/span&gt;
+&lt;span class=&#34;c1&#34;&gt;# 更新源列表&lt;/span&gt;
+apt-get update
+
+&lt;span class=&#34;c1&#34;&gt;# 下载 kubectl，kubeadm以及 kubelet&lt;/span&gt;
+&lt;span class=&#34;c1&#34;&gt;# 安装最新版本&lt;/span&gt;
+apt-get install -y kubelet kubeadm kubectl
+&lt;span class=&#34;c1&#34;&gt;# 安装指定版本&lt;/span&gt;
+apt-get install -y &lt;span class=&#34;nv&#34;&gt;kubelet&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;1.15.1-00 &lt;span class=&#34;nv&#34;&gt;kubeadm&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;1.15.1-00 &lt;span class=&#34;nv&#34;&gt;kubectl&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;1.15.1-00
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;删除已安装的k8s&#34;&gt;删除已安装的k8s&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;sudo apt-get remove -y --allow-change-held-packages kubeadm kubectl kubelet
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;查询可安装版本&#34;&gt;查询可安装版本&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;apt-cache madison kubeadm
+apt-cache madison kubelet
+apt-cache madison kubectl
+apt-cache madison kubernetes-cni
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;设置不随系统更新而更新&#34;&gt;设置不随系统更新而更新&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;sudo apt-mark hold kubelet kubeadm kubectl
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;四初始化master&#34;&gt;四、初始化master&lt;/h2&gt;
+&lt;h3 id=&#34;kubeadm-init&#34;&gt;kubeadm init&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;kubeadm init &lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;--apiserver-advertise-address&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;10.10.0.2 &lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;--kubernetes-version&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;1.15.1 &lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;--image-repository registry.cn-hangzhou.aliyuncs.com/google_containers &lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;--service-cidr&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;10.96.0.0/16 &lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;--pod-network-cidr&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;10.244.0.0/16
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;参数解释：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&amp;ndash;kubernetes-version：指定kubernetes的版本，与上面kubelet，kubeadm，kubectl工具版本保持一致。&lt;/li&gt;
+&lt;li&gt;&amp;ndash;apiserver-advertise-address：apiserver所在的节点(master)的ip。&lt;/li&gt;
+&lt;li&gt;&amp;ndash;image-repository=registry.aliyuncs.com/google_containers：由于国外地址无法访问，所以使用阿里云仓库地址&lt;/li&gt;
+&lt;li&gt;&amp;ndash;server-cidr：service之间访问使用的网络ip段&lt;/li&gt;
+&lt;li&gt;&amp;ndash;pod-network-cidr：pod之间网络访问使用的网络ip,与下文部署的CNI网络组件yml中保持一致&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;初始化成功之后你将看到&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;Your Kubernetes control-plane has initialized successfully!
+
+To start using your cluster, you need to run the following as a regular user:
+
+  mkdir -p &lt;span class=&#34;nv&#34;&gt;$HOME&lt;/span&gt;/.kube
+  sudo cp -i /etc/kubernetes/admin.conf &lt;span class=&#34;nv&#34;&gt;$HOME&lt;/span&gt;/.kube/config
+  sudo chown &lt;span class=&#34;k&#34;&gt;$(&lt;/span&gt;id -u&lt;span class=&#34;k&#34;&gt;)&lt;/span&gt;:&lt;span class=&#34;k&#34;&gt;$(&lt;/span&gt;id -g&lt;span class=&#34;k&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;$HOME&lt;/span&gt;/.kube/config
+
+Alternatively, &lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; you are the root user, you can run:
+
+  &lt;span class=&#34;nb&#34;&gt;export&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;KUBECONFIG&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;/etc/kubernetes/admin.conf
+
+You should now deploy a pod network to the cluster.
+Run &lt;span class=&#34;s2&#34;&gt;&amp;#34;kubectl apply -f [podnetwork].yaml&amp;#34;&lt;/span&gt; with one of the options listed at:
+  https://kubernetes.io/docs/concepts/cluster-administration/addons/
+
+Then you can join any number of worker nodes by running the following on each as root:
+
+kubeadm join 10.10.0.2:6443 --token juojiv.q4gwfmkj4cwgscnt &lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;        --discovery-token-ca-cert-hash sha256:381b61262d3b174cfce0e5cfbd0b4b171e270c506d82c4d82334d0a4e2c2ac47
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;初始化失败&#34;&gt;初始化失败&lt;/h3&gt;
+&lt;p&gt;重置之后重新初始化&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;kubeadm reset
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;记得保存kubeadm-join-命令&#34;&gt;记得保存kubeadm join 命令&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;kubeadm join 10.10.0.2:6443 --token qc7drh.47mloh5ierij84xi &lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;        --discovery-token-ca-cert-hash sha256:90f147ef85ae06d9a46bed91d64109abbd697b6878ab9ca16a376e11816f9a0d 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;如果忘记可以使用下面的命令重新生成&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;kubeadm token create --print-join-command
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;配置kubectl&#34;&gt;配置kubectl&lt;/h3&gt;
+&lt;p&gt;按照上图中的命令配置，可以直接从命令行中复制&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;非root用户&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt; mkdir -p &lt;span class=&#34;nv&#34;&gt;$HOME&lt;/span&gt;/.kube
+ sudo cp -i /etc/kubernetes/admin.conf &lt;span class=&#34;nv&#34;&gt;$HOME&lt;/span&gt;/.kube/config
+ sudo chown &lt;span class=&#34;k&#34;&gt;$(&lt;/span&gt;id -u&lt;span class=&#34;k&#34;&gt;)&lt;/span&gt;:&lt;span class=&#34;k&#34;&gt;$(&lt;/span&gt;id -g&lt;span class=&#34;k&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;$HOME&lt;/span&gt;/.kube/config
+
+&lt;span class=&#34;c1&#34;&gt;# 查看已加入的节点&lt;/span&gt;
+kubectl get nodes
+&lt;span class=&#34;c1&#34;&gt;# 查看集群状态&lt;/span&gt;
+kubectl get cs
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;root用户&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span class=&#34;nb&#34;&gt;export&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;KUBECONFIG&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;/etc/kubernetes/admin.conf
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;部署网络&#34;&gt;部署网络&lt;/h3&gt;
+&lt;p&gt;网络插件可以选择calico或flannel。这里使用Flannel作为Kubernetes容器网络方案，解决容器跨主机网络通信。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;部署flannel网络&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;也可以把这个文件下载到本地，注意修改下图中的Network，与kubeadm inti中的&amp;ndash;pod-network-cidr 10.244.0.0/16参数保持一致，然后&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;kubectl apply -f kube-flannel.yml
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;figure 
+	&gt;
+	&lt;a href=&#34;https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/image-20220613013117789.png&#34; &gt;
+		&lt;img src=&#34;https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/image-20220613013117789.png&#34;
+			
+			
+			
+			loading=&#34;lazy&#34;
+			alt=&#34;image-20220613013117789&#34;&gt;
+	&lt;/a&gt;
+	
+	&lt;figcaption&gt;image-20220613013117789&lt;/figcaption&gt;
+	
+&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;将会看到&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;podsecuritypolicy.policy/psp.flannel.unprivileged created
+clusterrole.rbac.authorization.k8s.io/flannel created
+clusterrolebinding.rbac.authorization.k8s.io/flannel created
+serviceaccount/flannel created
+configmap/kube-flannel-cfg created
+daemonset.apps/kube-flannel-ds created
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;查看pod状态，应该全部为running。可能需要等待一段时间&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;kubectl get pod --all-namespaces -o wide
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;figure 
+	&gt;
+	&lt;a href=&#34;https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/image-20220613012658569.png&#34; &gt;
+		&lt;img src=&#34;https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/image-20220613012658569.png&#34;
+			
+			
+			
+			loading=&#34;lazy&#34;
+			alt=&#34;image-20220613012658569&#34;&gt;
+	&lt;/a&gt;
+	
+	&lt;figcaption&gt;image-20220613012658569&lt;/figcaption&gt;
+	
+&lt;/figure&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;部署calico网络&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;下载yml文件&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;wget  https://docs.projectcalico.org/v3.11/manifests/calico.yaml
+
+vi calico.yaml
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;#修改CALICO_IPV4POOL_CIDR，为10.244.0.0/16（要与kubeadm inti中的&amp;ndash;pod-network-cidr 10.244.0.0/16参数保持一致，默认为192.168.0.0/16&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;kubectl apply -f calico.yaml
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;五添加worker节点&#34;&gt;五、添加worker节点&lt;/h2&gt;
+&lt;p&gt;使用之前保存的kubeadm join命令&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;kubeadm join 10.10.0.2:6443 --token ryyy8k.pr8u7cjm4btqdx4v --discovery-token-ca-cert-hash sha256:6b596c66745b162190475b63686ca46c60cc4f39473
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;然后在master节点上，查看&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;kubectl get nodes
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;可以看到&lt;/p&gt;
+&lt;p&gt;&lt;figure 
+	&gt;
+	&lt;a href=&#34;https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/image-20220613010009663.png&#34; &gt;
+		&lt;img src=&#34;https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/image-20220613010009663.png&#34;
+			
+			
+			
+			loading=&#34;lazy&#34;
+			alt=&#34;image-20220613010009663&#34;&gt;
+	&lt;/a&gt;
+	
+	&lt;figcaption&gt;image-20220613010009663&lt;/figcaption&gt;
+	
+&lt;/figure&gt;&lt;/p&gt;
+&lt;h2 id=&#34;六验证&#34;&gt;六、验证&lt;/h2&gt;
+&lt;h3 id=&#34;创建nginx&#34;&gt;创建nginx&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;kubectl create deployment nginx-web --image&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;nginx
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;获取pod信息&#34;&gt;获取pod信息&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;kubectl get pod -o wide
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;figure 
+	&gt;
+	&lt;a href=&#34;https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/image-20220613013920336.png&#34; &gt;
+		&lt;img src=&#34;https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/image-20220613013920336.png&#34;
+			
+			
+			
+			loading=&#34;lazy&#34;
+			alt=&#34;image-20220613013920336&#34;&gt;
+	&lt;/a&gt;
+	
+	&lt;figcaption&gt;image-20220613013920336&lt;/figcaption&gt;
+	
+&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;可以看到该节点的ip为10.244.1.2&lt;/p&gt;
+&lt;h3 id=&#34;测试nginx&#34;&gt;测试nginx&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;root@k8s-master:/home# curl http://10.244.1.2
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;可以看到&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&amp;lt;!DOCTYPE html&amp;gt;
+&amp;lt;html&amp;gt;
+&amp;lt;head&amp;gt;
+&amp;lt;title&amp;gt;Welcome to nginx!&amp;lt;/title&amp;gt;
+&amp;lt;style&amp;gt;
+html &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt; color-scheme: light dark&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+body &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt; width: 35em&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; margin: &lt;span class=&#34;m&#34;&gt;0&lt;/span&gt; auto&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+font-family: Tahoma, Verdana, Arial, sans-serif&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+&amp;lt;/style&amp;gt;
+&amp;lt;/head&amp;gt;
+&amp;lt;body&amp;gt;
+&amp;lt;h1&amp;gt;Welcome to nginx!&amp;lt;/h1&amp;gt;
+&amp;lt;p&amp;gt;If you see this page, the nginx web server is successfully installed and
+working. Further configuration is required.&amp;lt;/p&amp;gt;
+
+&amp;lt;p&amp;gt;For online documentation and support please refer to
+&amp;lt;a &lt;span class=&#34;nv&#34;&gt;href&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;http://nginx.org/&amp;#34;&lt;/span&gt;&amp;gt;nginx.org&amp;lt;/a&amp;gt;.&amp;lt;br/&amp;gt;
+Commercial support is available at
+&amp;lt;a &lt;span class=&#34;nv&#34;&gt;href&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;http://nginx.com/&amp;#34;&lt;/span&gt;&amp;gt;nginx.com&amp;lt;/a&amp;gt;.&amp;lt;/p&amp;gt;
+
+&amp;lt;p&amp;gt;&amp;lt;em&amp;gt;Thank you &lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; using nginx.&amp;lt;/em&amp;gt;&amp;lt;/p&amp;gt;
+&amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;删除pod&#34;&gt;删除pod&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;kubectl delete pod nginx-web-xxxxxx -n nginx-web
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;七删除节点&#34;&gt;七、删除节点&lt;/h2&gt;
+&lt;p&gt;首先，确定想要清空的节点的名称。可以用以下命令列出集群中的所有节点:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;kubectl get nodes
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;接下来，告诉 Kubernetes 清空节点：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;kubectl drain &amp;lt;node name&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;一旦它返回（没有报错）， 你就可以下线此节点（或者等价地，如果在云平台上，删除支持该节点的虚拟机）。 如果要在维护操作期间将节点留在集群中，则需要运行：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;kubectl uncordon &amp;lt;node name&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;然后告诉 Kubernetes，它可以继续在此节点上调度新的 Pods。&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>安装环境</title>
         <link>https://tweakzx.github.io/p/%E5%AE%89%E8%A3%85%E7%8E%AF%E5%A2%83/</link>
         <pubDate>Thu, 28 Apr 2022 13:36:00 +0800</pubDate>
