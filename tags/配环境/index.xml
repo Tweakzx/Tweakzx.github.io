@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>配环境 on Tweakzx</title>
+    <link>https://tweakzx.github.io/tags/%E9%85%8D%E7%8E%AF%E5%A2%83/</link>
+    <description>Recent content in 配环境 on Tweakzx</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 28 Apr 2022 13:36:00 +0800</lastBuildDate><atom:link href="https://tweakzx.github.io/tags/%E9%85%8D%E7%8E%AF%E5%A2%83/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>安装环境</title>
+      <link>https://tweakzx.github.io/p/%E5%AE%89%E8%A3%85%E7%8E%AF%E5%A2%83/</link>
+      <pubDate>Thu, 28 Apr 2022 13:36:00 +0800</pubDate>
+      
+      <guid>https://tweakzx.github.io/p/%E5%AE%89%E8%A3%85%E7%8E%AF%E5%A2%83/</guid>
+      <description>安装 git yum install git 安装 docker curl -fsSL https://get.docker.com | bash -s docker --mirror Aliyun systemctl start docker 安装 make yum -y install gcc automake autoconf libtool make yum install gcc gcc-c++ 安装 K8s curl -LO &amp;#34;https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl&amp;#34; curl -LO &amp;#34;https://dl.k8s.io/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl.sha256&amp;#34; echo &amp;#34;$(cat kubectl.sha256)kubectl&amp;#34; | sha256sum --check sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl kubectl version --client 安装 go   Remove any previous Go installation  by deleting the /usr/local/go folder (if it exists), then extract the archive you just downloaded into /usr/local, creating a fresh Go tree in /usr/local/go:</description>
+    </item>
+    
+  </channel>
+</rss>
