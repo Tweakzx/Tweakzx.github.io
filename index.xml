@@ -346,11 +346,11 @@ Commercial support is available at
 </description>
         </item>
         <item>
-        <title>安装环境</title>
-        <link>https://tweakzx.github.io/p/%E5%AE%89%E8%A3%85%E7%8E%AF%E5%A2%83/</link>
+        <title>centOS安装环境</title>
+        <link>https://tweakzx.github.io/p/centos%E5%AE%89%E8%A3%85%E7%8E%AF%E5%A2%83/</link>
         <pubDate>Thu, 28 Apr 2022 13:36:00 +0800</pubDate>
         
-        <guid>https://tweakzx.github.io/p/%E5%AE%89%E8%A3%85%E7%8E%AF%E5%A2%83/</guid>
+        <guid>https://tweakzx.github.io/p/centos%E5%AE%89%E8%A3%85%E7%8E%AF%E5%A2%83/</guid>
         <description>&lt;h2 id=&#34;安装-git&#34;&gt;安装 git&lt;/h2&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;yum install git
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;安装-docker&#34;&gt;安装 docker&lt;/h2&gt;
