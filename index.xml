@@ -12,7 +12,7 @@
         <pubDate>Mon, 13 Jun 2022 14:57:42 +0800</pubDate>
         
         <guid>https://tweakzx.github.io/p/ubuntu%E5%AE%89%E8%A3%85k8s%E9%9B%86%E7%BE%A4/</guid>
-        <description>&lt;img src="https://tweakzx.github.io/cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/20220823225811.png" alt="Featured image of post Ubuntu安装k8s集群" /&gt;&lt;h1 id=&#34;在ubuntu上k8s集群部署实践&#34;&gt;在ubuntu上k8s集群部署实践&lt;/h1&gt;
+        <description>&lt;img src="https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/20220823230439.png" alt="Featured image of post Ubuntu安装k8s集群" /&gt;&lt;h1 id=&#34;在ubuntu上k8s集群部署实践&#34;&gt;在ubuntu上k8s集群部署实践&lt;/h1&gt;
 &lt;h2 id=&#34;一机器配置&#34;&gt;一、机器配置&lt;/h2&gt;
 &lt;h3 id=&#34;配置主机名&#34;&gt;配置主机名&lt;/h3&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;sudo hostnamectl set-hostname &lt;span class=&#34;s2&#34;&gt;&amp;#34;k8s-master&amp;#34;&lt;/span&gt;    // Run this &lt;span class=&#34;nb&#34;&gt;command&lt;/span&gt; on masternode

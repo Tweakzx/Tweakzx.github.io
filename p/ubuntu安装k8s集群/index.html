@@ -15,13 +15,13 @@ ssh-keygen 然后登录master，并依次输入下述两条命令将其复制并
 # 复制到 master 主机 scp root@worker:~/.ssh/id_rsa.pub /home # 写入到 authorized_keys 中 cat /home/id_rsa.'>
 <meta property='og:url' content='https://tweakzx.github.io/p/ubuntu%E5%AE%89%E8%A3%85k8s%E9%9B%86%E7%BE%A4/'>
 <meta property='og:site_name' content='Tweakzx'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='容器' /><meta property='article:tag' content='k8s' /><meta property='article:published_time' content='2022-06-13T14:57:42&#43;08:00'/><meta property='article:modified_time' content='2022-06-13T14:57:42&#43;08:00'/><meta property='og:image' content='https://tweakzx.github.io/cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/20220823225811.png' />
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='容器' /><meta property='article:tag' content='k8s' /><meta property='article:published_time' content='2022-06-13T14:57:42&#43;08:00'/><meta property='article:modified_time' content='2022-06-13T14:57:42&#43;08:00'/><meta property='og:image' content='https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/20220823230439.png' />
 <meta name="twitter:title" content="Ubuntu安装k8s集群">
 <meta name="twitter:description" content="在ubuntu上k8s集群部署实践 一、机器配置 配置主机名 sudo hostnamectl set-hostname &amp;#34;k8s-master&amp;#34; // Run this command on masternode cat /etc/hostname sudo hostnamectl set-hostname &amp;#34;k8s-node1&amp;#34; // Run this command on node-0 sudo hostnamectl set-hostname &amp;#34;k8s-node2&amp;#34; // Run this command on node-1 配置/etc/hosts sudo vi /etc/hosts 10.1.13.106 k8s-master #10.1.13.107 k8s-node1 #10.1.13.108 k8s-node1 配置免密登录 想让机器 A 访问机器 B，就把机器 A 的公钥放到机器 B 的~/.ssh/authorized_keys 文件里就行了。
 首先我们在worker上生成一个密钥，输入下述命令后一路回车即可：
 ssh-keygen 然后登录master，并依次输入下述两条命令将其复制并写入到master的authorized_keys中，注意我下面的scp命令中使用了worker别名，要提前进行配置：
 # 复制到 master 主机 scp root@worker:~/.ssh/id_rsa.pub /home # 写入到 authorized_keys 中 cat /home/id_rsa."><meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content='https://tweakzx.github.io/cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/20220823225811.png' />
+    <meta name="twitter:image" content='https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/20220823230439.png' />
     </head>
     <body class="
     article-page has-toc
@@ -73,7 +73,7 @@ ssh-keygen 然后登录master，并依次输入下述两条命令将其复制并
         <div class="article-image">
             <a href="/p/ubuntu%E5%AE%89%E8%A3%85k8s%E9%9B%86%E7%BE%A4/">
                 
-                    <img src="/cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/20220823225811.png" loading="lazy" alt="Featured image of post Ubuntu安装k8s集群" />
+                    <img src="https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/20220823230439.png" loading="lazy" alt="Featured image of post Ubuntu安装k8s集群" />
                 
             </a>
         </div>
