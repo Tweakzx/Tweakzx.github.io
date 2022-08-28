@@ -1,12 +1,21 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>k8s on Tweakzx</title>
+    <title>K8s on Tweakzx</title>
     <link>https://tweakzx.github.io/tags/k8s/</link>
-    <description>Recent content in k8s on Tweakzx</description>
+    <description>Recent content in K8s on Tweakzx</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 13 Jun 2022 14:57:42 +0800</lastBuildDate><atom:link href="https://tweakzx.github.io/tags/k8s/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 26 Aug 2022 17:20:32 +0800</lastBuildDate><atom:link href="https://tweakzx.github.io/tags/k8s/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>GaiaGPU 论文阅读笔记</title>
+      <link>https://tweakzx.github.io/p/gaiagpu-%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link>
+      <pubDate>Fri, 26 Aug 2022 17:20:32 +0800</pubDate>
+      
+      <guid>https://tweakzx.github.io/p/gaiagpu-%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</guid>
+      <description>《GaiaGPU：Sharing GPUs in Container Clouds》论文笔记 Abstract  对于云服务的提供商， 如何在容器间共享GPU， 是一个有吸引力的问题  容器的轻量与伸缩性 GPU强大的并行计算能力 在云环境，容器需要使用一个或多个GPU来满足资源需要的同时， 容器独占式的GPU往往使用率很低   我们提出GaiaGPU，能够在容器间共享显存和算力  将物理GPU划分为多个虚拟GPU 采用弹性资源分配和动态资源分配来提高资源利用率 实验结果显示， 有效的实现了容器间资源的分配和隔离的同时，平均只增加了1.015%的开销。    Introduction  容器化是一种虚拟化技术  涉及到量身定制一个标准操作系统，方便它在一个物理机上运行由多个用户处理的不同应用程序 与VM模拟底层硬件不同  容器模拟的是操作系统 轻量，可伸缩，易部署 微服务打包与发布应用的事实标准   云服务提供商整合容器编排框架（如k8s）到基础架构中来提供容器云   GPU 图像处理单元  有很强的并行处理能力  因为一个芯片上集成了数以千计的计算核 GPU被广泛用于计算密集型任务，以加快计算 随着技术的发展趋势，现代GPU内将集成入越来越多的计算资源   CUDA是多功能GPU最流行的平台，提供了API方便GPU的使用 卓越的性能吸引了很多云提供商将GPU引入云环境  在云环境中，部署在容器中的一个应用程序可能需要一个或多个GPU才能执行， 而另一方面，应用程序的专用GPU资源导致资源不足。 因此，如何在不同的容器中共享GPU对大多数云提供商都非常感兴趣     GPU虚拟化技术是在隔离的虚拟环境（例如VM， 容器）之间共享GPU的技术  多数的GPU虚拟化技术应用于VM， 容器间的虚拟化技术还在起始阶段 现阶段的基于容器的GPU虚拟化技术有以下局限性  需要特定的硬件设备（NVIDIA GRID） 将一整个GPU分配给单个容器， 不能共享 （NVIDIA Docker） 容器间只能共享GPU显存 （ConvGPU） 只支持单个GPU （ConvGPU）     我们提出GaiaGPU，能够在容器间透明地共享显存和算力  用户不用修改容器镜像来共享底层GPU  我们使用k8s的device plugin 框架将物理GPU划分为多个虚拟GPU   每个镜像可以按需分配一个或者多个vGPU 提供了两者方式在运行时更改镜像资源  弹性资源分配：暂时改变资源 动态资源分配：永久改变资源     vGPU包括GPU显存和计算资源  共享显存  容器包含GPU显存的一小部分 vGPU分配的是GPU的物理内存   共享计算资源  共享计算资源意味着每个容器都拥有GPU线程的一部分以并行执行计算。 VGPU的计算资源由GPU的利用率衡量（采样时段内， 容器使用GPU的时间比例）     总结：本文做了如下贡献  提出了GaiaGPU：一种在容器间透明共享显存与算力的方法 采用弹性分配和动态分配的方式提高了资源的利用率 进行了四个实验来验证GaiaGPU的性能。结果：实现了容器间资源的分配和隔离的同时，平均只增加了1.</description>
+    </item>
+    
     <item>
       <title>Ubuntu安装k8s集群</title>
       <link>https://tweakzx.github.io/p/ubuntu%E5%AE%89%E8%A3%85k8s%E9%9B%86%E7%BE%A4/</link>
