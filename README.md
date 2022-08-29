@@ -1,4 +1,4 @@
-欢迎我的个人博客
+欢迎访问我的个人博客
 
-[tweakzx.github.io](tweakzx.github.io)
+[Tweakzx的废物日志](https://tweakzx.github.io/)
 
