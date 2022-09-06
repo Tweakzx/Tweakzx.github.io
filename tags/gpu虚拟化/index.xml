@@ -6,7 +6,19 @@
     <description>Recent content in GPU虚拟化 on Tweakzx</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 26 Aug 2022 17:20:32 +0800</lastBuildDate><atom:link href="https://tweakzx.github.io/tags/gpu%E8%99%9A%E6%8B%9F%E5%8C%96/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 29 Aug 2022 15:41:42 +0800</lastBuildDate><atom:link href="https://tweakzx.github.io/tags/gpu%E8%99%9A%E6%8B%9F%E5%8C%96/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>AntMan论文阅读笔记</title>
+      <link>https://tweakzx.github.io/p/antman%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link>
+      <pubDate>Mon, 29 Aug 2022 15:41:42 +0800</pubDate>
+      
+      <guid>https://tweakzx.github.io/p/antman%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</guid>
+      <description>《AntMan: Dynamic Scaling on GPU Clusters for Deep Learning》论文阅读笔记 Abstract 如何在大规模GPU集群上有效调度深度学习工作， 对于工作性能，系统吞吐量和硬件利用率至关重要。
+随着深度学习的工作量变得更加复杂，它变得越来越具有挑战性。
+本文将介绍Antman， 这是一种深入学习的基础设施，该基础架构共同设计了集群调度程序，并已在阿里巴巴部署在生产中，以管理数以万计的每日深度学习工作。
+ Antman适应深度学习训练的波动资源需求。因此，它利用备用GPU资源在共享GPU上共同执行多个作业。 Antman利用深度学习训练的独特特征，在深度学习框架内为显存和计算资源引入动态缩放机制。这允许job之间的细粒度协调并防止工作干扰。 评估表明，Antman在我们的多租户集群中不损害公平性的情况下，整体将显存利用率提高了42％，计算资源利用率提高了34％，为有效利用大规模的GPU提出了新方法。  Introduction  在共享多租户的DL集群， 许多工作排队等待资源的时候会导致GPU利用率低下，有两个原因  大多数的训练任务在执行过程中不能完全利用GPU资源  训练一个DL模型通常需要多种计算的混合 当使用分布式的训练的时候，90%的时间会被浪费到网络通信上   基于资源预留的集群调度方案导致显著的GPU空闲，DL工作中总有部分资源没有投入使用  例如，随机梯度下降是同步的，需要获取所有的资源以进行gang-scheduling， 在得到所有资源之前，已得到的部分资源就会陷入空闲     在共享GPU上进行packing job  可以提高GPU的利用率，可以使得同样的集群整体上胜任更多的job。 但是这个策略在生产集群上很少使用， 原因  尽管提升GPU的利用率是有利的，但也要保证resource-guarantee jobs（RGJ，资源保证性job）的性能。同一个GPU上同时执行多个job会导致干扰&amp;ndash;&amp;gt;RGJ性能出现显著下降 job packing策略可以给并发job引入内存竞争。job需要的资源陡然增加的话，有可能导致训练任务failure。   因此，job资源的独占分配在显存的GPU集群生产环境中比较典型   我们提出AntMan  简述  一个DL系统提高GPU集群的利用率 同时保证公平性与RGJ的性能 通过合作性的资源扩缩来减少job干扰   DL系统中引入了新的分配机制在job训练过程中来动态地精确分配所需资源（显存和计算单元） 使用超卖机制使得任何空闲的GPU资源（显存和计算单元）都能被利用 重新设计了集群调度器和DL框架来适应生产job的波动的资源特点  通过  框架信息感知调度 透明显存扩展 快速可持续的任务间协调   使用这个结构，Antman为DL任务的同时执行的policy design 开辟了空间   AntMan采用了简单且有效的策略来最大化集群吞吐  为RGJ提供资源保证的同时 分配一些偶然性的任务来尽力而为的利用GPU资源（低优先级且不保证资源）     本文主要贡献如下  对生产环境的DL集群进行调研，发现低利用率来自于三个方面：硬件，集群调度，job行为 在DL框架中为显存和计算单元管理引入了两种动态放缩机制，来解决GPU共享问题。新机制利用DL的工作特征来动态调整DL job的资源使用情况，在作业执行期间。 通过共同设计集群调度器和DL框架以利用动态缩放机制，我们为GPU共享引入了一种新的工业方法。这在多租户集群中维护工作服务级协议（SLA），同时通过机会调度来改善集群利用率。 在超过5000个GPU上进行了实验    Motivation deep learning Training  深度学习训练通常包括数百万次迭代，每个迭代过程都称为mini-batch。  通常，训练mini-batch可以分为三个阶段。  首先，计算样品和模型权重以产生一组得分，称为forward pass 其次，使用目标函数在产生的分数和所需的分数之间计算loss error。然后，损失通过模型向后扩散，以计算梯度，称为backward pass。 最后，通过由优化器定义的学习率来缩放梯度，以更新模型参数。   正向通行的计算输出通常包括许多数据输出，每个数据输出称为张量。这些张量应暂时保存在内存中，并被向后通过以计算梯度。通常，为了监视培训中的模型质量，定期触发评估.</description>
+    </item>
+    
     <item>
       <title>GaiaGPU 论文阅读笔记</title>
       <link>https://tweakzx.github.io/p/gaiagpu-%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link>
