@@ -13,10 +13,7 @@
       <pubDate>Mon, 13 Jun 2022 14:57:42 +0800</pubDate>
       
       <guid>https://tweakzx.github.io/p/ubuntu%E5%AE%89%E8%A3%85k8s%E9%9B%86%E7%BE%A4/</guid>
-      <description>在ubuntu上k8s集群部署实践 一、机器配置 配置主机名 sudo hostnamectl set-hostname &amp;#34;k8s-master&amp;#34; // Run this command on masternode cat /etc/hostname sudo hostnamectl set-hostname &amp;#34;k8s-node1&amp;#34; // Run this command on node-0 sudo hostnamectl set-hostname &amp;#34;k8s-node2&amp;#34; // Run this command on node-1 配置/etc/hosts sudo vi /etc/hosts 10.1.13.106 k8s-master #10.1.13.107 k8s-node1 #10.1.13.108 k8s-node1 配置免密登录 想让机器 A 访问机器 B，就把机器 A 的公钥放到机器 B 的~/.ssh/authorized_keys 文件里就行了。
-首先我们在worker上生成一个密钥，输入下述命令后一路回车即可：
-ssh-keygen 然后登录master，并依次输入下述两条命令将其复制并写入到master的authorized_keys中，注意我下面的scp命令中使用了worker别名，要提前进行配置：
-# 复制到 master 主机 scp root@worker:~/.ssh/id_rsa.pub /home # 写入到 authorized_keys 中 cat /home/id_rsa.</description>
+      <description>在ubuntu上k8s集群部署实践 一、机器配置 配置主机名 sudo hostnamectl set-hostname &amp;#34;k8s-master&amp;#34; // Run this command on masternode cat /etc/hostname sudo hostnamectl set-hostname &amp;#34;k8s-node1&amp;#34; // Run this command on node-0 sudo hostnamectl set-hostname &amp;#34;k8s-node2&amp;#34; // Run this command on node-1 配置/etc/hos</description>
     </item>
     
   </channel>
