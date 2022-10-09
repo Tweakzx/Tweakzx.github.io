@@ -6,7 +6,38 @@
         <description>Recent content on Tweakzx</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Mon, 29 Aug 2022 15:41:42 +0800</lastBuildDate><atom:link href="https://tweakzx.github.io/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Tue, 20 Sep 2022 16:25:26 +0800</lastBuildDate><atom:link href="https://tweakzx.github.io/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>GFS论文阅读笔记</title>
+        <link>https://tweakzx.github.io/p/gfs%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link>
+        <pubDate>Tue, 20 Sep 2022 16:25:26 +0800</pubDate>
+        
+        <guid>https://tweakzx.github.io/p/gfs%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</guid>
+        <description>&lt;img src="https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/20220920170446.png" alt="Featured image of post GFS论文阅读笔记" /&gt;&lt;h1 id=&#34;the-google-file-system-论文阅读笔记&#34;&gt;《The Google File System》 论文阅读笔记&lt;/h1&gt;
+&lt;h2 id=&#34;abstract&#34;&gt;Abstract&lt;/h2&gt;
+&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;
+&lt;h2 id=&#34;design-overview&#34;&gt;Design Overview&lt;/h2&gt;
+&lt;h3 id=&#34;assumptions&#34;&gt;Assumptions&lt;/h3&gt;
+&lt;h3 id=&#34;interface&#34;&gt;Interface&lt;/h3&gt;
+&lt;h3 id=&#34;architecture&#34;&gt;Architecture&lt;/h3&gt;
+&lt;h3 id=&#34;single-master&#34;&gt;Single Master&lt;/h3&gt;
+&lt;h3 id=&#34;chunk-size&#34;&gt;Chunk Size&lt;/h3&gt;
+&lt;h3 id=&#34;metadata&#34;&gt;Metadata&lt;/h3&gt;
+&lt;h4 id=&#34;in-memory-data-structure&#34;&gt;In-Memory Data Structure&lt;/h4&gt;
+&lt;h4 id=&#34;chunk-locations&#34;&gt;Chunk Locations&lt;/h4&gt;
+&lt;h4 id=&#34;operation-log&#34;&gt;Operation Log&lt;/h4&gt;
+&lt;h3 id=&#34;cosistency-model&#34;&gt;Cosistency Model&lt;/h3&gt;
+&lt;h4 id=&#34;guarantees-by-gfs&#34;&gt;Guarantees By GFS&lt;/h4&gt;
+&lt;h4 id=&#34;implications-for-applications&#34;&gt;Implications for Applications&lt;/h4&gt;
+&lt;h2 id=&#34;system-interactions&#34;&gt;System Interactions&lt;/h2&gt;
+&lt;h2 id=&#34;master-operation&#34;&gt;Master Operation&lt;/h2&gt;
+&lt;h2 id=&#34;fault-tolerance-and-diagnosis&#34;&gt;FAULT TOLERANCE AND DIAGNOSIS&lt;/h2&gt;
+&lt;h2 id=&#34;measurements&#34;&gt;MEASUREMENTS&lt;/h2&gt;
+&lt;h2 id=&#34;experiences&#34;&gt;EXPERIENCES&lt;/h2&gt;
+&lt;h2 id=&#34;related-work&#34;&gt;RELATED WORK&lt;/h2&gt;
+&lt;h2 id=&#34;conclusions&#34;&gt;CONCLUSIONS&lt;/h2&gt;
+</description>
+        </item>
+        <item>
         <title>AntMan论文阅读笔记</title>
         <link>https://tweakzx.github.io/p/antman%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link>
         <pubDate>Mon, 29 Aug 2022 15:41:42 +0800</pubDate>
@@ -2132,7 +2163,12 @@ z := float64(1)
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;旅行终点&#34;&gt;旅行终点&lt;/h1&gt;
 &lt;p&gt;你可以从&lt;a class=&#34;link&#34; href=&#34;https://go-zh.org/doc/install/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;安装 Go&lt;/a&gt; 开始。&lt;/p&gt;
-&lt;p&gt;一旦安装了 Go，Go &lt;a class=&#34;link&#34; href=&#34;https://go-zh.org/doc/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+&lt;pre&gt;&lt;code&gt;wget -c https://dl.google.com/go/go1.14.2.linux-amd64.tar.gz -O - | sudo tar -xz -C /usr/local
+&lt;/code&gt;&lt;/pre&gt;&lt;pre&gt;&lt;code&gt;vim /etc/profile
+&lt;/code&gt;&lt;/pre&gt;&lt;pre&gt;&lt;code&gt;export PATH=$PATH:/usr/local/go/bin
+&lt;/code&gt;&lt;/pre&gt;&lt;pre&gt;&lt;code&gt;source ~/.profile
+go version
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;一旦安装了 Go，Go &lt;a class=&#34;link&#34; href=&#34;https://go-zh.org/doc/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;文档&lt;/a&gt;是一个极好的 应当继续阅读的内容。 它包含了参考、指南、视频等等更多资料。&lt;/p&gt;
 &lt;p&gt;了解如何组织 Go 代码并在其上工作，参阅&lt;a class=&#34;link&#34; href=&#34;https://www.youtube.com/watch?v=XCsL89YtqCs&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;此视频&lt;/a&gt;，或者阅读&lt;a class=&#34;link&#34; href=&#34;https://go-zh.org/doc/code.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;

@@ -6,7 +6,25 @@
     <description>Recent content in Tags on Tweakzx</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 29 Aug 2022 15:41:42 +0800</lastBuildDate><atom:link href="https://tweakzx.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 20 Sep 2022 16:25:26 +0800</lastBuildDate><atom:link href="https://tweakzx.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>分布式</title>
+      <link>https://tweakzx.github.io/tags/%E5%88%86%E5%B8%83%E5%BC%8F/</link>
+      <pubDate>Tue, 20 Sep 2022 16:25:26 +0800</pubDate>
+      
+      <guid>https://tweakzx.github.io/tags/%E5%88%86%E5%B8%83%E5%BC%8F/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>论文</title>
+      <link>https://tweakzx.github.io/tags/%E8%AE%BA%E6%96%87/</link>
+      <pubDate>Tue, 20 Sep 2022 16:25:26 +0800</pubDate>
+      
+      <guid>https://tweakzx.github.io/tags/%E8%AE%BA%E6%96%87/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>GPU虚拟化</title>
       <link>https://tweakzx.github.io/tags/gpu%E8%99%9A%E6%8B%9F%E5%8C%96/</link>
@@ -71,15 +89,6 @@
     </item>
     
     <item>
-      <title>论文</title>
-      <link>https://tweakzx.github.io/tags/%E8%AE%BA%E6%96%87/</link>
-      <pubDate>Wed, 22 Dec 2021 14:17:12 +0800</pubDate>
-      
-      <guid>https://tweakzx.github.io/tags/%E8%AE%BA%E6%96%87/</guid>
-      <description></description>
-    </item>
-    
-    <item>
       <title>作业</title>
       <link>https://tweakzx.github.io/tags/%E4%BD%9C%E4%B8%9A/</link>
       <pubDate>Tue, 14 Dec 2021 13:55:35 +0800</pubDate>
@@ -103,15 +112,6 @@
       <pubDate>Mon, 13 Dec 2021 19:03:20 +0800</pubDate>
       
       <guid>https://tweakzx.github.io/tags/cuda/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>分布式</title>
-      <link>https://tweakzx.github.io/tags/%E5%88%86%E5%B8%83%E5%BC%8F/</link>
-      <pubDate>Tue, 07 Dec 2021 14:21:24 +0800</pubDate>
-      
-      <guid>https://tweakzx.github.io/tags/%E5%88%86%E5%B8%83%E5%BC%8F/</guid>
       <description></description>
     </item>
     
