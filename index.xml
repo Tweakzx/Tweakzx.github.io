@@ -2166,6 +2166,8 @@ z := float64(1)
 &lt;pre&gt;&lt;code&gt;wget -c https://dl.google.com/go/go1.14.2.linux-amd64.tar.gz -O - | sudo tar -xz -C /usr/local
 &lt;/code&gt;&lt;/pre&gt;&lt;pre&gt;&lt;code&gt;vim /etc/profile
 &lt;/code&gt;&lt;/pre&gt;&lt;pre&gt;&lt;code&gt;export PATH=$PATH:/usr/local/go/bin
+export GOPROXY=https://goproxy.cn,direct
+export GO111MODULE=on
 &lt;/code&gt;&lt;/pre&gt;&lt;pre&gt;&lt;code&gt;source ~/.profile
 go version
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;一旦安装了 Go，Go &lt;a class=&#34;link&#34; href=&#34;https://go-zh.org/doc/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
