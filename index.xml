@@ -6,7 +6,180 @@
         <description>Recent content on Tweakzx</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Fri, 21 Oct 2022 15:52:45 +0800</lastBuildDate><atom:link href="https://tweakzx.github.io/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Tue, 01 Nov 2022 16:44:33 +0800</lastBuildDate><atom:link href="https://tweakzx.github.io/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Docker用法</title>
+        <link>https://tweakzx.github.io/p/docker%E7%94%A8%E6%B3%95/</link>
+        <pubDate>Tue, 01 Nov 2022 16:44:33 +0800</pubDate>
+        
+        <guid>https://tweakzx.github.io/p/docker%E7%94%A8%E6%B3%95/</guid>
+        <description>&lt;h1 id=&#34;docker-的使用方法&#34;&gt;docker 的使用方法&lt;/h1&gt;
+&lt;h2 id=&#34;docker的安装&#34;&gt;docker的安装&lt;/h2&gt;
+&lt;p&gt;docker的版本比较多， 大家可以自行搜索安装方式， 以下只是参考。&lt;/p&gt;
+&lt;h3 id=&#34;ubuntu&#34;&gt;Ubuntu&lt;/h3&gt;
+&lt;p&gt;安装docker.io比较方便&lt;/p&gt;
+&lt;h4 id=&#34;查询可安装版本&#34;&gt;查询可安装版本&lt;/h4&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;apt-cache madison docker
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h4 id=&#34;安装docker&#34;&gt;安装docker&lt;/h4&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;sudo apt install docker.io
+指定安装版本
+sudo apt install docker.io&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;18.09.1-0ubuntu1 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h4 id=&#34;启动docker&#34;&gt;启动docker&lt;/h4&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;sudo systemctl start docker
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h4 id=&#34;重启docker&#34;&gt;重启docker&lt;/h4&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;sudo systemctl daemon-reload
+sudo systemctl restart docker
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h4 id=&#34;设置开机自启动&#34;&gt;设置开机自启动&lt;/h4&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;$ sudo systemctl &lt;span class=&#34;nb&#34;&gt;enable&lt;/span&gt; docker
+或
+$ sudo systemctl &lt;span class=&#34;nb&#34;&gt;enable&lt;/span&gt; docker.service --now
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h4 id=&#34;验证docker&#34;&gt;验证docker&lt;/h4&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;systemctl status docker
+docker --version
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;centos&#34;&gt;centOS&lt;/h3&gt;
+&lt;p&gt;需要安装docker-ce， docker社区版&lt;/p&gt;
+&lt;h4 id=&#34;卸载旧版本&#34;&gt;卸载旧版本&lt;/h4&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;yum remove docker  docker-common docker-selinux docker-engine
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h4 id=&#34;安装依赖&#34;&gt;安装依赖&lt;/h4&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;yum install -y yum-utils device-mapper-persistent-data lvm2
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h4 id=&#34;设置源&#34;&gt;设置源&lt;/h4&gt;
+&lt;p&gt;阿里源&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;清华源&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;yum-config-manager --add-repo https://mirrors.tuna.tsinghua.edu.cn/docker-ce/linux/centos/docker-ce.repo
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h4 id=&#34;安装&#34;&gt;安装&lt;/h4&gt;
+&lt;p&gt;查看可安装版本&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;yum list docker-ce --showduplicates &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; sort -r
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;选择版本安装&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;yum -y install docker-ce-18.03.1.ce
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;启动docker-1&#34;&gt;启动docker&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;systemctl start docker
+systemctl &lt;span class=&#34;nb&#34;&gt;enable&lt;/span&gt; docker
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;docker-的基本命令&#34;&gt;docker 的基本命令&lt;/h2&gt;
+&lt;h3 id=&#34;本地镜像管理&#34;&gt;本地镜像管理&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.runoob.com/docker/docker-images-command.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;images&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.runoob.com/docker/docker-rmi-command.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;rmi&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.runoob.com/docker/docker-tag-command.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;tag&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.runoob.com/docker/docker-build-command.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;build&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.runoob.com/docker/docker-history-command.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;history&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.runoob.com/docker/docker-save-command.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;save&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.runoob.com/docker/docker-load-command.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;load&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.runoob.com/docker/docker-import-command.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;import&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;容器生命周期管理&#34;&gt;容器生命周期管理&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.runoob.com/docker/docker-run-command.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;run&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.runoob.com/docker/docker-start-stop-restart-command.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;start/stop/restart&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.runoob.com/docker/docker-kill-command.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;kill&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.runoob.com/docker/docker-rm-command.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;rm&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.runoob.com/docker/docker-pause-unpause-command.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;pause/unpause&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.runoob.com/docker/docker-create-command.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;create&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.runoob.com/docker/docker-exec-command.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;exec&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;容器操作&#34;&gt;容器操作&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.runoob.com/docker/docker-ps-command.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;ps&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.runoob.com/docker/docker-inspect-command.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;inspect&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.runoob.com/docker/docker-top-command.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;top&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.runoob.com/docker/docker-attach-command.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;attach&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.runoob.com/docker/docker-events-command.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;events&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.runoob.com/docker/docker-logs-command.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;logs&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.runoob.com/docker/docker-wait-command.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;wait&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.runoob.com/docker/docker-export-command.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;export&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.runoob.com/docker/docker-port-command.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;port&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.runoob.com/docker/docker-stats-command.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;stats&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;容器rootfs命令&#34;&gt;容器rootfs命令&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.runoob.com/docker/docker-commit-command.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;commit&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.runoob.com/docker/docker-cp-command.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;cp&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.runoob.com/docker/docker-diff-command.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;diff&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;镜像仓库&#34;&gt;镜像仓库&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.runoob.com/docker/docker-login-command.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;login&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.runoob.com/docker/docker-pull-command.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;pull&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.runoob.com/docker/docker-push-command.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;push&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.runoob.com/docker/docker-search-command.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;search&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&#34;https://www.runoob.com/docker/docker-import-command.html&#34;&gt;https://www.runoob.com/docker/docker-import-command.html&lt;/a&gt;)&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;infoversion&#34;&gt;info|version&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.runoob.com/docker/docker-info-command.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;info&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.runoob.com/docker/docker-version-command.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;version&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;docker-部署实例&#34;&gt;docker 部署实例&lt;/h2&gt;
+&lt;h3 id=&#34;hello-world&#34;&gt;Hello World&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;runoob@runoob:~$ docker run ubuntu:15.10 /bin/echo &amp;quot;Hello world&amp;quot;
+Hello world
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;redis&#34;&gt;Redis&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;docker pull redis:latest
+
+docker run -itd --name redis-test -p 6379:6379 redis
+
+docker exec -it redis-test /bin/bash
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;相关问题&#34;&gt;相关问题&lt;/h2&gt;
+&lt;h3 id=&#34;1-dockerio-和docker-ce-的区别&#34;&gt;1. docker.io 和docker-ce 的区别&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;维护者：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;docker-ce 是 docker 官方维护的&lt;/li&gt;
+&lt;li&gt;docker.io 是 Debian 团队维护的&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;依赖管理：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;docker.io 采用 apt 的方式管理依赖&lt;/li&gt;
+&lt;li&gt;docker-ce 用 go 的方式管理依赖，会自己管理所有的依赖。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;2&#34;&gt;2.&lt;/h3&gt;
+</description>
+        </item>
+        <item>
         <title>[心及]现在及过往</title>
         <link>https://tweakzx.github.io/p/%E5%BF%83%E5%8F%8A%E7%8E%B0%E5%9C%A8%E5%8F%8A%E8%BF%87%E5%BE%80/</link>
         <pubDate>Fri, 21 Oct 2022 15:52:45 +0800</pubDate>

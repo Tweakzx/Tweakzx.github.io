@@ -6,7 +6,16 @@
     <description>Recent content in Posts on Tweakzx</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 21 Oct 2022 15:52:45 +0800</lastBuildDate><atom:link href="https://tweakzx.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 01 Nov 2022 16:44:33 +0800</lastBuildDate><atom:link href="https://tweakzx.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Docker用法</title>
+      <link>https://tweakzx.github.io/p/docker%E7%94%A8%E6%B3%95/</link>
+      <pubDate>Tue, 01 Nov 2022 16:44:33 +0800</pubDate>
+      
+      <guid>https://tweakzx.github.io/p/docker%E7%94%A8%E6%B3%95/</guid>
+      <description>docker 的使用方法 docker的安装 docker的版本比较多， 大家可以自行搜索安装方式， 以下只是参考。 Ubuntu 安装docker.io比较方便 查询可安装版</description>
+    </item>
+    
     <item>
       <title>[心及]现在及过往</title>
       <link>https://tweakzx.github.io/p/%E5%BF%83%E5%8F%8A%E7%8E%B0%E5%9C%A8%E5%8F%8A%E8%BF%87%E5%BE%80/</link>
