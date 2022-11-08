@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Gandiva on Tweakzx</title>
+    <link>https://tweakzx.github.io/tags/gandiva/</link>
+    <description>Recent content in Gandiva on Tweakzx</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 08 Nov 2022 09:59:52 +0800</lastBuildDate><atom:link href="https://tweakzx.github.io/tags/gandiva/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Gandiva论文阅读笔记</title>
+      <link>https://tweakzx.github.io/p/gandiva%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link>
+      <pubDate>Tue, 08 Nov 2022 09:59:52 +0800</pubDate>
+      
+      <guid>https://tweakzx.github.io/p/gandiva%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</guid>
+      <description>Gandiva 论文阅读笔记 Abstract Gandiva: 一个集群调度框架，使用特定领域知识，优化了GPU集群训练深度学习模型的延迟与效率 深度学习job的特征 1）反馈驱动的探索： 一</description>
+    </item>
+    
+  </channel>
+</rss>

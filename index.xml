@@ -6,7 +6,413 @@
         <description>Recent content on Tweakzx</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Tue, 01 Nov 2022 16:44:33 +0800</lastBuildDate><atom:link href="https://tweakzx.github.io/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Tue, 08 Nov 2022 09:59:52 +0800</lastBuildDate><atom:link href="https://tweakzx.github.io/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Gandiva论文阅读笔记</title>
+        <link>https://tweakzx.github.io/p/gandiva%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link>
+        <pubDate>Tue, 08 Nov 2022 09:59:52 +0800</pubDate>
+        
+        <guid>https://tweakzx.github.io/p/gandiva%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</guid>
+        <description>&lt;img src="https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202211081933118.png" alt="Featured image of post Gandiva论文阅读笔记" /&gt;&lt;h1 id=&#34;gandiva-论文阅读笔记&#34;&gt;Gandiva 论文阅读笔记&lt;/h1&gt;
+&lt;h2 id=&#34;abstract&#34;&gt;Abstract&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Gandiva: 一个集群调度框架，使用特定领域知识，优化了GPU集群训练深度学习模型的延迟与效率&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;深度学习job的特征&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;1）反馈驱动的探索：
+&lt;ul&gt;
+&lt;li&gt;一个用户经常运行一组作业(或多个job)来获得特定任务的最佳结果&lt;/li&gt;
+&lt;li&gt;并使用关于准确性的早期反馈来动态优先考虑或杀死一个作业子集&lt;/li&gt;
+&lt;li&gt;同步发生的多个作业的早期反馈是至关重要的&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;2）深度学习工作在资源使用方面的&lt;strong&gt;异构&lt;/strong&gt;，这使得它很难实现最适合的先验。&lt;/li&gt;
+&lt;li&gt;3）作业内可预测性：因为作业会重复执行叫做mini-batch的迭代
+&lt;ul&gt;
+&lt;li&gt;Gandiva利用这个特征解决了1）2）两个问题&lt;/li&gt;
+&lt;li&gt;利用可预测性对GPU进行多个job间进行时分复用， 这提供了低延迟&lt;/li&gt;
+&lt;li&gt;这种预测性还可以用于内省job性能并动态迁移到最合适的GPU上，提高了集群效率&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;我们通过一个原型实现和微基准测试表明&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Gandiva 可以在深度学习过程中的数量级级别地&lt;strong&gt;加快超参数搜索&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;并通过&lt;strong&gt;透明迁移&lt;/strong&gt;和&lt;strong&gt;job时分&lt;/strong&gt;实现更好的利用，以实现更好的job与资源的匹配。&lt;/li&gt;
+&lt;li&gt;在一个运行在180-GPU 集群中的实际工作负载中，Gandiva 将集群的总利用率提高了26%&lt;/li&gt;
+&lt;li&gt;这为深度学习提供了一种管理大型 GPU 集群的新方法。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;DLT  job的特征&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;反馈驱动&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;超参数搜索：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;用户通常会尝试一个作业的几个配置（a multi-job），并利用这些作业的早期反馈来决定是否优先处理或杀死其中的一些子集。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;传统的调度器运行一个工作子集， 完成前其他工作排队&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;这种模式不适合multi-jobs，因为a multi-job中的所有工作需要&lt;strong&gt;同时&lt;/strong&gt;得到早期反馈。&lt;/li&gt;
+&lt;li&gt;另外，伴随着multi-jobs，其他已经确定了正确的超参数的DLT作业，运行了几个小时到几天，导致了行头阻塞，因为长期运行的作业对GPU拥有独家访问权，直到完成，而取决于早期反馈的多作业则在队列中等待。&lt;/li&gt;
+&lt;li&gt;长的排队时间迫使用户要么使用预留的GPU，要么要求集群超额配置，从而降低集群效率。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;异构&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Jobs之间的固有差异
+&lt;ul&gt;
+&lt;li&gt;显存使用&lt;/li&gt;
+&lt;li&gt;核使用&lt;/li&gt;
+&lt;li&gt;带宽敏感性&lt;/li&gt;
+&lt;li&gt;job之间的干扰&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;传统调度器将job视作黑箱，无法取得最优的集群效率&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;作业内可预测&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Gandiva&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Gandiva利用可预测性来执行剖析驱动的自省。
+&lt;ul&gt;
+&lt;li&gt;它使用小批量的进度率来不断反省其决策，以提高集群效率。&lt;/li&gt;
+&lt;li&gt;例如，只有在内存和GPU利用率较低时，它才会将多个作业打包在同一个GPU上&lt;/li&gt;
+&lt;li&gt;它动态地将通信密集型作业迁移到更多的亲和力强的GPU上&lt;/li&gt;
+&lt;li&gt;它还会适时地 &amp;ldquo;增长 &amp;ldquo;作业的并行程度，以利用空闲资源，并在空闲资源消失后缩小作业。&lt;/li&gt;
+&lt;li&gt;我们目前实施的自省策略是一个有状态的试错策略，它是可行的，因为它的预测能力很强。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Gandiva除了特定的内省核调度策略，还提供了一些API&lt;/li&gt;
+&lt;li&gt;API：（a）高效的挂起恢复或时间切片，（b）低延迟迁移，（c）细粒度监控，（d）弹性，以及（e）动态优先级。
+&lt;ul&gt;
+&lt;li&gt;这些原语高效的关键是Gandiva的协同设计：跨越调度器层与DLT工具包层（如pytorch， tensorflow)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;通过利用GPU集群的专用性，Gandiva为深度学习的特定工作负载定制了调度器，从而为调度器提供了对工作的更多可见性和控制，同时仍然实现了对任意DLT工作的通用性。&lt;/li&gt;
+&lt;li&gt;Gandiva的实现
+&lt;ul&gt;
+&lt;li&gt;修改两个流行的框架 PyTorch 和 Tensorflow ，为调度程序提供必要的新原语&lt;/li&gt;
+&lt;li&gt;并在 Kubernetes 和 Docker 容器之上实现了一个初始调度策略管理器&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;本文贡献&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;我们说明了深度学习工作流程的各种独特特征，并将其映射到集群调度所需的具体要求。&lt;/li&gt;
+&lt;li&gt;我们确定了DLT作业调度策略可以使用的通用原语，并提供了应用感知技术，通过利用DL特有的作业内周期性知识，使时间切割和迁移等原语的效率提高了一个数量级，从而变得实用。&lt;/li&gt;
+&lt;li&gt;我们提出并评估了一个新的自省式调度框架，该框架利用DLT工作的特定领域知识来不断完善其调度决策，从而显著改善早期反馈时间并提供高集群效率。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;backgroud&#34;&gt;Backgroud&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;反馈驱动的探索。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;实现高精确度的一个前提条件是模型的选择。新模型的发现，如ResNet或Inception，如今大多是一个试错的过程，尽管使之自动化的方法是一个活跃的研究领域。&lt;/li&gt;
+&lt;li&gt;除了模型结构外，还有一些参数，称为超参数，也需要作为DLT工作的一部分被指定。超参数包括模型中的层数/权重、最小批量大小、学习率等。这些参数通常由用户根据领域知识和试错来选择，有时甚至会导致早期训练失败。&lt;/li&gt;
+&lt;li&gt;因此，DLT工作的早期反馈是至关重要的，特别是在训练的初始阶段。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;multi-job&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;一旦用户确定了要进一步探索的特定模型，用户通常会进行超参数搜索以提高任务的准确性。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;这可以在超参数空间上使用各种搜索技术来完成；也就是说，用户生成多个DLT任务或多任务，每个任务使用&lt;strong&gt;一组超参数或配置&lt;/strong&gt;进行全面训练。由于用户通常会探索数百个这样的配置，这个过程在计算上是很昂贵的。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;因此，文献中出现了复杂版本的超参数搜索，如HyperOpt和Hyperband。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;例如，Hyperband最初可能会产生128个DLT作业，并在每一轮（例如100个小批量迭代）中，杀死一半精度最低的作业。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;同样，对于这些算法来说，对整个作业集的早期反馈是至关重要的，因为否则他们将无法做出有效的训练决定。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;dlt-job的特征&#34;&gt;DLT job的特征&lt;/h2&gt;
+&lt;h3 id=&#34;对局部性的敏感&#34;&gt;对局部性的敏感&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;多GPU DLT工作的性能取决于分配的GPU的亲和力。
+&lt;ul&gt;
+&lt;li&gt;不同的DLT工作对GPU间的亲和力表现出不同程度的敏感性。&lt;/li&gt;
+&lt;li&gt;即使是同一台机器上的GPU，由于不对称的架构，我们观察到不同程度的GPU之间的亲和力
+&lt;ul&gt;
+&lt;li&gt;两个GPU可能位于不同的CPU插槽（表示为DiffSocket）&lt;/li&gt;
+&lt;li&gt;在同一个CPU插槽，但在不同的PCIe Switch（表示为SameSocket）&lt;/li&gt;
+&lt;li&gt;在同一个PCIe Switch（表示为SamePCIeSw）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;figure 
+	&gt;
+	&lt;a href=&#34;https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202211081932589.png&#34; &gt;
+		&lt;img src=&#34;https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202211081932589.png&#34;
+			
+			
+			
+			loading=&#34;lazy&#34;
+			alt=&#34;image-20221108193230029&#34;&gt;
+	&lt;/a&gt;
+	
+	&lt;figcaption&gt;image-20221108193230029&lt;/figcaption&gt;
+	
+&lt;/figure&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;图1显示了两个模型VGG16[44]和ResNet-50[24]对服务器内定位的不同敏感性。
+&lt;ul&gt;
+&lt;li&gt;当使用Tensorflow的两个P100 GPU进行训练时，VGG16在不良定位下受到很大影响。&lt;/li&gt;
+&lt;li&gt;在最差的定位下，当两个GPU位于不同的CPU插座上时，VGG16只实现了最佳定位配置的60%，即两个GPU被放置在同一个PCIe开关下。&lt;/li&gt;
+&lt;li&gt;另一方面，在这种设置下，ResNet-50不受GPU定位的影响。这是因为VGG16是一个比ResNet-50更大的神经模型，因此在每个小批次中的模型同步会在底层PCIe总线上产生更高的通信负荷。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;我们在分布式环境中观察到类似的趋势。图2显示了一个4GPU Tensorflow作业的性能，它以不同的服务器间定位运行，训练ResNet-50和InceptionV3[46]模型。
+&lt;ul&gt;
+&lt;li&gt;即使是用40G InfiniBand网络互连，当作业被分配到4个GPU时，性能差异明显，
+&lt;ul&gt;
+&lt;li&gt;其中它们均匀地分散在4台服务器（表示为4*1-GPU）&lt;/li&gt;
+&lt;li&gt;2台服务器（表示为2*2-GPU）&lt;/li&gt;
+&lt;li&gt;以及全部在一台服务器（表示为本地4GPU）&lt;/li&gt;
+&lt;li&gt;尽管两个模型对位置性的敏感性不同。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;因此，DLT调度器在分配GPU时必须考虑到作业对位置的敏感性。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;对干扰的敏感&#34;&gt;对干扰的敏感&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;当在一个共享的执行环境中运行时，DLT工作可能会因为资源争夺而相互干扰。我们再次观察到，不同的DLT工作表现出不同程度的干扰。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;figure 
+	&gt;
+	&lt;a href=&#34;https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202211081932419.png&#34; &gt;
+		&lt;img src=&#34;https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202211081932419.png&#34;
+			
+			
+			
+			loading=&#34;lazy&#34;
+			alt=&#34;image-20221108193107517&#34;&gt;
+	&lt;/a&gt;
+	
+	&lt;figcaption&gt;image-20221108193107517&lt;/figcaption&gt;
+	
+&lt;/figure&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;即使对于单GPU作业，也存在干扰。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;图3显示了: 当把一个语言模型作业（标记为LM）与另一个作业放在同一个PCI-e交换机下时，由于服务器内的干扰而导致的性能下降情况。
+&lt;ul&gt;
+&lt;li&gt;当两个LM一起运行时，两个作业都会遭受19%的减速。&lt;/li&gt;
+&lt;li&gt;然而，ResNet-50并没有受到GPU与LM共处的影响。&lt;/li&gt;
+&lt;li&gt;神经机器翻译（GNMT）[51]对LM的干扰程度不大。&lt;/li&gt;
+&lt;li&gt;同样地，我们也观察到不同类型的训练模型对多GPU训练的不同程度的干扰。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;图4显示了用40G InfiniBand网络连接的两个4GPU服务器上的服务器间干扰。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;当运行多个2-GPU作业时，每个GPU被放在不同的服务器上，
+&lt;ul&gt;
+&lt;li&gt;ResNet-50显示出高达47%的减速，&lt;/li&gt;
+&lt;li&gt;InceptionV3显示出30%的减速，&lt;/li&gt;
+&lt;li&gt;而DeepSpeech[23]仅显示出5%的减速。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;总之，不同应用领域的流行深度学习模型，如视觉、语言和语音，表现出对位置性和干扰的不同程度的敏感性。为了迎合这些挑战，Gandiva利用了DLT工作的一个关键特征，我们接下来会详细说明。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;job内可预测性&#34;&gt;job内可预测性&lt;/h3&gt;
+&lt;p&gt;&lt;figure 
+	&gt;
+	&lt;a href=&#34;https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202211081933633.png&#34; &gt;
+		&lt;img src=&#34;https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202211081933633.png&#34;
+			
+			
+			
+			loading=&#34;lazy&#34;
+			alt=&#34;image-20221108193308480&#34;&gt;
+	&lt;/a&gt;
+	
+	&lt;figcaption&gt;image-20221108193308480&lt;/figcaption&gt;
+	
+&lt;/figure&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;一个DLT作业包括许多小批量的迭代， 呈现对应的周期性。
+&lt;ul&gt;
+&lt;li&gt;图5(a)显示了在四个K80 GPU上使用ResNet-50模型对ImageNet数据进行训练的20s快照期间使用的GPU总内存。
+&lt;ul&gt;
+&lt;li&gt;所使用的GPU内存明显遵循一个周期性模式。&lt;/li&gt;
+&lt;li&gt;每个周期都对应着一个小批次的处理（大约1.5s），内存在前向传递中增加，在后向传递中减少。&lt;/li&gt;
+&lt;li&gt;使用的最大和最小的GPU内存分别为23GB和0.3GB，或77倍的系数。&lt;/li&gt;
+&lt;li&gt;这个比例随着迷你批处理量的增加而扩大（通常在16到256之间；本例中为128）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;图5(b)显示了在一个K80 GPU上使用GNMT模型时，对WMT&#39;14英语德语数据集进行训练的20s快照所使用的GPU总内存。
+&lt;ul&gt;
+&lt;li&gt;虽然小批量迭代与ImageNet的例子不完全相同（由于不同的句子长度和PyTorch中使用的动态图），但该图具有类似的循环性质。&lt;/li&gt;
+&lt;li&gt;最大值和最小值之间的差异较小（3倍），主要是由于较大的模型（0.4GB）和较小的迷你批次大小（本例中为16）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;除了这里显示的图像和语言模型外，其他训练领域，如语音、生成式逆向网络（GAN）和变异自动编码器都遵循类似的循环模式（由于空间限制没有显示），因为训练的核心是梯度下降算法，执行许多小批量迭代。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;充分利用可预测性。
+&lt;ul&gt;
+&lt;li&gt;首先，一个DLT作业可以被自动分割成小批量的迭代，这些迭代在60秒内的集合，例如一个微任务，形成一个调度间隔。&lt;/li&gt;
+&lt;li&gt;第二，通过在内存周期的最小值上执行暂停操作，可以大大减少从GPU复制到CPU中的内存量，从而使暂停/恢复和迁移的效率比naive的实现要高一个数量级。&lt;/li&gt;
+&lt;li&gt;第三，可以对小批量的进度进行分析，并将其作为评估打包或迁移等机制的有效性的代理。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;设计&#34;&gt;设计&lt;/h2&gt;
+&lt;p&gt;今天的集群中出现高延迟和低利用率，是因为DLT作业被专门分配了一组固定的GPU（图6）。独占访问 GPU 的原因线头阻塞，防止早期反馈，导致传入作业的排队时间过长。当作业无法完全利用其分配的GPU时，对一组固定的GPU的独家访问也会导致GPU的低利用率。&lt;/p&gt;
+&lt;h3 id=&#34;机制&#34;&gt;机制&lt;/h3&gt;
+&lt;h4 id=&#34;挂起-重启与装箱&#34;&gt;挂起-重启与装箱&lt;/h4&gt;
+&lt;h4 id=&#34;迁移&#34;&gt;迁移&lt;/h4&gt;
+&lt;h4 id=&#34;增长与收缩&#34;&gt;增长与收缩&lt;/h4&gt;
+&lt;h4 id=&#34;profile&#34;&gt;Profile&lt;/h4&gt;
+&lt;h3 id=&#34;调度原则&#34;&gt;调度原则&lt;/h3&gt;
+&lt;h4 id=&#34;响应模式&#34;&gt;响应模式&lt;/h4&gt;
+&lt;h4 id=&#34;内省模式&#34;&gt;内省模式&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;装箱&lt;/li&gt;
+&lt;li&gt;迁移&lt;/li&gt;
+&lt;li&gt;扩缩&lt;/li&gt;
+&lt;li&gt;时分&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;figure 
+	&gt;
+	&lt;a href=&#34;https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202211081934805.png&#34; &gt;
+		&lt;img src=&#34;https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202211081934805.png&#34;
+			
+			
+			
+			loading=&#34;lazy&#34;
+			alt=&#34;image-20221108193438681&#34;&gt;
+	&lt;/a&gt;
+	
+	&lt;figcaption&gt;image-20221108193438681&lt;/figcaption&gt;
+	
+&lt;/figure&gt;&lt;/p&gt;
+&lt;h2 id=&#34;实现&#34;&gt;实现&lt;/h2&gt;
+&lt;h3 id=&#34;调度器&#34;&gt;调度器&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Gandiva由一个定制的中央调度器和一个客户端组件组成，客户端是每个DLT工作容器的一部分。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;调度器只是另一个由Kubernetes管理的容器。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Kubernetes负责整体集群管理，&lt;/li&gt;
+&lt;li&gt;Gandiva调度器管理DLT作业的调度。&lt;/li&gt;
+&lt;li&gt;Gandiva调度器使用Kubernetes API来获取集群节点和容器信息，每当提交一个新的容器时，调度器会根据调度策略将其分配给集群中的一个或多个GPU。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;当一个容器被安排在一个节点上时&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;最初只有Gandiva客户端开始执行。&lt;/li&gt;
+&lt;li&gt;然后，它轮询Gandiva调度器，以确定哪些GPU可用于DLT工作，&lt;/li&gt;
+&lt;li&gt;并使用暂停/恢复和迁移命令控制DLT工作的执行。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;虽然我们集群中所有GPU的调度完全由中央调度器控制，但如果弹性成为我们关心的问题，可能需要一个分层的方法。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;dl工具的修改&#34;&gt;DL工具的修改&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;PyTorch的时分。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;发出SIGTSTP信信号&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Gandiva client会发出一个SIGTSTP信号，表示工具包必须暂停进程。&lt;/li&gt;
+&lt;li&gt;它还指示恢复是否应该通过内存文件在新的GPU中发生。&lt;/li&gt;
+&lt;li&gt;收到信号后，工具包会设置一个暂停标志，并且只在一个小批处理边界的末端执行暂停。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;识别mini-batch边界&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;在Tensorflow这个定义并运行的工具包中，mini-batch的边界很容易识别（session.run()的结束）。&lt;/li&gt;
+&lt;li&gt;在PyTorch这个逐一定义的工具包中，
+&lt;ul&gt;
+&lt;li&gt;我们通过跟踪GPU内存使用周期来确定mini-batch的边界，&lt;/li&gt;
+&lt;li&gt;这是PyTorch的GPU内存管理器（THCCachingAllocator）的一部分，&lt;/li&gt;
+&lt;li&gt;每当GPU内存被释放时，我们就会寻找一个&lt;strong&gt;周期最小值&lt;/strong&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;执行暂停&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;一旦检测到周期最小值，工具包 i）将所有存储的对象从GPU复制到CPU，ii）释放GPU分配，以及iii）暂停进程。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;恢复进程&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;当Gandiva客户端发出SIGCONT信号时，工具包会分配GPU内存，将存储的对象从CPU复制到GPU，并恢复进程。&lt;/li&gt;
+&lt;li&gt;为了处理重新启动时的&lt;strong&gt;地址改变&lt;/strong&gt;，我们跟踪工具包中的GPU对象，并用新的地址对其进行修补。&lt;/li&gt;
+&lt;li&gt;改变GPU需要调用cudaDeviceReset和CudaInit，这可能需要5-10秒。我们通过在 &amp;ldquo;暂停 &amp;ldquo;时在后台执行这些操作来&lt;strong&gt;隐藏这个延时&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Tensorflow迁移&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;我们用400多行Python/C++代码对Tensorflow（TF）进行了修改。用200多行额外的代码，我们在每个服务器上部署了一个迁移助手，以支持按需检查点和迁移。当收到来自调度器的迁移命令时，目的地助手首先预热TF会话并等待检查点的到来。然后，源帮助者要求TF保存检查点，在跨服务器迁移的情况下将检查点移到目的地，最后恢复训练会话。为了加快迁移过程，我们采用Ramdisk将检查点保存在内存中。在跨服务器的情况下，修改后的TF通过网络文件系统（NFS）协议将检查点直接保存到远程Ramdisk。&lt;/li&gt;
+&lt;li&gt;当Migration Helper要求作业执行检查点时，修改后的TF会在一个小批处理结束时调用tf.Saver。对于数据的并行性，检查点只包括一个GPU中的模型，而不考虑训练中使用的GPU数量。为了进一步加快TF的迁移，我们在检查点中不包括元图结构，因为它可以根据用户代码进行重建。&lt;/li&gt;
+&lt;li&gt;在热身阶段，修改后的TF检查GPU配置并重建元图。它进一步创建Executor来运行热身操作，以确保初始化不会被懒惰地推迟。当恢复训练过程时，修改后的TF加载检查点，由多个GPU并行加载，并继续进行训练。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        <item>
         <title>Docker用法</title>
         <link>https://tweakzx.github.io/p/docker%E7%94%A8%E6%B3%95/</link>
         <pubDate>Tue, 01 Nov 2022 16:44:33 +0800</pubDate>
