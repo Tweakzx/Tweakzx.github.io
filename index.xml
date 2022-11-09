@@ -23,7 +23,7 @@
 &lt;ul&gt;
 &lt;li&gt;1）反馈驱动的探索：
 &lt;ul&gt;
-&lt;li&gt;一个用户经常运行一组作业(或多个job)来获得特定任务的最佳结果&lt;/li&gt;
+&lt;li&gt;一个用户经常运行一组作业(或 a multi-job)来获得特定任务的最佳结果&lt;/li&gt;
 &lt;li&gt;并使用关于准确性的早期反馈来动态优先考虑或杀死一个作业子集&lt;/li&gt;
 &lt;li&gt;同步发生的多个作业的早期反馈是至关重要的&lt;/li&gt;
 &lt;/ul&gt;
@@ -41,8 +41,8 @@
 &lt;li&gt;
 &lt;p&gt;我们通过一个原型实现和微基准测试表明&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;Gandiva 可以在深度学习过程中的数量级级别地&lt;strong&gt;加快超参数搜索&lt;/strong&gt;&lt;/li&gt;
-&lt;li&gt;并通过&lt;strong&gt;透明迁移&lt;/strong&gt;和&lt;strong&gt;job时分&lt;/strong&gt;实现更好的利用，以实现更好的job与资源的匹配。&lt;/li&gt;
+&lt;li&gt;Gandiva 可以在深度学习过程&lt;strong&gt;加快超参数搜索&lt;/strong&gt;一个数量级&lt;/li&gt;
+&lt;li&gt;并通过&lt;strong&gt;透明迁移&lt;/strong&gt;和&lt;strong&gt;job时分&lt;/strong&gt;实现更好的利用，使job与资源的更好地匹配。&lt;/li&gt;
 &lt;li&gt;在一个运行在180-GPU 集群中的实际工作负载中，Gandiva 将集群的总利用率提高了26%&lt;/li&gt;
 &lt;li&gt;这为深度学习提供了一种管理大型 GPU 集群的新方法。&lt;/li&gt;
 &lt;/ul&gt;
@@ -161,7 +161,7 @@
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id=&#34;dlt-job的特征&#34;&gt;DLT job的特征&lt;/h2&gt;
-&lt;h3 id=&#34;对局部性的敏感&#34;&gt;对局部性的敏感&lt;/h3&gt;
+&lt;h3 id=&#34;对位置locality敏感&#34;&gt;对位置（locality)敏感&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;多GPU DLT工作的性能取决于分配的GPU的亲和力。
 &lt;ul&gt;
@@ -212,7 +212,7 @@
 &lt;/li&gt;
 &lt;li&gt;因此，DLT调度器在分配GPU时必须考虑到作业对位置的敏感性。&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3 id=&#34;对干扰的敏感&#34;&gt;对干扰的敏感&lt;/h3&gt;
+&lt;h3 id=&#34;对干扰敏感&#34;&gt;对干扰敏感&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;当在一个共享的执行环境中运行时，DLT工作可能会因为资源争夺而相互干扰。我们再次观察到，不同的DLT工作表现出不同程度的干扰。&lt;/li&gt;
 &lt;/ul&gt;
@@ -319,10 +319,10 @@
 	
 &lt;/figure&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;今天的集群中出现高延迟和低利用率
+&lt;li&gt;如今的集群中出现高延迟和低利用率的问题
 &lt;ul&gt;
-&lt;li&gt;是因为DLT作业被专门分配了一组固定的GPU。&lt;/li&gt;
-&lt;li&gt;独占访问 GPU 的原因行头阻塞，阻塞了早期反馈，导致作业的排队时间过长。&lt;/li&gt;
+&lt;li&gt;是因为DLT作业被专门分配了一组&lt;strong&gt;固定&lt;/strong&gt;的GPU。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;独占&lt;/strong&gt;访问 GPU 的原因行头阻塞，阻塞了早期反馈，导致作业的排队时间过长。&lt;/li&gt;
 &lt;li&gt;当作业无法完全利用其分配的GPU时，对一组固定的GPU的独家访问也会导致GPU的低利用率。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
@@ -331,7 +331,7 @@
 &lt;ul&gt;
 &lt;li&gt;三种方式消除GPU对DLT作业的排他性和固定分配来解决低效率问题
 &lt;ul&gt;
-&lt;li&gt;首先，在过载期间，Gandiva允许后来的工作与现有的工作共享GPU
+&lt;li&gt;首先，在过载期间，Gandiva允许后来的工作与现有的工作&lt;strong&gt;共享&lt;/strong&gt;GPU
 &lt;ul&gt;
 &lt;li&gt;而不是等待当前工作的离开。&lt;/li&gt;
 &lt;li&gt;这是为DLT作业定制的&lt;strong&gt;挂起-重启机制&lt;/strong&gt;和&lt;strong&gt;选择性装箱&lt;/strong&gt;而实现的。&lt;/li&gt;
@@ -617,10 +617,15 @@
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;放置工作&lt;/p&gt;
+&lt;p&gt;放置job&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;传统的调度器将使用&lt;strong&gt;作业离开&lt;/strong&gt;来触发从等待队列中挑选下一个作业。&lt;/li&gt;
-&lt;li&gt;Gandiva检查集群的高度是否可以减少
+&lt;li&gt;
+&lt;blockquote&gt;
+&lt;p&gt;传统的调度器将使用&lt;strong&gt;作业离开&lt;/strong&gt;来触发从等待队列中挑选下一个作业。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Gandiva检查集群的高度是否可以减少&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;将被暂停的作业迁移到新的空闲GPU上&lt;/li&gt;
 &lt;li&gt;这个作业可能来自同一台服务器或集群中的任何其他服务器。&lt;/li&gt;
@@ -682,16 +687,16 @@
 &lt;li&gt;
 &lt;p&gt;迁移&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;GPU的位置性在一些作业的性能中起着重要作用。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;在Gandiva中&lt;/p&gt;
+&lt;li&gt;GPU的位置性在一些作业的性能中起着重要作用。&lt;/li&gt;
+&lt;li&gt;在Gandiva中
 &lt;ul&gt;
 &lt;li&gt;每当作业离开时，我们都会使用迁移来改善位置性，&lt;/li&gt;
 &lt;li&gt;同时也作为一个后台进程来 &amp;ldquo;整理 &amp;ldquo;集群的内容。&lt;/li&gt;
 &lt;li&gt;为了改善位置性，我们挑选那些不在同一地点的作业，并试图找到一个新的同一地点的位置。&lt;/li&gt;
 &lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
 &lt;p&gt;&lt;figure 
 	&gt;
 	&lt;a href=&#34;https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202211091112968.png&#34; &gt;
@@ -706,9 +711,8 @@
 	&lt;figcaption&gt;image-20221109111201868&lt;/figcaption&gt;
 	
 &lt;/figure&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;图8展示了一个集群实验的例子（第6.4节）。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;图8展示了一个集群实验的例子（第6.4节）。
 &lt;ul&gt;
 &lt;li&gt;当一个有4个作业、每个作业需要2个GPU的多作业被安排时，它的GPU亲和性很差；
 &lt;ul&gt;
@@ -718,6 +722,11 @@
 &lt;li&gt;因此，Gandiva启动了迁移过程，将J1、J2和J3重新安置到同地的GPU。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;ul&gt;
 &lt;li&gt;去碎片化
 &lt;ul&gt;
 &lt;li&gt;我们在所有非空闲的服务器中挑选出拥有最多空闲GPU的服务器。&lt;/li&gt;
@@ -728,20 +737,28 @@
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;扩缩&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;只有当集群未被充分利用，并且DLT作业明确指出自己可以进行增长-收缩时，才会触发增长-收缩。&lt;/li&gt;
-&lt;li&gt;在我们目前的系统中，我们只让作业增长到单台服务器中可用的最大GPU数量。&lt;/li&gt;
-&lt;li&gt;此外，我们只在空闲期后触发增长，以避免惊扰，并在新作业可能需要GPU时立即收缩。&lt;/li&gt;
+&lt;li&gt;增长-收缩的条件
+&lt;ul&gt;
+&lt;li&gt;集群未被充分利用&lt;/li&gt;
+&lt;li&gt;DLT作业明确指出自己可以进行增长-收缩&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;限制
+&lt;ul&gt;
+&lt;li&gt;在我们目前的系统中，我们只让作业增长到&lt;strong&gt;单台服务器&lt;/strong&gt;中可用的最大GPU数量。&lt;/li&gt;
+&lt;li&gt;此外，我们只在&lt;strong&gt;空闲一段时间后&lt;/strong&gt;触发增长，以避免惊扰，&lt;/li&gt;
+&lt;li&gt;在新作业可能需要GPU时&lt;strong&gt;立即收缩&lt;/strong&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;时分&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;最后，我们在每个服务器中支持轮回调度，以公平地分享GPU。&lt;/li&gt;
+&lt;li&gt;我们在每个服务器中支持轮回调度，以公平地分享GPU。&lt;/li&gt;
 &lt;li&gt;当作业有多个优先级时，较高优先级的作业将不会被暂停以适应较低优先级的作业。&lt;/li&gt;
 &lt;li&gt;如果一台服务器被较高优先级的作业完全利用，如果可行的话，较低优先级的作业将被迁移到另一台服务器。&lt;/li&gt;
 &lt;/ul&gt;
