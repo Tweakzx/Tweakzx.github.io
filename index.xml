@@ -99,7 +99,7 @@
 &lt;li&gt;Gandiva利用可预测性来执行剖析驱动的自省。
 &lt;ul&gt;
 &lt;li&gt;它使用小批量的进度率来不断反省其决策，以提高集群效率。&lt;/li&gt;
-&lt;li&gt;例如，只有在内存和GPU利用率较低时，它才会将多个作业打包在同一个GPU上&lt;/li&gt;
+&lt;li&gt;例如，只有在内存和GPU利用率较低时，它才会将多个作业装箱在同一个GPU上&lt;/li&gt;
 &lt;li&gt;它动态地将通信密集型作业迁移到更多的亲和力强的GPU上&lt;/li&gt;
 &lt;li&gt;它还会适时地 &amp;ldquo;增长 &amp;ldquo;作业的并行程度，以利用空闲资源，并在空闲资源消失后缩小作业。&lt;/li&gt;
 &lt;li&gt;我们目前实施的自省策略是一个有状态的试错策略，它是可行的，因为它的预测能力很强。&lt;/li&gt;
@@ -299,26 +299,11 @@
 &lt;ul&gt;
 &lt;li&gt;首先，一个DLT作业可以被自动分割成小批量的迭代，这些迭代在60秒内的集合，例如一个微任务，形成一个调度间隔。&lt;/li&gt;
 &lt;li&gt;第二，通过在内存周期的最小值上执行暂停操作，可以大大减少从GPU复制到CPU中的内存量，从而使暂停/恢复和迁移的效率比naive的实现要高一个数量级。&lt;/li&gt;
-&lt;li&gt;第三，可以对小批量的进度进行分析，并将其作为评估打包或迁移等机制的有效性的代理。&lt;/li&gt;
+&lt;li&gt;第三，可以对小批量的进度进行分析，并将其作为评估装箱或迁移等机制的有效性的代理。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id=&#34;设计&#34;&gt;设计&lt;/h2&gt;
-&lt;p&gt;今天的集群中出现高延迟和低利用率，是因为DLT作业被专门分配了一组固定的GPU（图6）。独占访问 GPU 的原因线头阻塞，防止早期反馈，导致传入作业的排队时间过长。当作业无法完全利用其分配的GPU时，对一组固定的GPU的独家访问也会导致GPU的低利用率。&lt;/p&gt;
-&lt;h3 id=&#34;机制&#34;&gt;机制&lt;/h3&gt;
-&lt;h4 id=&#34;挂起-重启与装箱&#34;&gt;挂起-重启与装箱&lt;/h4&gt;
-&lt;h4 id=&#34;迁移&#34;&gt;迁移&lt;/h4&gt;
-&lt;h4 id=&#34;增长与收缩&#34;&gt;增长与收缩&lt;/h4&gt;
-&lt;h4 id=&#34;profile&#34;&gt;Profile&lt;/h4&gt;
-&lt;h3 id=&#34;调度原则&#34;&gt;调度原则&lt;/h3&gt;
-&lt;h4 id=&#34;响应模式&#34;&gt;响应模式&lt;/h4&gt;
-&lt;h4 id=&#34;内省模式&#34;&gt;内省模式&lt;/h4&gt;
-&lt;ul&gt;
-&lt;li&gt;装箱&lt;/li&gt;
-&lt;li&gt;迁移&lt;/li&gt;
-&lt;li&gt;扩缩&lt;/li&gt;
-&lt;li&gt;时分&lt;/li&gt;
-&lt;/ul&gt;
 &lt;p&gt;&lt;figure 
 	&gt;
 	&lt;a href=&#34;https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202211081934805.png&#34; &gt;
@@ -333,7 +318,437 @@
 	&lt;figcaption&gt;image-20221108193438681&lt;/figcaption&gt;
 	
 &lt;/figure&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;今天的集群中出现高延迟和低利用率
+&lt;ul&gt;
+&lt;li&gt;是因为DLT作业被专门分配了一组固定的GPU。&lt;/li&gt;
+&lt;li&gt;独占访问 GPU 的原因行头阻塞，阻塞了早期反馈，导致作业的排队时间过长。&lt;/li&gt;
+&lt;li&gt;当作业无法完全利用其分配的GPU时，对一组固定的GPU的独家访问也会导致GPU的低利用率。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;机制&#34;&gt;机制&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;三种方式消除GPU对DLT作业的排他性和固定分配来解决低效率问题
+&lt;ul&gt;
+&lt;li&gt;首先，在过载期间，Gandiva允许后来的工作与现有的工作共享GPU
+&lt;ul&gt;
+&lt;li&gt;而不是等待当前工作的离开。&lt;/li&gt;
+&lt;li&gt;这是为DLT作业定制的&lt;strong&gt;挂起-重启机制&lt;/strong&gt;和&lt;strong&gt;选择性装箱&lt;/strong&gt;而实现的。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;第二，Gandiva支持DLT作业从一组GPU到另一组的&lt;strong&gt;高效迁移&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;迁移允许时间碎片化的作业迁移到其他（最近空出的）GPU上&lt;/li&gt;
+&lt;li&gt;或者对集群进行去碎片化处理，从而使后来的作业被分配到具有良好位置性的GPU上。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;第三，Gandiva支持GPU增长-缩减机制
+&lt;ul&gt;
+&lt;li&gt;这样空闲的GPU就可以适时地被使用。&lt;/li&gt;
+&lt;li&gt;为了有效地支持这些机制并实现有效的资源管理，Gandiva通过不断地&lt;strong&gt;剖析&lt;/strong&gt;DLT作业的资源使用情况并估计其性能，对DLT作业进行内省。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;挂起-重启与装箱&#34;&gt;挂起-重启与装箱&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Suspend-resume&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;挂起-重启是Gandiva用来消除一组GPU对DLT作业的独占性的一种机制。
+&lt;ul&gt;
+&lt;li&gt;Gandiva利用这种机制，增加了对GPU时间分割的自定义支持。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Gandiva的关键思想是利用这种周期性行为，在DLT作业的&lt;strong&gt;GPU显存使用量最低&lt;/strong&gt;时暂停-恢复。
+&lt;ul&gt;
+&lt;li&gt;1）发出暂停调用&lt;/li&gt;
+&lt;li&gt;2）DLT工具包会等到内存使用周期的最小值，将存储在GPU中的对象复制到CPU，释放其所有GPU内存分配（包括缓存）&lt;/li&gt;
+&lt;li&gt;3）然后调用经典的CPU暂停机制&lt;/li&gt;
+&lt;li&gt;4）之后，当CPU恢复工作时，DLT框架首先分配适当的GPU内存，将存储的对象复制回GPU，然后恢复工作。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Suspend-resume也可以在同一台服务器中启动GPU的更换
+&lt;ul&gt;
+&lt;li&gt;虽然更换GPU的成本很高，但我们可以把这个延迟从关键路径中隐藏
+&lt;ul&gt;
+&lt;li&gt;典型的图像分类工作，暂停-恢复一起可以在100ms内完成&lt;/li&gt;
+&lt;li&gt;而对于大型语言翻译工作，暂停-恢复可能需要1s&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;考虑到1分钟的时间切分间隔，这相当于2%或更少的开销&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;延迟
+&lt;ul&gt;
+&lt;li&gt;Gandiva中的suspend可能最多&lt;strong&gt;延迟&lt;/strong&gt;DLT作业的一个小批次间隔&lt;/li&gt;
+&lt;li&gt;值得
+&lt;ul&gt;
+&lt;li&gt;由于减少了GPU-CPU的复制成本和更少的CPU使用的内存，它的开销明显减少&lt;/li&gt;
+&lt;li&gt;在这个延迟期间还完成了有用的工作。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;调度器跟踪这一延迟，并相应地调整时间分割的间隔，以实现公平性&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;装箱&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;暂停-恢复的另一种方法是装箱
+&lt;ul&gt;
+&lt;li&gt;在一个GPU上同时运行多个DLT作业，让GPU分担作业的时间。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;有效性
+&lt;ul&gt;
+&lt;li&gt;只有当装箱的作业不超过GPU的资源，并且不会对彼此产生不利影响时，GPU中的装箱才是有效的。&lt;/li&gt;
+&lt;li&gt;如果作业相互干扰，装箱就会比暂停-恢复差很多。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;装箱的使用
+&lt;ul&gt;
+&lt;li&gt;当DLT作业有排他性的访问时，我们使用Profiling来监测它们的资源和进度&lt;/li&gt;
+&lt;li&gt;如果两个作业被确定为装箱的候选者，我们就把它们装箱在一起，并继续监控它们&lt;/li&gt;
+&lt;li&gt;如果给定的装箱结果对作业的性能产生了不利影响，我们就解除这些作业的装箱并恢复到暂停-恢复状态&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;迁移&#34;&gt;迁移&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;迁移是Gandiva用来改变分配给DLT作业的GPU集的机制。
+&lt;ul&gt;
+&lt;li&gt;迁移在几种情况下是有用的
+&lt;ul&gt;
+&lt;li&gt;i）将时间分割的作业移到集群中任何地方的空闲GPU上&lt;/li&gt;
+&lt;li&gt;ii）将相互干扰的作业移开&lt;/li&gt;
+&lt;li&gt;iii）对集群进行去碎片化处理，使进入的作业获得具有良好位置性的GPU&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;我们评估了两种解决DLT进程状态迁移的方法。
+&lt;ul&gt;
+&lt;li&gt;在第一种方法中，我们利用一个通用的进程迁移机制，如&lt;strong&gt;CRIU&lt;/strong&gt;。
+&lt;ul&gt;
+&lt;li&gt;CRIU本身不支持使用GPU设备的进程迁移
+&lt;ul&gt;
+&lt;li&gt;我们首先对GPU对象进行检查&lt;/li&gt;
+&lt;li&gt;调用CRIU之前从进程中删除所有GPU状态&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;因为CRIU检查点和恢复整个进程的内存
+&lt;ul&gt;
+&lt;li&gt;对于这些使用PyTorch的DLT作业来说，检查点的大小是GB级别的。&lt;/li&gt;
+&lt;li&gt;对于单GPU作业来说，所产生的迁移开销约为810s，对于多GPU作业来说则更高。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;我们考虑的第二种方法是使用具有检查点意识的DLT作业。
+&lt;ul&gt;
+&lt;li&gt;Tensorflow等DLT框架已经支持允许自动检查点和恢复模型的API&lt;/li&gt;
+&lt;li&gt;通过在迁移前对目的地进行&lt;strong&gt;预热&lt;/strong&gt;，并且只迁移必要的训练状态。我们可以降低迁移开销小到一两秒&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;无论采用哪种方法，我们发现，与它在提高GPU总体利用率方面提供的好处相比，服务器间迁移的开销是值得的&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;增长与收缩&#34;&gt;增长与收缩&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;Gandiva用来消除GPU对DLT作业的排他性的第三个机制是增长-收缩。
+&lt;ul&gt;
+&lt;li&gt;这种机制主要针对集群可能没有被完全利用的情况&lt;/li&gt;
+&lt;li&gt;基本思想
+&lt;ul&gt;
+&lt;li&gt;在空闲时间内，适时地增加可用于作业的GPU数量&lt;/li&gt;
+&lt;li&gt;在负载增加时相应地减少可用的GPU数量&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;许多DLT工作，特别是在图像领域，随着GPU数量的增加，会看到线性的性能扩展。
+&lt;ul&gt;
+&lt;li&gt;Gandiva只对那些特别声明他们有足够的适应性来利用这些增长机会的DLT工作应用这一机制。&lt;/li&gt;
+&lt;li&gt;当多个DLT工作符合这一标准时，Gandiva使用Profiling来估计每个工作的进度，然后相应地分配GPU。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;profiling&#34;&gt;Profiling&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;Gandiva监控资源使用情况
+&lt;ul&gt;
+&lt;li&gt;如CPU和GPU利用率，CPU/GPU内存等。&lt;/li&gt;
+&lt;li&gt;Gandiva的独特之处在于，它还以一种应用感知的方式内省
+&lt;ul&gt;
+&lt;li&gt;利用了DLT作业表现出的规律内省&lt;/li&gt;
+&lt;li&gt;利用周期性以估计DLT进度&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Gandiva估计DLT作业的mini_batch时间
+&lt;ul&gt;
+&lt;li&gt;即对一批输入数据做一次前向/后向传递的时间，作为GPU内存使用周期的两个最小值之间的时间&lt;/li&gt;
+&lt;li&gt;由于DLT作业在其生命周期中通常会执行数百万次这样的小批量操作，调度器会在调度决策之前和之后比较DLT的mini_batch时间以确定其有效性。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Gandiva可以决定装箱是否有效
+&lt;ul&gt;
+&lt;li&gt;通过比较装箱前后两个DLT作业的小批量时间&lt;/li&gt;
+&lt;li&gt;如果没有这样的剖析，为了做出装箱的决定
+&lt;ul&gt;
+&lt;li&gt;人们不仅要对两个DLT作业在不同GPU上的性能进行建模，&lt;/li&gt;
+&lt;li&gt;还要对它们可能相互干扰的各种方式进行建模（例如，缓存、内存带宽等）&lt;/li&gt;
+&lt;li&gt;这不是一项简单的任务&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;调度原则&#34;&gt;调度原则&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;定义：在我们描述调度器的细节之前，我们定义一些术语。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;DLT作业
+&lt;ul&gt;
+&lt;li&gt;被封装在容器中, 包括
+&lt;ul&gt;
+&lt;li&gt;所需的GPU数量&lt;/li&gt;
+&lt;li&gt;优先级（可以是动态的 ）&lt;/li&gt;
+&lt;li&gt;一个指示作业是否能够增长-收缩的标志&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;我们假设一个作业所要求的GPU数量是2的幂。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;集群
+&lt;ul&gt;
+&lt;li&gt;一个集群由一个或多个服务器组成&lt;/li&gt;
+&lt;li&gt;每个服务器有一个或多个GPU&lt;/li&gt;
+&lt;li&gt;我们假设一个专门的GPU集群用于DLT工作&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;服务器的高度
+&lt;ul&gt;
+&lt;li&gt;定义为⌈M/N]， 其中M是分配的GPU数量，N是总GPU的数量。&lt;/li&gt;
+&lt;li&gt;只有当服务器的高度超过1时，才会使用暂停/恢复机制。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;集群的高度
+&lt;ul&gt;
+&lt;li&gt;被定义为其所有服务器的最大高度。&lt;/li&gt;
+&lt;li&gt;当集群的高度大于1时，就会出现过载；即所有作业的请求/分配的GPU之和大于GPU的总数。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;服务器的亲和力
+&lt;ul&gt;
+&lt;li&gt;被定义为分配给该服务器的作业类型。&lt;/li&gt;
+&lt;li&gt;例如，最初服务器的亲和力为零，如果一个需要两个GPU的作业被分配到一个服务器上，那么该服务器的亲和力就会变成两个。&lt;/li&gt;
+&lt;li&gt;这个参数被调度器用来将具有类似GPU需求的作业分配到同一台服务器上。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;目标&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Gandiva调度器的主要设计目标是&lt;strong&gt;为作业提供早期反馈&lt;/strong&gt;。
+&lt;ul&gt;
+&lt;li&gt;在流行的调度器中，作业在过载期间会在队列中等待。&lt;/li&gt;
+&lt;li&gt;Gandiva通过立即为新作业分配GPU并使用suspend-resume机制提供早期结果来支持超额订阅。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;第二个设计目标是&lt;strong&gt;集群效率&lt;/strong&gt;。
+&lt;ul&gt;
+&lt;li&gt;通过一个持续的优化过程来实现，该过程使用了剖析和贪婪的启发式，利用了诸如装箱、迁移和增长-收缩等机制。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;集群级的公平性&lt;strong&gt;不是&lt;/strong&gt;Gandiva的设计目标。
+&lt;ul&gt;
+&lt;li&gt;只关注使用暂停-恢复机制在每个服务器上提供作业之间的公平性&lt;/li&gt;
+&lt;li&gt;集群级的公平性留给未来工作&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;为了实现这些目标，Gandiva调度器以两种模式运行：
+&lt;ul&gt;
+&lt;li&gt;响应模式：调度器对诸如工作到达、离开、机器故障等事件做出反应&lt;/li&gt;
+&lt;li&gt;内省模式： 一个持续的过程，过程中，调度器的目标是提高集群的利用率和作业完成时间&lt;/li&gt;
+&lt;li&gt;请注意，调度器可以同时在两种模式下运行。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;响应模式&#34;&gt;响应模式&lt;/h4&gt;
+&lt;p&gt;响应模式被设计用来处理诸如工作到达、离开和机器故障的事件&lt;/p&gt;
+&lt;p&gt;&lt;figure 
+	&gt;
+	&lt;a href=&#34;https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202211082206024.png&#34; &gt;
+		&lt;img src=&#34;https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202211082206024.png&#34;
+			
+			
+			
+			loading=&#34;lazy&#34;
+			alt=&#34;image-20221108220646915&#34;&gt;
+	&lt;/a&gt;
+	
+	&lt;figcaption&gt;image-20221108220646915&lt;/figcaption&gt;
+	
+&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;当一个新的作业到达时，调度器为该作业分配服务器/GPU。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Gandiva使用的节点分配策略如算法1所示。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;findNodes是一个函数，用于返回满足作业请求的节点候选者，并有一个亲和力约束的可选参数。&lt;/li&gt;
+&lt;li&gt;最初，Gandiva试图找到与新工作具有相同亲和力的节点，并在这些节点中找到具有最小负载的节点。如果存在这样的节点，并且它们的高度小于1（第5-6行），该节点将被分配。&lt;/li&gt;
+&lt;li&gt;否则，Gandiva试图找到并分配未亲和的节点（第7-8行）。&lt;/li&gt;
+&lt;li&gt;如果没有这样的空闲服务器，第三个选择是寻找有空闲GPU的节点，同时忽略亲和力（第9-10行）。&lt;/li&gt;
+&lt;li&gt;这可能会导致多个节点之间的碎片化分配，但正如我们将在后面看到的，迁移可以用于碎片化。如果上述方法都不奏效，这意味着集群中没有可用的GPU。在这种情况下，如果存在具有相同亲和力的节点，它们将被用于暂停-恢复（第11-12行）；&lt;/li&gt;
+&lt;li&gt;如果没有，作业将被排队（第13-14行）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;放置工作&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;传统的调度器将使用&lt;strong&gt;作业离开&lt;/strong&gt;来触发从等待队列中挑选下一个作业。&lt;/li&gt;
+&lt;li&gt;Gandiva检查集群的高度是否可以减少
+&lt;ul&gt;
+&lt;li&gt;将被暂停的作业迁移到新的空闲GPU上&lt;/li&gt;
+&lt;li&gt;这个作业可能来自同一台服务器或集群中的任何其他服务器。&lt;/li&gt;
+&lt;li&gt;作业的离开也可以触发迁移，以改善位置性&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Gandiva的工作安排Policy时考虑到了两个因素。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Gandiva&lt;strong&gt;允许超额认购&lt;/strong&gt;。
+&lt;ul&gt;
+&lt;li&gt;当一个服务器被超额认购时，我们会进行&lt;strong&gt;加权轮流调度&lt;/strong&gt;，给每个作业公平的时间份额。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;GPU分配不是作业到达时的一次性事件，Gandiva使用自省模式来&lt;strong&gt;持续改善&lt;/strong&gt;集群的利用率。
+&lt;ul&gt;
+&lt;li&gt;因此，Gandiva依靠一个简单的作业安置策略来快速分配GPU资源给新作业，从而实现早期反馈。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;内省模式&#34;&gt;内省模式&lt;/h4&gt;
+&lt;p&gt;在自省模式下，Gandiva持续监控并优化作业在集群中的GPU上的位置，以提高DLT作业的整体利用率和完成时间。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;装箱&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;只有在过载时才会考虑装箱。
+&lt;ul&gt;
+&lt;li&gt;基本思想：在GPU上同时运行两个或多个作业以提高效率。&lt;/li&gt;
+&lt;li&gt;可能无效
+&lt;ul&gt;
+&lt;li&gt;如果装箱工作的内存需求加起来高于GPU的内存，那么从CPU内存中 &amp;ldquo;分页 &amp;ldquo;的开销就会很高，装箱就没有效果。&lt;/li&gt;
+&lt;li&gt;当两个或更多作业的内存需求小于GPU内存时，装箱仍然可能不比暂停-恢复更有效。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;鉴于DLT作业的异质性，对装箱的性能进行分析建模是一个具有挑战性的问题。
+&lt;ul&gt;
+&lt;li&gt;相反，Gandiva依靠一种贪婪的启发式方法来装箱job。
+&lt;ul&gt;
+&lt;li&gt;当job到达时，我们总是使用暂停-恢复的独占模式运行它们，并收集剖析信息（GPU利用率、内存和作业进展率）。&lt;/li&gt;
+&lt;li&gt;基于剖析数据，调度器维护一个按GPU利用率排序的作业列表。&lt;/li&gt;
+&lt;li&gt;调度器贪婪地挑选出GPU利用率最低的作业，并试图将其装箱到具有最低GPU利用率的GPU上。我们只在装箱作业的总内存利用率不超过GPU的总内存时才这样做。&lt;/li&gt;
+&lt;li&gt;当装箱作业的总吞吐量大于时间切割时，装箱被认为是成功的。&lt;/li&gt;
+&lt;li&gt;如果装箱不成功，我们就撤消装箱，并尝试下一个利用率最低的GPU。&lt;/li&gt;
+&lt;li&gt;如果装箱成功，我们找到下一个利用率较低的作业并重复这个过程。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;根据我们的评估，我们发现这个简单的贪婪的启发式方法实现了26%的效率提升。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;迁移&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;GPU的位置性在一些作业的性能中起着重要作用。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;在Gandiva中&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;每当作业离开时，我们都会使用迁移来改善位置性，&lt;/li&gt;
+&lt;li&gt;同时也作为一个后台进程来 &amp;ldquo;整理 &amp;ldquo;集群的内容。&lt;/li&gt;
+&lt;li&gt;为了改善位置性，我们挑选那些不在同一地点的作业，并试图找到一个新的同一地点的位置。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;figure 
+	&gt;
+	&lt;a href=&#34;https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202211091112968.png&#34; &gt;
+		&lt;img src=&#34;https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202211091112968.png&#34;
+			
+			
+			
+			loading=&#34;lazy&#34;
+			alt=&#34;image-20221109111201868&#34;&gt;
+	&lt;/a&gt;
+	
+	&lt;figcaption&gt;image-20221109111201868&lt;/figcaption&gt;
+	
+&lt;/figure&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;图8展示了一个集群实验的例子（第6.4节）。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;当一个有4个作业、每个作业需要2个GPU的多作业被安排时，它的GPU亲和性很差；
+&lt;ul&gt;
+&lt;li&gt;只有J0的两个GPU被安排在一起，而多作业中的其他3个作业（J1、J2和J3）被分配到不同的GPU。&lt;/li&gt;
+&lt;li&gt;三分钟后，一个背景训练作业DeepSpeech完成了，并释放了它的8个GPU。&lt;/li&gt;
+&lt;li&gt;8个GPU中的3个，在图8中标记为D，位于三个不同的服务器（服务器1、3和4），可以提高多任务的训练效率。&lt;/li&gt;
+&lt;li&gt;因此，Gandiva启动了迁移过程，将J1、J2和J3重新安置到同地的GPU。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;去碎片化
+&lt;ul&gt;
+&lt;li&gt;我们在所有非空闲的服务器中挑选出拥有最多空闲GPU的服务器。&lt;/li&gt;
+&lt;li&gt;然后我们尝试将运行在该服务器上的作业迁移到其他服务器上。&lt;/li&gt;
+&lt;li&gt;只要性能损失可以忽略不计，作业就会被迁移到另一个空闲GPU较少的服务器上。&lt;/li&gt;
+&lt;li&gt;我们重复这个过程，直到每台非空闲服务器上的空闲GPU数量少于阈值（在我们的实验中是4个中的3个），或者没有作业会从迁移中受益。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;扩缩&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;只有当集群未被充分利用，并且DLT作业明确指出自己可以进行增长-收缩时，才会触发增长-收缩。&lt;/li&gt;
+&lt;li&gt;在我们目前的系统中，我们只让作业增长到单台服务器中可用的最大GPU数量。&lt;/li&gt;
+&lt;li&gt;此外，我们只在空闲期后触发增长，以避免惊扰，并在新作业可能需要GPU时立即收缩。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;时分&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;最后，我们在每个服务器中支持轮回调度，以公平地分享GPU。&lt;/li&gt;
+&lt;li&gt;当作业有多个优先级时，较高优先级的作业将不会被暂停以适应较低优先级的作业。&lt;/li&gt;
+&lt;li&gt;如果一台服务器被较高优先级的作业完全利用，如果可行的话，较低优先级的作业将被迁移到另一台服务器。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
 &lt;h2 id=&#34;实现&#34;&gt;实现&lt;/h2&gt;
+&lt;p&gt;DLT作业被封装为Docker容器，其中包含我们定制的DL工具箱和Gandiva客户端的版本。这些工作被提交给Kubernetes系统。Gandiva还实现了一个定制的调度器，然后对这些作业进行调度。&lt;/p&gt;
 &lt;h3 id=&#34;调度器&#34;&gt;调度器&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;
@@ -404,9 +819,26 @@
 &lt;li&gt;
 &lt;p&gt;Tensorflow迁移&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;我们用400多行Python/C++代码对Tensorflow（TF）进行了修改。用200多行额外的代码，我们在每个服务器上部署了一个迁移助手，以支持按需检查点和迁移。当收到来自调度器的迁移命令时，目的地助手首先预热TF会话并等待检查点的到来。然后，源帮助者要求TF保存检查点，在跨服务器迁移的情况下将检查点移到目的地，最后恢复训练会话。为了加快迁移过程，我们采用Ramdisk将检查点保存在内存中。在跨服务器的情况下，修改后的TF通过网络文件系统（NFS）协议将检查点直接保存到远程Ramdisk。&lt;/li&gt;
-&lt;li&gt;当Migration Helper要求作业执行检查点时，修改后的TF会在一个小批处理结束时调用tf.Saver。对于数据的并行性，检查点只包括一个GPU中的模型，而不考虑训练中使用的GPU数量。为了进一步加快TF的迁移，我们在检查点中不包括元图结构，因为它可以根据用户代码进行重建。&lt;/li&gt;
-&lt;li&gt;在热身阶段，修改后的TF检查GPU配置并重建元图。它进一步创建Executor来运行热身操作，以确保初始化不会被懒惰地推迟。当恢复训练过程时，修改后的TF加载检查点，由多个GPU并行加载，并继续进行训练。&lt;/li&gt;
+&lt;li&gt;我们在每个服务器上部署了一个迁移助手，以支持按需checkpoint和迁移。
+&lt;ul&gt;
+&lt;li&gt;当收到来自调度器的迁移命令时，目的地助手首先&lt;strong&gt;预热TF会话&lt;/strong&gt;并等待检查点的到来。&lt;/li&gt;
+&lt;li&gt;然后，源帮助者要求TF保存检查点，在跨服务器迁移的情况下将检查点移到目的地，最后恢复训练会话。&lt;/li&gt;
+&lt;li&gt;为了加快迁移过程，我们采用Ramdisk将检查点保存在内存中。在跨服务器的情况下，修改后的TF通过网络文件系统（NFS）协议将检查点直接保存到远程Ramdisk。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;当Migration Helper要求作业执行checkpoint时
+&lt;ul&gt;
+&lt;li&gt;修改后的TF会在一个小批处理结束时调用tf.Saver。&lt;/li&gt;
+&lt;li&gt;对于数据的并行性，检查点只包括一个GPU中的模型，而不考虑训练中使用的GPU数量。&lt;/li&gt;
+&lt;li&gt;为了进一步加快TF的迁移，我们在检查点中不包括元图结构，因为它可以根据用户代码进行重建。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;在&lt;strong&gt;预热阶段&lt;/strong&gt;，修改后的TF检查GPU配置并重建元图。
+&lt;ul&gt;
+&lt;li&gt;它进一步创建Executor来运行预热操作，以确保初始化不会被懒惰地推迟。&lt;/li&gt;
+&lt;li&gt;当恢复训练过程时，修改后的TF加载检查点，由多个GPU并行加载，并继续进行训练。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
