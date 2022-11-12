@@ -499,27 +499,154 @@
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;h3 id=&#34;调度原则&#34;&gt;调度原则&lt;/h3&gt;
-&lt;p&gt;在这一节中，我们描述了调度器的设计，它利用EasyScale的弹性，将EasyScaleThreads分配到可用的GPU上，并充分利用集群中的同质和异质GPU。用户在提交EasyScale作业时，可以指定一个maxP，即要启动的最大工作者数量，这也是作业执行过程中EasyScaleThreads的数量。用户还可以指定一个minP（&amp;gt;=0），表示所需的保证GPU。设置minP == maxP意味着作业将回到使用与DDP相同的固定DoP。&lt;/p&gt;
-&lt;p&gt;通过上面介绍的EasyScaleThreads（EST）的抽象（第3.2节），我们已经将DL训练和底层GPU资源解耦，因此与DDP兼容的训练作业可以持续地在同质GPU的弹性数量上运行。再加上确定性处理（第3.3节），我们还实现了弹性训练下的精度一致性，即使是在异构GPU上。&lt;/p&gt;
-&lt;p&gt;在异构GPU上调度EST的关键挑战在于计算能力的异质性和GPU&lt;/p&gt;
-&lt;p&gt;内存的异质性。Pollux[47]和VirtualFlow[42]所采用的为每一种GPU单独扩展批次大小的方法，对于EasyScale来说是完全不可接受的，因为它改变了固有的训练超参数，从而破坏了精度的一致性，正如第2.2节所说明的。在EST执行过程中，每个EST消耗固定的计算能力，其中GPU的微架构特征（即SM数量和缓存大小）决定了理论能力。具有较高计算能力的GPU可以在一定时间内执行更多的EST。而每个EST都有固定大小的GPU内存使用峰值。此外，由于同一GPU执行器中的EST的内存是完全重复使用/共享的，执行器的内存用量可以代表EST的内存用量。为简洁起见，我们将固定的计算能力和内存用量分别定义为计算单元（CU）和内存单元（MU）。然而，如果没有复杂的分析规划，将EasyScale作业的指定CU（总数为maxP）和MU（最多为maxP）映射到异构GPU（例如，1个V10032G、1个P100-16G和2个T4-16G）可能会因为严重的负载不平衡而造成重大的性能浪费。&lt;/p&gt;
-&lt;h4 id=&#34;异构感知的est计划&#34;&gt;异构感知的EST计划&lt;/h4&gt;
 &lt;ul&gt;
-&lt;li&gt;Planning CUs
+&lt;li&gt;用户在提交EasyScale作业时
 &lt;ul&gt;
-&lt;li&gt;当分配的GPU是同质的，并且数量是maxP的一个因素时，我们可以在这些GPU上均匀地分配CU，因为所有CU都有相同的计算时间。在异构GPU的情况下，均匀分配的策略变得低效。异构GPU的不同计算能力导致了CU的不同前向计算时间。显然，它们的实际能力不能总是以CU的整数倍来表示（例如，ResNet50在V100上比在T4上快2.45倍），如果有更多类型的GPU，这就变得相当难以实现了。同时，Sync-SGD在所有的GPU上执行一个障碍，以等待最慢的那一个，这导致了长时间闲置GPU周期的浪费，如图8a所示。考虑到这一点，我们需要根据GPU的计算能力来分配CU以达到平衡，并最多消除空闲周期，如图8b所示。&lt;/li&gt;
-&lt;li&gt;我们提出了一个新的指标，叫做浪费，即由于CU的整数倍和GPU的实际连续能力不匹配而浪费的计算能力，或者说是负载不平衡。浪费主要包括两个方面：∂异构GPU之间的负载不平衡，是由于用CU的整数倍不准确地逼近连续的实际计算能力造成的；∑同构GPU之间的负载不平衡，是由于没有足够的CU分配来充分利用所有的GPU，因为CU的总量被maxP所限制。因此，我们建立一个分析模型来量化浪费。可用的GPU数量表示为Ni，其中下标i代表GPU类型。与工作负载相关的计算能力Ci被估计为每秒的小批处理数量。分配给GPU类型i的CU的最大数目被表示为Ai。为了确保所有EasyScaleThreads被执行，异构GPU上的最大CU总数（CU_capacity）应该大于或等于maxP（公式1a）。过载系数foverload代表所请求的异构GPU的最大过载，其中过载被定义为每个计算能力的CU（等式1b）。如果一个GPU类型承担了太多的CU，它就会成为性能瓶颈，并由于Sync-SGD而拖慢其他GPU的速度。因此，浪费被表述为：∂Ci和Ai之间的差距按foverload缩放，∑超额配置的CU_capacity按foverload缩放（公式1c）。为了进一步区分当前Ni、Ci和Ai下的CU分配效率，得出了归一化的浪费百分比（公式1d）。还得出了估计性能（等式1e）。&lt;/li&gt;
+&lt;li&gt;可以指定一个maxP：即要启动的最大工作者数量，这也是作业执行过程中EasyScaleThreads的数量&lt;/li&gt;
+&lt;li&gt;用户还可以指定一个minP（&amp;gt;=0），表示所需的保证GPU&lt;/li&gt;
+&lt;li&gt;设置minP == maxP意味着作业将回到使用与DDP相同的固定DoP&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;Planning MUs
+&lt;li&gt;小结：ESTi抽象 -&amp;gt; 确定性处理 -&amp;gt; 调度EST
 &lt;ul&gt;
-&lt;li&gt;异构GPU之间的内存容量也存在异质性。以数据中心的GPU为例，V100有32GB或16GB，P100和T4有16GB。将MU分配给每个GPU的单个执行器可以最大限度地减少整体内存占用，因为EasyScaleThreads引入的内存开销可以忽略不计，而且它们的MU可以完全重复使用。因此，所有的GPU都显示出与MU相同的峰值内存使用量，导致具有较大内存容量的GPU出现闲置内存。&lt;/li&gt;
-&lt;li&gt;我们提出了一个多执行器的设计，它允许在GPU上分配一个以上的执行器，这样就可以同时执行多个EST。因此，具有较大内存的GPU可以权衡每个执行器的执行器数量和EST数量，同时保持#执行器×#EST不变（例如，在分配了两个EST的情况下，有两种选择：a）&amp;lt;1执行器×2EST&amp;gt;，和b）&amp;lt;2执行器×1EST&amp;gt;）。它拓宽了高效场景，即运行更多的执行器不会超过GPU资源（SM核、内存），即使考虑到干扰，仍然有助于提高性能。推荐模型（如Wide&amp;amp;Deep）的训练通常显示出对GPU计算能力的利用不足，通常低于50%[63]。在这种情况下，分配多个执行器可以利用剩余的计算能力，而且执行器之间不会产生不利影响，从而提高综合吞吐量。&lt;/li&gt;
-&lt;li&gt;我们还对方程1进行了调整，以对多个执行器的浪费进行建模。与工作负载相关的计算能力Ci被MCi = m × Ci × Ii所取代，表示m个执行器的整体能力，其中包括干扰Ii。分配给GPU Ai的CU数量由MAi = m × Ai取代，代表m个执行器的总CU数量。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;EasyScaleThreads（EST）的抽象&lt;/strong&gt;将DL训练和底层GPU资源解耦，因此与DDP兼容的训练作业可以持续地在同质GPU的弹性数量上运行。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;确定性处理&lt;/strong&gt;实现了弹性训练下的精度一致性，即使是在异构GPU上&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;在&lt;strong&gt;异构GPU上调度EST&lt;/strong&gt;的关键挑战在于计算能力的异质性和GPU内存的异质性。
+&lt;ul&gt;
+&lt;li&gt;Pollux和VirtualFlow
+&lt;ul&gt;
+&lt;li&gt;采用为每一种GPU单独扩展批次大小的方法&lt;/li&gt;
+&lt;li&gt;对于EasyScale来说是完全不可接受的，因为它改变了固有的训练超参数，从而破坏了精度的一致性&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;EST消耗固定计算能力与固定内存消耗
+&lt;ul&gt;
+&lt;li&gt;在EST执行过程中，每个EST消耗&lt;strong&gt;固定的计算能力&lt;/strong&gt;，其中GPU的微架构特征（即SM数量和缓存大小）决定了理论能力。具有较高计算能力的GPU可以在一定时间内执行更多的EST&lt;/li&gt;
+&lt;li&gt;而每个EST都有&lt;strong&gt;固定大小的GPU内存&lt;/strong&gt;使用峰值。此外，由于同一GPU执行器中的EST的内存是完全重复使用/共享的，执行器的内存用量可以代表EST的内存用量&lt;/li&gt;
+&lt;li&gt;为简洁起见，我们将固定的计算能力和内存用量分别定义为计算单元（CU）和内存单元（MU）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;复杂的分析规划：避免因为严重的负载不平衡而造成重大的性能浪费&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;异构感知的est规划&#34;&gt;异构感知的EST规划&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Planning CUs&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;分配策略
+&lt;ul&gt;
+&lt;li&gt;当分配的GPU是同质的，并且数量是maxP的一个因素时，在这些GPU上&lt;strong&gt;均匀地分配CU&lt;/strong&gt;，因为所有CU都有相同的计算时间&lt;/li&gt;
+&lt;li&gt;在异构GPU的情况下，需要&lt;strong&gt;根据GPU的计算能力来分配&lt;/strong&gt;CU以达到平衡，并最多消除空闲周期&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;我们提出了一个新的指标，叫做浪费，
+&lt;ul&gt;
+&lt;li&gt;即由于CU的整数倍和GPU的实际连续能力不匹配而浪费的计算能力，或者说是负载不平衡。&lt;/li&gt;
+&lt;li&gt;浪费主要包括两个方面：
+&lt;ul&gt;
+&lt;li&gt;∂异构GPU之间的负载不平衡，是由于用CU的整数倍不准确地逼近连续的实际计算能力造成的；&lt;/li&gt;
+&lt;li&gt;∑同构GPU之间的负载不平衡，是由于没有足够的CU分配来充分利用所有的GPU，因为CU的总量被maxP所限制。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;因此，我们建立一个分析模型来量化浪费。
+&lt;ul&gt;
+&lt;li&gt;符号表示
+&lt;ul&gt;
+&lt;li&gt;可用的GPU数量表示为Ni，其中下标i代表GPU类型。&lt;/li&gt;
+&lt;li&gt;与工作负载相关的计算能力Ci被估计为每秒的小批处理数量。&lt;/li&gt;
+&lt;li&gt;分配给GPU类型i的CU的最大数目被表示为Ai。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;figure 
+	&gt;
+	&lt;a href=&#34;https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202211122032034.png&#34; &gt;
+		&lt;img src=&#34;https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202211122032034.png&#34;
+			
+			
+			
+			loading=&#34;lazy&#34;
+			alt=&#34;image-20221112203217230&#34;&gt;
+	&lt;/a&gt;
+	
+	&lt;figcaption&gt;image-20221112203217230&lt;/figcaption&gt;
+	
+&lt;/figure&gt;&lt;/li&gt;
+&lt;li&gt;为了确保所有EasyScaleThreads被执行，异构GPU上的最大CU总数（CU_capacity）应该大于或等于maxP（公式1a）。&lt;/li&gt;
+&lt;li&gt;过载系数foverload代表所请求的异构GPU的最大过载，其中过载被定义为每个计算能力的CU（等式1b）。&lt;/li&gt;
+&lt;li&gt;如果一个GPU类型承担了太多的CU，它就会成为性能瓶颈，并由于Sync-SGD而拖慢其他GPU的速度。因此，浪费被表述为：∂Ci和Ai之间的差距按foverload缩放，∑超额配置的CU_capacity按foverload缩放（公式1c）。&lt;/li&gt;
+&lt;li&gt;为了进一步区分当前Ni、Ci和Ai下的CU分配效率，得出了归一化的浪费百分比（公式1d）。&lt;/li&gt;
+&lt;li&gt;还得出了估计性能（等式1e）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Planning MUs&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;异构GPU之间的内存容量也存在异质性&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;将MU分配给每个GPU的单个执行器可以最大限度地减少整体内存占用，因为EasyScaleThreads引入的内存开销可以忽略不计。&lt;/li&gt;
+&lt;li&gt;而且它们的MU可以完全重复使用。&lt;/li&gt;
+&lt;li&gt;因此，所有的GPU都显示出与MU相同的峰值内存使用量，导致具有较大内存容量的GPU出现闲置内存。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;我们提出了一个&lt;strong&gt;多执行器&lt;/strong&gt;的设计&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;它允许在GPU上分配&lt;strong&gt;一个以上&lt;/strong&gt;的执行器，这样就可以同时执行多个EST。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;具有较大内存的GPU可以&lt;strong&gt;权衡&lt;/strong&gt;执行器数量和每个执行器的EST数量&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;同时保持   （#执行器   ×   #EST）  不变&lt;/li&gt;
+&lt;li&gt;例如，在分配了两个EST的情况下，有两种选择：
+&lt;ul&gt;
+&lt;li&gt;a）&amp;lt;1执行器×2EST&amp;gt;&lt;/li&gt;
+&lt;li&gt;b）&amp;lt;2执行器×1EST&amp;gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;它拓宽了高效场景，即运行更多的执行器不会超过GPU资源（SM核、内存），即使考虑到干扰，仍然有助于提高性能。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;推荐模型（如Wide&amp;amp;Deep）的训练通常显示出对GPU计算能力的利用不足，通常低于50%。在这种情况下，分配多个执行器可以利用剩余的计算能力，而且执行器之间不会产生不利影响，从而提高综合吞吐量。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;我们还对（等式1）进行了调整，以对多个执行器的浪费进行建模。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;与工作负载相关的计算能力Ci被MCi = m × Ci × Ii所取代，表示m个执行器的整体能力，其中包括干扰Ii。&lt;/li&gt;
+&lt;li&gt;分配给GPU Ai的CU数量由MAi = m × Ai取代，代表m个执行器的总CU数量。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;h4 id=&#34;eeayscale-调度器&#34;&gt;EeayScale 调度器&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;如图9所示，EasyScale采用了一个分层调度架构。
+&lt;ul&gt;
+&lt;li&gt;每个作业都包含一个&lt;strong&gt;作业内的调度器，名为AIMaster&lt;/strong&gt;，它负责：
+&lt;ul&gt;
+&lt;li&gt;a）在同质和异质GPU之间分配EasyScaleThreads，尽量减少浪费，使资源利用率最大化；&lt;/li&gt;
+&lt;li&gt;b）通过估计潜在的速度提升，提出所需的资源进行扩展。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;此外，一个&lt;strong&gt;集群调度器&lt;/strong&gt;以全局模式行事，协调作业之间的资源。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
 &lt;p&gt;&lt;figure 
 	&gt;
 	&lt;a href=&#34;https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202211102146741.png&#34; &gt;
@@ -534,19 +661,83 @@
 	&lt;figcaption&gt;image-20221110214614664&lt;/figcaption&gt;
 	
 &lt;/figure&gt;&lt;/p&gt;
-&lt;p&gt;如图9所示，EasyScale采用了一个分层调度架构。每个作业都包含一个作业内的调度器，名为AIMaster，它负责：a）在同质和异质GPU之间分配EasyScaleThreads，尽量减少浪费，使资源利用率最大化；b）通过估计潜在的速度提升，提出所需的资源进行扩展。此外，一个集群调度器以全局模式行事，协调作业之间的资源。&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Intra-Job scheduler
 &lt;ul&gt;
-&lt;li&gt;任务内调度器（即图9中的AIMaster）的基本职责是在给定的GPU下生成EST分配配置。首先，在当前可用的GPU下，它选择估计吞吐量最高的前1个配置，并相应分配EST。其次，它试图用一个增量的GPU来扩展，从而产生新的配置，并选择top-K的配置作为提交给集群调度器的建议。具体来说，每个配置由&amp;lt;nums, executors, threads, waste, per f&amp;gt;组成。nums, executors, threads是具有相同长度的GPU类型的数组，分别代表GPU数量、执行器数量和每个执行器的EST数量。 waste和per f代表该配置通过分析模型（第3.4.1节）估计的浪费和性能。这些配置应该满足集群总资源、minP、maxP和归一化浪费的阈值（实际为30%）的约束。否则，它们将被排除在外。&lt;/li&gt;
-&lt;li&gt;工作负载显示出使用异构GPU的吞吐量差异（例如，ResNet50在V100上比T4上快2.45倍，而Bert是1.55倍），这在没有实际执行的情况下很难预测。因此，AIMaster模块使用作业的运行时执行统计数据来了解工作负载差异，并确定每个GPU类型i的工作负载相关计算能力Ci。鉴于每个GPU类型i的剖析计算能力Ci，我们计算它们的整数近似值（例如，ceil(t×Ci), floor(t×Ci)），假设每个能力承担k EST，并形成它们的组合。然后我们遍历这些组合，找到可用的配置。对于具有相同&amp;lt;数、执行器、线程&amp;gt;的配置，选择具有最小浪费的配置，其他配置则被过滤掉。&lt;/li&gt;
-&lt;li&gt;对浪费的估计有时可能是不正确的，这可能会导致更差的训练性能。一旦在重新配置后观察到性能下降，我们就会退回到使用以前的资源并释放新分配的资源。&lt;/li&gt;
+&lt;li&gt;基本职责：在给定的GPU下生成EST&lt;strong&gt;分配配置&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;首先，在当前可用的GPU下，它选择估计吞吐量最高的配置，并相应分配EST。&lt;/li&gt;
+&lt;li&gt;其次，它试图用一个增量的GPU来扩展，从而产生新的配置，并选择top-K的配置作为提交给集群调度器的建议。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;配置组成与约束
+&lt;ul&gt;
+&lt;li&gt;由&amp;lt;nums, executors, threads, waste, perf&amp;gt;组成
+&lt;ul&gt;
+&lt;li&gt;nums, executors, threads是具有相同长度的GPU类型的数组，分别代表GPU数量、执行器数量和每个执行器的EST数量&lt;/li&gt;
+&lt;li&gt;waste和perf代表该配置通过分析模型估计的浪费和性能&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;这些配置应该满足集群总资源、minP、maxP和归一化浪费的阈值（实际为30%）的约束。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;寻找可用配置
+&lt;ul&gt;
+&lt;li&gt;不同的工作负载使用不同GPU的吞吐量有差异，但在没有实际执行的情况下很难预测&lt;/li&gt;
+&lt;li&gt;因此，AIMaster模块使用作业的&lt;strong&gt;运行时执行&lt;/strong&gt;统计数据来了解&lt;strong&gt;工作负载差异&lt;/strong&gt;，并确定每个GPU类型i的工作负载相关&lt;strong&gt;计算能力Ci&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;鉴于每个GPU类型i的剖析计算能力Ci，我们计算它们的整数近似值（例如，ceil(t×Ci), floor(t×Ci)），假设每个能力承担k个EST，并形成它们的组合&lt;/li&gt;
+&lt;li&gt;然后我们遍历这些组合，找到可用的配置。对于具有相同&amp;lt;数、执行器、线程&amp;gt;的配置，选择具有最小浪费的配置，其他配置则被过滤掉&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;配置回退
+&lt;ul&gt;
+&lt;li&gt;对浪费的估计有时可能是不正确的，这可能会导致更差的训练性能&lt;/li&gt;
+&lt;li&gt;一旦在重新配置后观察到性能下降，我们就会退回到使用以前的资源并释放新分配的资源&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;Inter-job cluster scheduler
 &lt;ul&gt;
-&lt;li&gt;它通过考虑资源可用性和提案的优先级来响应AIMaster提案，如图9所示。为了提高集群的整体利用率和聚合作业的吞吐量，它采用了一种启发式算法，倾向于接受每个GPU具有较高速度的建议，如算法1所示。作业间调度器按照报告的平均加速比对建议进行降序排序。然后，它对这些建议进行循环，开始接受最高的建议。如果多个建议引入了相同的平均GPU加速，我们的调度器会优先考虑拥有更多GPU的建议。&lt;/li&gt;
-&lt;li&gt;集群调度器允许弹性作业最好地利用空闲资源，这些资源通常属于其他人，但暂时是闲置的。然而，如果这些GPU需要返回，可能会触发抢占。在这种情况下，集群调度器将尝试把与抢占的GPU相同的GPU分配给弹性作业。当超时时，EasyScale作业会回落到利用它目前拥有的可用GPU。&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;它通过考虑&lt;strong&gt;资源可用性&lt;/strong&gt;和&lt;strong&gt;提案的优先级&lt;/strong&gt;来响应AIMaster提案。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;为了提高集群的整体利用率和聚合作业的吞吐量&lt;/li&gt;
+&lt;li&gt;它采用了一种启发式算法，倾向于接受&lt;strong&gt;每个GPU具有较高速度&lt;/strong&gt;的建议，如算法1所示。
+&lt;ul&gt;
+&lt;li&gt;作业间调度器按照报告的&lt;strong&gt;平均加速比&lt;/strong&gt;对建议进行降序排序。&lt;/li&gt;
+&lt;li&gt;然后，它对这些建议进行循环，开始接受最高的建议。&lt;/li&gt;
+&lt;li&gt;如果多个建议引入了相同的平均GPU加速，我们的调度器会&lt;strong&gt;优先考虑拥有更多GPU&lt;/strong&gt;的建议。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;figure 
+	&gt;
+	&lt;a href=&#34;https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202211122105011.png&#34; &gt;
+		&lt;img src=&#34;https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202211122105011.png&#34;
+			
+			
+			
+			loading=&#34;lazy&#34;
+			alt=&#34;image-20221112210504940&#34;&gt;
+	&lt;/a&gt;
+	
+	&lt;figcaption&gt;image-20221112210504940&lt;/figcaption&gt;
+	
+&lt;/figure&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;集群调度器允许弹性作业最好地&lt;strong&gt;利用空闲资源&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;这些资源通常属于其他人，但暂时是闲置的。&lt;/li&gt;
+&lt;li&gt;然而，如果这些GPU需要返回，可能会触发抢占。
+&lt;ul&gt;
+&lt;li&gt;在这种情况下，集群调度器将尝试把与抢占的GPU相同的GPU分配给弹性作业。&lt;/li&gt;
+&lt;li&gt;当分配超时时，EasyScale作业会回落到利用它目前拥有的可用GPU。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
