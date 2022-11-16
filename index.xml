@@ -7,12 +7,12 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
         <lastBuildDate>Wed, 09 Nov 2022 15:09:23 +0800</lastBuildDate><atom:link href="https://tweakzx.github.io/index.xml" rel="self" type="application/rss+xml" /><item>
-        <title>EasyScale论文阅读笔记</title>
-        <link>https://tweakzx.github.io/p/easyscale%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link>
+        <title>【论文笔记】EasyScale论文阅读笔记</title>
+        <link>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0easyscale%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link>
         <pubDate>Wed, 09 Nov 2022 15:09:23 +0800</pubDate>
         
-        <guid>https://tweakzx.github.io/p/easyscale%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</guid>
-        <description>&lt;img src="https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202211091510408.png" alt="Featured image of post EasyScale论文阅读笔记" /&gt;&lt;h1 id=&#34;easyscale-论文阅读笔记&#34;&gt;EasyScale 论文阅读笔记&lt;/h1&gt;
+        <guid>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0easyscale%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</guid>
+        <description>&lt;img src="https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202211091510408.png" alt="Featured image of post 【论文笔记】EasyScale论文阅读笔记" /&gt;&lt;h1 id=&#34;easyscale-论文阅读笔记&#34;&gt;EasyScale 论文阅读笔记&lt;/h1&gt;
 &lt;h2 id=&#34;abstract&#34;&gt;Abstract&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;分布式同步GPU训练通常被用于深度学习。
@@ -781,12 +781,12 @@
 </description>
         </item>
         <item>
-        <title>Gandiva论文阅读笔记</title>
-        <link>https://tweakzx.github.io/p/gandiva%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link>
+        <title>【论文笔记】Gandiva论文阅读笔记</title>
+        <link>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0gandiva%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link>
         <pubDate>Tue, 08 Nov 2022 09:59:52 +0800</pubDate>
         
-        <guid>https://tweakzx.github.io/p/gandiva%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</guid>
-        <description>&lt;img src="https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202211081933118.png" alt="Featured image of post Gandiva论文阅读笔记" /&gt;&lt;h1 id=&#34;gandiva-论文阅读笔记&#34;&gt;Gandiva 论文阅读笔记&lt;/h1&gt;
+        <guid>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0gandiva%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</guid>
+        <description>&lt;img src="https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202211081933118.png" alt="Featured image of post 【论文笔记】Gandiva论文阅读笔记" /&gt;&lt;h1 id=&#34;gandiva-论文阅读笔记&#34;&gt;Gandiva 论文阅读笔记&lt;/h1&gt;
 &lt;h2 id=&#34;abstract&#34;&gt;Abstract&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;
@@ -1636,11 +1636,11 @@
 </description>
         </item>
         <item>
-        <title>Docker用法</title>
-        <link>https://tweakzx.github.io/p/docker%E7%94%A8%E6%B3%95/</link>
+        <title>【Docker】Docker用法</title>
+        <link>https://tweakzx.github.io/p/dockerdocker%E7%94%A8%E6%B3%95/</link>
         <pubDate>Tue, 01 Nov 2022 16:44:33 +0800</pubDate>
         
-        <guid>https://tweakzx.github.io/p/docker%E7%94%A8%E6%B3%95/</guid>
+        <guid>https://tweakzx.github.io/p/dockerdocker%E7%94%A8%E6%B3%95/</guid>
         <description>&lt;h1 id=&#34;docker-的使用方法&#34;&gt;docker 的使用方法&lt;/h1&gt;
 &lt;h2 id=&#34;docker的安装&#34;&gt;docker的安装&lt;/h2&gt;
 &lt;p&gt;docker的版本比较多， 大家可以自行搜索安装方式， 以下只是参考。&lt;/p&gt;
@@ -1809,11 +1809,11 @@ docker exec -it redis-test /bin/bash
 </description>
         </item>
         <item>
-        <title>[心及]现在及过往</title>
-        <link>https://tweakzx.github.io/p/%E5%BF%83%E5%8F%8A%E7%8E%B0%E5%9C%A8%E5%8F%8A%E8%BF%87%E5%BE%80/</link>
+        <title>【心及】一些往事</title>
+        <link>https://tweakzx.github.io/p/%E5%BF%83%E5%8F%8A%E4%B8%80%E4%BA%9B%E5%BE%80%E4%BA%8B/</link>
         <pubDate>Fri, 21 Oct 2022 15:52:45 +0800</pubDate>
         
-        <guid>https://tweakzx.github.io/p/%E5%BF%83%E5%8F%8A%E7%8E%B0%E5%9C%A8%E5%8F%8A%E8%BF%87%E5%BE%80/</guid>
+        <guid>https://tweakzx.github.io/p/%E5%BF%83%E5%8F%8A%E4%B8%80%E4%BA%9B%E5%BE%80%E4%BA%8B/</guid>
         <description>&lt;h2 id=&#34;突发恶疾&#34;&gt;突发恶疾&lt;/h2&gt;
 &lt;h3 id=&#34;关于手头的工作&#34;&gt;关于手头的工作&lt;/h3&gt;
 &lt;p&gt;现在在工位上摸鱼，准备在别人的代码（gaiaGPU）上增加一些功能。&lt;/p&gt;
@@ -1943,43 +1943,12 @@ docker exec -it redis-test /bin/bash
 </description>
         </item>
         <item>
-        <title>GFS论文阅读笔记</title>
-        <link>https://tweakzx.github.io/p/gfs%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link>
-        <pubDate>Tue, 20 Sep 2022 16:25:26 +0800</pubDate>
-        
-        <guid>https://tweakzx.github.io/p/gfs%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</guid>
-        <description>&lt;img src="https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/20220920170446.png" alt="Featured image of post GFS论文阅读笔记" /&gt;&lt;h1 id=&#34;the-google-file-system-论文阅读笔记&#34;&gt;《The Google File System》 论文阅读笔记&lt;/h1&gt;
-&lt;h2 id=&#34;abstract&#34;&gt;Abstract&lt;/h2&gt;
-&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;
-&lt;h2 id=&#34;design-overview&#34;&gt;Design Overview&lt;/h2&gt;
-&lt;h3 id=&#34;assumptions&#34;&gt;Assumptions&lt;/h3&gt;
-&lt;h3 id=&#34;interface&#34;&gt;Interface&lt;/h3&gt;
-&lt;h3 id=&#34;architecture&#34;&gt;Architecture&lt;/h3&gt;
-&lt;h3 id=&#34;single-master&#34;&gt;Single Master&lt;/h3&gt;
-&lt;h3 id=&#34;chunk-size&#34;&gt;Chunk Size&lt;/h3&gt;
-&lt;h3 id=&#34;metadata&#34;&gt;Metadata&lt;/h3&gt;
-&lt;h4 id=&#34;in-memory-data-structure&#34;&gt;In-Memory Data Structure&lt;/h4&gt;
-&lt;h4 id=&#34;chunk-locations&#34;&gt;Chunk Locations&lt;/h4&gt;
-&lt;h4 id=&#34;operation-log&#34;&gt;Operation Log&lt;/h4&gt;
-&lt;h3 id=&#34;cosistency-model&#34;&gt;Cosistency Model&lt;/h3&gt;
-&lt;h4 id=&#34;guarantees-by-gfs&#34;&gt;Guarantees By GFS&lt;/h4&gt;
-&lt;h4 id=&#34;implications-for-applications&#34;&gt;Implications for Applications&lt;/h4&gt;
-&lt;h2 id=&#34;system-interactions&#34;&gt;System Interactions&lt;/h2&gt;
-&lt;h2 id=&#34;master-operation&#34;&gt;Master Operation&lt;/h2&gt;
-&lt;h2 id=&#34;fault-tolerance-and-diagnosis&#34;&gt;FAULT TOLERANCE AND DIAGNOSIS&lt;/h2&gt;
-&lt;h2 id=&#34;measurements&#34;&gt;MEASUREMENTS&lt;/h2&gt;
-&lt;h2 id=&#34;experiences&#34;&gt;EXPERIENCES&lt;/h2&gt;
-&lt;h2 id=&#34;related-work&#34;&gt;RELATED WORK&lt;/h2&gt;
-&lt;h2 id=&#34;conclusions&#34;&gt;CONCLUSIONS&lt;/h2&gt;
-</description>
-        </item>
-        <item>
-        <title>AntMan论文阅读笔记</title>
-        <link>https://tweakzx.github.io/p/antman%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link>
+        <title>【论文笔记】AntMan论文阅读笔记</title>
+        <link>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0antman%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link>
         <pubDate>Mon, 29 Aug 2022 15:41:42 +0800</pubDate>
         
-        <guid>https://tweakzx.github.io/p/antman%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</guid>
-        <description>&lt;img src="https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/20220829154241.png" alt="Featured image of post AntMan论文阅读笔记" /&gt;&lt;h1 id=&#34;antman-dynamic-scaling-on-gpu-clusters-for-deep-learning论文阅读笔记&#34;&gt;《AntMan: Dynamic Scaling on GPU Clusters for Deep Learning》论文阅读笔记&lt;/h1&gt;
+        <guid>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0antman%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</guid>
+        <description>&lt;img src="https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/20220829154241.png" alt="Featured image of post 【论文笔记】AntMan论文阅读笔记" /&gt;&lt;h1 id=&#34;antman-dynamic-scaling-on-gpu-clusters-for-deep-learning论文阅读笔记&#34;&gt;《AntMan: Dynamic Scaling on GPU Clusters for Deep Learning》论文阅读笔记&lt;/h1&gt;
 &lt;h2 id=&#34;abstract&#34;&gt;Abstract&lt;/h2&gt;
 &lt;p&gt;如何在大规模GPU集群上有效调度深度学习工作， 对于&lt;strong&gt;工作性能&lt;/strong&gt;，&lt;strong&gt;系统吞吐量&lt;/strong&gt;和&lt;strong&gt;硬件利用率&lt;/strong&gt;至关重要。&lt;/p&gt;
 &lt;p&gt;随着深度学习的工作量变得更加复杂，它变得越来越具有挑战性。&lt;/p&gt;
@@ -2642,12 +2611,12 @@ docker exec -it redis-test /bin/bash
 </description>
         </item>
         <item>
-        <title>GaiaGPU 论文阅读笔记</title>
-        <link>https://tweakzx.github.io/p/gaiagpu-%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link>
+        <title>【论文笔记】GaiaGPU论文阅读笔记</title>
+        <link>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0gaiagpu%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link>
         <pubDate>Fri, 26 Aug 2022 17:20:32 +0800</pubDate>
         
-        <guid>https://tweakzx.github.io/p/gaiagpu-%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</guid>
-        <description>&lt;img src="https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/20220826142857.png" alt="Featured image of post GaiaGPU 论文阅读笔记" /&gt;&lt;h2 id=&#34;gaiagpusharing-gpus-in-container-clouds论文笔记&#34;&gt;《GaiaGPU：Sharing GPUs in Container Clouds》论文笔记&lt;/h2&gt;
+        <guid>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0gaiagpu%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</guid>
+        <description>&lt;img src="https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/20220826142857.png" alt="Featured image of post 【论文笔记】GaiaGPU论文阅读笔记" /&gt;&lt;h2 id=&#34;gaiagpusharing-gpus-in-container-clouds论文笔记&#34;&gt;《GaiaGPU：Sharing GPUs in Container Clouds》论文笔记&lt;/h2&gt;
 &lt;h3 id=&#34;abstract&#34;&gt;Abstract&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;对于云服务的提供商， 如何在容器间共享GPU， 是一个有吸引力的问题
@@ -3172,12 +3141,16 @@ docker exec -it redis-test /bin/bash
 </description>
         </item>
         <item>
-        <title>Ubuntu安装k8s集群</title>
-        <link>https://tweakzx.github.io/p/ubuntu%E5%AE%89%E8%A3%85k8s%E9%9B%86%E7%BE%A4/</link>
+        <title>【Kubernetes】ubuntu安装k8s集群</title>
+        <link>https://tweakzx.github.io/p/kubernetesubuntu%E5%AE%89%E8%A3%85k8s%E9%9B%86%E7%BE%A4/</link>
         <pubDate>Mon, 13 Jun 2022 14:57:42 +0800</pubDate>
         
-        <guid>https://tweakzx.github.io/p/ubuntu%E5%AE%89%E8%A3%85k8s%E9%9B%86%E7%BE%A4/</guid>
-        <description>&lt;img src="https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/20220823230439.png" alt="Featured image of post Ubuntu安装k8s集群" /&gt;&lt;h1 id=&#34;在ubuntu上k8s集群部署实践&#34;&gt;在ubuntu上k8s集群部署实践&lt;/h1&gt;
+        <guid>https://tweakzx.github.io/p/kubernetesubuntu%E5%AE%89%E8%A3%85k8s%E9%9B%86%E7%BE%A4/</guid>
+        <description>&lt;img src="https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/20220823230439.png" alt="Featured image of post 【Kubernetes】ubuntu安装k8s集群" /&gt;&lt;h1 id=&#34;在ubuntu上k8s集群部署实践&#34;&gt;在ubuntu上k8s集群部署实践&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;centos 上安装建议看 &lt;a class=&#34;link&#34; href=&#34;https://segmentfault.com/a/1190000037682150&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;后端 - CentOS 搭建 K8S，一次性成功，收藏了！_个人文章 - SegmentFault 思否&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
 &lt;h2 id=&#34;一机器配置&#34;&gt;一、机器配置&lt;/h2&gt;
 &lt;h3 id=&#34;配置主机名&#34;&gt;配置主机名&lt;/h3&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;sudo hostnamectl set-hostname &lt;span class=&#34;s2&#34;&gt;&amp;#34;k8s-master&amp;#34;&lt;/span&gt;    // Run this &lt;span class=&#34;nb&#34;&gt;command&lt;/span&gt; on masternode
@@ -3511,11 +3484,11 @@ Commercial support is available at
 </description>
         </item>
         <item>
-        <title>自动机的实现</title>
-        <link>https://tweakzx.github.io/p/%E8%87%AA%E5%8A%A8%E6%9C%BA%E7%9A%84%E5%AE%9E%E7%8E%B0/</link>
+        <title>【Golang】自动机的实现</title>
+        <link>https://tweakzx.github.io/p/golang%E8%87%AA%E5%8A%A8%E6%9C%BA%E7%9A%84%E5%AE%9E%E7%8E%B0/</link>
         <pubDate>Sat, 12 Mar 2022 16:59:39 +0800</pubDate>
         
-        <guid>https://tweakzx.github.io/p/%E8%87%AA%E5%8A%A8%E6%9C%BA%E7%9A%84%E5%AE%9E%E7%8E%B0/</guid>
+        <guid>https://tweakzx.github.io/p/golang%E8%87%AA%E5%8A%A8%E6%9C%BA%E7%9A%84%E5%AE%9E%E7%8E%B0/</guid>
         <description>&lt;h2 id=&#34;题目描述&#34;&gt;题目描述&lt;/h2&gt;
 &lt;p&gt;请你来实现一个 myAtoi(string s) 函数，使其能将字符串转换成一个 32 位有符号整数（类似 C/C++ 中的 atoi 函数）。&lt;/p&gt;
 &lt;p&gt;函数 myAtoi(string s) 的算法如下：&lt;/p&gt;
@@ -3655,12 +3628,12 @@ Commercial support is available at
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
         </item>
         <item>
-        <title>Go语言之旅</title>
-        <link>https://tweakzx.github.io/p/go%E8%AF%AD%E8%A8%80%E4%B9%8B%E6%97%85/</link>
+        <title>【Golang】Go语言之旅</title>
+        <link>https://tweakzx.github.io/p/golanggo%E8%AF%AD%E8%A8%80%E4%B9%8B%E6%97%85/</link>
         <pubDate>Tue, 22 Feb 2022 17:20:32 +0800</pubDate>
         
-        <guid>https://tweakzx.github.io/p/go%E8%AF%AD%E8%A8%80%E4%B9%8B%E6%97%85/</guid>
-        <description>&lt;img src="https://go.dev/images/gophers/biplane.svg" alt="Featured image of post Go语言之旅" /&gt;&lt;h1 id=&#34;旅行起点&#34;&gt;旅行起点&lt;/h1&gt;
+        <guid>https://tweakzx.github.io/p/golanggo%E8%AF%AD%E8%A8%80%E4%B9%8B%E6%97%85/</guid>
+        <description>&lt;img src="https://go.dev/images/gophers/biplane.svg" alt="Featured image of post 【Golang】Go语言之旅" /&gt;&lt;h1 id=&#34;旅行起点&#34;&gt;旅行起点&lt;/h1&gt;
 &lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://tour.go-zh.org/welcome/1&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;Go 语言之旅 (go-zh.org)&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;上方链接是一个Go语言学习的Playground，快点击它，开启一场Go语言之旅吧&lt;/p&gt;
@@ -4138,12 +4111,12 @@ go version
 </description>
         </item>
         <item>
-        <title>PolarDB Serverless论文阅读报告</title>
-        <link>https://tweakzx.github.io/p/polardb-serverless%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E6%8A%A5%E5%91%8A/</link>
+        <title>【论文笔记】PolarDB-Serverless论文阅读报告</title>
+        <link>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0polardb-serverless%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E6%8A%A5%E5%91%8A/</link>
         <pubDate>Wed, 22 Dec 2021 14:17:12 +0800</pubDate>
         
-        <guid>https://tweakzx.github.io/p/polardb-serverless%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E6%8A%A5%E5%91%8A/</guid>
-        <description>&lt;img src="https://2021.sigmod.org/images/2021sigmod-logo1.jpg" alt="Featured image of post PolarDB Serverless论文阅读报告" /&gt;&lt;h1 id=&#34;polardb-serverless论文阅读报告&#34;&gt;PolarDB Serverless论文阅读报告&lt;/h1&gt;
+        <guid>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0polardb-serverless%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E6%8A%A5%E5%91%8A/</guid>
+        <description>&lt;img src="https://2021.sigmod.org/images/2021sigmod-logo1.jpg" alt="Featured image of post 【论文笔记】PolarDB-Serverless论文阅读报告" /&gt;&lt;h1 id=&#34;polardb-serverless论文阅读报告&#34;&gt;PolarDB Serverless论文阅读报告&lt;/h1&gt;
 &lt;h2 id=&#34;摘要&#34;&gt;摘要&lt;/h2&gt;
 &lt;p&gt;数据库管理系统的上云是近期很火的研究趋势，因为这样可以获得更高的弹性，可用性以及更低的成本，传统的独块的数据库架构很难满足这样的要求。高速网络与新的内存技术（例如RDMA）的发展，给分散式数据库带来了可能：它将原先的独块的服务器资源分离解耦到资源池中，再通过高速网络连接起来。下一代的云原生数据库就是为了分散化的数据中心而设计。&lt;/p&gt;
 &lt;p&gt;PolarDB Serverless 遵循分散式的设计范式而设计，解耦了计算节点的CPU，内存，存储资源。&lt;/p&gt;
@@ -4546,12 +4519,12 @@ go version
 </description>
         </item>
         <item>
-        <title>并行作业 3</title>
-        <link>https://tweakzx.github.io/p/%E5%B9%B6%E8%A1%8C%E4%BD%9C%E4%B8%9A-3/</link>
+        <title>【分布式与并行计算】并行作业-3</title>
+        <link>https://tweakzx.github.io/p/%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%8E%E5%B9%B6%E8%A1%8C%E8%AE%A1%E7%AE%97%E5%B9%B6%E8%A1%8C%E4%BD%9C%E4%B8%9A-3/</link>
         <pubDate>Tue, 14 Dec 2021 13:55:35 +0800</pubDate>
         
-        <guid>https://tweakzx.github.io/p/%E5%B9%B6%E8%A1%8C%E4%BD%9C%E4%B8%9A-3/</guid>
-        <description>&lt;img src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fpmob0455c.pic27.websiteonline.cn%2Fupload%2Felinpack3000-1200_dps0.jpg&refer=http%3A%2F%2Fpmob0455c.pic27.websiteonline.cn&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1642054231&t=55c0893a251868314596e23dae76a843" alt="Featured image of post 并行作业 3" /&gt;&lt;h2 id=&#34;1-hplhigh-performance-linpack&#34;&gt;1 HPL（High Performance Linpack)&lt;/h2&gt;
+        <guid>https://tweakzx.github.io/p/%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%8E%E5%B9%B6%E8%A1%8C%E8%AE%A1%E7%AE%97%E5%B9%B6%E8%A1%8C%E4%BD%9C%E4%B8%9A-3/</guid>
+        <description>&lt;img src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fpmob0455c.pic27.websiteonline.cn%2Fupload%2Felinpack3000-1200_dps0.jpg&refer=http%3A%2F%2Fpmob0455c.pic27.websiteonline.cn&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1642054231&t=55c0893a251868314596e23dae76a843" alt="Featured image of post 【分布式与并行计算】并行作业-3" /&gt;&lt;h2 id=&#34;1-hplhigh-performance-linpack&#34;&gt;1 HPL（High Performance Linpack)&lt;/h2&gt;
 &lt;p&gt;假设要使用HPL程序在4个进程上解一个4096 * 4096的方程组（4096 * 4096的矩阵加一列方程组的右端项b），按照讲义第14页所示的block-cyclic方式对数据进行分配，NB=512。4个进程按1 * 4和4 * 1两种方式排布。那么，在HPL的回代部分（讲义48到55页），X的各个元素分别是由哪些进程算出的？例如，X[0..512]由进程(3, 0)求出。写出两种排布方式下X的各部分分别由哪些进程计算得到。（5分）&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;1 * 4 排布&lt;/li&gt;
@@ -4674,12 +4647,12 @@ go version
 </description>
         </item>
         <item>
-        <title>CUDA加速课程题目</title>
-        <link>https://tweakzx.github.io/p/cuda%E5%8A%A0%E9%80%9F%E8%AF%BE%E7%A8%8B%E9%A2%98%E7%9B%AE/</link>
+        <title>【分布式与并行计算】CUDA加速课程题目</title>
+        <link>https://tweakzx.github.io/p/%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%8E%E5%B9%B6%E8%A1%8C%E8%AE%A1%E7%AE%97cuda%E5%8A%A0%E9%80%9F%E8%AF%BE%E7%A8%8B%E9%A2%98%E7%9B%AE/</link>
         <pubDate>Mon, 13 Dec 2021 19:03:20 +0800</pubDate>
         
-        <guid>https://tweakzx.github.io/p/cuda%E5%8A%A0%E9%80%9F%E8%AF%BE%E7%A8%8B%E9%A2%98%E7%9B%AE/</guid>
-        <description>&lt;img src="https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/image-20211215144717123.png" alt="Featured image of post CUDA加速课程题目" /&gt;&lt;h2 id=&#34;1-加速向量加法&#34;&gt;1 加速向量加法&lt;/h2&gt;
+        <guid>https://tweakzx.github.io/p/%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%8E%E5%B9%B6%E8%A1%8C%E8%AE%A1%E7%AE%97cuda%E5%8A%A0%E9%80%9F%E8%AF%BE%E7%A8%8B%E9%A2%98%E7%9B%AE/</guid>
+        <description>&lt;img src="https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/image-20211215144717123.png" alt="Featured image of post 【分布式与并行计算】CUDA加速课程题目" /&gt;&lt;h2 id=&#34;1-加速向量加法&#34;&gt;1 加速向量加法&lt;/h2&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-c++&#34; data-lang=&#34;c++&#34;&gt;&lt;span class=&#34;cp&#34;&gt;#include&lt;/span&gt; &lt;span class=&#34;cpf&#34;&gt;&amp;lt;stdio.h&amp;gt;&lt;/span&gt;&lt;span class=&#34;cp&#34;&gt;
 &lt;/span&gt;&lt;span class=&#34;cp&#34;&gt;#include&lt;/span&gt; &lt;span class=&#34;cpf&#34;&gt;&amp;lt;assert.h&amp;gt;&lt;/span&gt;&lt;span class=&#34;cp&#34;&gt;
 &lt;/span&gt;&lt;span class=&#34;cp&#34;&gt;&lt;/span&gt;
@@ -4993,12 +4966,12 @@ go version
 </description>
         </item>
         <item>
-        <title>并行作业 2</title>
-        <link>https://tweakzx.github.io/p/%E5%B9%B6%E8%A1%8C%E4%BD%9C%E4%B8%9A-2/</link>
+        <title>【分布式与并行计算】并行作业-2</title>
+        <link>https://tweakzx.github.io/p/%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%8E%E5%B9%B6%E8%A1%8C%E8%AE%A1%E7%AE%97%E5%B9%B6%E8%A1%8C%E4%BD%9C%E4%B8%9A-2/</link>
         <pubDate>Sat, 11 Dec 2021 18:01:26 +0800</pubDate>
         
-        <guid>https://tweakzx.github.io/p/%E5%B9%B6%E8%A1%8C%E4%BD%9C%E4%B8%9A-2/</guid>
-        <description>&lt;img src="https://pic1.zhimg.com/v2-f9d2f5486443cc045996753d59f80a7e_1440w.jpg?source=172ae18b" alt="Featured image of post 并行作业 2" /&gt;&lt;h2 id=&#34;1-矩阵向量乘法6分&#34;&gt;1 矩阵向量乘法（6分）&lt;/h2&gt;
+        <guid>https://tweakzx.github.io/p/%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%8E%E5%B9%B6%E8%A1%8C%E8%AE%A1%E7%AE%97%E5%B9%B6%E8%A1%8C%E4%BD%9C%E4%B8%9A-2/</guid>
+        <description>&lt;img src="https://pic1.zhimg.com/v2-f9d2f5486443cc045996753d59f80a7e_1440w.jpg?source=172ae18b" alt="Featured image of post 【分布式与并行计算】并行作业-2" /&gt;&lt;h2 id=&#34;1-矩阵向量乘法6分&#34;&gt;1 矩阵向量乘法（6分）&lt;/h2&gt;
 &lt;p&gt;矩阵向量乘法(gemv)如何用OpenMP或pthread对其并行化(OpenMP和pthread任选一种即可)？假设矩阵按行存储（每一行数据是连续的），处理器有32个核。如果矩阵是按列存储呢？具体实现如何修改？&lt;/p&gt;
 &lt;p&gt;可用语言&lt;strong&gt;详细&lt;/strong&gt;描述或写出伪代码&lt;/p&gt;
 &lt;ul&gt;
@@ -5072,12 +5045,12 @@ go version
 </description>
         </item>
         <item>
-        <title>并行作业 1</title>
-        <link>https://tweakzx.github.io/p/%E5%B9%B6%E8%A1%8C%E4%BD%9C%E4%B8%9A-1/</link>
+        <title>【分布式与并行计算】并行作业-1</title>
+        <link>https://tweakzx.github.io/p/%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%8E%E5%B9%B6%E8%A1%8C%E8%AE%A1%E7%AE%97%E5%B9%B6%E8%A1%8C%E4%BD%9C%E4%B8%9A-1/</link>
         <pubDate>Fri, 10 Dec 2021 11:28:33 +0800</pubDate>
         
-        <guid>https://tweakzx.github.io/p/%E5%B9%B6%E8%A1%8C%E4%BD%9C%E4%B8%9A-1/</guid>
-        <description>&lt;img src="https://img2.baidu.com/it/u=2900542081,1673808678&fm=26&fmt=auto" alt="Featured image of post 并行作业 1" /&gt;&lt;h2 id=&#34;1矩阵向量乘法4分&#34;&gt;1矩阵向量乘法（4分）&lt;/h2&gt;
+        <guid>https://tweakzx.github.io/p/%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%8E%E5%B9%B6%E8%A1%8C%E8%AE%A1%E7%AE%97%E5%B9%B6%E8%A1%8C%E4%BD%9C%E4%B8%9A-1/</guid>
+        <description>&lt;img src="https://img2.baidu.com/it/u=2900542081,1673808678&fm=26&fmt=auto" alt="Featured image of post 【分布式与并行计算】并行作业-1" /&gt;&lt;h2 id=&#34;1矩阵向量乘法4分&#34;&gt;1矩阵向量乘法（4分）&lt;/h2&gt;
 &lt;p&gt;讲义55页所示结果Y，如果要作为下一次矩阵向量乘法的输入X，切分到不同的列进程，并且复制到每一行进程，应如何操作？可写出伪代码，或用语言描述。&lt;/p&gt;
 &lt;p&gt;即图(a)中的Y，变成下图(b)中的X。假设每行有P个进程，每列也是P个进程，一共P*P个进程。&lt;/p&gt;
 &lt;p&gt;&lt;figure 
@@ -5137,12 +5110,12 @@ go version
 </description>
         </item>
         <item>
-        <title>分布式巩固类作业</title>
-        <link>https://tweakzx.github.io/p/%E5%88%86%E5%B8%83%E5%BC%8F%E5%B7%A9%E5%9B%BA%E7%B1%BB%E4%BD%9C%E4%B8%9A/</link>
+        <title>【分布式与并行计算】分布式作业</title>
+        <link>https://tweakzx.github.io/p/%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%8E%E5%B9%B6%E8%A1%8C%E8%AE%A1%E7%AE%97%E5%88%86%E5%B8%83%E5%BC%8F%E4%BD%9C%E4%B8%9A/</link>
         <pubDate>Tue, 07 Dec 2021 14:21:24 +0800</pubDate>
         
-        <guid>https://tweakzx.github.io/p/%E5%88%86%E5%B8%83%E5%BC%8F%E5%B7%A9%E5%9B%BA%E7%B1%BB%E4%BD%9C%E4%B8%9A/</guid>
-        <description>&lt;img src="https://img2.baidu.com/it/u=1163044150,1040852846&fm=26&fmt=auto" alt="Featured image of post 分布式巩固类作业" /&gt;&lt;h2 id=&#34;1-逻辑时钟与一致割集&#34;&gt;1 逻辑时钟与一致割集&lt;/h2&gt;
+        <guid>https://tweakzx.github.io/p/%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%8E%E5%B9%B6%E8%A1%8C%E8%AE%A1%E7%AE%97%E5%88%86%E5%B8%83%E5%BC%8F%E4%BD%9C%E4%B8%9A/</guid>
+        <description>&lt;img src="https://img2.baidu.com/it/u=1163044150,1040852846&fm=26&fmt=auto" alt="Featured image of post 【分布式与并行计算】分布式作业" /&gt;&lt;h2 id=&#34;1-逻辑时钟与一致割集&#34;&gt;1 逻辑时钟与一致割集&lt;/h2&gt;
 &lt;p&gt;下图中，直线上小黑点给出了时钟计数，请分别用Lamport 逻辑时钟和向量时钟给图上的事件设置时间戳，并给出一致割集和非一致割集的例子。&lt;/p&gt;
 &lt;p&gt;&lt;figure 
 	&gt;
@@ -5572,12 +5545,12 @@ in process p:
 </description>
         </item>
         <item>
-        <title>阿里实习二面</title>
-        <link>https://tweakzx.github.io/p/%E9%98%BF%E9%87%8C%E5%AE%9E%E4%B9%A0%E4%BA%8C%E9%9D%A2/</link>
+        <title>【实习面试】阿里实习二面</title>
+        <link>https://tweakzx.github.io/p/%E5%AE%9E%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%98%BF%E9%87%8C%E5%AE%9E%E4%B9%A0%E4%BA%8C%E9%9D%A2/</link>
         <pubDate>Sat, 04 Dec 2021 18:31:16 +0800</pubDate>
         
-        <guid>https://tweakzx.github.io/p/%E9%98%BF%E9%87%8C%E5%AE%9E%E4%B9%A0%E4%BA%8C%E9%9D%A2/</guid>
-        <description>&lt;img src="https://img2.baidu.com/it/u=3334504742,937198599&fm=26&fmt=auto" alt="Featured image of post 阿里实习二面" /&gt;&lt;blockquote&gt;
+        <guid>https://tweakzx.github.io/p/%E5%AE%9E%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%98%BF%E9%87%8C%E5%AE%9E%E4%B9%A0%E4%BA%8C%E9%9D%A2/</guid>
+        <description>&lt;img src="https://img2.baidu.com/it/u=3334504742,937198599&fm=26&fmt=auto" alt="Featured image of post 【实习面试】阿里实习二面" /&gt;&lt;blockquote&gt;
 &lt;p&gt;时间：2021-12-2 下午5点半&lt;/p&gt;
 &lt;p&gt;方式：阿里会议视频面试&lt;/p&gt;
 &lt;p&gt;岗位：研究型实习生-智能存储&lt;/p&gt;
@@ -5613,12 +5586,12 @@ in process p:
 </description>
         </item>
         <item>
-        <title>阿里研究型实习生面试</title>
-        <link>https://tweakzx.github.io/p/%E9%98%BF%E9%87%8C%E7%A0%94%E7%A9%B6%E5%9E%8B%E5%AE%9E%E4%B9%A0%E7%94%9F%E9%9D%A2%E8%AF%95/</link>
+        <title>【实习面试】阿里实习生面试</title>
+        <link>https://tweakzx.github.io/p/%E5%AE%9E%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%98%BF%E9%87%8C%E5%AE%9E%E4%B9%A0%E7%94%9F%E9%9D%A2%E8%AF%95/</link>
         <pubDate>Wed, 01 Dec 2021 21:49:57 +0800</pubDate>
         
-        <guid>https://tweakzx.github.io/p/%E9%98%BF%E9%87%8C%E7%A0%94%E7%A9%B6%E5%9E%8B%E5%AE%9E%E4%B9%A0%E7%94%9F%E9%9D%A2%E8%AF%95/</guid>
-        <description>&lt;img src="https://img2.baidu.com/it/u=3334504742,937198599&fm=26&fmt=auto" alt="Featured image of post 阿里研究型实习生面试" /&gt;&lt;blockquote&gt;
+        <guid>https://tweakzx.github.io/p/%E5%AE%9E%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%98%BF%E9%87%8C%E5%AE%9E%E4%B9%A0%E7%94%9F%E9%9D%A2%E8%AF%95/</guid>
+        <description>&lt;img src="https://img2.baidu.com/it/u=3334504742,937198599&fm=26&fmt=auto" alt="Featured image of post 【实习面试】阿里实习生面试" /&gt;&lt;blockquote&gt;
 &lt;p&gt;时间：2021-11-30 下午2点&lt;/p&gt;
 &lt;p&gt;方式：阿里会议视频面试&lt;/p&gt;
 &lt;p&gt;岗位：研究型实习生-智能存储&lt;/p&gt;
@@ -5668,12 +5641,12 @@ in process p:
 </description>
         </item>
         <item>
-        <title>蓝湖面试凉经</title>
-        <link>https://tweakzx.github.io/p/%E8%93%9D%E6%B9%96%E9%9D%A2%E8%AF%95%E5%87%89%E7%BB%8F/</link>
+        <title>【实习面试】蓝湖面试凉经</title>
+        <link>https://tweakzx.github.io/p/%E5%AE%9E%E4%B9%A0%E9%9D%A2%E8%AF%95%E8%93%9D%E6%B9%96%E9%9D%A2%E8%AF%95%E5%87%89%E7%BB%8F/</link>
         <pubDate>Wed, 01 Dec 2021 20:56:54 +0800</pubDate>
         
-        <guid>https://tweakzx.github.io/p/%E8%93%9D%E6%B9%96%E9%9D%A2%E8%AF%95%E5%87%89%E7%BB%8F/</guid>
-        <description>&lt;img src="https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/image-20211201214555354.png" alt="Featured image of post 蓝湖面试凉经" /&gt;&lt;blockquote&gt;
+        <guid>https://tweakzx.github.io/p/%E5%AE%9E%E4%B9%A0%E9%9D%A2%E8%AF%95%E8%93%9D%E6%B9%96%E9%9D%A2%E8%AF%95%E5%87%89%E7%BB%8F/</guid>
+        <description>&lt;img src="https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/image-20211201214555354.png" alt="Featured image of post 【实习面试】蓝湖面试凉经" /&gt;&lt;blockquote&gt;
 &lt;p&gt;时间：2021-11-26 下午六点&lt;/p&gt;
 &lt;p&gt;方式：飞书视频面试&lt;/p&gt;
 &lt;p&gt;岗位：后端开发&lt;/p&gt;
@@ -5762,12 +5735,12 @@ in process p:
 </description>
         </item>
         <item>
-        <title>字节实习面试凉经</title>
-        <link>https://tweakzx.github.io/p/%E5%AD%97%E8%8A%82%E5%AE%9E%E4%B9%A0%E9%9D%A2%E8%AF%95%E5%87%89%E7%BB%8F/</link>
+        <title>【实习面试】字节面试凉经</title>
+        <link>https://tweakzx.github.io/p/%E5%AE%9E%E4%B9%A0%E9%9D%A2%E8%AF%95%E5%AD%97%E8%8A%82%E9%9D%A2%E8%AF%95%E5%87%89%E7%BB%8F/</link>
         <pubDate>Mon, 29 Nov 2021 16:52:26 +0800</pubDate>
         
-        <guid>https://tweakzx.github.io/p/%E5%AD%97%E8%8A%82%E5%AE%9E%E4%B9%A0%E9%9D%A2%E8%AF%95%E5%87%89%E7%BB%8F/</guid>
-        <description>&lt;img src="https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/bytedance.jpg" alt="Featured image of post 字节实习面试凉经" /&gt;&lt;blockquote&gt;
+        <guid>https://tweakzx.github.io/p/%E5%AE%9E%E4%B9%A0%E9%9D%A2%E8%AF%95%E5%AD%97%E8%8A%82%E9%9D%A2%E8%AF%95%E5%87%89%E7%BB%8F/</guid>
+        <description>&lt;img src="https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/bytedance.jpg" alt="Featured image of post 【实习面试】字节面试凉经" /&gt;&lt;blockquote&gt;
 &lt;p&gt;时间：2021-11-29下午三点&lt;/p&gt;
 &lt;p&gt;方式：飞书视频面试&lt;/p&gt;
 &lt;p&gt;岗位：后端开发实习生-业务中台职位&lt;/p&gt;
