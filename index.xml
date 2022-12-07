@@ -13,7 +13,7 @@
         
         <guid>https://tweakzx.github.io/p/%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90antman%E5%AF%B9tensorflow%E7%9A%84%E4%BF%AE%E6%94%B9/</guid>
         <description>&lt;h2 id=&#34;antman对tensorflow的代码修改&#34;&gt;Antman对Tensorflow的代码修改&lt;/h2&gt;
-&lt;p&gt;总体的关系图&lt;/p&gt;
+&lt;p&gt;总体的关系图，主要包括两个实现， 内存方面的GPUResourceManagement以及算力方面的GpuOpManager。&lt;/p&gt;
 &lt;div class=&#34;mermaid&#34;， align=center&gt;
   
 
