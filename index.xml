@@ -14,8 +14,11 @@
         <guid>https://tweakzx.github.io/p/%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90antman%E5%AF%B9tensorflow%E7%9A%84%E4%BF%AE%E6%94%B9/</guid>
         <description>&lt;h2 id=&#34;antman对tensorflow的代码修改&#34;&gt;Antman对Tensorflow的代码修改&lt;/h2&gt;
 &lt;p&gt;总体的关系图&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&#34;language-mermaid&#34; data-lang=&#34;mermaid&#34;&gt;graph TD
-  A&amp;gt;gpu_resource_manage_file]
+&lt;div class=&#34;mermaid&#34;&gt;
+  
+
+graph TD
+  A&gt;gpu_resource_manage_file]
   B[SessionRunRegistry]
   C[SessionRunAction] 
   D[Executor]
@@ -27,37 +30,45 @@
   J[GPU Process State]
   K[GPUVMemAllocator]
   L[GPUAdjustableAllocator]
-  
-  
-  A --&amp;gt;|FileListener| E
-  B --&amp;gt;|Register| E
-  E --&amp;gt;|need_to_adjust_memory_| H
-  H --&amp;gt;|new| L
-  H --&amp;gt;|get| K
-  C --&amp;gt;|Derive| E
-  C --&amp;gt;|Derive| F
-  B --&amp;gt;|Register| F
-  F --&amp;gt;|need_to_dump_statistics_| I
 
-  B --&amp;gt;|Run| C
-  
-  J --&amp;gt;|maybe_create_gpu_vmem_allocator|K
-  D --&amp;gt;|run thread| G
-  E --&amp;gt;|GetEstimatedIdleTime| G
-&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;gpuvmemallocator&#34;&gt;GPUVMemAllocator&lt;/h2&gt;
+  A --&gt;|FileListener| E
+  B --&gt;|Register| E
+  E --&gt;|need_to_adjust_memory_| H
+  H --&gt;|new| L
+  H --&gt;|get| K
+  C --&gt;|Derive| E
+  C --&gt;|Derive| F
+  B --&gt;|Register| F
+  F --&gt;|need_to_dump_statistics_| I
+
+  B --&gt;|Run| C
+
+  J --&gt;|maybe_create_gpu_vmem_allocator|K
+  D --&gt;|run thread| G
+  E --&gt;|GetEstimatedIdleTime| G
+
+
+&lt;/div&gt;
+&lt;h2 id=&#34;gpuvmemallocator&#34;&gt;GPUVMemAllocator&lt;/h2&gt;
 &lt;p&gt;GPUVMemAllocator 可以分配host的mem作为显存的备用，以免出现OOM错误。&lt;/p&gt;
 &lt;h3 id=&#34;创建allocator&#34;&gt;创建allocator&lt;/h3&gt;
 &lt;p&gt;maybe_create_gpu_vmem_allocator(&amp;hellip;)可以根据情况返回合适的allocator&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&#34;language-mermaid&#34; data-lang=&#34;mermaid&#34;&gt;graph TD
-  A([start]) --&amp;gt;|gpu_allocator|B[maybe_create_gpu_vmem_allocator]--&amp;gt;C{if !gpu_vmem} 
-  C --&amp;gt;|true| D([返回gpu_allocator])
-  C --&amp;gt;|false|Z(准备生成VMemAllocator)
-  Z --&amp;gt; E[new GpuHostAllocator]
-  E --&amp;gt;|sub_allocator| F[new BFCAllocator]
-  Z --&amp;gt;|gpu_allocator| G[new GPUVMemAllocator]
-  F --&amp;gt;|host_allocator|G
-  G --&amp;gt;|gpu_vmem_allocator|H([返回gpu_vmem_allocator])
-&lt;/code&gt;&lt;/pre&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-c++&#34; data-lang=&#34;c++&#34;&gt;&lt;span class=&#34;n&#34;&gt;Allocator&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;*&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;maybe_create_gpu_vmem_allocator&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Allocator&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;*&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;gpu_allocator&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
+&lt;div class=&#34;mermaid&#34;&gt;
+  
+
+graph TD
+  A([start]) --&gt;|gpu_allocator|B[maybe_create_gpu_vmem_allocator]--&gt;C{if !gpu_vmem} 
+  C --&gt;|true| D([返回gpu_allocator])
+  C --&gt;|false|Z(准备生成VMemAllocator)
+  Z --&gt; E[new GpuHostAllocator]
+  E --&gt;|sub_allocator| F[new BFCAllocator]
+  Z --&gt;|gpu_allocator| G[new GPUVMemAllocator]
+  F --&gt;|host_allocator|G
+  G --&gt;|gpu_vmem_allocator|H([返回gpu_vmem_allocator])
+
+
+&lt;/div&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-c++&#34; data-lang=&#34;c++&#34;&gt;&lt;span class=&#34;n&#34;&gt;Allocator&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;*&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;maybe_create_gpu_vmem_allocator&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Allocator&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;*&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;gpu_allocator&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
                                            &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;bus_id&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
                                            &lt;span class=&#34;n&#34;&gt;PlatformGpuId&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;platform_gpu_id&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
                                            &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;tf_gpu_id&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
@@ -742,7 +753,42 @@ simply distributes idle time slots before launching the GPU operators.&lt;/p&gt;
     &lt;span class=&#34;k&#34;&gt;delete&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;gpu_op_manager_thread_&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
     &lt;span class=&#34;n&#34;&gt;terminate_op_magager_thread_&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;false&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
   &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;总体关系图&#34;&gt;总体关系图&lt;/h2&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;总结&#34;&gt;总结&lt;/h2&gt;
+&lt;div class=&#34;mermaid&#34;&gt;
+  
+
+graph TD
+  A&gt;gpu_resource_manage_file]
+  B[SessionRunRegistry]
+  C[SessionRunAction] 
+  D[Executor]
+  E[GPUResouceManagement]
+  F[GPU Statistic]
+  G[GpuOpManager]
+  H[GpuUsageAdjustment]
+  I(dump gpu statistic)
+  J[GPU Process State]
+  K[GPUVMemAllocator]
+  L[GPUAdjustableAllocator]
+
+  A --&gt;|FileListener| E
+  B --&gt;|Register| E
+  E --&gt;|need_to_adjust_memory_| H
+  H --&gt;|new| L
+  H --&gt;|get| K
+  C --&gt;|Derive| E
+  C --&gt;|Derive| F
+  B --&gt;|Register| F
+  F --&gt;|need_to_dump_statistics_| I
+
+  B --&gt;|Run| C
+
+  J --&gt;|maybe_create_gpu_vmem_allocator|K
+  D --&gt;|run thread| G
+  E --&gt;|GetEstimatedIdleTime| G
+
+
+&lt;/div&gt;
 </description>
         </item>
         <item>
