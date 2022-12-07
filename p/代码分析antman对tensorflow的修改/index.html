@@ -116,7 +116,7 @@
     <section class="article-content">
     <h2 id="antman对tensorflow的代码修改">Antman对Tensorflow的代码修改</h2>
 <p>总体的关系图</p>
-<div class="mermaid">
+<div class="mermaid"， align=center>
   
 
 graph TD
@@ -155,19 +155,17 @@ graph TD
 <p>GPUVMemAllocator 可以分配host的mem作为显存的备用，以免出现OOM错误。</p>
 <h3 id="创建allocator">创建allocator</h3>
 <p>maybe_create_gpu_vmem_allocator(&hellip;)可以根据情况返回合适的allocator</p>
-<div class="mermaid">
+<div class="mermaid"， align=center>
   
-
 graph TD
-  A([start]) -->|gpu_allocator|B[maybe_create_gpu_vmem_allocator]-->C{if !gpu_vmem} 
-  C -->|true| D([返回gpu_allocator])
-  C -->|false|Z(准备生成VMemAllocator)
-  Z --> E[new GpuHostAllocator]
-  E -->|sub_allocator| F[new BFCAllocator]
-  Z -->|gpu_allocator| G[new GPUVMemAllocator]
-  F -->|host_allocator|G
-  G -->|gpu_vmem_allocator|H([返回gpu_vmem_allocator])
-
+	A([start]) -->|gpu_allocator|B[maybe_create_gpu_vmem_allocator]-->C{if !gpu_vmem} 
+	C -->|true| D([返回gpu_allocator])
+	C -->|false|Z(准备生成VMemAllocator)
+	Z --> E[new GpuHostAllocator]
+	E -->|sub_allocator| F[new BFCAllocator]
+	Z -->|gpu_allocator| G[new GPUVMemAllocator]
+	F -->|host_allocator|G
+	G -->|gpu_vmem_allocator|H([返回gpu_vmem_allocator])
 
 </div>
 <div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="n">Allocator</span><span class="o">*</span> <span class="nf">maybe_create_gpu_vmem_allocator</span><span class="p">(</span><span class="n">Allocator</span><span class="o">*</span> <span class="n">gpu_allocator</span><span class="p">,</span>
@@ -856,7 +854,7 @@ simply distributes idle time slots before launching the GPU operators.</p>
     <span class="n">terminate_op_magager_thread_</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
   <span class="p">}</span>
 </code></pre></div><h2 id="总结">总结</h2>
-<div class="mermaid">
+<div class="mermaid"， align=center>
   
 
 graph TD
