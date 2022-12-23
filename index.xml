@@ -14,6 +14,8 @@
         <guid>https://tweakzx.github.io/p/%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90tensorflow%E7%9A%84session%E6%89%A7%E8%A1%8C%E5%88%86%E6%9E%90/</guid>
         <description>&lt;h1 id=&#34;tensorflow-kernal-launch-的过程&#34;&gt;Tensorflow kernal launch 的过程&lt;/h1&gt;
 &lt;p&gt;分析session执行的过程， 并分析Antman对执行过程的修改&lt;/p&gt;
+&lt;p&gt;修改了direct_session.cc ,  在session执行前后运行中间件框架&lt;/p&gt;
+&lt;p&gt;修改了executor.cc ， 新增一个异步调用队列， 并将需要插入时间槽的异步Op加入队列，在OpManager线程中等待执行。&lt;/p&gt;
 &lt;p&gt;&lt;figure 
 	&gt;
 	&lt;a href=&#34;https://shengyg.github.io/repository/assets/pic/tf-architecture.png&#34; &gt;
