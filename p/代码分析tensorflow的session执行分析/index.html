@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 <html lang="en-us">
     <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='Tensorflow kernal launch 的过程 分析session执行的过程， 并分析Antman对执行过程的修改 修改了direct_session.cc , 在session执行前'><title>【代码分析]Tensorflow的session执行分析</title>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='Tensorflow kernal launch 的过程 分析session执行的过程， 并分析Antman对执行过程的修改 函数调用链 Run()&amp;ndash;&amp;gt;RunInternel()&amp;ndash;&amp;gt;RunAsync()&amp;ndash;&amp;gt;ScheduleReady()&amp;ndash;&amp;gt;Process() 修改了direct_session.cc , 在sess'><title>【代码分析]Tensorflow的session执行分析</title>
 
 <link rel='canonical' href='https://tweakzx.github.io/p/%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90tensorflow%E7%9A%84session%E6%89%A7%E8%A1%8C%E5%88%86%E6%9E%90/'>
 
 <link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='【代码分析]Tensorflow的session执行分析'>
-<meta property='og:description' content='Tensorflow kernal launch 的过程 分析session执行的过程， 并分析Antman对执行过程的修改 修改了direct_session.cc , 在session执行前'>
+<meta property='og:description' content='Tensorflow kernal launch 的过程 分析session执行的过程， 并分析Antman对执行过程的修改 函数调用链 Run()&amp;ndash;&amp;gt;RunInternel()&amp;ndash;&amp;gt;RunAsync()&amp;ndash;&amp;gt;ScheduleReady()&amp;ndash;&amp;gt;Process() 修改了direct_session.cc , 在sess'>
 <meta property='og:url' content='https://tweakzx.github.io/p/%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90tensorflow%E7%9A%84session%E6%89%A7%E8%A1%8C%E5%88%86%E6%9E%90/'>
 <meta property='og:site_name' content='Tweakzx'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Tensorflow' /><meta property='article:tag' content='GPU' /><meta property='article:tag' content='Antman' /><meta property='article:published_time' content='2022-12-23T18:57:14&#43;08:00'/><meta property='article:modified_time' content='2022-12-23T18:57:14&#43;08:00'/>
 <meta name="twitter:title" content="【代码分析]Tensorflow的session执行分析">
-<meta name="twitter:description" content="Tensorflow kernal launch 的过程 分析session执行的过程， 并分析Antman对执行过程的修改 修改了direct_session.cc , 在session执行前">
+<meta name="twitter:description" content="Tensorflow kernal launch 的过程 分析session执行的过程， 并分析Antman对执行过程的修改 函数调用链 Run()&amp;ndash;&amp;gt;RunInternel()&amp;ndash;&amp;gt;RunAsync()&amp;ndash;&amp;gt;ScheduleReady()&amp;ndash;&amp;gt;Process() 修改了direct_session.cc , 在sess">
     </head>
     <body class="
     article-page has-toc
@@ -106,7 +106,7 @@
 
 
                 <time class="article-time--reading">
-                    5 minute read
+                    6 minute read
                 </time>
             </div>
         
@@ -121,6 +121,7 @@
     <section class="article-content">
     <h1 id="tensorflow-kernal-launch-的过程">Tensorflow kernal launch 的过程</h1>
 <p>分析session执行的过程， 并分析Antman对执行过程的修改</p>
+<p>函数调用链 Run()&ndash;&gt;RunInternel()&ndash;&gt;RunAsync()&ndash;&gt;ScheduleReady()&ndash;&gt;Process()</p>
 <p>修改了direct_session.cc ,  在session执行前后运行中间件框架</p>
 <p>修改了executor.cc ， 新增一个异步调用队列， 并将需要插入时间槽的异步Op加入队列，在OpManager线程中等待执行。</p>
 <p><figure 
