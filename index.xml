@@ -43,9 +43,9 @@
 &lt;li&gt;在具有 60 个 P100 GPU 的密歇根 ConFlux 集群上进行的实验和大规模跟踪驱动模拟表明，
 &lt;ul&gt;
 &lt;li&gt;与生产中使用的基于 Apache YARN 的资源管理器相比，Tiresias 将平均 JCT 提高了 5.5 倍。&lt;/li&gt;
+&lt;li&gt;更重要的是，Tiresias 的性能与假设完美知识的解决方案的性能相当。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;更重要的是，Tiresias 的性能与假设完美知识的解决方案的性能相当。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;
 &lt;p&gt;由于 DDL 训练的独特限制，我们观察到当前集群管理器设计中的两个主要限制。&lt;/p&gt;
