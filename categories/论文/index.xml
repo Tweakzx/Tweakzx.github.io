@@ -6,7 +6,16 @@
     <description>Recent content in 论文 on Tweakzx</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 09 Nov 2022 15:09:23 +0800</lastBuildDate><atom:link href="https://tweakzx.github.io/categories/%E8%AE%BA%E6%96%87/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 27 Dec 2022 09:46:16 +0800</lastBuildDate><atom:link href="https://tweakzx.github.io/categories/%E8%AE%BA%E6%96%87/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>【论文笔记】Tiresias论文阅读笔记</title>
+      <link>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0tiresias%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link>
+      <pubDate>Tue, 27 Dec 2022 09:46:16 +0800</pubDate>
+      
+      <guid>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0tiresias%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</guid>
+      <description>Tiresias 论文阅读笔记 Abstract 深度学习 (DL) 训练作业给现有的集群管理器带来了一些独特的挑战，例如 不可预测的训练时间 全有或全无的执行模型 GPU 共享的不灵活性 我们对生</description>
+    </item>
+    
     <item>
       <title>【论文笔记】EasyScale论文阅读笔记</title>
       <link>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0easyscale%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link>

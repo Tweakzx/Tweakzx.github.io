@@ -3,7 +3,27 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://tweakzx.github.io/categories/</loc>
+    <lastmod>2022-12-27T09:46:16+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tweakzx.github.io/tags/gpu/</loc>
+    <lastmod>2022-12-27T09:46:16+08:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://tweakzx.github.io/post/</loc>
+    <lastmod>2022-12-27T09:46:16+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tweakzx.github.io/tags/</loc>
+    <lastmod>2022-12-27T09:46:16+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tweakzx.github.io/tags/tiresias/</loc>
     <lastmod>2022-12-27T09:46:16+08:00</lastmod>
   </url>
   
@@ -18,22 +38,12 @@
   </url>
   
   <url>
+    <loc>https://tweakzx.github.io/categories/%E8%AE%BA%E6%96%87/</loc>
+    <lastmod>2022-12-27T09:46:16+08:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://tweakzx.github.io/tags/antman/</loc>
-    <lastmod>2022-12-23T18:57:14+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://tweakzx.github.io/categories/</loc>
-    <lastmod>2022-12-23T18:57:14+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://tweakzx.github.io/tags/gpu/</loc>
-    <lastmod>2022-12-23T18:57:14+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://tweakzx.github.io/tags/</loc>
     <lastmod>2022-12-23T18:57:14+08:00</lastmod>
   </url>
   
@@ -69,11 +79,6 @@
   
   <url>
     <loc>https://tweakzx.github.io/tags/%E8%AE%BA%E6%96%87/</loc>
-    <lastmod>2022-11-09T15:09:23+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://tweakzx.github.io/categories/%E8%AE%BA%E6%96%87/</loc>
     <lastmod>2022-11-09T15:09:23+08:00</lastmod>
   </url>
   
