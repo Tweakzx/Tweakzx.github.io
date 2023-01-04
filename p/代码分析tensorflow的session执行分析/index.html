@@ -596,14 +596,16 @@
     <span class="n">Allocator</span><span class="o">*</span> <span class="n">gpu_allocator</span> <span class="o">=</span> <span class="n">gpu_bfc_allocator</span><span class="p">;</span>
     <span class="c1">// GPUVMemAllocator will allocate host memory as backup after running out of
 </span><span class="c1"></span>    <span class="c1">// gpu device memory to avoid OOM failures
-</span><span class="c1"></span>    <span class="c1">//////////////////////////////////////////////////////////////////////////////////
+</span><span class="c1"></span>      
+    <span class="c1">//////////////////////////////////////////////////////////////////////////////////
 </span><span class="c1"></span>    <span class="n">gpu_allocator</span> <span class="o">=</span> <span class="n">maybe_create_gpu_vmem_allocator</span><span class="p">(</span><span class="n">gpu_allocator</span><span class="p">,</span>
                                                         <span class="n">bus_id</span><span class="p">,</span>
                                                         <span class="n">platform_gpu_id</span><span class="p">,</span>
                                                         <span class="n">tf_gpu_id</span><span class="p">.</span><span class="n">value</span><span class="p">(),</span>
                                                         <span class="n">stream_exec</span><span class="p">);</span>
     <span class="c1">//////////////////////////////////////////////////////////////////////////////////
-</span><span class="c1"></span>    <span class="n">SharedCounter</span><span class="o">*</span> <span class="n">timing_counter</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+</span><span class="c1"></span>      
+    <span class="n">SharedCounter</span><span class="o">*</span> <span class="n">timing_counter</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">options</span><span class="p">.</span><span class="n">experimental</span><span class="p">().</span><span class="n">timestamped_allocator</span><span class="p">())</span> <span class="p">{</span>
       <span class="n">timing_counter</span> <span class="o">=</span> <span class="k">new</span> <span class="n">SharedCounter</span><span class="p">;</span>
       <span class="n">gpu_bfc_allocator</span><span class="o">-&gt;</span><span class="n">SetTimingCounter</span><span class="p">(</span><span class="n">timing_counter</span><span class="p">);</span>
@@ -794,7 +796,7 @@
         
             2020 - 
         
-        2022 Tweakzx
+        2023 Tweakzx
     </section>
     
     <section class="powerby">

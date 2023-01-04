@@ -6,7 +6,16 @@
     <description>Recent content in GPU on Tweakzx</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 27 Dec 2022 09:46:16 +0800</lastBuildDate><atom:link href="https://tweakzx.github.io/tags/gpu/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 04 Jan 2023 10:16:46 +0800</lastBuildDate><atom:link href="https://tweakzx.github.io/tags/gpu/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>【论文笔记】Harmony论文阅读笔记</title>
+      <link>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0harmony%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link>
+      <pubDate>Wed, 04 Jan 2023 10:16:46 +0800</pubDate>
+      
+      <guid>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0harmony%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</guid>
+      <description>基于深度学习的机器学习集群的任务放置 这是一篇发表在INFOCOM&#39;2019上的论文， 特点是使用了强化学习进行任务放置。 Abstract 背景 虽然作业之间的服</description>
+    </item>
+    
     <item>
       <title>【论文笔记】Tiresias论文阅读笔记</title>
       <link>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0tiresias%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link>
