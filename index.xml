@@ -181,7 +181,7 @@ Done
 &lt;blockquote&gt;
 &lt;p&gt;Failed to initialize NVML: could not load NVML library.If this is a GPU node, did you set the docker default runtime to &lt;code&gt;nvidia&lt;/code&gt;?&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;p&gt;你可能没有设置`&amp;ldquo;default-runtime&amp;rdquo;: &amp;ldquo;nvidia&amp;quot;字段， 设置之后重启docker， 将pod全部删除重启&lt;/p&gt;
+&lt;p&gt;你可能没有设置`&amp;ldquo;default-runtime&amp;rdquo;: &amp;ldquo;nvidia&amp;quot;字段， 设置之后重启docker， 将pod全部删除重启，一定要注意操作顺序， 安装docker， 配置/etc/docker/daemon.json， 重启docker， 启动k8s-device-plugin, 进行测试。&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;kubectl delete -n kube-system &amp;lt;POD NAME&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;如果需要给不同型号gpu打label&#34;&gt;如果需要给不同型号GPU打Label&lt;/h2&gt;
 &lt;pre&gt;&lt;code&gt;# Label your nodes with the accelerator type they have.
