@@ -265,7 +265,7 @@ apt-get install -y <span class="nv">kubelet</span><span class="o">=</span>1.15.1
 </code></pre></div><h3 id="删除已安装的k8s">删除已安装的k8s</h3>
 <div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">sudo apt-get remove -y --allow-change-held-packages kubeadm kubectl kubelet
 </code></pre></div><h3 id="查询可安装版本">查询可安装版本</h3>
-<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">apt-cache madison kubeadm
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">apt-cache madison kubeadm
 apt-cache madison kubelet
 apt-cache madison kubectl
 apt-cache madison kubernetes-cni
@@ -358,7 +358,7 @@ kubectl apply -f https://raw.githubusercontent.com/flannel-io/flannel/master/Doc
 	
 </figure></p>
 <p>将会看到</p>
-<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">podsecuritypolicy.policy/psp.flannel.unprivileged created
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">podsecuritypolicy.policy/psp.flannel.unprivileged created
 clusterrole.rbac.authorization.k8s.io/flannel created
 clusterrolebinding.rbac.authorization.k8s.io/flannel created
 serviceaccount/flannel created
@@ -461,9 +461,9 @@ Commercial support is available at
 <p>首先，确定想要清空的节点的名称。可以用以下命令列出集群中的所有节点:</p>
 <div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">kubectl get nodes
 </code></pre></div><p>接下来，告诉 Kubernetes 清空节点：</p>
-<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">kubectl drain &lt;node name&gt;
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">kubectl drain &lt;node name&gt;
 </code></pre></div><p>一旦它返回（没有报错）， 你就可以下线此节点（或者等价地，如果在云平台上，删除支持该节点的虚拟机）。 如果要在维护操作期间将节点留在集群中，则需要运行：</p>
-<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">kubectl uncordon &lt;node name&gt;
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">kubectl uncordon &lt;node name&gt;
 </code></pre></div><p>然后告诉 Kubernetes，它可以继续在此节点上调度新的 Pods。</p>
 
 </section>

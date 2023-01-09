@@ -5477,7 +5477,7 @@ apt-get install -y &lt;span class=&#34;nv&#34;&gt;kubelet&lt;/span&gt;&lt;span c
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;删除已安装的k8s&#34;&gt;删除已安装的k8s&lt;/h3&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;sudo apt-get remove -y --allow-change-held-packages kubeadm kubectl kubelet
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;查询可安装版本&#34;&gt;查询可安装版本&lt;/h3&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;apt-cache madison kubeadm
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;apt-cache madison kubeadm
 apt-cache madison kubelet
 apt-cache madison kubectl
 apt-cache madison kubernetes-cni
@@ -5570,7 +5570,7 @@ kubectl apply -f https://raw.githubusercontent.com/flannel-io/flannel/master/Doc
 	
 &lt;/figure&gt;&lt;/p&gt;
 &lt;p&gt;将会看到&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;podsecuritypolicy.policy/psp.flannel.unprivileged created
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;podsecuritypolicy.policy/psp.flannel.unprivileged created
 clusterrole.rbac.authorization.k8s.io/flannel created
 clusterrolebinding.rbac.authorization.k8s.io/flannel created
 serviceaccount/flannel created
@@ -5673,9 +5673,9 @@ Commercial support is available at
 &lt;p&gt;首先，确定想要清空的节点的名称。可以用以下命令列出集群中的所有节点:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;kubectl get nodes
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;接下来，告诉 Kubernetes 清空节点：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;kubectl drain &amp;lt;node name&amp;gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;kubectl drain &amp;lt;node name&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;一旦它返回（没有报错）， 你就可以下线此节点（或者等价地，如果在云平台上，删除支持该节点的虚拟机）。 如果要在维护操作期间将节点留在集群中，则需要运行：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;kubectl uncordon &amp;lt;node name&amp;gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;kubectl uncordon &amp;lt;node name&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;然后告诉 Kubernetes，它可以继续在此节点上调度新的 Pods。&lt;/p&gt;
 </description>
         </item>
