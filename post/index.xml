@@ -17,15 +17,6 @@
     </item>
     
     <item>
-      <title>【论文笔记】Gandiva Fair论文阅读笔记</title>
-      <link>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0gandiva-fair%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link>
-      <pubDate>Mon, 09 Jan 2023 10:27:34 +0800</pubDate>
-      
-      <guid>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0gandiva-fair%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</guid>
-      <description>Balancing Efficiency and Fairness in Heterogeneous GPU Clusters for Deep Learning Abstract Gandiva-fair 效率与公平的平衡 效率：Gandiva-fair 提供用户之间的性能隔离，使多个用户可以共享一个集群，从而最大限度地提</description>
-    </item>
-    
-    <item>
       <title>【论文笔记】Harmony论文阅读笔记</title>
       <link>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0harmony%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link>
       <pubDate>Wed, 04 Jan 2023 10:16:46 +0800</pubDate>
