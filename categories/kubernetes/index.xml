@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>kubernetes on Tweakzx</title>
+    <link>https://tweakzx.github.io/categories/kubernetes/</link>
+    <description>Recent content in kubernetes on Tweakzx</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 09 Jan 2023 20:06:52 +0800</lastBuildDate><atom:link href="https://tweakzx.github.io/categories/kubernetes/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>【Kubernetes】如何让kubernetes集群使用GPU</title>
+      <link>https://tweakzx.github.io/p/kubernetes%E5%A6%82%E4%BD%95%E8%AE%A9kubernetes%E9%9B%86%E7%BE%A4%E4%BD%BF%E7%94%A8gpu/</link>
+      <pubDate>Mon, 09 Jan 2023 20:06:52 +0800</pubDate>
+      
+      <guid>https://tweakzx.github.io/p/kubernetes%E5%A6%82%E4%BD%95%E8%AE%A9kubernetes%E9%9B%86%E7%BE%A4%E4%BD%BF%E7%94%A8gpu/</guid>
+      <description>在Kubernetes集群中使用GPU资源 在前文中， 我们搭建了k8s集群， 但是k8s原生不支持GPU资源， 需要使用各大GPU厂商开发的插件才</description>
+    </item>
+    
+  </channel>
+</rss>

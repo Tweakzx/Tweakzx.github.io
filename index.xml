@@ -6,7 +6,206 @@
         <description>Recent content on Tweakzx</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Mon, 09 Jan 2023 10:27:34 +0800</lastBuildDate><atom:link href="https://tweakzx.github.io/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Mon, 09 Jan 2023 20:06:52 +0800</lastBuildDate><atom:link href="https://tweakzx.github.io/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>【Kubernetes】如何让kubernetes集群使用GPU</title>
+        <link>https://tweakzx.github.io/p/kubernetes%E5%A6%82%E4%BD%95%E8%AE%A9kubernetes%E9%9B%86%E7%BE%A4%E4%BD%BF%E7%94%A8gpu/</link>
+        <pubDate>Mon, 09 Jan 2023 20:06:52 +0800</pubDate>
+        
+        <guid>https://tweakzx.github.io/p/kubernetes%E5%A6%82%E4%BD%95%E8%AE%A9kubernetes%E9%9B%86%E7%BE%A4%E4%BD%BF%E7%94%A8gpu/</guid>
+        <description>&lt;h2 id=&#34;在kubernetes集群中使用gpu资源&#34;&gt;在Kubernetes集群中使用GPU资源&lt;/h2&gt;
+&lt;p&gt;在前文中， 我们搭建了k8s集群， 但是k8s原生不支持GPU资源， 需要使用各大GPU厂商开发的插件才能使用。&lt;/p&gt;
+&lt;p&gt;这一部分大家可以参考&lt;a class=&#34;link&#34; href=&#34;https://github.com/NVIDIA/k8s-device-plugin#quick-start&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;NVIDIA/k8s-device-plugin: NVIDIA device plugin for Kubernetes (github.com)&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;本文就记录我在k8s集群中配置插件的过程。&lt;/p&gt;
+&lt;h2 id=&#34;安装前的环境配置&#34;&gt;安装前的环境配置&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Centos Linux realease 7.9.2009&lt;/li&gt;
+&lt;li&gt;内核：3.10.0-1062.18.1.el7.x86_64&lt;/li&gt;
+&lt;li&gt;Docker-ce：18.09.7&lt;/li&gt;
+&lt;li&gt;Kubernetes：1.16.15&lt;/li&gt;
+&lt;li&gt;Nvidia Driver： 460.32.03两台，510.47.03一台&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;安装nvidia-docker2&#34;&gt;安装&lt;code&gt;nvidia-docker2&lt;/code&gt;&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;如果你使用的是新版本的docker (&amp;gt;=19.03)，则推荐使用nvidia-container-toolkit包来代替nvidia-docker2包：&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;由于我的docker版本是18.09.7， 所以我需要安装nvidia-docker2&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;c1&#34;&gt;##设置仓库&lt;/span&gt;
+&lt;span class=&#34;nv&#34;&gt;distribution&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;$(&lt;/span&gt;. /etc/os-release&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;echo&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;$ID$VERSION_ID&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;)&lt;/span&gt;
+curl -s -L https://nvidia.github.io/nvidia-docker/&lt;span class=&#34;nv&#34;&gt;$distribution&lt;/span&gt;/nvidia-docker.repo &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; &lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;sudo tee /etc/yum.repos.d/nvidia-docker.repo
+
+&lt;span class=&#34;c1&#34;&gt;##更新仓库中的key&lt;/span&gt;
+&lt;span class=&#34;nv&#34;&gt;DIST&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;$(&lt;/span&gt;sed -n &lt;span class=&#34;s1&#34;&gt;&amp;#39;s/releasever=//p&amp;#39;&lt;/span&gt; /etc/yum.conf&lt;span class=&#34;k&#34;&gt;)&lt;/span&gt;
+&lt;span class=&#34;nv&#34;&gt;DIST&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;si&#34;&gt;${&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;DIST&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;:-$(&lt;/span&gt;. /etc/os-release&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;echo&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;$VERSION_ID&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;si&#34;&gt;}&lt;/span&gt;
+sudo yum makecache
+
+&lt;span class=&#34;c1&#34;&gt;##安装nvidia-docker2&lt;/span&gt;
+sudo yum install nvidia-docker2
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;这时候， 查看/etc/docker/daemon.json，你会发现内容已经改了， 内容如下&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+  &lt;span class=&#34;s2&#34;&gt;&amp;#34;runtimes&amp;#34;&lt;/span&gt;: &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+     &lt;span class=&#34;s2&#34;&gt;&amp;#34;nvidia&amp;#34;&lt;/span&gt;: &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+         &lt;span class=&#34;s2&#34;&gt;&amp;#34;path&amp;#34;&lt;/span&gt;: &lt;span class=&#34;s2&#34;&gt;&amp;#34;nvidia-container-runtime&amp;#34;&lt;/span&gt;,
+         &lt;span class=&#34;s2&#34;&gt;&amp;#34;runtimeArgs&amp;#34;&lt;/span&gt;: &lt;span class=&#34;o&#34;&gt;[]&lt;/span&gt;
+      &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+   &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;但是， 我还有一些其他的设置， 例如cgroupdriver， 镜像等等也需要设置， 所以我的修改了daemon.json，内容如下&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+  &lt;span class=&#34;s2&#34;&gt;&amp;#34;default-runtime&amp;#34;&lt;/span&gt;: &lt;span class=&#34;s2&#34;&gt;&amp;#34;nvidia&amp;#34;&lt;/span&gt;,
+  &lt;span class=&#34;s2&#34;&gt;&amp;#34;registry-mirrors&amp;#34;&lt;/span&gt;: &lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;https://n73pm3wf.mirror.aliyuncs.com&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt;,
+  &lt;span class=&#34;s2&#34;&gt;&amp;#34;exec-opts&amp;#34;&lt;/span&gt;: &lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;native.cgroupdriver=systemd&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt;,
+  &lt;span class=&#34;s2&#34;&gt;&amp;#34;log-driver&amp;#34;&lt;/span&gt;: &lt;span class=&#34;s2&#34;&gt;&amp;#34;json-file&amp;#34;&lt;/span&gt;,
+  &lt;span class=&#34;s2&#34;&gt;&amp;#34;log-opts&amp;#34;&lt;/span&gt;: &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+    &lt;span class=&#34;s2&#34;&gt;&amp;#34;max-size&amp;#34;&lt;/span&gt;: &lt;span class=&#34;s2&#34;&gt;&amp;#34;100m&amp;#34;&lt;/span&gt;
+  &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;,
+  &lt;span class=&#34;s2&#34;&gt;&amp;#34;storage-driver&amp;#34;&lt;/span&gt;: &lt;span class=&#34;s2&#34;&gt;&amp;#34;overlay2&amp;#34;&lt;/span&gt;,
+  &lt;span class=&#34;s2&#34;&gt;&amp;#34;storage-opts&amp;#34;&lt;/span&gt;: &lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;
+    &lt;span class=&#34;s2&#34;&gt;&amp;#34;overlay2.override_kernel_check=true&amp;#34;&lt;/span&gt;
+  &lt;span class=&#34;o&#34;&gt;]&lt;/span&gt;,
+  &lt;span class=&#34;s2&#34;&gt;&amp;#34;runtimes&amp;#34;&lt;/span&gt;: &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+     &lt;span class=&#34;s2&#34;&gt;&amp;#34;nvidia&amp;#34;&lt;/span&gt;: &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+         &lt;span class=&#34;s2&#34;&gt;&amp;#34;path&amp;#34;&lt;/span&gt;: &lt;span class=&#34;s2&#34;&gt;&amp;#34;nvidia-container-runtime&amp;#34;&lt;/span&gt;,
+         &lt;span class=&#34;s2&#34;&gt;&amp;#34;runtimeArgs&amp;#34;&lt;/span&gt;: &lt;span class=&#34;o&#34;&gt;[]&lt;/span&gt;
+      &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+   &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;修改完之后，记得重启docker&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;c1&#34;&gt;##重启docker&lt;/span&gt;
+systemctl restart docker
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;特别注意一个字段&lt;code&gt;&amp;quot;default-runtime&amp;quot;: &amp;quot;nvidia&amp;quot;,&lt;/code&gt; 这个default-runtime需要加上才可以在k8s中找到设备。&lt;/p&gt;
+&lt;p&gt;加了之后重启docker， 使用&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;docker run --security-opt&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;no-new-privileges --cap-drop&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;ALL --network&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;none -it -v /var/lib/kubelet/device-plugins:/var/lib/kubelet/device-plugins nvidia/k8s-device-plugin:1.11
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;如果成功的话会出现&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;2023/01/09 12:56:36 Loading NVML
+2023/01/09 12:56:36 Fetching devices.
+2023/01/09 12:56:37 Starting FS watcher.
+2023/01/09 12:56:37 Starting OS watcher.
+2023/01/09 12:56:37 Starting to serve on /var/lib/kubelet/device-plugins/nvidia.sock
+2023/01/09 12:56:37 Registered device plugin with Kubelet
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;如果不加的话，使用如下命令也可以验证docker是否可以使用GPU&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;docker run --runtime&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;nvidia --rm nvidia/cuda nvidia-smi
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;等待几秒，下载完成后出现会以下结果&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;# docker run --runtime=nvidia --rm nvidia/cuda nvidia-smi
+Mon Jan  9 12:33:59 2023       
++-----------------------------------------------------------------------------+
+| NVIDIA-SMI 510.47.03    Driver Version: 510.47.03    CUDA Version: 11.6     |
+|-------------------------------+----------------------+----------------------+
+| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
+|                               |                      |               MIG M. |
+|===============================+======================+======================|
+|   0  Tesla V100-PCIE...  Off  | 00000000:02:00.0 Off |                    0 |
+| N/A   28C    P0    24W / 250W |      0MiB / 16384MiB |      0%      Default |
+|                               |                      |                  N/A |
++-------------------------------+----------------------+----------------------+
+|   1  Tesla V100-PCIE...  Off  | 00000000:03:00.0 Off |                    0 |
+| N/A   29C    P0    25W / 250W |      0MiB / 16384MiB |      0%      Default |
+|                               |                      |                  N/A |
++-------------------------------+----------------------+----------------------+
+|   2  Tesla V100-PCIE...  Off  | 00000000:82:00.0 Off |                    0 |
+| N/A   30C    P0    24W / 250W |      0MiB / 16384MiB |      0%      Default |
+|                               |                      |                  N/A |
++-------------------------------+----------------------+----------------------+
+|   3  Tesla V100-PCIE...  Off  | 00000000:83:00.0 Off |                    0 |
+| N/A   28C    P0    23W / 250W |      0MiB / 16384MiB |      0%      Default |
+|                               |                      |                  N/A |
++-------------------------------+----------------------+----------------------+
+                                                                               
++-----------------------------------------------------------------------------+
+| Processes:                                                                  |
+|  GPU   GI   CI        PID   Type   Process name                  GPU Memory |
+|        ID   ID                                                   Usage      |
+|=============================================================================|
+|  No running processes found                                                 |
++-----------------------------------------------------------------------------+
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;在k8s上启动nvidia-device-plugin&#34;&gt;在k8s上启动nvidia-device-plugin&lt;/h2&gt;
+&lt;p&gt;在Master节点上运行&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;kubectl create -f https://raw.githubusercontent.com/NVIDIA/k8s-device-plugin/v1.11/nvidia-device-plugin.yml
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;然后使用以下命令查看&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;kubectl get pods -A -owide
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;可以发现， 相关的pod已经起来了，对应每个修改了docker运行时的GPU节点都有一个pod&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;kube-system   nvidia-device-plugin-daemonset-2bhzz  1/1     Running     0          59m
+kube-system   nvidia-device-plugin-daemonset-l5djd  1/1     Running     0          59m
+kube-system   nvidia-device-plugin-daemonset-lt756  1/1     Running     0          60m
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;使用&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;kubectl describe nodes
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;可以发现可分配资源里出现了nvidia.com/gpu的字段&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;Capacity:
+ cpu:                56
+ ephemeral-storage:  2148327Mi
+ hugepages-1Gi:      0
+ hugepages-2Mi:      0
+ memory:             65678476Ki
+ nvidia.com/gpu:     4
+ pods:               110
+Allocatable:
+ cpu:                56
+ ephemeral-storage:  2027415715761
+ hugepages-1Gi:      0
+ hugepages-2Mi:      0
+ memory:             65576076Ki
+ nvidia.com/gpu:     4
+ pods:               110
+System Info:
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;测试&#34;&gt;测试&lt;/h2&gt;
+&lt;p&gt;我们使用官方文档里的测试方法&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ cat &amp;lt;&amp;lt;EOF | kubectl apply -f -
+apiVersion: v1
+kind: Pod
+metadata:
+  name: gpu-pod
+spec:
+  restartPolicy: Never
+  containers:
+    - name: cuda-container
+      image: nvcr.io/nvidia/k8s/cuda-sample:vectoradd-cuda10.2
+      resources:
+        limits:
+          nvidia.com/gpu: 1 # requesting 1 GPU
+  tolerations:
+  - key: nvidia.com/gpu
+    operator: Exists
+    effect: NoSchedule
+EOF
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;可以得到&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;# kubectl logs gpu-pod 
+[Vector addition of 50000 elements]
+Copy input data from the host memory to the CUDA device
+CUDA kernel launch with 196 blocks of 256 threads
+Copy output data from the CUDA device to the host memory
+Test PASSED
+Done
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;遇到的问题&#34;&gt;遇到的问题&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Failed to initialize NVML: could not load NVML library.If this is a GPU node, did you set the docker default runtime to &lt;code&gt;nvidia&lt;/code&gt;?&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;你可能没有设置`&amp;ldquo;default-runtime&amp;rdquo;: &amp;ldquo;nvidia&amp;quot;字段， 设置之后重启docker， 将pod全部删除重启&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;kubectl delete -n kube-system &amp;lt;POD NAME&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;如果需要给不同型号gpu打label&#34;&gt;如果需要给不同型号GPU打Label&lt;/h2&gt;
+&lt;pre&gt;&lt;code&gt;# Label your nodes with the accelerator type they have.
+kubectl label nodes &amp;lt;node-with-k80&amp;gt; accelerator=nvidia-tesla-k80
+kubectl label nodes &amp;lt;node-with-p100&amp;gt; accelerator=nvidia-tesla-p100
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;调用的时候， 指定nodeSelector条件&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;apiVersion: v1
+kind: Pod
+metadata:
+  name: cuda-vector-add
+spec:
+  restartPolicy: OnFailure
+  containers:
+    - name: cuda-vector-add
+      # https://github.com/kubernetes/kubernetes/blob/v1.7.11/test/images/nvidia-cuda/Dockerfile
+      image: &amp;quot;k8s.gcr.io/cuda-vector-add:v0.1&amp;quot;
+      resources:
+        limits:
+          nvidia.com/gpu: 1
+  nodeSelector:
+    accelerator: nvidia-tesla-p100 # or nvidia-tesla-k80 etc.
+&lt;/code&gt;&lt;/pre&gt;</description>
+        </item>
+        <item>
         <title>【论文笔记】Gandiva Fair论文阅读笔记</title>
         <link>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0gandiva-fair%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link>
         <pubDate>Mon, 09 Jan 2023 10:27:34 +0800</pubDate>
