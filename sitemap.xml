@@ -3,6 +3,21 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://tweakzx.github.io/post/</loc>
+    <lastmod>2023-01-10T11:24:28+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tweakzx.github.io/</loc>
+    <lastmod>2023-01-10T11:24:28+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tweakzx.github.io/p/kubernetes%E5%9C%A8k8s%E9%9B%86%E7%BE%A4%E4%B8%AD%E6%8C%82%E8%BD%BD%E5%9F%BA%E4%BA%8Enfs%E7%9A%84storageclass/</loc>
+    <lastmod>2023-01-10T11:24:28+08:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://tweakzx.github.io/categories/</loc>
     <lastmod>2023-01-09T20:06:52+08:00</lastmod>
   </url>
@@ -23,17 +38,7 @@
   </url>
   
   <url>
-    <loc>https://tweakzx.github.io/post/</loc>
-    <lastmod>2023-01-09T20:06:52+08:00</lastmod>
-  </url>
-  
-  <url>
     <loc>https://tweakzx.github.io/tags/</loc>
-    <lastmod>2023-01-09T20:06:52+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://tweakzx.github.io/</loc>
     <lastmod>2023-01-09T20:06:52+08:00</lastmod>
   </url>
   
