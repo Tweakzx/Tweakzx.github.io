@@ -17,6 +17,15 @@
     </item>
     
     <item>
+      <title>【Kubernetes】在k8s集群安装测试adaptdl</title>
+      <link>https://tweakzx.github.io/p/kubernetes%E5%9C%A8k8s%E9%9B%86%E7%BE%A4%E5%AE%89%E8%A3%85%E6%B5%8B%E8%AF%95adaptdl/</link>
+      <pubDate>Mon, 09 Jan 2023 21:15:48 +0800</pubDate>
+      
+      <guid>https://tweakzx.github.io/p/kubernetes%E5%9C%A8k8s%E9%9B%86%E7%BE%A4%E5%AE%89%E8%A3%85%E6%B5%8B%E8%AF%95adaptdl/</guid>
+      <description>在k8s集群上部署测试Adaptdl 环境配置 Centos Linux realease 7.9.2009 三台（GPU节点），CentOS Linux release 7.7.1908 一台（Master节点） 内核：3.10.0-106</description>
+    </item>
+    
+    <item>
       <title>【Kubernetes】如何让kubernetes集群使用GPU</title>
       <link>https://tweakzx.github.io/p/kubernetes%E5%A6%82%E4%BD%95%E8%AE%A9kubernetes%E9%9B%86%E7%BE%A4%E4%BD%BF%E7%94%A8gpu/</link>
       <pubDate>Mon, 09 Jan 2023 20:06:52 +0800</pubDate>

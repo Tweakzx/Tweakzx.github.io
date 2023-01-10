@@ -175,6 +175,225 @@ course-nfs-storage   fuseim.pri/ifs   154m
 </description>
         </item>
         <item>
+        <title>【Kubernetes】在k8s集群安装测试adaptdl</title>
+        <link>https://tweakzx.github.io/p/kubernetes%E5%9C%A8k8s%E9%9B%86%E7%BE%A4%E5%AE%89%E8%A3%85%E6%B5%8B%E8%AF%95adaptdl/</link>
+        <pubDate>Mon, 09 Jan 2023 21:15:48 +0800</pubDate>
+        
+        <guid>https://tweakzx.github.io/p/kubernetes%E5%9C%A8k8s%E9%9B%86%E7%BE%A4%E5%AE%89%E8%A3%85%E6%B5%8B%E8%AF%95adaptdl/</guid>
+        <description>&lt;h1 id=&#34;在k8s集群上部署测试adaptdl&#34;&gt;在k8s集群上部署测试Adaptdl&lt;/h1&gt;
+&lt;h2 id=&#34;环境配置&#34;&gt;环境配置&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Centos Linux realease 7.9.2009 三台（GPU节点），CentOS Linux release 7.7.1908 一台（Master节点）&lt;/li&gt;
+&lt;li&gt;内核：3.10.0-1062.18.1.el7.x86_64&lt;/li&gt;
+&lt;li&gt;Docker-ce：18.09.7&lt;/li&gt;
+&lt;li&gt;Kubernetes：1.16.15&lt;/li&gt;
+&lt;li&gt;Nvidia Driver： 460.32.03两台，510.47.03一台&lt;/li&gt;
+&lt;li&gt;Helm: 3.1.1&lt;/li&gt;
+&lt;li&gt;安装配置Nvidia-docker2， 集群可以使用&lt;strong&gt;nvidia.com/gpu&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;配置NFS，在集群中&lt;strong&gt;配置StorageClass&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;配置docker私有仓库&#34;&gt;配置docker私有仓库&lt;/h2&gt;
+&lt;p&gt;Adaptdl提供的安装方法&lt;a class=&#34;link&#34; href=&#34;https://adaptdl.readthedocs.io/en/latest/installation/install-adaptdl.html#install-the-adaptdl-helm-chart&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Installing the AdaptDL Scheduler — AdaptDL documentation&lt;/a&gt;里面提到， 使用&lt;code&gt;--set docker-registry.enabled=true&lt;/code&gt; 可以安装一个Docker Registry， 但是这是不安全的， 建议使用别的docker registry来替代， 在安装的时候将&lt;code&gt;--set docker-registry.enabled=true&lt;/code&gt; 省略掉。&lt;/p&gt;
+&lt;p&gt;我自己尝试使用adaptdl自带的registry结果在submit job的时候无法拉去到镜像， 试了很多别的方法， 发现没有效果， 只能自己搭建私有仓库来尝试解决， 万幸确实解决了。&lt;/p&gt;
+&lt;h3 id=&#34;在91节点上配置registry&#34;&gt;在[91]节点上配置registry&lt;/h3&gt;
+&lt;p&gt;拉取镜像&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;docker pull registr
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;搭建私有仓库&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;docker run -d --name registry -p 5000:5000 -v /opt/registry:/var/lib/registry   registry:latest
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;查看是否建成&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# ls  /opt/registry&lt;/span&gt;
+docker
+&lt;span class=&#34;c1&#34;&gt;# docker ps |grep registry&lt;/span&gt;
+4375a31c83e3 registry:latest  &lt;span class=&#34;s2&#34;&gt;&amp;#34;/entrypoint.sh /etc…&amp;#34;&lt;/span&gt;   &lt;span class=&#34;m&#34;&gt;44&lt;/span&gt; minutes ago Up &lt;span class=&#34;m&#34;&gt;44&lt;/span&gt; minutes 0.0.0.0:5000-&amp;gt;5000/tcp registry
+&lt;span class=&#34;c1&#34;&gt;# netstat  -antup | grep 5000&lt;/span&gt;
+tcp6  &lt;span class=&#34;m&#34;&gt;0&lt;/span&gt;   &lt;span class=&#34;m&#34;&gt;0&lt;/span&gt; :::5000  :::*   LISTEN  10552/docker-proxy 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;查看镜像列表， 你可以发现此刻仓库镜像为空&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# curl http://10.10.108.91:5000/v2/_catalog &lt;/span&gt;
+&lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;repositories&amp;#34;&lt;/span&gt;:&lt;span class=&#34;o&#34;&gt;[]}&lt;/span&gt; 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;在其他节点10-14-15上使用私有仓库&#34;&gt;在其他节点[10, 14, 15]上使用私有仓库&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;vim  /etc/docker/daemon.json   
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;修改daemon.json， 写入以下内容&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;quot;insecure-registries&amp;quot;: [ &amp;quot;10.10.108.91:5000&amp;quot; ],
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;之后重启docker&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;systemctl daemon-reload
+systemctl restart docker 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;从其他节点上上传镜像到仓库&#34;&gt;从其他节点上上传镜像到仓库&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;docker pull busybox
+docker tag busybox:latest 10.10.108.91:5000/busybox:latest
+docker push 10.10.108.91:5000/busybox:latest
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;先下载busybox， 改名之后再上传到私有仓库， 之后查看镜像列表， 发现私有仓库里多了busybox&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# curl http://10.10.108.91:5000/v2/_catalog &lt;/span&gt;
+&lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;repositories&amp;#34;&lt;/span&gt;:&lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;adaptdl-submit&amp;#34;&lt;/span&gt;,&lt;span class=&#34;s2&#34;&gt;&amp;#34;busybox&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;]}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;私有仓库配置成功&lt;/p&gt;
+&lt;h2 id=&#34;安装helm&#34;&gt;安装Helm&lt;/h2&gt;
+&lt;p&gt;建议下载helm3， 具体版本支持策略可以看&lt;a class=&#34;link&#34; href=&#34;https://helm.sh/zh/docs/topics/version_skew/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Helm | Helm版本支持策略&lt;/a&gt;， 安装方法参考&lt;a class=&#34;link&#34; href=&#34;https://helm.sh/zh/docs/intro/install/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Helm | 安装Helm&lt;/a&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;wget https://get.helm.sh/helm-v3.1.1-linux-amd64.tar.gz
+tar -zxvf helm-v3.1.1-linux-amd64.tar.gz
+mv linux-amd64/helm /usr/local/bin/helm
+
+&lt;span class=&#34;c1&#34;&gt;# 查看是否安装成功&lt;/span&gt;
+helm version
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;helm安装adaptdl&#34;&gt;Helm安装Adaptdl&lt;/h2&gt;
+&lt;h3 id=&#34;adaptdl官方提供的安装策略&#34;&gt;Adaptdl官方提供的安装策略&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;helm install adaptdl adaptdl-sched --repo https://github.com/petuum/adaptdl/raw/helm-repo --namespace adaptdl --create-namespace --set docker-registry.enabled=true
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;我执行这个命令， 出现了很多问题， 例如&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;获取https://github.com/petuum/adaptdl/raw/helm-repo 超时&lt;/li&gt;
+&lt;li&gt;无法识别&amp;ndash;create-namespace 参数&lt;/li&gt;
+&lt;li&gt;validator-webhook.yaml报错Invalid value: []string{&amp;ldquo;v1&amp;rdquo;}: must include at least one of v1beta1&lt;/li&gt;
+&lt;li&gt;安装成功后， 仓库拉取镜像超时&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;我的安装过程&#34;&gt;我的安装过程&lt;/h3&gt;
+&lt;p&gt;本地下载adpatdl-sched&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;wget https://raw.githubusercontent.com/petuum/adaptdl/helm-repo/adaptdl-sched-0.2.11.tgz
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;解包修改一点内容&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;tar -zxvf adaptdl-sched-0.2.11.tgz
+vim adaptdl-sched/templates/validator-webhook.yaml
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;将admissionReviewVersions由v1改为v1beta1&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;webhooks:
+  - name: &lt;span class=&#34;o&#34;&gt;{{&lt;/span&gt; .Release.Name &lt;span class=&#34;o&#34;&gt;}}&lt;/span&gt;-validator.&lt;span class=&#34;o&#34;&gt;{{&lt;/span&gt; .Release.Namespace &lt;span class=&#34;o&#34;&gt;}}&lt;/span&gt;.svc.cluster.local
+    clientConfig:
+      caBundle: &lt;span class=&#34;o&#34;&gt;{{&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;$cert&lt;/span&gt;.Cert &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; b64enc &lt;span class=&#34;o&#34;&gt;}}&lt;/span&gt;
+      service:
+        name: &lt;span class=&#34;o&#34;&gt;{{&lt;/span&gt; .Release.Name &lt;span class=&#34;o&#34;&gt;}}&lt;/span&gt;-validator
+        namespace: &lt;span class=&#34;o&#34;&gt;{{&lt;/span&gt; .Release.Namespace &lt;span class=&#34;o&#34;&gt;}}&lt;/span&gt;
+        path: &lt;span class=&#34;s2&#34;&gt;&amp;#34;/validate&amp;#34;&lt;/span&gt;
+    rules:
+      - operations: &lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;CREATE&amp;#34;&lt;/span&gt;, &lt;span class=&#34;s2&#34;&gt;&amp;#34;UPDATE&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt;
+        apiGroups: &lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;adaptdl.petuum.com&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt;
+        apiVersions: &lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;v1&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt;
+        resources: &lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;adaptdljobs&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt;
+    admissionReviewVersions:
+      - v1beta1
+    sideEffects: None
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;重新打包&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;helm package adaptdl-sched
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;创建namespace&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;kubectl create namespace adaptdl
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;安装adaptdl&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;helm install adaptdl adaptdl-sched-0.2.11.tgz --namespace adaptdl
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;使用私有仓库&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;nb&#34;&gt;export&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;ADAPTDL_SUBMIT_REPO&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;10.10.108.91:5000/adaptdl-submit
+&lt;span class=&#34;nb&#34;&gt;export&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;ADAPTDL_SUBMIT_REPO_CREDS&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;mysecret
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;查看效果&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# kubectl get pods -A &lt;/span&gt;
+NAMESPACE     NAME                                       READY   STATUS      RESTARTS   AGE
+adaptdl       adaptdl-adaptdl-sched-67c844b5b6-zpqk8     3/3     Running     &lt;span class=&#34;m&#34;&gt;0&lt;/span&gt;          56m
+adaptdl       adaptdl-validator-5f48976d4d-kr9cf         1/1     Running     &lt;span class=&#34;m&#34;&gt;0&lt;/span&gt;          56m
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;测试&#34;&gt;测试&lt;/h2&gt;
+&lt;h3 id=&#34;hello-world&#34;&gt;Hello-world&lt;/h3&gt;
+&lt;p&gt;这一部分参考&lt;a class=&#34;link&#34; href=&#34;https://adaptdl.readthedocs.io/en/latest/commandline/simple-job.html#writing-a-simple-program&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Submitting a Simple Job — AdaptDL documentation&lt;/a&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;mkdir hello_world
+cd hello_world
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id=&#34;创建文件&#34;&gt;创建文件&lt;/h4&gt;
+&lt;p&gt;一共要创建三个文件&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;hello_world.py&lt;/li&gt;
+&lt;li&gt;Dockerfile&lt;/li&gt;
+&lt;li&gt;adaptdljob.yaml&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;hello_world/hello_world.py&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span class=&#34;kn&#34;&gt;import&lt;/span&gt; &lt;span class=&#34;nn&#34;&gt;adaptdl.env&lt;/span&gt;
+&lt;span class=&#34;kn&#34;&gt;import&lt;/span&gt; &lt;span class=&#34;nn&#34;&gt;os&lt;/span&gt;
+&lt;span class=&#34;kn&#34;&gt;import&lt;/span&gt; &lt;span class=&#34;nn&#34;&gt;time&lt;/span&gt;
+
+&lt;span class=&#34;k&#34;&gt;print&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;Hello, world!&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+
+&lt;span class=&#34;k&#34;&gt;with&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;open&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;os&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;path&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;join&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;adaptdl&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;env&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;share_path&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(),&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;foo.txt&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;),&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;w&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;as&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;f&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;
+    &lt;span class=&#34;n&#34;&gt;f&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;write&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;Hello, world!&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+
+&lt;span class=&#34;n&#34;&gt;time&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;sleep&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;100&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;hello_world/Dockerfile&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-dockerfile&#34; data-lang=&#34;dockerfile&#34;&gt;&lt;span class=&#34;k&#34;&gt;FROM&lt;/span&gt;&lt;span class=&#34;s&#34;&gt; python:3.7-slim&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;RUN&lt;/span&gt; python3 -m pip install adaptdl&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;COPY&lt;/span&gt; hello_world.py /root/hello_world.py&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;ENV&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;PYTHONUNBUFFERED&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;true&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;hello_world/adaptdljob.yaml&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-yaml&#34; data-lang=&#34;yaml&#34;&gt;&lt;span class=&#34;nt&#34;&gt;apiVersion&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;l&#34;&gt;adaptdl.petuum.com/v1&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;kind&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;l&#34;&gt;AdaptDLJob&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;metadata&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;generateName&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;l&#34;&gt;hello-world-&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;spec&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;template&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;spec&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;      &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;containers&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;      &lt;/span&gt;- &lt;span class=&#34;nt&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;l&#34;&gt;main&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;        &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;command&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;        &lt;/span&gt;- &lt;span class=&#34;l&#34;&gt;python3&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;        &lt;/span&gt;- &lt;span class=&#34;l&#34;&gt;/root/hello_world.py&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h4 id=&#34;提交任务&#34;&gt;提交任务&lt;/h4&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;adaptdl submit hello_world/ --checkpoint-storage-class&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;course-nfs-storage
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;查看效果&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# kubectl get pods -A &lt;/span&gt;
+default hello-world-vbfp9-3f6dd75e-cf18-447a-a49a-3e1f39234b7a-0-0 1/1 Running &lt;span class=&#34;m&#34;&gt;0&lt;/span&gt;  6s
+&lt;span class=&#34;c1&#34;&gt;# adaptdl ls&lt;/span&gt;
+Name                Status     Start&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;UTC&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;    Runtime  Rplc  Rtrt    
+hello-world-vbfp9   Running    Jan-10 07:29  &lt;span class=&#34;m&#34;&gt;0&lt;/span&gt; min    &lt;span class=&#34;m&#34;&gt;1&lt;/span&gt;     &lt;span class=&#34;m&#34;&gt;0&lt;/span&gt;
+&lt;span class=&#34;c1&#34;&gt;# kubectl logs hello-world-6r2h6-57779eff-089b-47d9-ab44-fb23d7433518-0-0 &lt;/span&gt;
+Hello, world!
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;bert&#34;&gt;BERT&lt;/h3&gt;
+&lt;p&gt;这部分的代码在adaptdl/examples/BERT中&lt;/p&gt;
+&lt;p&gt;docker build的时候， 只能读取与Dockerfile同目录以下的内容， 目录外的内容无法使用， 所以你可能要对Dockerfile做一下修改， 然后将adaptdl的源码文件复制一份到BERT/目录下， 然后&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;adaptdl submit examples/BERT/ --checkpoint-storage-class=course-nfs-storage
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;查看运行状态，以及输出&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# kubectl logs mlm-task-bnqxw-390a44d3-ca34-4cb9-9ea7-091b1d4ec4db-0-0&lt;/span&gt;
+INFO:root:Downloading file wikitext-2-v1.zip to .data/wikitext-2-v1.zip.
+wikitext-2-v1.zip: 100%&lt;span class=&#34;p&#34;&gt;|&lt;/span&gt;██████████&lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; 4.48M/4.48M &lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;00:05&amp;lt;00:00, 811kB/s&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt; 
+INFO:root:File .data/wikitext-2-v1.zip downloaded.
+INFO:root:Opening zip file .data/wikitext-2-v1.zip.
+INFO:root:Creating train data
+INFO:root:Creating &lt;span class=&#34;nb&#34;&gt;test&lt;/span&gt; data
+INFO:root:Creating valid data
+1lines &lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;00:00,  3.76lines/s&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt;
+INFO:root:File .data/wikitext-2-v1.zip already exists.
+INFO:root:Opening zip file .data/wikitext-2-v1.zip.
+INFO:root:.data/wikitext-2/ already extracted.
+INFO:root:.data/wikitext-2/wiki.test.tokens already extracted.
+INFO:root:.data/wikitext-2/wiki.valid.tokens already extracted.
+INFO:root:.data/wikitext-2/wiki.train.tokens already extracted.
+INFO:root:Creating train data
+INFO:root:Creating &lt;span class=&#34;nb&#34;&gt;test&lt;/span&gt; data
+INFO:root:Creating valid data
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;问题&#34;&gt;问题&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Error: No Docker registry could be found!&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;nb&#34;&gt;export&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;ADAPTDL_SUBMIT_REPO&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;10.10.108.91:5000/adaptdl-submit
+&lt;span class=&#34;nb&#34;&gt;export&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;ADAPTDL_SUBMIT_REPO_CREDS&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;mysecret
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;解决：记得在Master节点上设置仓库的环境变量&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Unsupported storageclass from available storageclasses []&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;a href=&#34;https://github.com/petuum/adaptdl/issues/112#issue-1115791420&#34;&gt;https://github.com/petuum/adaptdl/issues/112#issue-1115791420&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;解决：配置StorageClass， 在提交job的时候指定&lt;code&gt;--checkpoint-storage-class=...&lt;/code&gt;&lt;/p&gt;
+&lt;h2 id=&#34;参考链接&#34;&gt;参考链接&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://adaptdl.readthedocs.io/en/latest/installation/install-adaptdl.html#install-the-adaptdl-helm-chart&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Installing the AdaptDL Scheduler — AdaptDL documentation&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://adaptdl.readthedocs.io/en/latest/commandline/simple-job.html#writing-a-simple-program&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Submitting a Simple Job — AdaptDL documentation&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://zhuanlan.zhihu.com/p/400598575&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;docker私有镜像仓库的配置和使用 - 知乎 (zhihu.com)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://adaptdl.readthedocs.io/_/downloads/en/latest/pdf/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;AdaptDL&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://github.com/petuum/adaptdl/issues/112&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;hello_world can not run · Issue #112 · petuum/adaptdl (github.com)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://helm.sh/zh/docs/topics/version_skew/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Helm | Helm版本支持策略&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://helm.sh/zh/docs/intro/install/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Helm | 安装Helm&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://adaptdl.readthedocs.io/en/latest/commandline/simple-job.html#writing-a-simple-program&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Submitting a Simple Job — AdaptDL documentation&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+</description>
+        </item>
+        <item>
         <title>【Kubernetes】如何让kubernetes集群使用GPU</title>
         <link>https://tweakzx.github.io/p/kubernetes%E5%A6%82%E4%BD%95%E8%AE%A9kubernetes%E9%9B%86%E7%BE%A4%E4%BD%BF%E7%94%A8gpu/</link>
         <pubDate>Mon, 09 Jan 2023 20:06:52 +0800</pubDate>
