@@ -3,6 +3,16 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://tweakzx.github.io/categories/</loc>
+    <lastmod>2023-01-10T11:24:28+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tweakzx.github.io/categories/kubernetes/</loc>
+    <lastmod>2023-01-10T11:24:28+08:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://tweakzx.github.io/post/</loc>
     <lastmod>2023-01-10T11:24:28+08:00</lastmod>
   </url>
@@ -23,22 +33,12 @@
   </url>
   
   <url>
-    <loc>https://tweakzx.github.io/categories/</loc>
-    <lastmod>2023-01-09T20:06:52+08:00</lastmod>
-  </url>
-  
-  <url>
     <loc>https://tweakzx.github.io/tags/gpu/</loc>
     <lastmod>2023-01-09T20:06:52+08:00</lastmod>
   </url>
   
   <url>
     <loc>https://tweakzx.github.io/tags/gpu-%E9%9B%86%E7%BE%A4/</loc>
-    <lastmod>2023-01-09T20:06:52+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://tweakzx.github.io/categories/kubernetes/</loc>
     <lastmod>2023-01-09T20:06:52+08:00</lastmod>
   </url>
   
@@ -175,11 +175,6 @@
   <url>
     <loc>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0gaiagpu%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</loc>
     <lastmod>2022-08-26T17:20:32+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://tweakzx.github.io/categories/k8s/</loc>
-    <lastmod>2022-06-13T14:57:42+08:00</lastmod>
   </url>
   
   <url>
