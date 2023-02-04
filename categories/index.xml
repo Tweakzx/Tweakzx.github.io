@@ -6,7 +6,16 @@
     <description>Recent content in Categories on Tweakzx</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 10 Jan 2023 11:24:28 +0800</lastBuildDate><atom:link href="https://tweakzx.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 04 Feb 2023 15:07:34 +0800</lastBuildDate><atom:link href="https://tweakzx.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Obsidian</title>
+      <link>https://tweakzx.github.io/categories/obsidian/</link>
+      <pubDate>Sat, 04 Feb 2023 15:07:34 +0800</pubDate>
+      
+      <guid>https://tweakzx.github.io/categories/obsidian/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>kubernetes</title>
       <link>https://tweakzx.github.io/categories/kubernetes/</link>

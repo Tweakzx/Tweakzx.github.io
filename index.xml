@@ -6,7 +6,108 @@
         <description>Recent content on Tweakzx</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Tue, 10 Jan 2023 11:24:28 +0800</lastBuildDate><atom:link href="https://tweakzx.github.io/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Sat, 04 Feb 2023 15:07:34 +0800</lastBuildDate><atom:link href="https://tweakzx.github.io/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>【Obsidian】win&#43;ipad&#43;andriod利用坚果云三端同步</title>
+        <link>https://tweakzx.github.io/p/obsidianwin-ipad-andriod%E5%88%A9%E7%94%A8%E5%9D%9A%E6%9E%9C%E4%BA%91%E4%B8%89%E7%AB%AF%E5%90%8C%E6%AD%A5/</link>
+        <pubDate>Sat, 04 Feb 2023 15:07:34 +0800</pubDate>
+        
+        <guid>https://tweakzx.github.io/p/obsidianwin-ipad-andriod%E5%88%A9%E7%94%A8%E5%9D%9A%E6%9E%9C%E4%BA%91%E4%B8%89%E7%AB%AF%E5%90%8C%E6%AD%A5/</guid>
+        <description>&lt;img src="https://obsidian.md/images/screenshot-1.0-hero-combo.png" alt="Featured image of post 【Obsidian】win&#43;ipad&#43;andriod利用坚果云三端同步" /&gt;&lt;h1 id=&#34;利用坚果云实现obsidian的多端同步&#34;&gt;利用坚果云实现Obsidian的多端同步&lt;/h1&gt;
+&lt;h2 id=&#34;win端下载插件remotely-save&#34;&gt;win端下载插件Remotely Save&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;启用obsidian的第三方插件&lt;/li&gt;
+&lt;li&gt;浏览社区插件市场并安装Remotely Save&lt;/li&gt;
+&lt;li&gt;安装完成后如图所示&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;figure 
+	&gt;
+	&lt;a href=&#34;https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202302041515869.png&#34; &gt;
+		&lt;img src=&#34;https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202302041515869.png&#34;
+			
+			
+			
+			loading=&#34;lazy&#34;
+			alt=&#34;image-20230204151516303&#34;&gt;
+	&lt;/a&gt;
+	
+	&lt;figcaption&gt;image-20230204151516303&lt;/figcaption&gt;
+	
+&lt;/figure&gt;&lt;/p&gt;
+&lt;h2 id=&#34;注册坚果云&#34;&gt;注册坚果云&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;进入账户信息-&amp;gt;安全选项-&amp;gt;第三方应用管理&lt;/li&gt;
+&lt;li&gt;点击添加应用，配置名称生成密码，名称自己设置，可以是Obsidian等等&lt;/li&gt;
+&lt;li&gt;记得复制生成的密码&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;win端同步设置&#34;&gt;win端同步设置&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;打开Remotely Save的设置页面&lt;/li&gt;
+&lt;li&gt;选择远程服务 Webdav&lt;/li&gt;
+&lt;li&gt;填写
+&lt;ul&gt;
+&lt;li&gt;坚果云的服务器地址：https://dav.jianguoyun.com/dav/&lt;/li&gt;
+&lt;li&gt;自己的账户名&lt;/li&gt;
+&lt;li&gt;刚刚生成的密码&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;检查可否连接&lt;/li&gt;
+&lt;li&gt;重启插件生效&lt;/li&gt;
+&lt;li&gt;单击侧边栏的↺同步文件&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;figure 
+	&gt;
+	&lt;a href=&#34;https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202302041521784.png&#34; &gt;
+		&lt;img src=&#34;https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202302041521784.png&#34;
+			
+			
+			
+			loading=&#34;lazy&#34;
+			alt=&#34;image-20230204152135645&#34;&gt;
+	&lt;/a&gt;
+	
+	&lt;figcaption&gt;image-20230204152135645&lt;/figcaption&gt;
+	
+&lt;/figure&gt;&lt;/p&gt;
+&lt;h2 id=&#34;ipad端与android端同步设置&#34;&gt;ipad端与Android端同步设置&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;创建与win端的同步仓库&lt;strong&gt;同名&lt;/strong&gt;的仓库&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;进入设置安装Remotely Save插件&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;打开电脑端设置-&amp;gt;第三方插件-&amp;gt;Remotely Save-&amp;gt;导入导出部分设置&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;在导出侧边点击生成QR code&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;打开ipad的相机 / Android手机的扫一扫功能&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;扫描这个QRcode导入配置信息即可&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;自定义设置以及其他&#34;&gt;自定义设置以及其他&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;建议打开ipad和安装端的启动后同步
+&lt;ul&gt;
+&lt;li&gt;步骤：基本设置-&amp;gt;启动后运行一次-&amp;gt;启动后第1s运行一次&lt;/li&gt;
+&lt;li&gt;我个人电脑端为主要进行读写操作，其他端为读操作&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;可以打开同步配置文件夹
+&lt;ul&gt;
+&lt;li&gt;步骤：进阶设置-&amp;gt;同步配置文件夹-&amp;gt;打开&lt;/li&gt;
+&lt;li&gt;打开后会同步.obsidian文件夹，Obsidian的设置也会在各个平台同步，不过我觉得没有必要&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;安卓端扫码比较费劲， 但是多试几次也可以成功&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        <item>
         <title>【Kubernetes】在k8s集群中挂载基于NFS的StorageClass</title>
         <link>https://tweakzx.github.io/p/kubernetes%E5%9C%A8k8s%E9%9B%86%E7%BE%A4%E4%B8%AD%E6%8C%82%E8%BD%BD%E5%9F%BA%E4%BA%8Enfs%E7%9A%84storageclass/</link>
         <pubDate>Tue, 10 Jan 2023 11:24:28 +0800</pubDate>

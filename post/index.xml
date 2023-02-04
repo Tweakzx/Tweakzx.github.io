@@ -6,7 +6,16 @@
     <description>Recent content in Posts on Tweakzx</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 10 Jan 2023 11:24:28 +0800</lastBuildDate><atom:link href="https://tweakzx.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 04 Feb 2023 15:07:34 +0800</lastBuildDate><atom:link href="https://tweakzx.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>【Obsidian】win&#43;ipad&#43;andriod利用坚果云三端同步</title>
+      <link>https://tweakzx.github.io/p/obsidianwin-ipad-andriod%E5%88%A9%E7%94%A8%E5%9D%9A%E6%9E%9C%E4%BA%91%E4%B8%89%E7%AB%AF%E5%90%8C%E6%AD%A5/</link>
+      <pubDate>Sat, 04 Feb 2023 15:07:34 +0800</pubDate>
+      
+      <guid>https://tweakzx.github.io/p/obsidianwin-ipad-andriod%E5%88%A9%E7%94%A8%E5%9D%9A%E6%9E%9C%E4%BA%91%E4%B8%89%E7%AB%AF%E5%90%8C%E6%AD%A5/</guid>
+      <description>利用坚果云实现Obsidian的多端同步 win端下载插件Remotely Save 启用obsidian的第三方插件 浏览社区插件市场并安装Remote</description>
+    </item>
+    
     <item>
       <title>【Kubernetes】在k8s集群中挂载基于NFS的StorageClass</title>
       <link>https://tweakzx.github.io/p/kubernetes%E5%9C%A8k8s%E9%9B%86%E7%BE%A4%E4%B8%AD%E6%8C%82%E8%BD%BD%E5%9F%BA%E4%BA%8Enfs%E7%9A%84storageclass/</link>
