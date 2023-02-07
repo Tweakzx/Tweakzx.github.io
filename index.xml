@@ -159,7 +159,7 @@ rm ./config.toml
 &lt;h2 id=&#34;撰写博客的流程&#34;&gt;撰写博客的流程&lt;/h2&gt;
 &lt;h3 id=&#34;创建博文&#34;&gt;创建博文&lt;/h3&gt;
 &lt;p&gt;我个人的博客创建时会用【】框住主题， 然后起名，这样方便我分类并查找。&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;hugo new ./content/post/【主题】博文提名.md
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;hugo new ./content/post/【主题】博文题目.md
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;编辑博文&#34;&gt;编辑博文&lt;/h3&gt;
 &lt;p&gt;使用Typora编辑刚刚创建的md文档， 在顶端设置好配置信息， 例如作者， 头图等等。&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-yaml&#34; data-lang=&#34;yaml&#34;&gt;&lt;span class=&#34;nt&#34;&gt;title&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;【博客】Hugo+Typora+PicGO+Github搭建个人博客&amp;#34;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
@@ -184,7 +184,16 @@ hugo
 git add .
 git commit -m &lt;span class=&#34;s2&#34;&gt;&amp;#34;updatde-blog-post&amp;#34;&lt;/span&gt;
 git push origin master:master
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;picgo图床的搭建&#34;&gt;picgo图床的搭建&lt;/h2&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;个人技巧&#34;&gt;个人技巧&lt;/h3&gt;
+&lt;p&gt;我会在./content文件下另外创建两个文件夹， 一个todo， 一个doing。todo文件只有题目， 是打算写的文章； doing是写了一半的文章&lt;/p&gt;
+&lt;p&gt;当我开始写文章时&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;如果只是打算写但是现在不想写， 我会创建到todo文件夹&lt;/li&gt;
+&lt;li&gt;如果马上就要开始写，我会创建到doing文件夹&lt;/li&gt;
+&lt;li&gt;开始写todo的文章时我会把该文章移入doing文件夹&lt;/li&gt;
+&lt;li&gt;如果大体上已经写完，可以发布，日后只需要一些简单的编辑的话，我会放入post文件夹&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;picgo图床的搭建&#34;&gt;picgo图床的搭建&lt;/h2&gt;
 &lt;p&gt;我选择使用github作为图床， 方便简单， 就是不好访问。&lt;/p&gt;
 &lt;p&gt;可能之后会转向七牛云， 不过七牛云需要一个固定的域名， 如果没有的话就比较麻烦了。&lt;/p&gt;
 &lt;h3 id=&#34;创建github仓库&#34;&gt;创建github仓库&lt;/h3&gt;
