@@ -6,7 +6,233 @@
         <description>Recent content on Tweakzx</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Sat, 04 Feb 2023 15:07:34 +0800</lastBuildDate><atom:link href="https://tweakzx.github.io/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Tue, 07 Feb 2023 10:57:40 +0800</lastBuildDate><atom:link href="https://tweakzx.github.io/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>【博客】Hugo&#43;Typora&#43;PicGO&#43;Github搭建个人博客</title>
+        <link>https://tweakzx.github.io/p/%E5%8D%9A%E5%AE%A2hugo-typora-picgo-github%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/</link>
+        <pubDate>Tue, 07 Feb 2023 10:57:40 +0800</pubDate>
+        
+        <guid>https://tweakzx.github.io/p/%E5%8D%9A%E5%AE%A2hugo-typora-picgo-github%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/</guid>
+        <description>&lt;img src="https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202302071614641.png" alt="Featured image of post 【博客】Hugo&#43;Typora&#43;PicGO&#43;Github搭建个人博客" /&gt;&lt;h1 id=&#34;hugotyporapicgogithub搭建个人博客&#34;&gt;Hugo+Typora+PicGO+Github搭建个人博客&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;我之前使用过typecho来搭建个人博客，由于是搭建在服务器上，我需要使用宝塔linux来完成各种配置，花花绿绿的各种环境让我对搭建博客多少有些累觉不爱&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;不过随着我阿里云服务器的到期，我决定趁机使用github托管我的个人网站，但是我不想麻烦区配置各种后端环境， 所以选择使用hugo。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;与其说我精挑细选了一种博客框架，倒不如说我的目的只是想要快速搭一个博客出来，技术的选型其实并没有花太多心思。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;你现在看到的博客使用到的工具链是：Hugo+Typora+PicGO+Github，它们分别的功能是&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;hugo: 编译静态网站&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;typora：编写博客内容&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;picgo：配合github搭建图床， 与typora联动上传博客中的图片&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;github：一方面网站需要使用到github提供的pages功能， 另一方面我也使用了github作为图床&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;下面是搭建这个博客的一些步骤， 记录下来一方面方便他人参考，另一方面如果我要重新搭建博客也方便我自己参考。&lt;/p&gt;
+&lt;p&gt;搭建前的一些环境配置&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;系统： windows&lt;/li&gt;
+&lt;li&gt;包管理器：scoop （非必须）&lt;/li&gt;
+&lt;li&gt;版本控制：git&lt;/li&gt;
+&lt;li&gt;markdown编辑器：Typora&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;github创建项目&#34;&gt;github创建项目&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;打开github新建一个库&lt;/li&gt;
+&lt;li&gt;建议项目名与github用户名保持一致，比如我的是 tweakzx，那么输入的 Repository name 就是 tweakzx.github.io&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;hugo创建站点&#34;&gt;hugo创建站点&lt;/h2&gt;
+&lt;h3 id=&#34;hugo-安装&#34;&gt;hugo 安装&lt;/h3&gt;
+&lt;p&gt;参看官方的安装教程&lt;a class=&#34;link&#34; href=&#34;https://gohugo.io/installation/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Installation | Hugo (gohugo.io)&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;我使用的系统是Windows的，我推荐以下两种安装方式&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Chocolatey (Windows)&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;如果使用 Windows 并且使用 Chocolatey 作为包管理器，可以使用如下一行代码来安装 Hugo ：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;choco install hugo -confirm
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;如果想要使用支持 Sass/SCSS 的扩展版Hugo的话，可以使用如下命令：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;choco install hugo-extended -confirm
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;strong&gt;Scoop (Windows)&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;如果使用 Windows 并且使用 Scoop 作为包管理器，可以使用如下一行代码来安装 Hugo ：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;scoop install hugo
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;如果想要使用支持 Sass/SCSS 的扩展版Hugo的话，可以使用如下命令：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;scoop install hugo-extended
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;hugo-生成站点&#34;&gt;hugo 生成站点&lt;/h3&gt;
+&lt;p&gt;创建一个用于存放网站文件的文件夹， 进入到这个文件夹，使用命令创建网站， 自定义一个站点名称&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;hugo new site &amp;lt;BLOG NAME&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;创建成功会看到官方的指导流程&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;Congratulations! Your new Hugo site is created in D:&lt;span class=&#34;se&#34;&gt;\s&lt;/span&gt;oftware&lt;span class=&#34;se&#34;&gt;\S&lt;/span&gt;coop&lt;span class=&#34;se&#34;&gt;\a&lt;/span&gt;pps&lt;span class=&#34;se&#34;&gt;\h&lt;/span&gt;ugo-extended&lt;span class=&#34;se&#34;&gt;\t&lt;/span&gt;est.
+
+Just a few more steps and you&lt;span class=&#34;err&#34;&gt;&amp;#39;&lt;/span&gt;re ready to go:
+
+1. Download a theme into the same-named folder.
+   Choose a theme from https://themes.gohugo.io/ or
+   create your own with the &lt;span class=&#34;s2&#34;&gt;&amp;#34;hugo new theme &amp;lt;THEMENAME&amp;gt;&amp;#34;&lt;/span&gt; command.
+2. Perhaps you want to add some content. You can add single files
+   with &lt;span class=&#34;s2&#34;&gt;&amp;#34;hugo new &amp;lt;SECTIONNAME&amp;gt;\&amp;lt;FILENAME&amp;gt;.&amp;lt;FORMAT&amp;gt;&amp;#34;&lt;/span&gt;.
+3. Start the built-in live server via &lt;span class=&#34;s2&#34;&gt;&amp;#34;hugo server&amp;#34;&lt;/span&gt;.
+
+Visit https://gohugo.io/ &lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; quickstart guide and full documentation.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;然后你会在该位置发现一个站点名称命名的文件夹，进入这个文件夹&lt;/p&gt;
+&lt;h3 id=&#34;hugo-主题&#34;&gt;hugo 主题&lt;/h3&gt;
+&lt;p&gt;我选择的是Stack主题，当然你可以去官网或者github选择你喜欢的主题&lt;a class=&#34;link&#34; href=&#34;https://themes.gohugo.io/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Complete List | Hugo Themes (gohugo.io)&lt;/a&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span class=&#34;nb&#34;&gt;cd&lt;/span&gt; &amp;lt;BLOG NAME&amp;gt;
+git clone https://github.com/CaiJimmy/hugo-theme-stack.git ./themes/hugo-theme-stack
+
+&lt;span class=&#34;c1&#34;&gt;## 复制stack的配置, 并删除原本的config.toml&lt;/span&gt;
+cp -rf themes/hugo-theme-stack/exampleSite/config.yaml ./
+rm ./config.toml
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;编辑config.yaml， 注意修改baseurl， 其他配置自定义修改吧&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-yaml&#34; data-lang=&#34;yaml&#34;&gt;&lt;span class=&#34;nt&#34;&gt;baseurl&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;  &lt;/span&gt;&lt;span class=&#34;l&#34;&gt;https://tweakzx.github.io/&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;languageCode&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;l&#34;&gt;zh-cn&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;theme&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;l&#34;&gt;hugo-theme-stack&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;paginate&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;m&#34;&gt;5&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;title&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;l&#34;&gt;Tweakzx&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;nn&#34;&gt;...&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;上传github的方式&#34;&gt;上传Github的方式&lt;/h3&gt;
+&lt;p&gt;其实这里分为两种编译方式&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;在线编译：上传整个站点文件，在线编译生成html静态文件，&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;本地编译：本地编译，直接上传静态文件&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;在线编译的方式需要在Github Action里找到Hugo 编译的 Action模板直接用就可以了&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;我选择了使用本地编译然后上传静态文件的方式， 主要原因是当时不太懂，瞎搞的， 于是顺其自然了， 要是能重来， 我要选在线编译。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;本地编译上传静态文件也是有好处的&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;本地编译成功的东西部署之后可以立刻看到， 不用等github服务器慢吞吞的编译，&lt;/li&gt;
+&lt;li&gt;如果本地成功编译预览没有问题，部署后看到的肯定也没有问题， 如果自己做了一些自定义的设置， 可能在GIthub端可能就不一样，甚至无法正常编译&lt;/li&gt;
+&lt;li&gt;而且自己的配置信息可以不用被别人看到， 如果有一些敏感信息也比较安全&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;github-action的配置&#34;&gt;Github Action的配置&lt;/h2&gt;
+&lt;p&gt;进入Github 仓库， 点击Settings-&amp;gt;Code and automations-&amp;gt;Pages&lt;/p&gt;
+&lt;p&gt;可以看到有个Static HTML的workflow， 点击配置&lt;/p&gt;
+&lt;p&gt;&lt;figure 
+	&gt;
+	&lt;a href=&#34;https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202302071559176.png&#34; &gt;
+		&lt;img src=&#34;https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202302071559176.png&#34;
+			
+			
+			
+			loading=&#34;lazy&#34;
+			alt=&#34;image-20230207155747151&#34;&gt;
+	&lt;/a&gt;
+	
+	&lt;figcaption&gt;image-20230207155747151&lt;/figcaption&gt;
+	
+&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;完成之后就可以在上方看到一个网址， 点击访问就可以看到网站部署成功。&lt;/p&gt;
+&lt;p&gt;&lt;figure 
+	&gt;
+	&lt;a href=&#34;https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202302071559078.png&#34; &gt;
+		&lt;img src=&#34;https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202302071559078.png&#34;
+			
+			
+			
+			loading=&#34;lazy&#34;
+			alt=&#34;image-20230207155914140&#34;&gt;
+	&lt;/a&gt;
+	
+	&lt;figcaption&gt;image-20230207155914140&lt;/figcaption&gt;
+	
+&lt;/figure&gt;&lt;/p&gt;
+&lt;h2 id=&#34;撰写博客的流程&#34;&gt;撰写博客的流程&lt;/h2&gt;
+&lt;h3 id=&#34;创建博文&#34;&gt;创建博文&lt;/h3&gt;
+&lt;p&gt;我个人的博客创建时会用【】框住主题， 然后起名，这样方便我分类并查找。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;hugo new ./content/post/【主题】博文提名.md
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;编辑博文&#34;&gt;编辑博文&lt;/h3&gt;
+&lt;p&gt;使用Typora编辑刚刚创建的md文档， 在顶端设置好配置信息， 例如作者， 头图等等。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-yaml&#34; data-lang=&#34;yaml&#34;&gt;&lt;span class=&#34;nt&#34;&gt;title&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;【博客】Hugo+Typora+PicGO+Github搭建个人博客&amp;#34;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;author&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;Tweakzx&amp;#34;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;date&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;ld&#34;&gt;2022-08-23T10:57:40&lt;/span&gt;&lt;span class=&#34;m&#34;&gt;+08&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;m&#34;&gt;00&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;description&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; 
+&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;categories&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; 
+&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;tags&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; 
+&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;image&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; 
+&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;draft&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;kc&#34;&gt;true&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;本地预览&#34;&gt;本地预览&lt;/h3&gt;
+&lt;p&gt;本地编辑完成后， 或者完成过程中， 可以预览效果， 将&lt;code&gt;draft:true&lt;/code&gt;改为&lt;code&gt;false&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;然后在网站根目录运行&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;hugo server
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;单击&lt;code&gt;http://localhost:1313/&lt;/code&gt;,  即可本地预览。&lt;/p&gt;
+&lt;h3 id=&#34;上传github&#34;&gt;上传Github&lt;/h3&gt;
+&lt;p&gt;为了实现一键更新博客， 需要写一个bat脚本， 但是如果你想要使用&lt;strong&gt;手动更新&lt;/strong&gt;的话， 这一步可以不用做&lt;/p&gt;
+&lt;p&gt;新建并编辑upload.bat 文件， 双击上传&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span class=&#34;nb&#34;&gt;cd&lt;/span&gt; &amp;lt;网站根目录路径&amp;gt;
+hugo
+&lt;span class=&#34;nb&#34;&gt;cd&lt;/span&gt; public
+git add .
+git commit -m &lt;span class=&#34;s2&#34;&gt;&amp;#34;updatde-blog-post&amp;#34;&lt;/span&gt;
+git push origin master:master
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;picgo图床的搭建&#34;&gt;picgo图床的搭建&lt;/h2&gt;
+&lt;p&gt;我选择使用github作为图床， 方便简单， 就是不好访问。&lt;/p&gt;
+&lt;p&gt;可能之后会转向七牛云， 不过七牛云需要一个固定的域名， 如果没有的话就比较麻烦了。&lt;/p&gt;
+&lt;h3 id=&#34;创建github仓库&#34;&gt;创建github仓库&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;创建一个github仓库， 必须是public&lt;/li&gt;
+&lt;li&gt;在个人设置里Settings-&amp;gt;Developer settings生成一个token，repo要打勾， 不过具体的权限与时间自行斟酌吧。&lt;/li&gt;
+&lt;li&gt;复制这个token&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;安装并配置picgo&#34;&gt;安装并配置Picgo&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;下载安装&lt;a class=&#34;link&#34; href=&#34;https://picgo.github.io/PicGo-Doc/zh/guide/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;PicGo is Here | PicGo&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;配置picgo
+&lt;ul&gt;
+&lt;li&gt;仓库名：刚刚创建的仓库名&lt;/li&gt;
+&lt;li&gt;分支名：注意是main还是master&lt;/li&gt;
+&lt;li&gt;Token：刚刚生成的token&lt;/li&gt;
+&lt;li&gt;存储路径， 如果有路径&lt;/li&gt;
+&lt;li&gt;配置CDN： 使用 &lt;a href=&#34;https://cdn.jsdelivr.net/gh/&#34;&gt;https://cdn.jsdelivr.net/gh/&lt;/a&gt; 用户名/仓库名@main 即可&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;配置giscus评论区&#34;&gt;配置giscus评论区&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;在giscus官网，输入自定义配置，生成相关配置ID &lt;a class=&#34;link&#34; href=&#34;https://giscus.app/zh-CN&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;giscus&lt;/a&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;生成repoID&lt;/li&gt;
+&lt;li&gt;生成categoryID&lt;/li&gt;
+&lt;li&gt;选择合适的主题&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;修改config.yaml即可&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code&gt;giscus:
+	repo: &amp;quot;Tweakzx/Tweakzx.github.io&amp;quot;
+	repoID: &amp;quot;&amp;quot;
+	category: &amp;quot;Announcements&amp;quot;
+	categoryID: &amp;quot;&amp;quot;
+	mapping: &amp;quot;title&amp;quot;
+	lightTheme: &amp;quot;light_tritanopia&amp;quot;
+	emitMetadata: 0
+&lt;/code&gt;&lt;/pre&gt;</description>
+        </item>
+        <item>
         <title>【Obsidian】win&#43;ipad&#43;andriod利用坚果云三端同步</title>
         <link>https://tweakzx.github.io/p/obsidianwin-ipad-andriod%E5%88%A9%E7%94%A8%E5%9D%9A%E6%9E%9C%E4%BA%91%E4%B8%89%E7%AB%AF%E5%90%8C%E6%AD%A5/</link>
         <pubDate>Sat, 04 Feb 2023 15:07:34 +0800</pubDate>
