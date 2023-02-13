@@ -92,7 +92,7 @@ Visit https://gohugo.io/ &lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; quicksta
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span class=&#34;nb&#34;&gt;cd&lt;/span&gt; &amp;lt;BLOG NAME&amp;gt;
 git clone https://github.com/CaiJimmy/hugo-theme-stack.git ./themes/hugo-theme-stack
 
-&lt;span class=&#34;c1&#34;&gt;## 复制stack的配置, 并删除原本的config.toml&lt;/span&gt;
+&lt;span class=&#34;c1&#34;&gt;## 复制stack的exampleSite下的配置, 并删除原本的config.toml&lt;/span&gt;
 cp -rf themes/hugo-theme-stack/exampleSite/config.yaml ./
 rm ./config.toml
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;编辑config.yaml， 注意修改baseurl， 其他配置自定义修改吧&lt;/p&gt;
@@ -111,7 +111,7 @@ rm ./config.toml
 &lt;p&gt;在线编译：上传整个站点文件，在线编译生成html静态文件，&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;本地编译：本地编译，直接上传静态文件&lt;/p&gt;
+&lt;p&gt;本地编译：本地编译，直接上传静态文件， 也就是public 文件夹&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;在线编译的方式需要在Github Action里找到Hugo 编译的 Action模板直接用就可以了&lt;/p&gt;
@@ -120,10 +120,14 @@ rm ./config.toml
 &lt;/blockquote&gt;
 &lt;p&gt;本地编译上传静态文件也是有好处的&lt;/p&gt;
 &lt;ul&gt;
+&lt;li&gt;配置简单， 无需复杂操作&lt;/li&gt;
 &lt;li&gt;本地编译成功的东西部署之后可以立刻看到， 不用等github服务器慢吞吞的编译，&lt;/li&gt;
 &lt;li&gt;如果本地成功编译预览没有问题，部署后看到的肯定也没有问题， 如果自己做了一些自定义的设置， 可能在GIthub端可能就不一样，甚至无法正常编译&lt;/li&gt;
 &lt;li&gt;而且自己的配置信息可以不用被别人看到， 如果有一些敏感信息也比较安全&lt;/li&gt;
 &lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;注意，一定要上传到仓库的default分支才可以，default分支一般是main分支， 我创建的比较早所以是master。&lt;/p&gt;
+&lt;/blockquote&gt;
 &lt;h2 id=&#34;github-action的配置&#34;&gt;Github Action的配置&lt;/h2&gt;
 &lt;p&gt;进入Github 仓库， 点击Settings-&amp;gt;Code and automations-&amp;gt;Pages&lt;/p&gt;
 &lt;p&gt;可以看到有个Static HTML的workflow， 点击配置&lt;/p&gt;
@@ -8861,6 +8865,166 @@ in process p:
 &lt;li&gt;打算把自己的学习总结下来，于是也有了这篇博客，希望自己可以坚持写博客，说实话，面试完压力挺大，感觉自己就是一个无敌铁废物，写博客写出来感觉好一些了。&lt;/li&gt;
 &lt;/ul&gt;
 </description>
+        </item>
+        <item>
+        <title>Docker</title>
+        <link>https://tweakzx.github.io/p/docker/</link>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        
+        <guid>https://tweakzx.github.io/p/docker/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Docker</title>
+        <link>https://tweakzx.github.io/p/docker/</link>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        
+        <guid>https://tweakzx.github.io/p/docker/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Golang</title>
+        <link>https://tweakzx.github.io/p/golang/</link>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        
+        <guid>https://tweakzx.github.io/p/golang/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Golang</title>
+        <link>https://tweakzx.github.io/p/golang/</link>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        
+        <guid>https://tweakzx.github.io/p/golang/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Kubernetes</title>
+        <link>https://tweakzx.github.io/p/kubernetes/</link>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        
+        <guid>https://tweakzx.github.io/p/kubernetes/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Kubernetes</title>
+        <link>https://tweakzx.github.io/p/kubernetes/</link>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        
+        <guid>https://tweakzx.github.io/p/kubernetes/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Obsidian</title>
+        <link>https://tweakzx.github.io/p/obsidian/</link>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        
+        <guid>https://tweakzx.github.io/p/obsidian/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Obsidian</title>
+        <link>https://tweakzx.github.io/p/obsidian/</link>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        
+        <guid>https://tweakzx.github.io/p/obsidian/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>代码分析</title>
+        <link>https://tweakzx.github.io/p/%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90/</link>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        
+        <guid>https://tweakzx.github.io/p/%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>代码分析</title>
+        <link>https://tweakzx.github.io/p/%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90/</link>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        
+        <guid>https://tweakzx.github.io/p/%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>分布式与并行计算</title>
+        <link>https://tweakzx.github.io/p/%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%8E%E5%B9%B6%E8%A1%8C%E8%AE%A1%E7%AE%97/</link>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        
+        <guid>https://tweakzx.github.io/p/%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%8E%E5%B9%B6%E8%A1%8C%E8%AE%A1%E7%AE%97/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>分布式与并行计算</title>
+        <link>https://tweakzx.github.io/p/%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%8E%E5%B9%B6%E8%A1%8C%E8%AE%A1%E7%AE%97/</link>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        
+        <guid>https://tweakzx.github.io/p/%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%8E%E5%B9%B6%E8%A1%8C%E8%AE%A1%E7%AE%97/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>博客</title>
+        <link>https://tweakzx.github.io/p/%E5%8D%9A%E5%AE%A2/</link>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        
+        <guid>https://tweakzx.github.io/p/%E5%8D%9A%E5%AE%A2/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>博客</title>
+        <link>https://tweakzx.github.io/p/%E5%8D%9A%E5%AE%A2/</link>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        
+        <guid>https://tweakzx.github.io/p/%E5%8D%9A%E5%AE%A2/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>实习面试</title>
+        <link>https://tweakzx.github.io/p/%E5%AE%9E%E4%B9%A0%E9%9D%A2%E8%AF%95/</link>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        
+        <guid>https://tweakzx.github.io/p/%E5%AE%9E%E4%B9%A0%E9%9D%A2%E8%AF%95/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>实习面试</title>
+        <link>https://tweakzx.github.io/p/%E5%AE%9E%E4%B9%A0%E9%9D%A2%E8%AF%95/</link>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        
+        <guid>https://tweakzx.github.io/p/%E5%AE%9E%E4%B9%A0%E9%9D%A2%E8%AF%95/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>心及</title>
+        <link>https://tweakzx.github.io/p/%E5%BF%83%E5%8F%8A/</link>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        
+        <guid>https://tweakzx.github.io/p/%E5%BF%83%E5%8F%8A/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>心及</title>
+        <link>https://tweakzx.github.io/p/%E5%BF%83%E5%8F%8A/</link>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        
+        <guid>https://tweakzx.github.io/p/%E5%BF%83%E5%8F%8A/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>论文笔记</title>
+        <link>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/</link>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        
+        <guid>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>论文笔记</title>
+        <link>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/</link>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        
+        <guid>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/</guid>
+        <description></description>
         </item>
         
     </channel>
