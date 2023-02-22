@@ -6,7 +6,34 @@
     <description>Recent content in Posts on Tweakzx</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 07 Feb 2023 10:57:40 +0800</lastBuildDate><atom:link href="https://tweakzx.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 22 Feb 2023 10:43:18 +0800</lastBuildDate><atom:link href="https://tweakzx.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>【指令】魔法指令</title>
+      <link>https://tweakzx.github.io/p/%E6%8C%87%E4%BB%A4%E9%AD%94%E6%B3%95%E6%8C%87%E4%BB%A4/</link>
+      <pubDate>Wed, 22 Feb 2023 10:43:18 +0800</pubDate>
+      
+      <guid>https://tweakzx.github.io/p/%E6%8C%87%E4%BB%A4%E9%AD%94%E6%B3%95%E6%8C%87%E4%BB%A4/</guid>
+      <description>Github520 $ crontab -e 0 0 * * * sed -i &amp;#34;/# GitHub520 Host Start/Q&amp;#34; /etc/hosts &amp;amp;&amp;amp; curl https://raw.hellogithub.com/hosts &amp;gt;&amp;gt; /etc/hosts 安装Go $ wget -c https://dl.google.com/go/go1.14.2.linux-amd64.tar.gz -O - | sudo tar -xz -C /usr/local $ vim /etc/profile export PATH=$PATH:/usr/local/go/bin export GOPROXY=https://goproxy.cn,direct export GO111MODULE=on $ source /etc/profile $ go version go version go1.14.2 linux/amd64 安装MiniConda(py</description>
+    </item>
+    
+    <item>
+      <title>【论文笔记】Gavel论文阅读笔记</title>
+      <link>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0gavel%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link>
+      <pubDate>Sun, 19 Feb 2023 19:57:52 +0800</pubDate>
+      
+      <guid>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0gavel%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</guid>
+      <description>Heterogeneity-Aware Cluster Scheduling Policies for Deep Learning Workloads Abstract 背景 加速器，如 GPU、 TPU、 FPGA 和定制 ASIC 表现出跨模型架构的异构性能行为。 现有的针对加速器集群的调度器(用于在许多用户之间仲</description>
+    </item>
+    
+    <item>
+      <title>【论文笔记】DNN训练负载分析</title>
+      <link>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0dnn%E8%AE%AD%E7%BB%83%E8%B4%9F%E8%BD%BD%E5%88%86%E6%9E%90/</link>
+      <pubDate>Mon, 13 Feb 2023 10:59:59 +0800</pubDate>
+      
+      <guid>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0dnn%E8%AE%AD%E7%BB%83%E8%B4%9F%E8%BD%BD%E5%88%86%E6%9E%90/</guid>
+      <description>Analysis of Large-Scale Multi-Tenant GPU Clusters for DNN Training Workloads 这是一篇2019年的ATC， 来自微软亚洲研究院 Abstract 调度框架旨在提供如下特性 高效率 资源隔离 用户间公平共享 然而，基于深度神经网</description>
+    </item>
+    
     <item>
       <title>【博客】Hugo&#43;Typora&#43;PicGO&#43;Github搭建个人博客</title>
       <link>https://tweakzx.github.io/p/%E5%8D%9A%E5%AE%A2hugo-typora-picgo-github%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/</link>
@@ -418,6 +445,24 @@
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://tweakzx.github.io/p/%E5%BF%83%E5%8F%8A/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>杂记</title>
+      <link>https://tweakzx.github.io/p/%E6%9D%82%E8%AE%B0/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://tweakzx.github.io/p/%E6%9D%82%E8%AE%B0/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>杂记</title>
+      <link>https://tweakzx.github.io/p/%E6%9D%82%E8%AE%B0/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://tweakzx.github.io/p/%E6%9D%82%E8%AE%B0/</guid>
       <description></description>
     </item>
     
