@@ -20,8 +20,8 @@
 &lt;li&gt;微软的全球分布式调度服务，高效和可靠地执行深度学习训练和推理工作负载&lt;/li&gt;
 &lt;li&gt;核心：是一个新颖的、&lt;strong&gt;工作负载感知的调度器&lt;/strong&gt;，它可以透明地抢占和弹性地扩展深度学习工作负载
 &lt;ul&gt;
-&lt;li&gt;以驱动高利用率&lt;/li&gt;
-&lt;li&gt;不会影响它们在全球 AI 加速器(GPU/FPGA)中的正确性或性能&lt;/li&gt;
+&lt;li&gt;以提高利用率&lt;/li&gt;
+&lt;li&gt;而且不会影响它们在全球 AI 加速器(GPU/FPGA)中的正确性或性能&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;所有作业都是&lt;strong&gt;可抢占的&lt;/strong&gt;、&lt;strong&gt;可迁移的&lt;/strong&gt;，并且在默认可以动态调整大小(&lt;strong&gt;弹性)&lt;/strong&gt; : 一个活动作业可以被动态和透明地
