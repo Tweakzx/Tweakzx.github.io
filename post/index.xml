@@ -5,15 +5,24 @@
     <link>https://tweakzx.github.io/post/</link>
     <description>Recent content in Posts on Tweakzx</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
-    <lastBuildDate>Wed, 22 Feb 2023 10:43:18 +0800</lastBuildDate><atom:link href="https://tweakzx.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <language>zh-cn</language>
+    <lastBuildDate>Fri, 17 Mar 2023 11:37:06 +0800</lastBuildDate><atom:link href="https://tweakzx.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>【论文笔记】Singularity论文笔记</title>
+      <link>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0singularity%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/</link>
+      <pubDate>Fri, 17 Mar 2023 11:37:06 +0800</pubDate>
+      
+      <guid>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0singularity%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/</guid>
+      <description>Singularity: Planet-Scale, Preemptive and Elastic Scheduling of AI Workloads Abstract Singularity 微软的全球分布式调度服务，高效和可靠地执行深度学习训练和推理工作负载 核心：是一个新颖的、工作负载感知的调度器，它可以透</description>
+    </item>
+    
     <item>
       <title>【指令】魔法指令</title>
       <link>https://tweakzx.github.io/p/%E6%8C%87%E4%BB%A4%E9%AD%94%E6%B3%95%E6%8C%87%E4%BB%A4/</link>
       <pubDate>Wed, 22 Feb 2023 10:43:18 +0800</pubDate>
       
       <guid>https://tweakzx.github.io/p/%E6%8C%87%E4%BB%A4%E9%AD%94%E6%B3%95%E6%8C%87%E4%BB%A4/</guid>
-      <description>Github520 $ crontab -e 0 0 * * * sed -i &amp;#34;/# GitHub520 Host Start/Q&amp;#34; /etc/hosts &amp;amp;&amp;amp; curl https://raw.hellogithub.com/hosts &amp;gt;&amp;gt; /etc/hosts 安装Go $ wget -c https://dl.google.com/go/go1.14.2.linux-amd64.tar.gz -O - | sudo tar -xz -C /usr/local $ vim /etc/profile export PATH=$PATH:/usr/local/go/bin export GOPROXY=https://goproxy.cn,direct export GO111MODULE=on $ source /etc/profile $ go version go version go1.14.2 linux/amd64 安装MiniConda(py</description>
+      <description>Github520 crontab -e 0 0 * * * sed -i &amp;#34;/# GitHub520 Host Start/Q&amp;#34; /etc/hosts &amp;amp;&amp;amp; curl https://raw.hellogithub.com/hosts &amp;gt;&amp;gt; /etc/hosts 安装Go wget -c https://dl.google.com/go/go1.14.2.linux-amd64.tar.gz -O - | sudo tar -xz -C /usr/local vim /etc/profile export PATH=$PATH:/usr/local/go/bin export GOPROXY=https://goproxy.cn,direct export GO111MODULE=on source /etc/profile go version 安装MiniConda(python 3.8) wget https://repo.anaconda.com/miniconda/Miniconda3-py38_23.1.0-1-Linux-x86_64.sh &amp;amp;&amp;amp; sh</description>
     </item>
     
     <item>

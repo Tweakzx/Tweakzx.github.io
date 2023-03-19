@@ -5,7 +5,7 @@
     <link>https://tweakzx.github.io/categories/kubernetes/</link>
     <description>Recent content in kubernetes on Tweakzx</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
+    <language>zh-cn</language>
     <lastBuildDate>Tue, 10 Jan 2023 11:24:28 +0800</lastBuildDate><atom:link href="https://tweakzx.github.io/categories/kubernetes/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>【Kubernetes】在k8s集群中挂载基于NFS的StorageClass</title>
