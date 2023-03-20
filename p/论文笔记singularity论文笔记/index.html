@@ -132,7 +132,7 @@
 <li>而且不会影响它们在全球 AI 加速器(GPU/FPGA)中的正确性或性能</li>
 </ul>
 </li>
-<li>所有作业都是<strong>可抢占的</strong>、<strong>可迁移的</strong>，并且在默认可以动态调整大小(<strong>弹性)</strong> : 一个活动作业可以被动态和透明地
+<li>所有作业都是<strong>可抢占的</strong>、<strong>可迁移的</strong>，并且在默认可以动态调整大小(<strong>弹性)</strong> : 一个活动的作业可以被动态和透明地
 <ul>
 <li>被抢占和被迁移到不同的节点集、集群、数据中心或者区域，并且可以从执行被抢占的地方精确地恢复</li>
 <li>在给定类型的一组不同的加速器上调整大小</li>
@@ -245,7 +245,7 @@
 <li><strong>性能开销</strong>：对于大范围的工作负载，GPU 调用的<strong>动态拦截</strong>、<strong>透明分布式屏障</strong>算法和透明时分的稳态性能开销可以忽略不计，均在3% 以内</li>
 <li><strong>稳健性</strong>：尽管 PyTorch 和 CUDA 的版本发生了迅速变化，但这种方法仍然是健壮的和实用的。</li>
 <li><strong>延迟</strong>： Singularity中的迁移和弹性延迟是合理的(几十秒) ，没有重复计算，</li>
-<li><strong>checkpoint大小</strong>：并且checkpoint大小与用户级checkpoint相当。</li>
+<li><strong>checkpoint大小</strong>：checkpoint大小与用户级checkpoint相当。</li>
 </ul>
 </li>
 </ul>
@@ -276,10 +276,10 @@
 </blockquote>
 </li>
 <li>
-<p>确保程序在正确的点恢复</p>
+<p>需要确保程序在正确的点恢复</p>
 </li>
 <li>
-<p>当作业向上或向下扩展时，改变超参数</p>
+<p>当作业向上或向下扩展时，需要改变超参数</p>
 </li>
 </ul>
 </li>
@@ -388,8 +388,7 @@
 <li>
 <p><strong>设备代理的定义与组成</strong></p>
 <ul>
-<li>任何与加速器的交互都必须经过特定的库(例如，用于 NVIDIA GPU 的 CUDA、用于 AMD GPU 的 ROCm) 。 Singularity通过 <strong>LD_PRELOAD</strong> 机制动态拦截它。</li>
-<li>大多数此功能驻留在设备代理中。</li>
+<li>任何与加速器的交互都必须经过特定的库(例如，用于 NVIDIA GPU 的 CUDA、用于 AMD GPU 的 ROCm) 。 Singularity通过 <strong>LD_PRELOAD</strong> 机制动态拦截它。大多数此功能驻留在设备代理中。</li>
 <li>设备代理可以被视为<strong>加速器设备</strong>的<strong>硬件抽象层服务</strong>
 <ul>
 <li>组成：
@@ -599,7 +598,7 @@
 </ul>
 </li>
 <li>
-<p><strong>分布式Barrier</strong>。</p>
+<p><strong>分布式Barrier</strong></p>
 <ul>
 <li><strong>meta-allreduces</strong>：为了避免引入新的故障路径，Singularity中的障碍算法依赖于作业用于集体通信的同一个通信库，通过引入附加的<strong>meta-allreduces</strong>来交换障碍协议状态。需要确保附加的meta-allreduces相对于常规的allreduces的排序在所有节点间是一致的，以满足避免死锁的程序顺序要求。</li>
 <li><strong>算法</strong>：为了保证程序顺序一致性，在每一个数据allreduce操作执行之前， 我们的算法会发射一个异步串联meta-allreduce。
