@@ -9,10 +9,10 @@
     <lastBuildDate>Mon, 13 Feb 2023 10:59:59 +0800</lastBuildDate><atom:link href="https://tweakzx.github.io/categories/%E8%AE%BA%E6%96%87/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>【论文笔记】DNN训练负载分析</title>
-      <link>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0dnn%E8%AE%AD%E7%BB%83%E8%B4%9F%E8%BD%BD%E5%88%86%E6%9E%90/</link>
+      <link>https://tweakzx.github.io/doing/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0dnn%E8%AE%AD%E7%BB%83%E8%B4%9F%E8%BD%BD%E5%88%86%E6%9E%90/</link>
       <pubDate>Mon, 13 Feb 2023 10:59:59 +0800</pubDate>
       
-      <guid>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0dnn%E8%AE%AD%E7%BB%83%E8%B4%9F%E8%BD%BD%E5%88%86%E6%9E%90/</guid>
+      <guid>https://tweakzx.github.io/doing/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0dnn%E8%AE%AD%E7%BB%83%E8%B4%9F%E8%BD%BD%E5%88%86%E6%9E%90/</guid>
       <description>Analysis of Large-Scale Multi-Tenant GPU Clusters for DNN Training Workloads 这是一篇2019年的ATC， 来自微软亚洲研究院 Abstract 调度框架旨在提供如下特性 高效率 资源隔离 用户间公平共享 然而，基于深度神经网</description>
     </item>
     
