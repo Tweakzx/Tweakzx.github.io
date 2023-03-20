@@ -639,7 +639,7 @@
 &lt;p&gt;集体通信通过专有库进行。&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;通信器&lt;/strong&gt;：NCCL 有一个通信器的概念，它被初始化为一个特定的参与rank环，随后的操作只是引用通信器。&lt;/li&gt;
-&lt;li&gt;**解耦：**为了保持 NCCL 通信器与用户级时分的交互可控，我们将作业的逻辑数据并行世界大小与 NCCL 看到的世界大小解耦; 在我们的方法中，NCCL 只看到每个 GPU 一个rank。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;解耦：&lt;/strong&gt; 为了保持 NCCL 通信器与用户级时分的交互可控，我们将作业的逻辑数据并行世界大小与 NCCL 看到的世界大小解耦; 在我们的方法中，NCCL 只看到每个 GPU 一个rank。&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;梯度累计&lt;/strong&gt;：在时分过程中，设备-代理透明地在抓取缓冲区中进行本地累积，并且只有共享 GPU 的最后一个rank使用本地累计梯度执行实际的nccl_allreduce&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;大小调整&lt;/strong&gt;：因此，在一个调整大小的操作之后，NCCL 看到的世界大小发生了变化，恢复后由新的会和处理&lt;/li&gt;
 &lt;/ul&gt;
