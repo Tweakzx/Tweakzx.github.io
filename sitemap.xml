@@ -3,13 +3,38 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://tweakzx.github.io/categories/</loc>
+    <lastmod>2023-03-31T10:04:38+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tweakzx.github.io/tags/etcd/</loc>
+    <lastmod>2023-03-31T10:04:38+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tweakzx.github.io/categories/kubernetes/</loc>
+    <lastmod>2023-03-31T10:04:38+08:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://tweakzx.github.io/post/</loc>
-    <lastmod>2023-03-17T11:37:06+08:00</lastmod>
+    <lastmod>2023-03-31T10:04:38+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tweakzx.github.io/tags/</loc>
+    <lastmod>2023-03-31T10:04:38+08:00</lastmod>
   </url>
   
   <url>
     <loc>https://tweakzx.github.io/</loc>
-    <lastmod>2023-03-17T11:37:06+08:00</lastmod>
+    <lastmod>2023-03-31T10:04:38+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://tweakzx.github.io/p/kubernetes%E5%A6%82%E4%BD%95%E8%AE%BF%E9%97%AE%E9%9B%86%E7%BE%A4etcd/</loc>
+    <lastmod>2023-03-31T10:04:38+08:00</lastmod>
   </url>
   
   <url>
@@ -25,11 +50,6 @@
   <url>
     <loc>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0gavel%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</loc>
     <lastmod>2023-02-19T19:57:52+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://tweakzx.github.io/categories/</loc>
-    <lastmod>2023-02-13T10:59:59+08:00</lastmod>
   </url>
   
   <url>
@@ -63,11 +83,6 @@
   </url>
   
   <url>
-    <loc>https://tweakzx.github.io/tags/</loc>
-    <lastmod>2023-02-04T15:07:34+08:00</lastmod>
-  </url>
-  
-  <url>
     <loc>https://tweakzx.github.io/p/obsidianwin-ipad-andriod%E5%88%A9%E7%94%A8%E5%9D%9A%E6%9E%9C%E4%BA%91%E4%B8%89%E7%AB%AF%E5%90%8C%E6%AD%A5/</loc>
     <lastmod>2023-02-04T15:07:34+08:00</lastmod>
   </url>
@@ -75,11 +90,6 @@
   <url>
     <loc>https://tweakzx.github.io/tags/%E7%AC%94%E8%AE%B0/</loc>
     <lastmod>2023-02-04T15:07:34+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://tweakzx.github.io/categories/kubernetes/</loc>
-    <lastmod>2023-01-10T11:24:28+08:00</lastmod>
   </url>
   
   <url>
