@@ -6,7 +6,16 @@
     <description>Recent content in Posts on Tweakzx</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Sat, 01 Apr 2023 19:51:18 +0800</lastBuildDate><atom:link href="https://tweakzx.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 10 Apr 2023 10:34:25 +0800</lastBuildDate><atom:link href="https://tweakzx.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>【论文笔记】Salus论文笔记</title>
+      <link>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0salus%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/</link>
+      <pubDate>Mon, 10 Apr 2023 10:34:25 +0800</pubDate>
+      
+      <guid>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0salus%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/</guid>
+      <description>Salus: Fine-Grained GPU Sharing Primitives for Deep Learning Applications 摘要 GPU 利用率不足 现代 GPU 本身不支持细粒度共享原语 分时和抢占是代价昂贵的 DL 应用程序不能完全使用 GPU 的资源， 且这些资源无法被共享 Salus</description>
+    </item>
+    
     <item>
       <title>【论文笔记】Lucid论文阅读笔记</title>
       <link>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0lucid%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link>

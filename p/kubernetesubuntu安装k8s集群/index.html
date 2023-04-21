@@ -147,16 +147,16 @@ sudo hostnamectl set-hostname <span class="s2">&#34;k8s-node2&#34;</span>   �
 <span class="c1">#10.1.13.107    k8s-node1</span>
 
 <span class="c1">#10.1.13.108    k8s-node1</span>
-</code></pre></div><h3 id="配置免密登录">配置免密登录</h3>
+</code></pre></div><h3 id="配置免密登录可以省略">配置免密登录（可以省略）</h3>
 <p>想让机器 A 访问机器 B，就把机器 A 的公钥放到机器 B 的<code>~/.ssh/authorized_keys</code> 文件里就行了。</p>
-<p>首先我们在<code>worker</code>上生成一个密钥，输入下述命令后<strong>一路回车</strong>即可：</p>
+<p>首先我们在<code>master</code>上生成一个密钥，输入下述命令后<strong>一路回车</strong>即可：</p>
 <div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">ssh-keygen
-</code></pre></div><p>然后登录<code>master</code>，并依次输入下述两条命令将其复制并写入到<code>master</code>的<code>authorized_keys</code>中，注意我下面的<code>scp</code>命令中使用了<code>worker</code>别名，要提前进行配置：</p>
-<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 复制到 master 主机</span>
-scp root@worker:~/.ssh/id_rsa.pub /home
+</code></pre></div><p>然后登录<code>worker</code>，并依次输入下述两条命令将其复制并写入到<code>worker</code>的<code>authorized_keys</code>中，注意我下面的<code>scp</code>命令中使用了<code>worker</code>别名，要提前进行配置：</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 复制到 worker</span>
+scp root@k8s-master:~/.ssh/id_rsa.pub /home
 <span class="c1"># 写入到 authorized_keys 中</span>
 cat /home/id_rsa.pub &gt;&gt; ~/.ssh/authorized_keys
-</code></pre></div><p>然后再次使用<code>ssh worker</code>登录就可以发现直接连接上而不需要密码了。</p>
+</code></pre></div><p>然后在master上使用<code>ssh worker</code>登录就可以发现直接连接上而不需要密码了。</p>
 <h3 id="关闭防火墙">关闭防火墙</h3>
 <div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">sudo systemctl stop firewalld
 sudo systemctl disable firewalld
@@ -740,7 +740,7 @@ Commercial support is available at
       <ol>
         <li><a href="#配置主机名">配置主机名</a></li>
         <li><a href="#配置etchosts">配置/etc/hosts</a></li>
-        <li><a href="#配置免密登录">配置免密登录</a></li>
+        <li><a href="#配置免密登录可以省略">配置免密登录（可以省略）</a></li>
         <li><a href="#关闭防火墙">关闭防火墙</a></li>
         <li><a href="#禁用swap">禁用swap</a></li>
         <li><a href="#禁用selinux">禁用Selinux</a></li>
