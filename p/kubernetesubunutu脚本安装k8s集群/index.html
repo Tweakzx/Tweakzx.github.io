@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='安装k8s-1.25.3版本的脚本 内容来源：Ubuntu-安装K8s-v1.25.3脚本 | Marshall&amp;rsquo;s blog (aledk.com) 适用的ubuntu版本为18.04及以上 # !/bin/bash'><title>【Kubernetes】ubunutu脚本安装k8s集群</title>
+
+<link rel='canonical' href='https://tweakzx.github.io/p/kubernetesubunutu%E8%84%9A%E6%9C%AC%E5%AE%89%E8%A3%85k8s%E9%9B%86%E7%BE%A4/'>
+
+<link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='【Kubernetes】ubunutu脚本安装k8s集群'>
+<meta property='og:description' content='安装k8s-1.25.3版本的脚本 内容来源：Ubuntu-安装K8s-v1.25.3脚本 | Marshall&amp;rsquo;s blog (aledk.com) 适用的ubuntu版本为18.04及以上 # !/bin/bash'>
+<meta property='og:url' content='https://tweakzx.github.io/p/kubernetesubunutu%E8%84%9A%E6%9C%AC%E5%AE%89%E8%A3%85k8s%E9%9B%86%E7%BE%A4/'>
+<meta property='og:site_name' content='Tweakzx'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2023-04-21T16:06:05&#43;08:00'/><meta property='article:modified_time' content='2023-04-21T16:06:05&#43;08:00'/>
+<meta name="twitter:title" content="【Kubernetes】ubunutu脚本安装k8s集群">
+<meta name="twitter:description" content="安装k8s-1.25.3版本的脚本 内容来源：Ubuntu-安装K8s-v1.25.3脚本 | Marshall&amp;rsquo;s blog (aledk.com) 适用的ubuntu版本为18.04及以上 # !/bin/bash">
+    </head>
+    <body class="
+    article-page has-toc
+">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex 
+    
+        extended
+    
+">
+    
+        <div id="article-toolbar">
+            <a href="/" class="back-home">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="15 6 9 12 15 18" />
+</svg>
+
+
+
+                <span>Back</span>
+            </a>
+        </div>
+    
+<main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+
+    <h2 class="article-title">
+        <a href="/p/kubernetesubunutu%E8%84%9A%E6%9C%AC%E5%AE%89%E8%A3%85k8s%E9%9B%86%E7%BE%A4/">【Kubernetes】ubunutu脚本安装k8s集群</a>
+    </h2>
+
+    
+
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Apr 21, 2023</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    3 minute read
+                </time>
+            </div>
+        
+    </footer>
+    
+</div>
+
+    
+
+</header>
+
+    <section class="article-content">
+    <h2 id="安装k8s-1253版本的脚本">安装k8s-1.25.3版本的脚本</h2>
+<p>内容来源：<a class="link" href="https://aledk.com/2022/10/30/ubuntu-k8s-sh/"  target="_blank" rel="noopener"
+    >Ubuntu-安装K8s-v1.25.3脚本 | Marshall&rsquo;s blog (aledk.com)</a></p>
+<ul>
+<li>适用的ubuntu版本为18.04及以上</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># !/bin/bash</span>
+<span class="nv">KUBE_VERSION</span><span class="o">=</span><span class="s2">&#34;1.18.9&#34;</span>
+<span class="nv">KUBE_VERSION2</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="nv">$KUBE_VERSION</span> <span class="p">|</span>awk -F. <span class="s1">&#39;{print $2}&#39;</span><span class="k">)</span>
+
+<span class="nv">DOCKER_VERSION</span><span class="o">=</span><span class="s2">&#34;&#34;</span>
+
+<span class="nv">MASTER1_IP</span><span class="o">=</span>10.10.0.25
+<span class="nv">NODE1_IP</span><span class="o">=</span>10.10.0.26
+
+<span class="nv">MASTER1</span><span class="o">=</span>master
+<span class="nv">NODE1</span><span class="o">=</span>node1
+
+<span class="nv">POD_NETWORK</span><span class="o">=</span><span class="s2">&#34;10.244.0.0/16&#34;</span>
+<span class="nv">SERVICE_NETWORK</span><span class="o">=</span><span class="s2">&#34;10.96.0.0/16&#34;</span>
+
+. /etc/os-release
+<span class="nv">IMAGES_URL</span><span class="o">=</span><span class="s2">&#34;registry.aliyuncs.com/google_containers&#34;</span>
+<span class="nv">CRI_DOCKER_VERSION</span><span class="o">=</span>0.2.6
+<span class="nv">CRI_DOCKER_URL</span><span class="o">=</span><span class="s2">&#34;https://ghproxy.com/https://github.com/Mirantis/cri-dockerd/releases/download/v</span><span class="si">${</span><span class="nv">CRI_DOCKER_VERSION</span><span class="si">}</span><span class="s2">/cri-dockerd_</span><span class="si">${</span><span class="nv">CRI_DOCKER_VERSION</span><span class="si">}</span><span class="s2">.3-0.ubuntu-</span><span class="si">${</span><span class="nv">UBUNTU_CODENAME</span><span class="si">}</span><span class="s2">_amd64.deb&#34;</span>
+
+<span class="nv">LOCAL_IP</span><span class="o">=</span><span class="sb">`</span>hostname -I <span class="p">|</span>awk <span class="s1">&#39;{print $1}&#39;</span><span class="sb">`</span>
+
+<span class="nv">COLOR_SUCCESS</span><span class="o">=</span><span class="s2">&#34;echo -e \\033[1;32m&#34;</span>
+<span class="nv">COLOR_FAILURE</span><span class="o">=</span><span class="s2">&#34;echo -e \\033[1;31m&#34;</span>
+<span class="nv">END</span><span class="o">=</span><span class="s2">&#34;\033[m&#34;</span>
+
+color <span class="o">()</span> <span class="o">{</span>
+    <span class="nv">RES_COL</span><span class="o">=</span><span class="m">60</span>
+    <span class="nv">MOVE_TO_COL</span><span class="o">=</span><span class="s2">&#34;echo -en \\033[</span><span class="si">${</span><span class="nv">RES_COL</span><span class="si">}</span><span class="s2">G&#34;</span>
+    <span class="nv">RES_COL</span><span class="o">=</span><span class="m">50</span>
+    <span class="nv">SETCOLOR_SUCCESS</span><span class="o">=</span><span class="s2">&#34;echo -en \\033[1;32m&#34;</span>
+    <span class="nv">SETCOLOR_FAILURE</span><span class="o">=</span><span class="s2">&#34;echo -en \\033[1;31m&#34;</span>
+    <span class="nv">SETCOLOR_WARNING</span><span class="o">=</span><span class="s2">&#34;echo -en \\033[1;33m&#34;</span>
+    <span class="nv">SETCOLOR_NORMAL</span><span class="o">=</span><span class="s2">&#34;echo -en \E[0m&#34;</span>
+    <span class="nb">echo</span> -n <span class="s2">&#34;</span><span class="nv">$1</span><span class="s2">&#34;</span> <span class="o">&amp;&amp;</span> <span class="nv">$MOVE_TO_COL</span>
+    <span class="nb">echo</span> -n <span class="s2">&#34;[&#34;</span>
+    <span class="k">if</span> <span class="o">[</span> <span class="nv">$2</span> <span class="o">=</span> <span class="s2">&#34;success&#34;</span> -o <span class="nv">$2</span> <span class="o">=</span> <span class="s2">&#34;0&#34;</span> <span class="o">]</span> <span class="p">;</span><span class="k">then</span>
+        <span class="si">${</span><span class="nv">SETCOLOR_SUCCESS</span><span class="si">}</span>
+        <span class="nb">echo</span> -n <span class="s2">$&#34;OK&#34;</span>
+    <span class="k">elif</span> <span class="o">[</span> <span class="nv">$2</span> <span class="o">=</span> <span class="s2">&#34;failure&#34;</span> -o <span class="nv">$2</span> <span class="o">=</span> <span class="s2">&#34;1&#34;</span> <span class="o">]</span> <span class="p">;</span><span class="k">then</span>
+        <span class="si">${</span><span class="nv">SETCOLOR_FAILURE</span><span class="si">}</span>
+        <span class="nb">echo</span> -n <span class="s2">$&#34;FAILED&#34;</span>
+    <span class="k">else</span>
+        <span class="si">${</span><span class="nv">SETCOLOR_WARNING</span><span class="si">}</span>
+        <span class="nb">echo</span> -n <span class="s2">$&#34;WARNING&#34;</span>
+    <span class="k">fi</span>
+    <span class="si">${</span><span class="nv">SETCOLOR_NORMAL</span><span class="si">}</span>
+    <span class="nb">echo</span> -n <span class="s2">&#34;]&#34;</span>
+    <span class="nb">echo</span> 
+<span class="o">}</span>
+
+install_prepare <span class="o">()</span> <span class="o">{</span>
+    <span class="si">${</span><span class="nv">COLOR_SUCCESS</span><span class="si">}</span><span class="s2">&#34;开始处理环境的基本配置...&#34;</span><span class="si">${</span><span class="nv">END</span><span class="si">}</span>
+    cat &gt; /etc/hosts <span class="s">&lt;&lt;EOF
+</span><span class="s">127.0.0.1 localhost
+</span><span class="s">$MASTER1_IP $MASTER1
+</span><span class="s">$NODE1_IP $NODE1
+</span><span class="s">EOF</span>
+    hostnamectl set-hostname <span class="k">$(</span>awk -v <span class="nv">ip</span><span class="o">=</span><span class="nv">$LOCAL_IP</span> <span class="s1">&#39;{if($1==ip)print $2}&#39;</span> /etc/hosts<span class="k">)</span>
+    swapoff -a
+    sed -i <span class="s1">&#39;/swap/s/^/#/&#39;</span> /etc/fstab
+    cat &gt;/etc/modules-load.d/k8s.conf <span class="s">&lt;&lt;EOF
+</span><span class="s">modprobe overlay
+</span><span class="s">modprobe br_netfilter
+</span><span class="s">EOF</span>
+    cat &gt;/etc/sysctl.d/k8s.conf <span class="s">&lt;&lt;EOF
+</span><span class="s">net.bridge.bridge-nf-call-iptables  = 1
+</span><span class="s">net.bridge.bridge-nf-call-ip6tables = 1
+</span><span class="s">net.ipv4.ip_forward                 = 1
+</span><span class="s">EOF</span>
+    sysctl --system
+    color <span class="s2">&#34;安装前准备完成！&#34;</span> <span class="m">0</span>
+    sleep <span class="m">1</span>
+<span class="o">}</span>
+
+install_docker <span class="o">()</span> <span class="o">{</span>
+    <span class="si">${</span><span class="nv">COLOR_SUCCESS</span><span class="si">}</span><span class="s2">&#34;开始安装docker...&#34;</span><span class="si">${</span><span class="nv">END</span><span class="si">}</span>
+    apt update
+    apt -y install docker.io <span class="o">||</span> <span class="o">{</span> color <span class="s2">&#34;安装Docker失败！&#34;</span> 1<span class="p">;</span> <span class="nb">exit</span> 1<span class="p">;</span> <span class="o">}</span>
+    cat &gt; /etc/docker/daemon.json <span class="s">&lt;&lt; EOF
+</span><span class="s">{
+</span><span class="s">&#34;registry-mirrors&#34;: [
+</span><span class="s">&#34;https://docker.mirrors.ustc.edu.cn&#34;,
+</span><span class="s">&#34;https://hub-mirror.c.163.com&#34;,
+</span><span class="s">&#34;https://reg-mirror.qiniu.com&#34;,
+</span><span class="s">&#34;https://registry.docker-cn.com&#34;
+</span><span class="s">],
+</span><span class="s">&#34;exec-opts&#34;: [&#34;native.cgroupdriver=systemd&#34;]
+</span><span class="s">}
+</span><span class="s">EOF</span>
+    systemctl restart docker.service
+    docker info <span class="o">&amp;&amp;</span> <span class="o">{</span> color <span class="s2">&#34;安装 Docker 成功&#34;</span> 0<span class="p">;</span> sleep 1<span class="p">;</span> <span class="o">}</span> <span class="o">||</span> <span class="o">{</span> color <span class="s2">&#34;安装 Docker 失败！&#34;</span> 1<span class="p">;</span> exit<span class="p">;</span> <span class="o">}</span>
+<span class="o">}</span>
+
+install_kubeadm <span class="o">()</span> <span class="o">{</span>
+    <span class="si">${</span><span class="nv">COLOR_SUCCESS</span><span class="si">}</span><span class="s2">&#34;kubeadm依赖安装...&#34;</span><span class="si">${</span><span class="nv">END</span><span class="si">}</span>
+    apt-get update <span class="o">&amp;&amp;</span> apt-get install -y apt-transport-https curl
+    curl https://mirrors.aliyun.com/kubernetes/apt/doc/apt-key.gpg <span class="p">|</span> apt-key add -
+    cat <span class="s">&lt;&lt; EOF &gt;/etc/apt/sources.list.d/kubernetes.list
+</span><span class="s">deb https://mirrorS.aliyun.com/kubernetes/apt/ kubernetes-xenial main
+</span><span class="s">EOF</span>
+    apt-get update
+    apt-cache madison kubeadm <span class="p">|</span> head
+    <span class="si">${</span><span class="nv">COLOR_FAILURE</span><span class="si">}</span><span class="s2">&#34;5秒后即将安装： kubeadm-&#34;</span><span class="si">${</span><span class="nv">KUBE_VERSION</span><span class="si">}</span><span class="s2">&#34; 版本......&#34;</span><span class="si">${</span><span class="nv">END</span><span class="si">}</span>
+    <span class="si">${</span><span class="nv">COLOR_FAILURE</span><span class="si">}</span><span class="s2">&#34;如果想安装其它版，请桜 ctrl + c 键退出，修改版本再执行&#34;</span><span class="si">${</span><span class="nv">END</span><span class="si">}</span>
+    sleep <span class="m">6</span>
+
+    <span class="c1">#安装指定版本</span>
+    apt install -y <span class="nv">kubeadm</span><span class="o">=</span><span class="si">${</span><span class="nv">KUBE_VERSION</span><span class="si">}</span>-00 <span class="nv">kubelet</span><span class="o">=</span><span class="si">${</span><span class="nv">KUBE_VERSION</span><span class="si">}</span>-00 <span class="nv">kubectl</span><span class="o">=</span><span class="si">${</span><span class="nv">KUBE_VERSION</span><span class="si">}</span>-00
+    <span class="o">[</span> <span class="nv">$?</span> -eq <span class="m">0</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="o">{</span> color <span class="s2">&#34;安装 kubeadm 成功！&#34;</span> 0<span class="p">;</span> sleep 1<span class="p">;</span><span class="o">}</span> <span class="o">||</span> <span class="o">{</span> color <span class="s2">&#34;安装 kubeadm 失败！&#34;</span> 1<span class="p">;</span> <span class="nb">exit</span> 2<span class="p">;</span> <span class="o">}</span>
+
+<span class="o">}</span>
+
+<span class="c1"># Kubernetes -v1.24之前版本无需安装 cri-dockerd </span>
+install_cri_dockerd <span class="o">()</span> <span class="o">{</span>
+    <span class="si">${</span><span class="nv">COLOR_SUCCESS</span><span class="si">}</span><span class="s2">&#34;开始安装cri-dockerd...&#34;</span><span class="si">${</span><span class="nv">END</span><span class="si">}</span>
+    <span class="o">[</span> <span class="nv">$KUBE_VERSION2</span> -lt <span class="m">24</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="k">return</span>
+    <span class="k">if</span> <span class="o">[</span> ! -e cri-dockerd_<span class="si">${</span><span class="nv">CRI_DOCKER_VERSION</span><span class="si">}</span>.3-0.ubuntu-<span class="si">${</span><span class="nv">UBUNTU_CODENAME</span><span class="si">}</span>_amd64.deb <span class="o">]</span> <span class="p">;</span><span class="k">then</span>
+        curl -LO <span class="nv">$CRI_DOCKER_URL</span> <span class="o">||</span> <span class="o">{</span> color <span class="s2">&#34;下载cri-dockerd失败！&#34;</span> 1<span class="p">;</span> <span class="nb">exit</span> 2<span class="p">;</span> <span class="o">}</span>
+    <span class="k">fi</span>
+    dpkg -i cri-dockerd_<span class="si">${</span><span class="nv">CRI_DOCKER_VERSION</span><span class="si">}</span>.3-0.ubuntu-<span class="si">${</span><span class="nv">UBUNTU_CODENAME</span><span class="si">}</span>_amd64.deb
+    sed -i -e <span class="s1">&#39;s#ExecStart=.*#ExecStart=/usr/bin/cri-dockerd --container-runtime-endpoint fd:// --network-plugin=cni --pod-infra-container-image=&#39;</span><span class="s2">&#34;</span><span class="nv">$IMAGES_URL</span><span class="s2">&#34;</span><span class="s1">&#39;/pause:3.7#g&#39;</span> /lib/systemd/system/cri-docker.service
+    systemctl daemon-reload
+    systemctl restart cri-docker.service
+
+<span class="o">}</span>
+
+kubernetes_init <span class="o">()</span> <span class="o">{</span>
+    <span class="si">${</span><span class="nv">COLOR_SUCCESS</span><span class="si">}</span><span class="s2">&#34;开始初始化k8s...&#34;</span><span class="si">${</span><span class="nv">END</span><span class="si">}</span>
+    kubeadm init <span class="se">\
+</span><span class="se"></span>		--kubernetes-version<span class="o">=</span>v<span class="si">${</span><span class="nv">KUBE_VERSION</span><span class="si">}</span> <span class="se">\
+</span><span class="se"></span>		--image-repository registry.aliyuncs.com/google_containers <span class="se">\
+</span><span class="se"></span>		--service-cidr<span class="o">=</span><span class="si">${</span><span class="nv">SERVICE_NETWORK</span><span class="si">}</span> <span class="se">\
+</span><span class="se"></span>		--pod-network-cidr<span class="o">=</span><span class="si">${</span><span class="nv">POD_NETWORK</span><span class="si">}</span> <span class="se">\
+</span><span class="se"></span>		--v<span class="o">=</span><span class="m">5</span>
+	<span class="k">if</span> <span class="o">[</span> <span class="nv">$?</span> -eq <span class="m">0</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+		mkdir -p <span class="nv">$HOME</span>/.kube
+  		sudo cp -i /etc/kubernetes/admin.conf <span class="nv">$HOME</span>/.kube/config
+  		sudo chown <span class="k">$(</span>id -u<span class="k">)</span>:<span class="k">$(</span>id -g<span class="k">)</span> <span class="nv">$HOME</span>/.kube/config	
+    	color <span class="s2">&#34;初始化 k8s 成功！&#34;</span> <span class="m">0</span>
+	<span class="k">else</span>
+	    color <span class="s2">&#34;初始化 k8s 失败！&#34;</span> <span class="m">1</span>
+	<span class="k">fi</span>
+<span class="o">}</span>
+
+reset_kubernetes <span class="o">()</span> <span class="o">{</span>
+    <span class="c1">#To do</span>
+    kubeadm reset
+<span class="o">}</span>
+
+configure_network <span class="o">()</span> <span class="o">{</span>
+	kubectl apply -f https://raw.githubusercontent.com/flannel-io/flannel/master/Documentation/kube-flannel.yml
+<span class="o">}</span>
+
+main <span class="o">()</span> <span class="o">{</span>
+    <span class="nv">PS3</span><span class="o">=</span><span class="s2">&#34;请选择编号（1-5）&#34;</span>
+    <span class="nv">options</span><span class="o">=(</span><span class="s2">&#34;初始化kubernetes集群&#34;</span> <span class="s2">&#34;加入kubernetes集群&#34;</span> <span class="s2">&#34;退出kubernetes集群&#34;</span> <span class="s2">&#34;配置网络&#34;</span> <span class="s2">&#34;退出本程序&#34;</span><span class="o">)</span>
+    <span class="k">select</span> item in <span class="s2">&#34;</span><span class="si">${</span><span class="nv">options</span><span class="p">[@]</span><span class="si">}</span><span class="s2">&#34;</span><span class="p">;</span> <span class="k">do</span>
+        <span class="k">case</span> <span class="nv">$item</span> in
+            <span class="s2">&#34;初始化kubernetes集群&#34;</span><span class="o">)</span>
+                install_prepare
+                install_docker
+                install_kubeadm
+                install_cri_dockerd
+                kubernetes_init
+                <span class="nb">break</span>
+                <span class="p">;;</span>
+            <span class="s2">&#34;加入kubernetes集群&#34;</span><span class="o">)</span>
+                install_prepare
+                install_docker
+                install_kubeadm
+                install_cri_dockerd
+                <span class="si">${</span><span class="nv">COLOR_SUCCESS</span><span class="si">}</span><span class="s2">&#34;加入kubernetes前的准备工作已完成，请执行kubeadm jion命令！&#34;</span><span class="si">${</span><span class="nv">END</span><span class="si">}</span>
+                <span class="nb">break</span>
+                <span class="p">;;</span>
+            <span class="s2">&#34;退出kubernetes集群&#34;</span><span class="o">)</span>
+                reset_kubernetes
+                <span class="nb">break</span>
+                <span class="p">;;</span>
+            <span class="s2">&#34;退出本程序&#34;</span><span class="o">)</span>
+                <span class="nb">exit</span>
+                <span class="p">;;</span>
+            *<span class="o">)</span> <span class="nb">echo</span> <span class="s2">&#34;invalid option </span><span class="nv">$REPLY</span><span class="s2">&#34;</span><span class="p">;;</span>
+        <span class="k">esac</span>
+    <span class="k">done</span>
+<span class="o">}</span>
+
+main
+</code></pre></div>
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+        <link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.css"integrity="sha384-RZU/ijkSsFbcmivfdRBQDtwuwVqK7GMOw6IMvKyeWL2K5UAlyp6WonmB8m7Jd0Hn"crossorigin="anonymous"
+            ><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.js"integrity="sha384-pK1WpvzWVBQiP0/GjnvRxV4mOb0oxFuyRxJlk6vVw146n3egcN5C925NCP7a7BY8"crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/contrib/auto-render.min.js"integrity="sha384-vZTG03m&#43;2yp6N6BNi5iM4rW4oIwk5DfcNdFfxkk9ZWpDriOkXX8voJBFrAO7MpVl"crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        renderMathInElement(document.querySelector(`.article-content`), {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ]
+        });})
+</script>
+    
+</article>
+
+    <aside class="related-contents--wrapper">
+    
+    
+</aside>
+
+     
+    
+        
+    <script
+    src="https://giscus.app/client.js"
+    data-repo="Tweakzx/Tweakzx.github.io"
+    data-repo-id="MDEwOlJlcG9zaXRvcnkzMjY5MTY1NTE="
+    data-category="Announcements"
+    data-category-id="DIC_kwDOE3xZx84CTfL-"
+    data-mapping="title"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-theme="light_tritanopia"
+    crossorigin="anonymous"
+    async
+></script>
+<script>
+    function setGiscusTheme(theme) {
+        let giscus = document.querySelector('iframe.giscus-frame');
+        if (giscus) {
+            giscus.contentWindow.postMessage(
+                { 
+                    giscus: {
+                        setConfig: { 
+                            theme: theme 
+                        }
+                    }
+                },
+                "https://giscus.app"
+            );
+        };
+    };
+
+    (function(){
+        addEventListener('message', (e) => {
+            if (event.origin !== 'https://giscus.app') return;
+            handler()
+        });
+        window.addEventListener('onColorSchemeChange', handler);
+
+        function handler() {
+            if (document.documentElement.dataset.scheme === "light") {
+                setGiscusTheme('light_tritanopia');
+            } else {
+                setGiscusTheme('dark_tritanopia');
+            };
+        };
+    }());
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2023 Tweakzx
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.5.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
+            >
+
+            </main>
+    
+        <aside class="sidebar right-sidebar sticky">
+            <section class="widget archives">
+                <div class="widget-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+                </div>
+                <h2 class="widget-title section-title">Table of contents</h2>
+                
+                <div class="widget--toc">
+                    <nav id="TableOfContents">
+  <ol>
+    <li><a href="#安装k8s-1253版本的脚本">安装k8s-1.25.3版本的脚本</a></li>
+  </ol>
+</nav>
+                </div>
+            </section>
+        </aside>
+    
+
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
+                defer="false"
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>
