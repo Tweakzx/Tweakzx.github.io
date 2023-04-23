@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
     <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='安装k8s-1.25.3版本的脚本 内容来源：Ubuntu-安装K8s-v1.25.3脚本 | Marshall&amp;rsquo;s blog (aledk.com) 适用的ubuntu版本为18.04及以上 # !/bin/bash'><title>【Kubernetes】ubunutu脚本安装k8s集群</title>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='安装k8s-1.18.9版本的脚本 内容参考来源：Ubuntu-安装K8s-v1.25.3脚本 | Marshall&amp;rsquo;s blog (aledk.com) # !/bin/bash KUBE_VERSION=&amp;#34;1.18.9&amp;#34; KUBE_VERSION2=$(echo $KUBE_VERSION |awk -F. &amp;#39;{print $2}&amp;#39;) DOCKER_VERSION=&amp;#34;18.06.3&amp;#34; MASTER1_IP=10.10.0.25 NODE1_IP=10.10.0.26 MASTER1=master NODE1=node1 POD_NETWORK=&amp;#34;10.244.0.0/16&amp;#34; SERVICE_NETWORK=&amp;#34;10.96.0.0/16&amp;#34; . /etc/os-release IMAGES_URL=&amp;#34;registry.aliyuncs.com/google_containers&amp;#34; CRI_DOCKER_VERSION=0.2.6'><title>【Kubernetes】ubunutu脚本安装k8s集群</title>
 
 <link rel='canonical' href='https://tweakzx.github.io/p/kubernetesubunutu%E8%84%9A%E6%9C%AC%E5%AE%89%E8%A3%85k8s%E9%9B%86%E7%BE%A4/'>
 
 <link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='【Kubernetes】ubunutu脚本安装k8s集群'>
-<meta property='og:description' content='安装k8s-1.25.3版本的脚本 内容来源：Ubuntu-安装K8s-v1.25.3脚本 | Marshall&amp;rsquo;s blog (aledk.com) 适用的ubuntu版本为18.04及以上 # !/bin/bash'>
+<meta property='og:description' content='安装k8s-1.18.9版本的脚本 内容参考来源：Ubuntu-安装K8s-v1.25.3脚本 | Marshall&amp;rsquo;s blog (aledk.com) # !/bin/bash KUBE_VERSION=&amp;#34;1.18.9&amp;#34; KUBE_VERSION2=$(echo $KUBE_VERSION |awk -F. &amp;#39;{print $2}&amp;#39;) DOCKER_VERSION=&amp;#34;18.06.3&amp;#34; MASTER1_IP=10.10.0.25 NODE1_IP=10.10.0.26 MASTER1=master NODE1=node1 POD_NETWORK=&amp;#34;10.244.0.0/16&amp;#34; SERVICE_NETWORK=&amp;#34;10.96.0.0/16&amp;#34; . /etc/os-release IMAGES_URL=&amp;#34;registry.aliyuncs.com/google_containers&amp;#34; CRI_DOCKER_VERSION=0.2.6'>
 <meta property='og:url' content='https://tweakzx.github.io/p/kubernetesubunutu%E8%84%9A%E6%9C%AC%E5%AE%89%E8%A3%85k8s%E9%9B%86%E7%BE%A4/'>
 <meta property='og:site_name' content='Tweakzx'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2023-04-21T16:06:05&#43;08:00'/><meta property='article:modified_time' content='2023-04-21T16:06:05&#43;08:00'/>
 <meta name="twitter:title" content="【Kubernetes】ubunutu脚本安装k8s集群">
-<meta name="twitter:description" content="安装k8s-1.25.3版本的脚本 内容来源：Ubuntu-安装K8s-v1.25.3脚本 | Marshall&amp;rsquo;s blog (aledk.com) 适用的ubuntu版本为18.04及以上 # !/bin/bash">
+<meta name="twitter:description" content="安装k8s-1.18.9版本的脚本 内容参考来源：Ubuntu-安装K8s-v1.25.3脚本 | Marshall&amp;rsquo;s blog (aledk.com) # !/bin/bash KUBE_VERSION=&amp;#34;1.18.9&amp;#34; KUBE_VERSION2=$(echo $KUBE_VERSION |awk -F. &amp;#39;{print $2}&amp;#39;) DOCKER_VERSION=&amp;#34;18.06.3&amp;#34; MASTER1_IP=10.10.0.25 NODE1_IP=10.10.0.26 MASTER1=master NODE1=node1 POD_NETWORK=&amp;#34;10.244.0.0/16&amp;#34; SERVICE_NETWORK=&amp;#34;10.96.0.0/16&amp;#34; . /etc/os-release IMAGES_URL=&amp;#34;registry.aliyuncs.com/google_containers&amp;#34; CRI_DOCKER_VERSION=0.2.6">
     </head>
     <body class="
     article-page has-toc
@@ -111,17 +111,14 @@
 </header>
 
     <section class="article-content">
-    <h2 id="安装k8s-1253版本的脚本">安装k8s-1.25.3版本的脚本</h2>
-<p>内容来源：<a class="link" href="https://aledk.com/2022/10/30/ubuntu-k8s-sh/"  target="_blank" rel="noopener"
+    <h2 id="安装k8s-1189版本的脚本">安装k8s-1.18.9版本的脚本</h2>
+<p>内容参考来源：<a class="link" href="https://aledk.com/2022/10/30/ubuntu-k8s-sh/"  target="_blank" rel="noopener"
     >Ubuntu-安装K8s-v1.25.3脚本 | Marshall&rsquo;s blog (aledk.com)</a></p>
-<ul>
-<li>适用的ubuntu版本为18.04及以上</li>
-</ul>
 <div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># !/bin/bash</span>
 <span class="nv">KUBE_VERSION</span><span class="o">=</span><span class="s2">&#34;1.18.9&#34;</span>
 <span class="nv">KUBE_VERSION2</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="nv">$KUBE_VERSION</span> <span class="p">|</span>awk -F. <span class="s1">&#39;{print $2}&#39;</span><span class="k">)</span>
 
-<span class="nv">DOCKER_VERSION</span><span class="o">=</span><span class="s2">&#34;&#34;</span>
+<span class="nv">DOCKER_VERSION</span><span class="o">=</span><span class="s2">&#34;18.06.3&#34;</span>
 
 <span class="nv">MASTER1_IP</span><span class="o">=</span>10.10.0.25
 <span class="nv">NODE1_IP</span><span class="o">=</span>10.10.0.26
@@ -247,33 +244,52 @@ install_cri_dockerd <span class="o">()</span> <span class="o">{</span>
 kubernetes_init <span class="o">()</span> <span class="o">{</span>
     <span class="si">${</span><span class="nv">COLOR_SUCCESS</span><span class="si">}</span><span class="s2">&#34;开始初始化k8s...&#34;</span><span class="si">${</span><span class="nv">END</span><span class="si">}</span>
     kubeadm init <span class="se">\
-</span><span class="se"></span>		--kubernetes-version<span class="o">=</span>v<span class="si">${</span><span class="nv">KUBE_VERSION</span><span class="si">}</span> <span class="se">\
-</span><span class="se"></span>		--image-repository registry.aliyuncs.com/google_containers <span class="se">\
-</span><span class="se"></span>		--service-cidr<span class="o">=</span><span class="si">${</span><span class="nv">SERVICE_NETWORK</span><span class="si">}</span> <span class="se">\
-</span><span class="se"></span>		--pod-network-cidr<span class="o">=</span><span class="si">${</span><span class="nv">POD_NETWORK</span><span class="si">}</span> <span class="se">\
-</span><span class="se"></span>		--v<span class="o">=</span><span class="m">5</span>
-	<span class="k">if</span> <span class="o">[</span> <span class="nv">$?</span> -eq <span class="m">0</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
-		mkdir -p <span class="nv">$HOME</span>/.kube
-  		sudo cp -i /etc/kubernetes/admin.conf <span class="nv">$HOME</span>/.kube/config
-  		sudo chown <span class="k">$(</span>id -u<span class="k">)</span>:<span class="k">$(</span>id -g<span class="k">)</span> <span class="nv">$HOME</span>/.kube/config	
-    	color <span class="s2">&#34;初始化 k8s 成功！&#34;</span> <span class="m">0</span>
-	<span class="k">else</span>
-	    color <span class="s2">&#34;初始化 k8s 失败！&#34;</span> <span class="m">1</span>
-	<span class="k">fi</span>
+</span><span class="se"></span>--kubernetes-version<span class="o">=</span>v<span class="si">${</span><span class="nv">KUBE_VERSION</span><span class="si">}</span> <span class="se">\
+</span><span class="se"></span>--apiserver-advertise-address<span class="o">=</span><span class="k">$(</span>MASTER1_IP<span class="k">)</span> <span class="se">\
+</span><span class="se"></span>--image-repository registry.aliyuncs.com/google_containers <span class="se">\
+</span><span class="se"></span>--service-cidr<span class="o">=</span><span class="si">${</span><span class="nv">SERVICE_NETWORK</span><span class="si">}</span> <span class="se">\
+</span><span class="se"></span>--pod-network-cidr<span class="o">=</span><span class="si">${</span><span class="nv">POD_NETWORK</span><span class="si">}</span> <span class="se">\
+</span><span class="se"></span>--v<span class="o">=</span><span class="m">5</span>
+
+    <span class="k">if</span> <span class="o">[</span> <span class="nv">$?</span> -eq <span class="m">0</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+        mkdir -p <span class="nv">$HOME</span>/.kube
+        sudo cp -i /etc/kubernetes/admin.conf <span class="nv">$HOME</span>/.kube/config
+        sudo chown <span class="k">$(</span>id -u<span class="k">)</span>:<span class="k">$(</span>id -g<span class="k">)</span> <span class="nv">$HOME</span>/.kube/config
+        color <span class="s2">&#34;初始化 k8s 成功！&#34;</span> <span class="m">0</span>
+    <span class="k">else</span>
+        color <span class="s2">&#34;初始化 k8s 失败！&#34;</span> <span class="m">1</span>
+    <span class="k">fi</span>
 <span class="o">}</span>
 
 reset_kubernetes <span class="o">()</span> <span class="o">{</span>
     <span class="c1">#To do</span>
     kubeadm reset
+    rm -rf /etc/kubernetes/*
+    rm -rf <span class="nv">$HOME</span>/.kube/
 <span class="o">}</span>
 
 configure_network <span class="o">()</span> <span class="o">{</span>
-	kubectl apply -f https://raw.githubusercontent.com/flannel-io/flannel/master/Documentation/kube-flannel.yml
+    kubectl apply -f https://raw.githubusercontent.com/flannel-io/flannel/master/Documentation/kube-flannel.yml
+<span class="o">}</span>
+
+remove_docker <span class="o">()</span> <span class="o">{</span>
+    apt-get autoremove docker docker-ce docker-engine  docker.io  containerd runc
+    dpkg -l <span class="p">|</span>grep ^rc<span class="p">|</span>awk <span class="s1">&#39;{print $2}&#39;</span> <span class="p">|</span>sudo xargs dpkg -P
+    rm -rf /etc/systemd/system/docker.service.d
+    rm -rf /var/lib/docker
+<span class="o">}</span>
+
+remove_kubernetes <span class="o">()</span> <span class="o">{</span>
+    <span class="c1">#To do</span>
+    apt remove -y kubeadm kubectl kubelet
+    sudo rm -rf /etc/kubernetes /var/lib/kubernetes /var/lib/etcd /var/lib/kubelet /var/run/kubernetes ~/.kube
+    sudo ip link delete cni0
+    sudo ip link delete flannel.1
 <span class="o">}</span>
 
 main <span class="o">()</span> <span class="o">{</span>
-    <span class="nv">PS3</span><span class="o">=</span><span class="s2">&#34;请选择编号（1-5）&#34;</span>
-    <span class="nv">options</span><span class="o">=(</span><span class="s2">&#34;初始化kubernetes集群&#34;</span> <span class="s2">&#34;加入kubernetes集群&#34;</span> <span class="s2">&#34;退出kubernetes集群&#34;</span> <span class="s2">&#34;配置网络&#34;</span> <span class="s2">&#34;退出本程序&#34;</span><span class="o">)</span>
+    <span class="nv">PS3</span><span class="o">=</span><span class="s2">&#34;请选择编号（1-6）&#34;</span>
+    <span class="nv">options</span><span class="o">=(</span><span class="s2">&#34;初始化kubernetes集群&#34;</span> <span class="s2">&#34;加入kubernetes集群&#34;</span> <span class="s2">&#34;退出kubernetes集群&#34;</span> <span class="s2">&#34;配置网络&#34;</span> <span class="s2">&#34;删除kubernetes&#34;</span> <span class="s2">&#34;退出本程序&#34;</span><span class="o">)</span>
     <span class="k">select</span> item in <span class="s2">&#34;</span><span class="si">${</span><span class="nv">options</span><span class="p">[@]</span><span class="si">}</span><span class="s2">&#34;</span><span class="p">;</span> <span class="k">do</span>
         <span class="k">case</span> <span class="nv">$item</span> in
             <span class="s2">&#34;初始化kubernetes集群&#34;</span><span class="o">)</span>
@@ -289,11 +305,21 @@ main <span class="o">()</span> <span class="o">{</span>
                 install_docker
                 install_kubeadm
                 install_cri_dockerd
-                <span class="si">${</span><span class="nv">COLOR_SUCCESS</span><span class="si">}</span><span class="s2">&#34;加入kubernetes前的准备工作已完成，请执行kubeadm jion命令！&#34;</span><span class="si">${</span><span class="nv">END</span><span class="si">}</span>
+                <span class="si">${</span><span class="nv">COLOR_SUCCESS</span><span class="si">}</span><span class="s2">&#34;加入kubernetes前的准备工作已完成，请执行kubeadm join命令！&#34;</span><span class="si">${</span><span class="nv">END</span><span class="si">}</span>
                 <span class="nb">break</span>
                 <span class="p">;;</span>
             <span class="s2">&#34;退出kubernetes集群&#34;</span><span class="o">)</span>
                 reset_kubernetes
+                <span class="nb">break</span>
+                <span class="p">;;</span>
+            <span class="s2">&#34;配置网络&#34;</span><span class="o">)</span>
+                configure_network
+                <span class="nb">break</span>
+                <span class="p">;;</span>
+            <span class="s2">&#34;删除kubernetes&#34;</span><span class="o">)</span>
+                reset_kubernetes
+                remove_kubernetes
+                remove_docker
                 <span class="nb">break</span>
                 <span class="p">;;</span>
             <span class="s2">&#34;退出本程序&#34;</span><span class="o">)</span>
@@ -305,6 +331,7 @@ main <span class="o">()</span> <span class="o">{</span>
 <span class="o">}</span>
 
 main
+                                                                                                                 217,4         Bot
 </code></pre></div>
 </section>
 
@@ -525,7 +552,7 @@ main
                 <div class="widget--toc">
                     <nav id="TableOfContents">
   <ol>
-    <li><a href="#安装k8s-1253版本的脚本">安装k8s-1.25.3版本的脚本</a></li>
+    <li><a href="#安装k8s-1189版本的脚本">安装k8s-1.18.9版本的脚本</a></li>
   </ol>
 </nav>
                 </div>

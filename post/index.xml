@@ -13,16 +13,7 @@
       <pubDate>Fri, 21 Apr 2023 16:06:05 +0800</pubDate>
       
       <guid>https://tweakzx.github.io/p/kubernetesubunutu%E8%84%9A%E6%9C%AC%E5%AE%89%E8%A3%85k8s%E9%9B%86%E7%BE%A4/</guid>
-      <description>安装k8s-1.25.3版本的脚本 内容来源：Ubuntu-安装K8s-v1.25.3脚本 | Marshall&amp;rsquo;s blog (aledk.com) 适用的ubuntu版本为18.04及以上 # !/bin/bash</description>
-    </item>
-    
-    <item>
-      <title>【论文笔记】Salus论文笔记</title>
-      <link>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0salus%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/</link>
-      <pubDate>Mon, 10 Apr 2023 10:34:25 +0800</pubDate>
-      
-      <guid>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0salus%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/</guid>
-      <description>Salus: Fine-Grained GPU Sharing Primitives for Deep Learning Applications 摘要 GPU 利用率不足 现代 GPU 本身不支持细粒度共享原语 分时和抢占是代价昂贵的 DL 应用程序不能完全使用 GPU 的资源， 且这些资源无法被共享 Salus</description>
+      <description>安装k8s-1.18.9版本的脚本 内容参考来源：Ubuntu-安装K8s-v1.25.3脚本 | Marshall&amp;rsquo;s blog (aledk.com) # !/bin/bash KUBE_VERSION=&amp;#34;1.18.9&amp;#34; KUBE_VERSION2=$(echo $KUBE_VERSION |awk -F. &amp;#39;{print $2}&amp;#39;) DOCKER_VERSION=&amp;#34;18.06.3&amp;#34; MASTER1_IP=10.10.0.25 NODE1_IP=10.10.0.26 MASTER1=master NODE1=node1 POD_NETWORK=&amp;#34;10.244.0.0/16&amp;#34; SERVICE_NETWORK=&amp;#34;10.96.0.0/16&amp;#34; . /etc/os-release IMAGES_URL=&amp;#34;registry.aliyuncs.com/google_containers&amp;#34; CRI_DOCKER_VERSION=0.2.6</description>
     </item>
     
     <item>

@@ -12,17 +12,14 @@
         <pubDate>Fri, 21 Apr 2023 16:06:05 +0800</pubDate>
         
         <guid>https://tweakzx.github.io/p/kubernetesubunutu%E8%84%9A%E6%9C%AC%E5%AE%89%E8%A3%85k8s%E9%9B%86%E7%BE%A4/</guid>
-        <description>&lt;h2 id=&#34;安装k8s-1253版本的脚本&#34;&gt;安装k8s-1.25.3版本的脚本&lt;/h2&gt;
-&lt;p&gt;内容来源：&lt;a class=&#34;link&#34; href=&#34;https://aledk.com/2022/10/30/ubuntu-k8s-sh/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+        <description>&lt;h2 id=&#34;安装k8s-1189版本的脚本&#34;&gt;安装k8s-1.18.9版本的脚本&lt;/h2&gt;
+&lt;p&gt;内容参考来源：&lt;a class=&#34;link&#34; href=&#34;https://aledk.com/2022/10/30/ubuntu-k8s-sh/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;Ubuntu-安装K8s-v1.25.3脚本 | Marshall&amp;rsquo;s blog (aledk.com)&lt;/a&gt;&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;适用的ubuntu版本为18.04及以上&lt;/li&gt;
-&lt;/ul&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# !/bin/bash&lt;/span&gt;
 &lt;span class=&#34;nv&#34;&gt;KUBE_VERSION&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;1.18.9&amp;#34;&lt;/span&gt;
 &lt;span class=&#34;nv&#34;&gt;KUBE_VERSION2&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;$(&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;echo&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;$KUBE_VERSION&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt;awk -F. &lt;span class=&#34;s1&#34;&gt;&amp;#39;{print $2}&amp;#39;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;)&lt;/span&gt;
 
-&lt;span class=&#34;nv&#34;&gt;DOCKER_VERSION&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt;
+&lt;span class=&#34;nv&#34;&gt;DOCKER_VERSION&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;18.06.3&amp;#34;&lt;/span&gt;
 
 &lt;span class=&#34;nv&#34;&gt;MASTER1_IP&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;10.10.0.25
 &lt;span class=&#34;nv&#34;&gt;NODE1_IP&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;10.10.0.26
@@ -148,33 +145,52 @@ install_cri_dockerd &lt;span class=&#34;o&#34;&gt;()&lt;/span&gt; &lt;span class
 kubernetes_init &lt;span class=&#34;o&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
     &lt;span class=&#34;si&#34;&gt;${&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;COLOR_SUCCESS&lt;/span&gt;&lt;span class=&#34;si&#34;&gt;}&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;开始初始化k8s...&amp;#34;&lt;/span&gt;&lt;span class=&#34;si&#34;&gt;${&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;END&lt;/span&gt;&lt;span class=&#34;si&#34;&gt;}&lt;/span&gt;
     kubeadm init &lt;span class=&#34;se&#34;&gt;\
-&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;		--kubernetes-version&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;v&lt;span class=&#34;si&#34;&gt;${&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;KUBE_VERSION&lt;/span&gt;&lt;span class=&#34;si&#34;&gt;}&lt;/span&gt; &lt;span class=&#34;se&#34;&gt;\
-&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;		--image-repository registry.aliyuncs.com/google_containers &lt;span class=&#34;se&#34;&gt;\
-&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;		--service-cidr&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;si&#34;&gt;${&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;SERVICE_NETWORK&lt;/span&gt;&lt;span class=&#34;si&#34;&gt;}&lt;/span&gt; &lt;span class=&#34;se&#34;&gt;\
-&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;		--pod-network-cidr&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;si&#34;&gt;${&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;POD_NETWORK&lt;/span&gt;&lt;span class=&#34;si&#34;&gt;}&lt;/span&gt; &lt;span class=&#34;se&#34;&gt;\
-&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;		--v&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;m&#34;&gt;5&lt;/span&gt;
-	&lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;[&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;$?&lt;/span&gt; -eq &lt;span class=&#34;m&#34;&gt;0&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;]&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;then&lt;/span&gt;
-		mkdir -p &lt;span class=&#34;nv&#34;&gt;$HOME&lt;/span&gt;/.kube
-  		sudo cp -i /etc/kubernetes/admin.conf &lt;span class=&#34;nv&#34;&gt;$HOME&lt;/span&gt;/.kube/config
-  		sudo chown &lt;span class=&#34;k&#34;&gt;$(&lt;/span&gt;id -u&lt;span class=&#34;k&#34;&gt;)&lt;/span&gt;:&lt;span class=&#34;k&#34;&gt;$(&lt;/span&gt;id -g&lt;span class=&#34;k&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;$HOME&lt;/span&gt;/.kube/config	
-    	color &lt;span class=&#34;s2&#34;&gt;&amp;#34;初始化 k8s 成功！&amp;#34;&lt;/span&gt; &lt;span class=&#34;m&#34;&gt;0&lt;/span&gt;
-	&lt;span class=&#34;k&#34;&gt;else&lt;/span&gt;
-	    color &lt;span class=&#34;s2&#34;&gt;&amp;#34;初始化 k8s 失败！&amp;#34;&lt;/span&gt; &lt;span class=&#34;m&#34;&gt;1&lt;/span&gt;
-	&lt;span class=&#34;k&#34;&gt;fi&lt;/span&gt;
+&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;--kubernetes-version&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;v&lt;span class=&#34;si&#34;&gt;${&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;KUBE_VERSION&lt;/span&gt;&lt;span class=&#34;si&#34;&gt;}&lt;/span&gt; &lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;--apiserver-advertise-address&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;$(&lt;/span&gt;MASTER1_IP&lt;span class=&#34;k&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;--image-repository registry.aliyuncs.com/google_containers &lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;--service-cidr&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;si&#34;&gt;${&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;SERVICE_NETWORK&lt;/span&gt;&lt;span class=&#34;si&#34;&gt;}&lt;/span&gt; &lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;--pod-network-cidr&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;si&#34;&gt;${&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;POD_NETWORK&lt;/span&gt;&lt;span class=&#34;si&#34;&gt;}&lt;/span&gt; &lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;--v&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;m&#34;&gt;5&lt;/span&gt;
+
+    &lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;[&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;$?&lt;/span&gt; -eq &lt;span class=&#34;m&#34;&gt;0&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;]&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;then&lt;/span&gt;
+        mkdir -p &lt;span class=&#34;nv&#34;&gt;$HOME&lt;/span&gt;/.kube
+        sudo cp -i /etc/kubernetes/admin.conf &lt;span class=&#34;nv&#34;&gt;$HOME&lt;/span&gt;/.kube/config
+        sudo chown &lt;span class=&#34;k&#34;&gt;$(&lt;/span&gt;id -u&lt;span class=&#34;k&#34;&gt;)&lt;/span&gt;:&lt;span class=&#34;k&#34;&gt;$(&lt;/span&gt;id -g&lt;span class=&#34;k&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;$HOME&lt;/span&gt;/.kube/config
+        color &lt;span class=&#34;s2&#34;&gt;&amp;#34;初始化 k8s 成功！&amp;#34;&lt;/span&gt; &lt;span class=&#34;m&#34;&gt;0&lt;/span&gt;
+    &lt;span class=&#34;k&#34;&gt;else&lt;/span&gt;
+        color &lt;span class=&#34;s2&#34;&gt;&amp;#34;初始化 k8s 失败！&amp;#34;&lt;/span&gt; &lt;span class=&#34;m&#34;&gt;1&lt;/span&gt;
+    &lt;span class=&#34;k&#34;&gt;fi&lt;/span&gt;
 &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
 
 reset_kubernetes &lt;span class=&#34;o&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
     &lt;span class=&#34;c1&#34;&gt;#To do&lt;/span&gt;
     kubeadm reset
+    rm -rf /etc/kubernetes/*
+    rm -rf &lt;span class=&#34;nv&#34;&gt;$HOME&lt;/span&gt;/.kube/
 &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
 
 configure_network &lt;span class=&#34;o&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
-	kubectl apply -f https://raw.githubusercontent.com/flannel-io/flannel/master/Documentation/kube-flannel.yml
+    kubectl apply -f https://raw.githubusercontent.com/flannel-io/flannel/master/Documentation/kube-flannel.yml
+&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+
+remove_docker &lt;span class=&#34;o&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+    apt-get autoremove docker docker-ce docker-engine  docker.io  containerd runc
+    dpkg -l &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt;grep ^rc&lt;span class=&#34;p&#34;&gt;|&lt;/span&gt;awk &lt;span class=&#34;s1&#34;&gt;&amp;#39;{print $2}&amp;#39;&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt;sudo xargs dpkg -P
+    rm -rf /etc/systemd/system/docker.service.d
+    rm -rf /var/lib/docker
+&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+
+remove_kubernetes &lt;span class=&#34;o&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+    &lt;span class=&#34;c1&#34;&gt;#To do&lt;/span&gt;
+    apt remove -y kubeadm kubectl kubelet
+    sudo rm -rf /etc/kubernetes /var/lib/kubernetes /var/lib/etcd /var/lib/kubelet /var/run/kubernetes ~/.kube
+    sudo ip link delete cni0
+    sudo ip link delete flannel.1
 &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
 
 main &lt;span class=&#34;o&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
-    &lt;span class=&#34;nv&#34;&gt;PS3&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;请选择编号（1-5）&amp;#34;&lt;/span&gt;
-    &lt;span class=&#34;nv&#34;&gt;options&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=(&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;初始化kubernetes集群&amp;#34;&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;加入kubernetes集群&amp;#34;&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;退出kubernetes集群&amp;#34;&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;配置网络&amp;#34;&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;退出本程序&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;
+    &lt;span class=&#34;nv&#34;&gt;PS3&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;请选择编号（1-6）&amp;#34;&lt;/span&gt;
+    &lt;span class=&#34;nv&#34;&gt;options&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=(&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;初始化kubernetes集群&amp;#34;&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;加入kubernetes集群&amp;#34;&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;退出kubernetes集群&amp;#34;&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;配置网络&amp;#34;&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;删除kubernetes&amp;#34;&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;退出本程序&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;
     &lt;span class=&#34;k&#34;&gt;select&lt;/span&gt; item in &lt;span class=&#34;s2&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;si&#34;&gt;${&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;options&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[@]&lt;/span&gt;&lt;span class=&#34;si&#34;&gt;}&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;do&lt;/span&gt;
         &lt;span class=&#34;k&#34;&gt;case&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;$item&lt;/span&gt; in
             &lt;span class=&#34;s2&#34;&gt;&amp;#34;初始化kubernetes集群&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;
@@ -190,11 +206,21 @@ main &lt;span class=&#34;o&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;o&#34;&gt
                 install_docker
                 install_kubeadm
                 install_cri_dockerd
-                &lt;span class=&#34;si&#34;&gt;${&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;COLOR_SUCCESS&lt;/span&gt;&lt;span class=&#34;si&#34;&gt;}&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;加入kubernetes前的准备工作已完成，请执行kubeadm jion命令！&amp;#34;&lt;/span&gt;&lt;span class=&#34;si&#34;&gt;${&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;END&lt;/span&gt;&lt;span class=&#34;si&#34;&gt;}&lt;/span&gt;
+                &lt;span class=&#34;si&#34;&gt;${&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;COLOR_SUCCESS&lt;/span&gt;&lt;span class=&#34;si&#34;&gt;}&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;加入kubernetes前的准备工作已完成，请执行kubeadm join命令！&amp;#34;&lt;/span&gt;&lt;span class=&#34;si&#34;&gt;${&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;END&lt;/span&gt;&lt;span class=&#34;si&#34;&gt;}&lt;/span&gt;
                 &lt;span class=&#34;nb&#34;&gt;break&lt;/span&gt;
                 &lt;span class=&#34;p&#34;&gt;;;&lt;/span&gt;
             &lt;span class=&#34;s2&#34;&gt;&amp;#34;退出kubernetes集群&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;
                 reset_kubernetes
+                &lt;span class=&#34;nb&#34;&gt;break&lt;/span&gt;
+                &lt;span class=&#34;p&#34;&gt;;;&lt;/span&gt;
+            &lt;span class=&#34;s2&#34;&gt;&amp;#34;配置网络&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;
+                configure_network
+                &lt;span class=&#34;nb&#34;&gt;break&lt;/span&gt;
+                &lt;span class=&#34;p&#34;&gt;;;&lt;/span&gt;
+            &lt;span class=&#34;s2&#34;&gt;&amp;#34;删除kubernetes&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;
+                reset_kubernetes
+                remove_kubernetes
+                remove_docker
                 &lt;span class=&#34;nb&#34;&gt;break&lt;/span&gt;
                 &lt;span class=&#34;p&#34;&gt;;;&lt;/span&gt;
             &lt;span class=&#34;s2&#34;&gt;&amp;#34;退出本程序&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;
@@ -206,56 +232,8 @@ main &lt;span class=&#34;o&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;o&#34;&gt
 &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
 
 main
+                                                                                                                 217,4         Bot
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
-        </item>
-        <item>
-        <title>【论文笔记】Salus论文笔记</title>
-        <link>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0salus%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/</link>
-        <pubDate>Mon, 10 Apr 2023 10:34:25 +0800</pubDate>
-        
-        <guid>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0salus%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/</guid>
-        <description>&lt;h1 id=&#34;salus-fine-grained-gpu-sharing-primitives-for-deep-learning-applications&#34;&gt;Salus: Fine-Grained GPU Sharing Primitives for Deep Learning Applications&lt;/h1&gt;
-&lt;h2 id=&#34;摘要&#34;&gt;摘要&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;GPU 利用率不足&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;现代 GPU 本身不支持细粒度共享原语&lt;/li&gt;
-&lt;li&gt;分时和抢占是代价昂贵的&lt;/li&gt;
-&lt;li&gt;DL 应用程序不能完全使用 GPU 的资源， 且这些资源无法被共享&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;Salus&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;支持两个 GPU 共享原语，以实现多个 DL 应用程序之间的细粒度 GPU 共享， 原语是：
-&lt;ul&gt;
-&lt;li&gt;快速作业切换&lt;/li&gt;
-&lt;li&gt;内存共享&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Salus 实现了一个高效的、统一的执行服务，将 GPU 共享给不同的 DL 应用程序，并通过执行迭代调度和解决相关的内存管理问题来实现细粒度共享。&lt;/li&gt;
-&lt;li&gt;我们展示了这些原语可以用来实现灵活的共享策略，比如公平性、优先级排序和为各种用例打包。&lt;/li&gt;
-&lt;li&gt;将 Salus 与 TensorFlow 相结合，对流行的 DL 工作进行评估，结果表明 Salus 可以提高 DL 培训工作的平均完成时间3.19 × ，超参数调整的 GPU 利用率2.38 × ，DL 推理应用的 GPU 利用率42 × 以上，不共享 GPU 和7 × 以上 NVIDIA MPS，且开销较小。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;引言&#34;&gt;引言&lt;/h2&gt;
-&lt;p&gt;近年来，深度学习(DL)在许多数据驱动的应用领域得到了普遍采用，从机器翻译和图像字幕到聊天机器人和个人助理[35]。因此，业界和学术界都在构建 DL 解决方案，例如 TensorFlow [16] ，CNTK [52] ，Caffe2[1]等[11,17,19,21,23,30,49] ，以便能够使用大型数据集对 DL 模型进行培训，并为 DL 模型提供推理服务。&lt;/p&gt;
-&lt;p&gt;GPU 在这种情况下已经成为一种流行的选择，因为它们擅长 DL 作业中常见的高度并行化的矩阵操作[9,16,31,54]。不幸的是，目前 GPU 分配的最小粒度总是整个 GPU-一个应用程序可以有多个 GPU，但是每个 GPU 只能分配给一个应用程序[5,10,13,14]。虽然这种访问 GPU 的排他性简化了硬件设计并使其高效率摆在首位，但它导致了两个主要的低效率。&lt;/p&gt;
-&lt;p&gt;首先，粗粒度的一次一个 GPU 分配模型阻碍了 GPU 集群管理器的调度能力[3,4,10,29,48]。对于灵活的调度，集群管理器通常必须挂起和恢复作业(即抢占) ，甚至将作业迁移到不同的主机。然而，一个正在运行的 DL 作业必须从 GPU 中完全清除，然后才能启动另一个作业，这会带来很大的性能开销。因此，GPU 集群通常采用非抢占式调度，比如 FIFO [4] ，这很容易受到线头(head-of-line，HOL)阻塞问题的影响。&lt;/p&gt;
-&lt;p&gt;其次，并非所有的 DL 作业都能始终充分利用 GPU (2)。一方面，DL 培训工作通常被认为是资源密集型的。但是对于内存密集型(例如，大批量) ，我们的分析表明，由于随着时间的推移和迭代之间的不同内存使用，GPU 内存的平均利用率通常低于50% (图1)。在计算机密集型的培训工作中也可以观察到类似的模式。DL 模式服务还要求细粒度的 GPU 共享和打包。由于请求速率在一天内以及不同的模型之间会发生时间上的变化，因此当请求速率较低时，在同一 GPU 上保存多个 DL 模型的能力可以通过减少服务集群所需的 GPU 数量来显着降低成本[8,22]。&lt;/p&gt;
-&lt;p&gt;此外，DL 模型的自动超参数调整(如 AutoML [18,36,42])越来越流行的趋势进一步强调了提高 GPU 利用率的必要性。这可以被视为“训练前”。它通常是通过并行生成许多训练作业来进行超参数探索，其中许多作业一旦被认为质量较差就会被杀死。通过将许多这些任务放在一起，可以提高 GPU 的利用率，从而缩短完成时间，这是可取的，因为超参数探索作业的全有或全无属性——也就是说，只有在所有探索作业完成之后，结果才是有用的。&lt;/p&gt;
-&lt;p&gt;为了解决这些问题，我们提出 Salus 来支持在共存的、未修改的 DL 应用程序之间使用灵活的调度策略细粒度地共享单个 GPU。虽然简单地共享一个 GPU 是可以实现的，但是以一种有效的方式这样做并不是微不足道的(2.3)。Salus 通过公开两个 GPU 共享原语实现了这一点: 快速作业切换和内存共享(3)。前者确保了我们可以在 GPU 上快速切换当前活动的 DL 作业，从而实现高效的分时和抢占。后者通过在同一设备上打包更多小的 DL 作业来确保高利用率。DL 应用程序独特的内存使用模式是为什么这些原语可以在 Salus 中有效实现的关键: 我们识别三种不同的内存使用类型，并在处理它们时应用不同的管理策略(3.2)。将这两个原语结合在一起，细粒度的时空共享可以用于实现各种解决方案(4)。&lt;/p&gt;
-&lt;p&gt;我们已经集成了 Salus 和 TensorFlow，并在一个由流行的 DL 模型(5)组成的集合 DL 工作负载上对其进行了评估。结果表明，Salus 通过有效地实现最短剩余时间优先(SRTF)调度策略，使 DL 训练任务的平均完成时间提高了3.19倍，从而避免了 HOL 阻塞。此外，Salus 在超参数调整工作负载方面显示出2.38倍的 GPU 利用率改进，42倍以上不共享 GPU，7倍以上 NVIDIA MPS 用于开销较小的 DL 推理应用程序。&lt;/p&gt;
-&lt;h2 id=&#34;背景&#34;&gt;背景&lt;/h2&gt;
-&lt;h2 id=&#34;深度学习&#34;&gt;深度学习&lt;/h2&gt;
-&lt;h2 id=&#34;dl负载特性&#34;&gt;DL负载特性&lt;/h2&gt;
-&lt;h2 id=&#34;现存的gpu共享方案&#34;&gt;现存的GPU共享方案&lt;/h2&gt;
-&lt;h2 id=&#34;salus&#34;&gt;Salus&lt;/h2&gt;
-&lt;h3 id=&#34;架构总览&#34;&gt;架构总览&lt;/h3&gt;
-&lt;h3 id=&#34;高效任务切换&#34;&gt;高效任务切换&lt;/h3&gt;
-</description>
         </item>
         <item>
         <title>【论文笔记】Lucid论文阅读笔记</title>
