@@ -7,11 +7,11 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <lastBuildDate>Fri, 21 Apr 2023 16:06:05 +0800</lastBuildDate><atom:link href="https://tweakzx.github.io/index.xml" rel="self" type="application/rss+xml" /><item>
-        <title>【Kubernetes】ubunutu脚本安装k8s集群</title>
-        <link>https://tweakzx.github.io/p/kubernetesubunutu%E8%84%9A%E6%9C%AC%E5%AE%89%E8%A3%85k8s%E9%9B%86%E7%BE%A4/</link>
+        <title>【Kubernetes】ubuntu脚本安装k8s集群</title>
+        <link>https://tweakzx.github.io/p/kubernetesubuntu%E8%84%9A%E6%9C%AC%E5%AE%89%E8%A3%85k8s%E9%9B%86%E7%BE%A4/</link>
         <pubDate>Fri, 21 Apr 2023 16:06:05 +0800</pubDate>
         
-        <guid>https://tweakzx.github.io/p/kubernetesubunutu%E8%84%9A%E6%9C%AC%E5%AE%89%E8%A3%85k8s%E9%9B%86%E7%BE%A4/</guid>
+        <guid>https://tweakzx.github.io/p/kubernetesubuntu%E8%84%9A%E6%9C%AC%E5%AE%89%E8%A3%85k8s%E9%9B%86%E7%BE%A4/</guid>
         <description>&lt;h2 id=&#34;安装k8s-1189版本的脚本&#34;&gt;安装k8s-1.18.9版本的脚本&lt;/h2&gt;
 &lt;p&gt;内容参考来源：&lt;a class=&#34;link&#34; href=&#34;https://aledk.com/2022/10/30/ubuntu-k8s-sh/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;Ubuntu-安装K8s-v1.25.3脚本 | Marshall&amp;rsquo;s blog (aledk.com)&lt;/a&gt;&lt;/p&gt;
