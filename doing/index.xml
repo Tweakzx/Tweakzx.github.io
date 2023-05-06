@@ -6,16 +6,7 @@
     <description>Recent content in Doings on Tweakzx</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Mon, 10 Apr 2023 10:34:25 +0800</lastBuildDate><atom:link href="https://tweakzx.github.io/doing/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>【论文笔记】Salus论文笔记</title>
-      <link>https://tweakzx.github.io/doing/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0salus%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/</link>
-      <pubDate>Mon, 10 Apr 2023 10:34:25 +0800</pubDate>
-      
-      <guid>https://tweakzx.github.io/doing/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0salus%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/</guid>
-      <description>Salus: Fine-Grained GPU Sharing Primitives for Deep Learning Applications 摘要 GPU 利用率不足 现代 GPU 本身不支持细粒度共享原语 分时和抢占是代价昂贵的 DL 应用程序不能完全使用 GPU 的资源， 且这些资源无法被共享 Salus</description>
-    </item>
-    
+    <lastBuildDate>Mon, 13 Feb 2023 10:59:59 +0800</lastBuildDate><atom:link href="https://tweakzx.github.io/doing/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>【论文笔记】DNN训练负载分析</title>
       <link>https://tweakzx.github.io/doing/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0dnn%E8%AE%AD%E7%BB%83%E8%B4%9F%E8%BD%BD%E5%88%86%E6%9E%90/</link>
