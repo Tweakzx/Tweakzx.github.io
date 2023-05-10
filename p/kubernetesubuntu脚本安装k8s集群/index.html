@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
     <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='安装k8s-1.18.9版本的脚本 内容参考来源：Ubuntu-安装K8s-v1.25.3脚本 | Marshall&amp;rsquo;s blog (aledk.com) # !/bin/bash KUBE_VERSION=&amp;#34;1.18.9&amp;#34; KUBE_VERSION2=$(echo $KUBE_VERSION |awk -F. &amp;#39;{print $2}&amp;#39;) DOCKER_VERSION=&amp;#34;18.06.3&amp;#34; MASTER1_IP=10.10.0.25 NODE1_IP=10.10.0.26 MASTER1=master NODE1=node1 POD_NETWORK=&amp;#34;10.244.0.0/16&amp;#34; SERVICE_NETWORK=&amp;#34;10.96.0.0/16&amp;#34; . /etc/os-release IMAGES_URL=&amp;#34;registry.aliyuncs.com/google_containers&amp;#34; CRI_DOCKER_VERSION=0.2.6'><title>【Kubernetes】ubuntu脚本安装k8s集群</title>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='安装k8s-1.18.9版本的脚本 下载之后最好修改 KUBE_VERSION=&amp;ldquo;1.18.9&amp;rdquo; 以安装自己想要的版本 MASTER1_IP= 自己的master IP NODE1_IP= 集群的节点IP 可以自定义修改， 但是也可以不动'><title>【Kubernetes】ubuntu脚本安装k8s集群</title>
 
 <link rel='canonical' href='https://tweakzx.github.io/p/kubernetesubuntu%E8%84%9A%E6%9C%AC%E5%AE%89%E8%A3%85k8s%E9%9B%86%E7%BE%A4/'>
 
 <link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='【Kubernetes】ubuntu脚本安装k8s集群'>
-<meta property='og:description' content='安装k8s-1.18.9版本的脚本 内容参考来源：Ubuntu-安装K8s-v1.25.3脚本 | Marshall&amp;rsquo;s blog (aledk.com) # !/bin/bash KUBE_VERSION=&amp;#34;1.18.9&amp;#34; KUBE_VERSION2=$(echo $KUBE_VERSION |awk -F. &amp;#39;{print $2}&amp;#39;) DOCKER_VERSION=&amp;#34;18.06.3&amp;#34; MASTER1_IP=10.10.0.25 NODE1_IP=10.10.0.26 MASTER1=master NODE1=node1 POD_NETWORK=&amp;#34;10.244.0.0/16&amp;#34; SERVICE_NETWORK=&amp;#34;10.96.0.0/16&amp;#34; . /etc/os-release IMAGES_URL=&amp;#34;registry.aliyuncs.com/google_containers&amp;#34; CRI_DOCKER_VERSION=0.2.6'>
+<meta property='og:description' content='安装k8s-1.18.9版本的脚本 下载之后最好修改 KUBE_VERSION=&amp;ldquo;1.18.9&amp;rdquo; 以安装自己想要的版本 MASTER1_IP= 自己的master IP NODE1_IP= 集群的节点IP 可以自定义修改， 但是也可以不动'>
 <meta property='og:url' content='https://tweakzx.github.io/p/kubernetesubuntu%E8%84%9A%E6%9C%AC%E5%AE%89%E8%A3%85k8s%E9%9B%86%E7%BE%A4/'>
 <meta property='og:site_name' content='Tweakzx'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2023-04-21T16:06:05&#43;08:00'/><meta property='article:modified_time' content='2023-04-21T16:06:05&#43;08:00'/>
 <meta name="twitter:title" content="【Kubernetes】ubuntu脚本安装k8s集群">
-<meta name="twitter:description" content="安装k8s-1.18.9版本的脚本 内容参考来源：Ubuntu-安装K8s-v1.25.3脚本 | Marshall&amp;rsquo;s blog (aledk.com) # !/bin/bash KUBE_VERSION=&amp;#34;1.18.9&amp;#34; KUBE_VERSION2=$(echo $KUBE_VERSION |awk -F. &amp;#39;{print $2}&amp;#39;) DOCKER_VERSION=&amp;#34;18.06.3&amp;#34; MASTER1_IP=10.10.0.25 NODE1_IP=10.10.0.26 MASTER1=master NODE1=node1 POD_NETWORK=&amp;#34;10.244.0.0/16&amp;#34; SERVICE_NETWORK=&amp;#34;10.96.0.0/16&amp;#34; . /etc/os-release IMAGES_URL=&amp;#34;registry.aliyuncs.com/google_containers&amp;#34; CRI_DOCKER_VERSION=0.2.6">
+<meta name="twitter:description" content="安装k8s-1.18.9版本的脚本 下载之后最好修改 KUBE_VERSION=&amp;ldquo;1.18.9&amp;rdquo; 以安装自己想要的版本 MASTER1_IP= 自己的master IP NODE1_IP= 集群的节点IP 可以自定义修改， 但是也可以不动">
     </head>
     <body class="
     article-page has-toc
@@ -98,7 +98,7 @@
 
 
                 <time class="article-time--reading">
-                    3 minute read
+                    4 minute read
                 </time>
             </div>
         
@@ -112,13 +112,47 @@
 
     <section class="article-content">
     <h2 id="安装k8s-1189版本的脚本">安装k8s-1.18.9版本的脚本</h2>
-<p>内容参考来源：<a class="link" href="https://aledk.com/2022/10/30/ubuntu-k8s-sh/"  target="_blank" rel="noopener"
-    >Ubuntu-安装K8s-v1.25.3脚本 | Marshall&rsquo;s blog (aledk.com)</a></p>
+<ul>
+<li>
+<p>下载之后最好修改</p>
+<ul>
+<li>KUBE_VERSION=&ldquo;1.18.9&rdquo; 以安装自己想要的版本</li>
+<li>MASTER1_IP=    自己的master IP</li>
+<li>NODE1_IP= 集群的节点IP</li>
+</ul>
+</li>
+<li>
+<p>可以自定义修改， 但是也可以不动</p>
+<ul>
+<li>POD_NETWORK=&ldquo;10.244.0.0/16&rdquo;</li>
+<li>SERVICE_NETWORK=&ldquo;10.96.0.0/16&rdquo;</li>
+</ul>
+</li>
+<li>
+<p>网络插件</p>
+<ul>
+<li>这个脚本默认使用flannel</li>
+<li>如果使用calico记得修改calico脚本里的pod network</li>
+</ul>
+</li>
+<li>
+<p>github</p>
+<ul>
+<li>
+<p>项目地址：<a class="link" href="https://github.com/Tweakzx/k8s-scripts"  target="_blank" rel="noopener"
+    >Tweakzx/k8s-scripts (github.com)</a></p>
+</li>
+<li>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">wget https://raw.githubusercontent.com/Tweakzx/k8s-scripts/main/k8s-install.sh
+</code></pre></div></li>
+</ul>
+</li>
+</ul>
 <div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># !/bin/bash</span>
 <span class="nv">KUBE_VERSION</span><span class="o">=</span><span class="s2">&#34;1.18.9&#34;</span>
 <span class="nv">KUBE_VERSION2</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="nv">$KUBE_VERSION</span> <span class="p">|</span>awk -F. <span class="s1">&#39;{print $2}&#39;</span><span class="k">)</span>
 
-<span class="nv">DOCKER_VERSION</span><span class="o">=</span><span class="s2">&#34;18.06.3&#34;</span>
+<span class="nv">DOCKER_VERSION</span><span class="o">=</span><span class="s2">&#34;&#34;</span>
 
 <span class="nv">MASTER1_IP</span><span class="o">=</span>10.10.0.25
 <span class="nv">NODE1_IP</span><span class="o">=</span>10.10.0.26
@@ -279,6 +313,12 @@ remove_docker <span class="o">()</span> <span class="o">{</span>
     rm -rf /var/lib/docker
 <span class="o">}</span>
 
+install_helm <span class="o">()</span> <span class="o">{</span>
+    wget https://mirrors.huaweicloud.com/helm/v3.1.1/helm-v3.1.1-linux-amd64.tar.gz
+    tar -zxvf helm-v3.1.1-linux-amd64.tar.gz
+    mv linux-amd64/helm /usr/local/bin/helm
+<span class="o">}</span>
+
 remove_kubernetes <span class="o">()</span> <span class="o">{</span>
     <span class="c1">#To do</span>
     apt remove -y kubeadm kubectl kubelet
@@ -288,8 +328,8 @@ remove_kubernetes <span class="o">()</span> <span class="o">{</span>
 <span class="o">}</span>
 
 main <span class="o">()</span> <span class="o">{</span>
-    <span class="nv">PS3</span><span class="o">=</span><span class="s2">&#34;请选择编号（1-6）&#34;</span>
-    <span class="nv">options</span><span class="o">=(</span><span class="s2">&#34;初始化kubernetes集群&#34;</span> <span class="s2">&#34;加入kubernetes集群&#34;</span> <span class="s2">&#34;退出kubernetes集群&#34;</span> <span class="s2">&#34;配置网络&#34;</span> <span class="s2">&#34;删除kubernetes&#34;</span> <span class="s2">&#34;退出本程序&#34;</span><span class="o">)</span>
+    <span class="nv">PS3</span><span class="o">=</span><span class="s2">&#34;请选择编号（1-8）&#34;</span>
+    <span class="nv">options</span><span class="o">=(</span><span class="s2">&#34;初始化kubernetes集群&#34;</span> <span class="s2">&#34;加入kubernetes集群&#34;</span> <span class="s2">&#34;退出kubernetes集群&#34;</span> <span class="s2">&#34;配置网络&#34;</span> <span class="s2">&#34;安装helm&#34;</span> <span class="s2">&#34;删除kubernetes&#34;</span> <span class="s2">&#34;删除docker&#34;</span> <span class="s2">&#34;退出本程序&#34;</span><span class="o">)</span>
     <span class="k">select</span> item in <span class="s2">&#34;</span><span class="si">${</span><span class="nv">options</span><span class="p">[@]</span><span class="si">}</span><span class="s2">&#34;</span><span class="p">;</span> <span class="k">do</span>
         <span class="k">case</span> <span class="nv">$item</span> in
             <span class="s2">&#34;初始化kubernetes集群&#34;</span><span class="o">)</span>
@@ -316,9 +356,16 @@ main <span class="o">()</span> <span class="o">{</span>
                 configure_network
                 <span class="nb">break</span>
                 <span class="p">;;</span>
+            <span class="s2">&#34;安装helm&#34;</span><span class="o">)</span>
+                install_helm
+                <span class="nb">break</span>
+                <span class="p">;;</span>
             <span class="s2">&#34;删除kubernetes&#34;</span><span class="o">)</span>
                 reset_kubernetes
                 remove_kubernetes
+                <span class="nb">break</span>
+                <span class="p">;;</span>
+            <span class="s2">&#34;删除docker&#34;</span><span class="o">)</span>
                 remove_docker
                 <span class="nb">break</span>
                 <span class="p">;;</span>

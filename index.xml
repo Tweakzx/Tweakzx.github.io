@@ -814,13 +814,47 @@
         
         <guid>https://tweakzx.github.io/p/kubernetesubuntu%E8%84%9A%E6%9C%AC%E5%AE%89%E8%A3%85k8s%E9%9B%86%E7%BE%A4/</guid>
         <description>&lt;h2 id=&#34;安装k8s-1189版本的脚本&#34;&gt;安装k8s-1.18.9版本的脚本&lt;/h2&gt;
-&lt;p&gt;内容参考来源：&lt;a class=&#34;link&#34; href=&#34;https://aledk.com/2022/10/30/ubuntu-k8s-sh/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;Ubuntu-安装K8s-v1.25.3脚本 | Marshall&amp;rsquo;s blog (aledk.com)&lt;/a&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;下载之后最好修改&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;KUBE_VERSION=&amp;ldquo;1.18.9&amp;rdquo; 以安装自己想要的版本&lt;/li&gt;
+&lt;li&gt;MASTER1_IP=    自己的master IP&lt;/li&gt;
+&lt;li&gt;NODE1_IP= 集群的节点IP&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;可以自定义修改， 但是也可以不动&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;POD_NETWORK=&amp;ldquo;10.244.0.0/16&amp;rdquo;&lt;/li&gt;
+&lt;li&gt;SERVICE_NETWORK=&amp;ldquo;10.96.0.0/16&amp;rdquo;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;网络插件&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;这个脚本默认使用flannel&lt;/li&gt;
+&lt;li&gt;如果使用calico记得修改calico脚本里的pod network&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;github&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;项目地址：&lt;a class=&#34;link&#34; href=&#34;https://github.com/Tweakzx/k8s-scripts&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Tweakzx/k8s-scripts (github.com)&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;wget https://raw.githubusercontent.com/Tweakzx/k8s-scripts/main/k8s-install.sh
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# !/bin/bash&lt;/span&gt;
 &lt;span class=&#34;nv&#34;&gt;KUBE_VERSION&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;1.18.9&amp;#34;&lt;/span&gt;
 &lt;span class=&#34;nv&#34;&gt;KUBE_VERSION2&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;$(&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;echo&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;$KUBE_VERSION&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt;awk -F. &lt;span class=&#34;s1&#34;&gt;&amp;#39;{print $2}&amp;#39;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;)&lt;/span&gt;
 
-&lt;span class=&#34;nv&#34;&gt;DOCKER_VERSION&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;18.06.3&amp;#34;&lt;/span&gt;
+&lt;span class=&#34;nv&#34;&gt;DOCKER_VERSION&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt;
 
 &lt;span class=&#34;nv&#34;&gt;MASTER1_IP&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;10.10.0.25
 &lt;span class=&#34;nv&#34;&gt;NODE1_IP&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;10.10.0.26
@@ -981,6 +1015,12 @@ remove_docker &lt;span class=&#34;o&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;
     rm -rf /var/lib/docker
 &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
 
+install_helm &lt;span class=&#34;o&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+    wget https://mirrors.huaweicloud.com/helm/v3.1.1/helm-v3.1.1-linux-amd64.tar.gz
+    tar -zxvf helm-v3.1.1-linux-amd64.tar.gz
+    mv linux-amd64/helm /usr/local/bin/helm
+&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+
 remove_kubernetes &lt;span class=&#34;o&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
     &lt;span class=&#34;c1&#34;&gt;#To do&lt;/span&gt;
     apt remove -y kubeadm kubectl kubelet
@@ -990,8 +1030,8 @@ remove_kubernetes &lt;span class=&#34;o&#34;&gt;()&lt;/span&gt; &lt;span class=&
 &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
 
 main &lt;span class=&#34;o&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
-    &lt;span class=&#34;nv&#34;&gt;PS3&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;请选择编号（1-6）&amp;#34;&lt;/span&gt;
-    &lt;span class=&#34;nv&#34;&gt;options&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=(&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;初始化kubernetes集群&amp;#34;&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;加入kubernetes集群&amp;#34;&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;退出kubernetes集群&amp;#34;&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;配置网络&amp;#34;&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;删除kubernetes&amp;#34;&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;退出本程序&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;
+    &lt;span class=&#34;nv&#34;&gt;PS3&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;请选择编号（1-8）&amp;#34;&lt;/span&gt;
+    &lt;span class=&#34;nv&#34;&gt;options&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=(&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;初始化kubernetes集群&amp;#34;&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;加入kubernetes集群&amp;#34;&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;退出kubernetes集群&amp;#34;&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;配置网络&amp;#34;&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;安装helm&amp;#34;&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;删除kubernetes&amp;#34;&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;删除docker&amp;#34;&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;退出本程序&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;
     &lt;span class=&#34;k&#34;&gt;select&lt;/span&gt; item in &lt;span class=&#34;s2&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;si&#34;&gt;${&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;options&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[@]&lt;/span&gt;&lt;span class=&#34;si&#34;&gt;}&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;do&lt;/span&gt;
         &lt;span class=&#34;k&#34;&gt;case&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;$item&lt;/span&gt; in
             &lt;span class=&#34;s2&#34;&gt;&amp;#34;初始化kubernetes集群&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;
@@ -1018,9 +1058,16 @@ main &lt;span class=&#34;o&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;o&#34;&gt
                 configure_network
                 &lt;span class=&#34;nb&#34;&gt;break&lt;/span&gt;
                 &lt;span class=&#34;p&#34;&gt;;;&lt;/span&gt;
+            &lt;span class=&#34;s2&#34;&gt;&amp;#34;安装helm&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;
+                install_helm
+                &lt;span class=&#34;nb&#34;&gt;break&lt;/span&gt;
+                &lt;span class=&#34;p&#34;&gt;;;&lt;/span&gt;
             &lt;span class=&#34;s2&#34;&gt;&amp;#34;删除kubernetes&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;
                 reset_kubernetes
                 remove_kubernetes
+                &lt;span class=&#34;nb&#34;&gt;break&lt;/span&gt;
+                &lt;span class=&#34;p&#34;&gt;;;&lt;/span&gt;
+            &lt;span class=&#34;s2&#34;&gt;&amp;#34;删除docker&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;
                 remove_docker
                 &lt;span class=&#34;nb&#34;&gt;break&lt;/span&gt;
                 &lt;span class=&#34;p&#34;&gt;;;&lt;/span&gt;

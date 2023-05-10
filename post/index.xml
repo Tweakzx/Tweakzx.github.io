@@ -22,7 +22,7 @@
       <pubDate>Fri, 21 Apr 2023 16:06:05 +0800</pubDate>
       
       <guid>https://tweakzx.github.io/p/kubernetesubuntu%E8%84%9A%E6%9C%AC%E5%AE%89%E8%A3%85k8s%E9%9B%86%E7%BE%A4/</guid>
-      <description>安装k8s-1.18.9版本的脚本 内容参考来源：Ubuntu-安装K8s-v1.25.3脚本 | Marshall&amp;rsquo;s blog (aledk.com) # !/bin/bash KUBE_VERSION=&amp;#34;1.18.9&amp;#34; KUBE_VERSION2=$(echo $KUBE_VERSION |awk -F. &amp;#39;{print $2}&amp;#39;) DOCKER_VERSION=&amp;#34;18.06.3&amp;#34; MASTER1_IP=10.10.0.25 NODE1_IP=10.10.0.26 MASTER1=master NODE1=node1 POD_NETWORK=&amp;#34;10.244.0.0/16&amp;#34; SERVICE_NETWORK=&amp;#34;10.96.0.0/16&amp;#34; . /etc/os-release IMAGES_URL=&amp;#34;registry.aliyuncs.com/google_containers&amp;#34; CRI_DOCKER_VERSION=0.2.6</description>
+      <description>安装k8s-1.18.9版本的脚本 下载之后最好修改 KUBE_VERSION=&amp;ldquo;1.18.9&amp;rdquo; 以安装自己想要的版本 MASTER1_IP= 自己的master IP NODE1_IP= 集群的节点IP 可以自定义修改， 但是也可以不动</description>
     </item>
     
     <item>
