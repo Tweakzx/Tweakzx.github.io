@@ -6,7 +6,25 @@
     <description>Recent content in Posts on Tweakzx</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Sat, 06 May 2023 15:38:04 +0800</lastBuildDate><atom:link href="https://tweakzx.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 21 May 2023 21:38:00 +0800</lastBuildDate><atom:link href="https://tweakzx.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>【论文笔记】paper List</title>
+      <link>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0paper-list/</link>
+      <pubDate>Sun, 21 May 2023 21:38:00 +0800</pubDate>
+      
+      <guid>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0paper-list/</guid>
+      <description>A reading list for machine learning systems Frameworks [VLDB &amp;lsquo;20] PyTorch Distributed: Experiences on Accelerating Data Parallel Training [NeurIPS &amp;lsquo;19] PyTorch: An Imperative Style, High-Performance Deep Learning Library [OSDI &amp;lsquo;18] Ray: A Distributed Framework for Emerging AI Applications [OSDI &amp;lsquo;16] TensorFlow: A System for Large-Scale Machine Learning Parallelism &amp;amp; Distributed Systems [NSDI &amp;lsquo;23] ARK: GPU-driven Code Execution for Distributed Deep Learning [OSDI &amp;lsquo;22] Unity: Accelerating DNN Training Through Joint Optimization</description>
+    </item>
+    
+    <item>
+      <title>【论文笔记】Horus论文笔记</title>
+      <link>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0horus%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/</link>
+      <pubDate>Mon, 15 May 2023 09:45:37 +0800</pubDate>
+      
+      <guid>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0horus%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/</guid>
+      <description>摘要 背景 为了加速深度学习(Deep Learning，DL)模型的培训，使用配备 GPU 等硬件加速器的机器集群来减少执行时间。 需要最先进的资源管理器</description>
+    </item>
+    
     <item>
       <title>【论文笔记】TGS论文阅读笔记</title>
       <link>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0tgs%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link>
@@ -14,6 +32,15 @@
       
       <guid>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0tgs%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</guid>
       <description>Transparent GPU Sharing in Container Clouds for Deep Learning Workloads 摘要 容器广泛用于数据中心中的资源管理。 支持容器云中的深度学习(DL)训练的一个常见实践是静态地将 GPU 完全绑定到容器上。 由于</description>
+    </item>
+    
+    <item>
+      <title>【论文笔记】Aryl论文阅读笔记</title>
+      <link>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0aryl%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link>
+      <pubDate>Mon, 24 Apr 2023 09:48:20 +0800</pubDate>
+      
+      <guid>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0aryl%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</guid>
+      <description>Aryl: An Elastic Cluster Scheduler for Deep Learning 摘要 训练和推理中的问题: 当流量负载较低时，推理集群的 GPU 利用率较低 由于缺乏资源，训练作业往往需要较长的排队时间 我们引入了 Ary</description>
     </item>
     
     <item>

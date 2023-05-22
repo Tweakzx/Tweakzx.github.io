@@ -130,13 +130,21 @@
     <section class="article-content">
     <h1 id="antman-dynamic-scaling-on-gpu-clusters-for-deep-learning论文阅读笔记">《AntMan: Dynamic Scaling on GPU Clusters for Deep Learning》论文阅读笔记</h1>
 <h2 id="abstract">Abstract</h2>
+<ul>
+<li>
 <p>如何在大规模GPU集群上有效调度深度学习工作， 对于<strong>工作性能</strong>，<strong>系统吞吐量</strong>和<strong>硬件利用率</strong>至关重要。</p>
-<p>随着深度学习的工作量变得更加复杂，它变得越来越具有挑战性。</p>
+<ul>
+<li>随着深度学习的工作量变得更加复杂，它变得越来越具有挑战性。</li>
+</ul>
+</li>
+<li>
 <p>本文将介绍Antman， 这是一种深入学习的基础设施，该基础架构共同设计了集群调度程序，并已在阿里巴巴部署在生产中，以管理数以万计的每日深度学习工作。</p>
 <ul>
 <li>Antman适应深度学习训练的波动资源需求。因此，它利用备用GPU资源在共享GPU上共同执行多个作业。</li>
 <li>Antman利用深度学习训练的独特特征，在深度学习框架内为显存和计算资源引入动态缩放机制。这允许job之间的细粒度协调并防止工作干扰。</li>
 <li>评估表明，Antman在我们的多租户集群中不损害公平性的情况下，整体将显存利用率提高了42％，计算资源利用率提高了34％，为有效利用大规模的GPU提出了新方法。</li>
+</ul>
+</li>
 </ul>
 <h2 id="introduction">Introduction</h2>
 <ul>
