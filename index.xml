@@ -13,14 +13,14 @@
         
         <guid>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0paper-list/</guid>
         <description>&lt;h1 id=&#34;a-reading-list-for-machine-learning-systems&#34;&gt;&lt;strong&gt;A reading list for machine learning systems&lt;/strong&gt;&lt;/h1&gt;
-&lt;h3 id=&#34;frameworks&#34;&gt;&lt;strong&gt;Frameworks&lt;/strong&gt;&lt;/h3&gt;
+&lt;h2 id=&#34;frameworks&#34;&gt;&lt;strong&gt;Frameworks&lt;/strong&gt;&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;[VLDB &amp;lsquo;20] PyTorch Distributed: Experiences on Accelerating Data Parallel Training&lt;/li&gt;
 &lt;li&gt;[NeurIPS &amp;lsquo;19] PyTorch: An Imperative Style, High-Performance Deep Learning Library&lt;/li&gt;
 &lt;li&gt;[OSDI &amp;lsquo;18] Ray: A Distributed Framework for Emerging AI Applications&lt;/li&gt;
 &lt;li&gt;[OSDI &amp;lsquo;16] TensorFlow: A System for Large-Scale Machine Learning&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3 id=&#34;parallelism--distributed-systems&#34;&gt;&lt;strong&gt;Parallelism &amp;amp; Distributed Systems&lt;/strong&gt;&lt;/h3&gt;
+&lt;h2 id=&#34;parallelism--distributed-systems&#34;&gt;&lt;strong&gt;Parallelism &amp;amp; Distributed Systems&lt;/strong&gt;&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;[NSDI &amp;lsquo;23] ARK: GPU-driven Code Execution for Distributed Deep Learning&lt;/li&gt;
 &lt;li&gt;[OSDI &amp;lsquo;22] Unity: Accelerating DNN Training Through Joint Optimization of Algebraic Transformations and Parallelization&lt;/li&gt;
@@ -40,7 +40,7 @@
 &lt;li&gt;[OSDI &amp;lsquo;14] Scaling Distributed Machine Learning with the Parameter Server&lt;/li&gt;
 &lt;li&gt;[NIPS &amp;lsquo;12] Large Scale Distributed Deep Networks&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3 id=&#34;gpu-cluster-management&#34;&gt;&lt;strong&gt;GPU Cluster Management&lt;/strong&gt;&lt;/h3&gt;
+&lt;h2 id=&#34;gpu-cluster-management&#34;&gt;&lt;strong&gt;GPU Cluster Management&lt;/strong&gt;&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;
 &lt;p&gt;[NSDI&#39;23] Transparent GPU Sharing in Container Clouds for Deep Learning Workloads&lt;/p&gt;
@@ -397,7 +397,7 @@
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3 id=&#34;memory-management-for-machine-learning&#34;&gt;&lt;strong&gt;Memory Management for Machine Learning&lt;/strong&gt;&lt;/h3&gt;
+&lt;h2 id=&#34;memory-management-for-machine-learning&#34;&gt;&lt;strong&gt;Memory Management for Machine Learning&lt;/strong&gt;&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;[ASPLOS &amp;lsquo;23] DeepUM: Tensor Migration and Prefetching in Unified Memory&lt;/li&gt;
 &lt;li&gt;[ATC &amp;lsquo;22] Memory Harvesting in Multi-GPU Systems with Hierarchical Unified Virtual Memory&lt;/li&gt;
@@ -410,7 +410,7 @@
 &lt;li&gt;[PPoPP &amp;lsquo;18] SuperNeurons: Dynamic GPU Memory Management for Training Deep Neural Networks&lt;/li&gt;
 &lt;li&gt;[MICRO &amp;lsquo;16] vDNN: Virtualized Deep Neural Networks for Scalable, Memory-Efficient Neural Network Design&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3 id=&#34;scheduling--resource-management&#34;&gt;&lt;strong&gt;Scheduling &amp;amp; Resource Management&lt;/strong&gt;&lt;/h3&gt;
+&lt;h2 id=&#34;scheduling--resource-management&#34;&gt;&lt;strong&gt;Scheduling &amp;amp; Resource Management&lt;/strong&gt;&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;[ASPLOS &amp;lsquo;23] ElasticFlow: An Elastic Serverless Training Platform for Distributed Deep Learning&lt;/li&gt;
 &lt;li&gt;[arXiv &amp;lsquo;22] EasyScale: Accuracy-consistent Elastic Training for Deep Learning
@@ -516,7 +516,7 @@
 &lt;/li&gt;
 &lt;li&gt;[HPCA &amp;lsquo;18] Applied Machine Learning at Facebook: A Datacenter Infrastructure Perspective&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3 id=&#34;serving-systems--inference-acceleration&#34;&gt;&lt;strong&gt;Serving Systems (&amp;amp; inference acceleration)&lt;/strong&gt;&lt;/h3&gt;
+&lt;h2 id=&#34;serving-systems--inference-acceleration&#34;&gt;&lt;strong&gt;Serving Systems (&amp;amp; inference acceleration)&lt;/strong&gt;&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;[EuroSys &amp;lsquo;23] Fast and Efficient Model Serving Using Multi-GPUs with Direct-Host-Access&lt;/li&gt;
 &lt;li&gt;[MICRO &amp;lsquo;22] DFX: A Low-latency Multi-FPGA Appliance for Accelerating Transformer-based Text Generation&lt;/li&gt;
@@ -533,19 +533,19 @@
 &lt;li&gt;[OSDI &amp;lsquo;18] Pretzel: Opening the Black Box of Machine Learning Prediction Serving Systems&lt;/li&gt;
 &lt;li&gt;[NSDI &amp;lsquo;17] Clipper: A Low-Latency Online Prediction Serving System&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3 id=&#34;deep-learning-compiler&#34;&gt;&lt;strong&gt;Deep Learning Compiler&lt;/strong&gt;&lt;/h3&gt;
+&lt;h2 id=&#34;deep-learning-compiler&#34;&gt;&lt;strong&gt;Deep Learning Compiler&lt;/strong&gt;&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;[PLDI &amp;lsquo;21] DeepCuts: A Deep Learning Optimization Framework for Versatile GPU Workloads&lt;/li&gt;
 &lt;li&gt;[OSDI &amp;lsquo;18] TVM: An Automated End-to-End Optimizing Compiler for Deep Learning&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3 id=&#34;very-large-models&#34;&gt;&lt;strong&gt;Very Large Models&lt;/strong&gt;&lt;/h3&gt;
+&lt;h2 id=&#34;very-large-models&#34;&gt;&lt;strong&gt;Very Large Models&lt;/strong&gt;&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;[ASPLOS &amp;lsquo;23] Optimus-CC: Efficient Large NLP Model Training with 3D Parallelism Aware Communication Compression&lt;/li&gt;
 &lt;li&gt;[arxiv &amp;lsquo;21] ZeRO-Infinity: Breaking the GPU Memory Wall for Extreme Scale Deep Learning&lt;/li&gt;
 &lt;li&gt;[ATC &amp;lsquo;21] ZeRO-Offload: Democratizing Billion-Scale Model Training&lt;/li&gt;
 &lt;li&gt;[FAST &amp;lsquo;21] Behemoth: A Flash-centric Training Accelerator for Extreme-scale DNNs&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3 id=&#34;deep-learning-recommendation-models&#34;&gt;&lt;strong&gt;Deep Learning Recommendation Models&lt;/strong&gt;&lt;/h3&gt;
+&lt;h2 id=&#34;deep-learning-recommendation-models&#34;&gt;&lt;strong&gt;Deep Learning Recommendation Models&lt;/strong&gt;&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;[OSDI &amp;lsquo;22] FAERY: An FPGA-accelerated Embedding-based Retrieval System&lt;/li&gt;
 &lt;li&gt;[OSDI &amp;lsquo;22] Ekko: A Large-Scale Deep Learning Recommender System with Low-Latency Model Update&lt;/li&gt;
@@ -559,18 +559,18 @@
 &lt;li&gt;[HPCA &amp;lsquo;20] The Architectural Implications of Facebook’s DNN-based Personalized Recommendation&lt;/li&gt;
 &lt;li&gt;[MICRO &amp;lsquo;19] TensorDIMM: A Practical Near-Memory Processing Architecture for Embeddings and Tensor Operations in Deep Learning&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3 id=&#34;hardware-support-for-ml&#34;&gt;&lt;strong&gt;Hardware Support for ML&lt;/strong&gt;&lt;/h3&gt;
+&lt;h2 id=&#34;hardware-support-for-ml&#34;&gt;&lt;strong&gt;Hardware Support for ML&lt;/strong&gt;&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;[ISCA &amp;lsquo;18] A Configurable Cloud-Scale DNN Processor for Real-Time AI&lt;/li&gt;
 &lt;li&gt;[ISCA &amp;lsquo;17] In-Datacenter Performance Analysis of a Tensor Processing Unit&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3 id=&#34;ml-at-mobile--embedded-systems&#34;&gt;&lt;strong&gt;ML at Mobile &amp;amp; Embedded Systems&lt;/strong&gt;&lt;/h3&gt;
+&lt;h2 id=&#34;ml-at-mobile--embedded-systems&#34;&gt;&lt;strong&gt;ML at Mobile &amp;amp; Embedded Systems&lt;/strong&gt;&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;[MobiCom &amp;lsquo;20] SPINN: Synergistic Progressive Inference of Neural Networks over Device and Cloud&lt;/li&gt;
 &lt;li&gt;[RTSS &amp;lsquo;19] Pipelined Data-Parallel CPU/GPU Scheduling for Multi-DNN Real-Time Inference&lt;/li&gt;
 &lt;li&gt;[ASPLOS &amp;lsquo;17] Neurosurgeon: Collaborative Intelligence Between the Cloud and Mobile Edge&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3 id=&#34;ml-techniques-for-systems&#34;&gt;&lt;strong&gt;ML Techniques for Systems&lt;/strong&gt;&lt;/h3&gt;
+&lt;h2 id=&#34;ml-techniques-for-systems&#34;&gt;&lt;strong&gt;ML Techniques for Systems&lt;/strong&gt;&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;[ICML &amp;lsquo;20] An Imitation Learning Approach for Cache Replacement&lt;/li&gt;
 &lt;li&gt;[ICML &amp;lsquo;18] Learning Memory Access Patterns&lt;/li&gt;
