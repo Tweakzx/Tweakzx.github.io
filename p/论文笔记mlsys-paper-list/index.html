@@ -317,9 +317,8 @@
 </li>
 <li>
 <p><strong>[OSDI &lsquo;20] Heterogeneity-Aware Cluster Scheduling Policies for Deep Learning Workloads</strong></p>
-</li>
-<li>
-<p>背景</p>
+<ul>
+<li>背景
 <ul>
 <li>加速器，如 GPU、 TPU、 FPGA 和定制 ASIC 表现出跨模型架构的异构性能行为。</li>
 <li>现有的针对加速器集群的调度器(用于在许多用户之间仲裁这些昂贵的培训资源)已经展示了如何针对各种多任务、多用户目标(如公平性和完成时间)进行优化。不幸的是，现有的调度程序基本上不考虑性能异构性。</li>
@@ -332,9 +331,11 @@
 </li>
 </ul>
 </li>
+</ul>
+</li>
 <li>
 <p><strong>[OSDI &lsquo;20] AntMan: Dynamic Scaling on GPU Clusters for Deep Learning</strong></p>
-</li>
+<ul>
 <li>
 <p>如何在大规模GPU集群上有效调度深度学习工作， 对于<strong>工作性能</strong>，<strong>系统吞吐量</strong>和<strong>硬件利用率</strong>至关重要。</p>
 <ul>
@@ -347,6 +348,8 @@
 <li>Antman适应深度学习训练的波动资源需求。因此，它利用备用GPU资源在共享GPU上共同执行多个作业。</li>
 <li>Antman利用深度学习训练的独特特征，在深度学习框架内为显存和计算资源引入动态缩放机制。这允许job之间的细粒度协调并防止工作干扰。</li>
 <li>评估表明，Antman在我们的多租户集群中不损害公平性的情况下，整体将显存利用率提高了42％，计算资源利用率提高了34％，为有效利用大规模的GPU提出了新方法。</li>
+</ul>
+</li>
 </ul>
 </li>
 <li>
@@ -395,9 +398,8 @@
 </li>
 <li>
 <p><strong>[NSDI &lsquo;19] Tiresias: A GPU Cluster Manager for Distributed Deep Learning</strong></p>
-</li>
-<li>
-<p>深度学习 (DL) 训练作业给现有的集群管理器带来了一些独特的挑战，例如</p>
+<ul>
+<li>深度学习 (DL) 训练作业给现有的集群管理器带来了一些独特的挑战，例如
 <ul>
 <li>不可预测的训练时间</li>
 <li>全有或全无的执行模型</li>
@@ -424,6 +426,8 @@
 <ul>
 <li>与生产中使用的基于 Apache YARN 的资源管理器相比，Tiresias 将平均 JCT 提高了 5.5 倍。</li>
 <li>更重要的是，Tiresias 的性能与假设完美知识的解决方案的性能相当。</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
