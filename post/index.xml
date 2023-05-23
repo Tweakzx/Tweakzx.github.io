@@ -6,7 +6,16 @@
     <description>Recent content in Posts on Tweakzx</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Fri, 19 May 2023 17:55:06 +0800</lastBuildDate><atom:link href="https://tweakzx.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 21 May 2023 21:38:00 +0800</lastBuildDate><atom:link href="https://tweakzx.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>【论文笔记】MLsys Paper List</title>
+      <link>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0mlsys-paper-list/</link>
+      <pubDate>Sun, 21 May 2023 21:38:00 +0800</pubDate>
+      
+      <guid>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0mlsys-paper-list/</guid>
+      <description>A reading list for machine learning systems Frameworks [VLDB &amp;lsquo;20] PyTorch Distributed: Experiences on Accelerating Data Parallel Training [NeurIPS &amp;lsquo;19] PyTorch: An Imperative Style, High-Performance Deep Learning Library [OSDI &amp;lsquo;18] Ray: A Distributed Framework for Emerging AI Applications [OSDI &amp;lsquo;16] TensorFlow: A System for Large-Scale Machine Learning Parallelism &amp;amp; Distributed Systems [NSDI &amp;lsquo;23] ARK: GPU-driven Code Execution for Distributed Deep Learning [OSDI &amp;lsquo;22] Unity: Accelerating DNN Training Through Joint Optimization</description>
+    </item>
+    
     <item>
       <title>【论文笔记】Shockwave论文阅读笔记</title>
       <link>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0shockwave%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link>
