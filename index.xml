@@ -130,9 +130,8 @@
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;&lt;strong&gt;[OSDI &amp;lsquo;22] Looking Beyond GPUs for DNN Scheduling on Multi-Tenant Clusters&lt;/strong&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;此文作者发现，&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;此文作者发现，
 &lt;ul&gt;
 &lt;li&gt;尽管 GPU 是 DNN 训练所需要的最主要的资源，&lt;/li&gt;
 &lt;li&gt;但是 CPU 和 MEM 的分配策略同样也会显著影响到集群的资源利用效率和训练任务的吞吐量。&lt;/li&gt;
@@ -144,11 +143,12 @@
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;strong&gt;[NSDI &amp;lsquo;22] MLaaS in the Wild: Workload Analysis and Scheduling in Large-Scale Heterogeneous GPU Clusters&lt;/strong&gt;&lt;/p&gt;
+&lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;随着机器学习 (ML) 技术的持续进步和最近大量数据集的可用性，科技公司正在部署大型 ML 即服务 (MLaaS) 云，通常使用异构 GPU 来提供大量 ML 应用程序。然而，在异构 GPU 集群中运行不同的 ML 工作负载会带来许多挑战。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;[NSDI &amp;lsquo;22] MLaaS in the Wild: Workload Analysis and Scheduling in Large-Scale Heterogeneous GPU Clusters&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;随着机器学习 (ML) 技术的持续进步和最近大量数据集的可用性，科技公司正在部署大型 ML 即服务 (MLaaS) 云，通常使用异构 GPU 来提供大量 ML 应用程序。然而，在异构 GPU 集群中运行不同的 ML 工作负载会带来许多挑战。
 &lt;ul&gt;
 &lt;li&gt;在本文中
 &lt;ul&gt;
@@ -165,6 +165,8 @@
 &lt;/li&gt;
 &lt;li&gt;我们描述了我们当前的解决方案，并呼吁进一步调查仍未解决的挑战。&lt;/li&gt;
 &lt;li&gt;我们已经发布了公共访问的跟踪，就工作负载和集群规模而言，这是最全面的。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
@@ -250,9 +252,8 @@
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;&lt;strong&gt;[NSDI &amp;lsquo;20] Themis: Fair and Efficient GPU Cluster Scheduling&lt;/strong&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;ML 训练工作负载通常是需要批量调度的长时间运行的作业，并且它们的性能对任务的相对位置很敏感&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;ML 训练工作负载通常是需要批量调度的长时间运行的作业，并且它们的性能对任务的相对位置很敏感
 &lt;ul&gt;
 &lt;li&gt;Themis 作为 ML 训练工作负载的新调度框架。
 &lt;ul&gt;
@@ -265,6 +266,8 @@
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;Themis 在 Apache YARN 3.2.0 上实现，并通过重放大型企业跟踪中的工作负载进行评估，公平性提高了 2.25 倍以上，集群效率提高了 ~5% 到 ~250%。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
@@ -362,9 +365,8 @@
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;&lt;strong&gt;[OSDI &amp;lsquo;18] Gandiva: Introspective cluster scheduling for deep learning&lt;/strong&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;Gandiva: 一个集群调度框架，使用特定领域知识，优化了GPU集群训练深度学习模型的延迟与效率&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Gandiva: 一个集群调度框架，使用特定领域知识，优化了GPU集群训练深度学习模型的延迟与效率
 &lt;ul&gt;
 &lt;li&gt;
 &lt;p&gt;深度学习job的特征&lt;/p&gt;
@@ -393,6 +395,8 @@
 &lt;li&gt;并通过&lt;strong&gt;透明迁移&lt;/strong&gt;和&lt;strong&gt;job时分&lt;/strong&gt;实现更好的利用，使job与资源的更好地匹配。&lt;/li&gt;
 &lt;li&gt;在一个运行在180-GPU 集群中的实际工作负载中，Gandiva 将集群的总利用率提高了26%&lt;/li&gt;
 &lt;li&gt;这为深度学习提供了一种管理大型 GPU 集群的新方法。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
