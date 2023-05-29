@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='HiveD: Sharing a GPU Cluster for Deep Learning with Guarantees 摘要 生产多租户集群中存在严重的共享异常现象 在这种情况下，一些租户中的作业所经历的排队延迟比它们在拥有其分配的 GPU 的私有集群'><title>【论文笔记】HiveD论文阅读笔记</title>
+
+<link rel='canonical' href='https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0hived%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/'>
+
+<link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='【论文笔记】HiveD论文阅读笔记'>
+<meta property='og:description' content='HiveD: Sharing a GPU Cluster for Deep Learning with Guarantees 摘要 生产多租户集群中存在严重的共享异常现象 在这种情况下，一些租户中的作业所经历的排队延迟比它们在拥有其分配的 GPU 的私有集群'>
+<meta property='og:url' content='https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0hived%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/'>
+<meta property='og:site_name' content='Tweakzx'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2023-05-29T10:37:17&#43;08:00'/><meta property='article:modified_time' content='2023-05-29T10:37:17&#43;08:00'/><meta property='og:image' content='https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202305291403418.png' />
+<meta name="twitter:title" content="【论文笔记】HiveD论文阅读笔记">
+<meta name="twitter:description" content="HiveD: Sharing a GPU Cluster for Deep Learning with Guarantees 摘要 生产多租户集群中存在严重的共享异常现象 在这种情况下，一些租户中的作业所经历的排队延迟比它们在拥有其分配的 GPU 的私有集群"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202305291403418.png' />
+    </head>
+    <body class="
+    article-page has-toc
+">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex 
+    
+        extended
+    
+">
+    
+        <div id="article-toolbar">
+            <a href="/" class="back-home">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="15 6 9 12 15 18" />
+</svg>
+
+
+
+                <span>Back</span>
+            </a>
+        </div>
+    
+<main class="main full-width">
+    <article class="has-image main-article">
+    <header class="article-header">
+        <div class="article-image">
+            <a href="/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0hived%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/">
+                
+                    <img src="https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202305291403418.png" loading="lazy" alt="Featured image of post 【论文笔记】HiveD论文阅读笔记" />
+                
+            </a>
+        </div>
+    
+
+    <div class="article-details">
+    
+
+    <h2 class="article-title">
+        <a href="/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0hived%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/">【论文笔记】HiveD论文阅读笔记</a>
+    </h2>
+
+    
+
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">May 29, 2023</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    11 minute read
+                </time>
+            </div>
+        
+    </footer>
+    
+</div>
+
+    
+
+</header>
+
+    <section class="article-content">
+    <h1 id="hived-sharing-a-gpu-cluster-for-deep-learning-with-guarantees">HiveD: Sharing a GPU Cluster for Deep Learning with Guarantees</h1>
+<p><strong>摘要</strong></p>
+<ul>
+<li>生产多租户集群中存在严重的共享异常现象
+<ul>
+<li>在这种情况下，一些租户中的作业所经历的排队延迟比它们在拥有其分配的 GPU 的私有集群中所经历的排队延迟更为严重。</li>
+<li>这是因为租户使用配额(GPU 的数量)来保留资源，而深度学习作业通常使用具有理想 GPU 关联的 GPU，而配额不能保证这一点</li>
+</ul>
+</li>
+<li>HiveD 是第一个安全共享 GPU 集群的框架，因此这种异常从设计上来说永远不会发生。
+<ul>
+<li>在 HiveD 中，每个租户通过虚拟专用集群(Virtual Private Cluster，VC)保留资源。</li>
+<li>虚拟专用集群是根据集群中对应于不同级别的 GPU 亲和力的多阶储存细胞结构来定义的。</li>
+<li>这种设计允许 HiveD 在每个 VC 中合并任何现有的调度程序，以实现各自的设计目标，同时安全地共享集群。</li>
+</ul>
+</li>
+<li>HiveD 开发了一种优雅的伙伴细胞分配算法，
+<ul>
+<li>通过有效地管理来自 VC 的细胞与物理集群中的细胞之间的动态结合来确保共享安全。</li>
+<li>伙伴细胞分配的直接扩展可以进一步支持低优先级作业，以清理未使用的 GPU 资源，从而提高集群利用率。</li>
+</ul>
+</li>
+<li>结合实际部署和跟踪驱动的仿真，我们发现
+<ul>
+<li>(i)共享异常存在于三个最先进的深度学习调度器中，导致额外的队列延迟长达1000分钟</li>
+<li>(ii) HiveD 可以合并这些调度器，消除所有调度器中的共享异常，实现关注点分离，使调度器能够专注于自己的调度目标，而不违反共享安全。</li>
+</ul>
+</li>
+</ul>
+<h2 id="引言">引言</h2>
+<ul>
+<li>
+<p>常见的做法</p>
+<ul>
+<li>每个租户使用由 GPU 数量和其他相关资源(如 CPU 和内存)组成的配额来保留资源。</li>
+<li>异常情况: DDL<strong>等待 GPU</strong>的时间明显长于在一个大小等于租户配额的私有集群中进行。</li>
+<li>这是因为当前的资源预留机制是基于配额的，即 GPU 的数量。
+<ul>
+<li>配额不能捕获训练作业的 GPU 亲和性需求: 例如，一个节点上的8-GPU 作业通常比8个节点上的运行速度快得多。</li>
+<li>配额不能像承租者的私有集群那样保证承租者的 GPU 关联性。</li>
+</ul>
+</li>
+<li>因此，多 GPU 作业通常必须在队列中等待或以放松的亲和力运行，这两种情况都会导致更差的性能(更长的队列延迟或更慢的训练速度)。</li>
+</ul>
+</li>
+<li>
+<p>HiveD，一个共享 GPU 集群的资源预留框架，用于深度学习训练，通过完全消除共享异常来保证共享安全。</p>
+<ul>
+<li>HiveD 不使用配额，而是为每个租户提供一个由一个新的抽象: cell 定义的虚拟私有集群(简称 VC)。
+<ul>
+<li>Cell 使用多级结构来捕获一组 GPU 可以满足的不同级别的亲和力。</li>
+</ul>
+</li>
+<li>这些细胞结构自然地在典型的 GPU 集群中形成一个层次结构;
+<ul>
+<li>例如，从单个 GPU，到连接到 PCIe 交换机的 GPU，到连接到 CPU 套接字的 GPU，到节点中的 GPU，再到机架中的 GPU，等等。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>Cell</p>
+<ul>
+<li>HiveD 将物理 GPU 集群虚拟化为每个租户的 VC，其中 VC 保留了物理集群中必要的亲和结构。
+<ul>
+<li>这使得任何一个最先进的深度学习调度器都可以在 VC 定义的边界内做出调度决策，而不会影响其他 VC 的亲和力需求，从而确保共享安全。</li>
+<li>通过这种方式，HiveD 实现了关注点分离：它专注于资源预留机制，并将其他资源分配目标留给 VC 调度程序(例如，集群利用率和作业完成时间)。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>HiveD 开发了一种优雅高效的伙伴细胞分配算法，可以将细胞从 VC 绑定到物理集群。</p>
+<ul>
+<li>伙伴细胞分配倡导动态细胞绑定，而非静态绑定，以获得灵活性。
+<ul>
+<li>它动态地创建和释放 VC 中的细胞到物理集群中的 GPU 的绑定，同时在不可预测的工作负载下提供经过验证的共享安全性。</li>
+</ul>
+</li>
+<li>此外，该算法可以自然地扩展到支持抢占的低优先级作业，以机会性地清除未使用的细胞，从而提高总体利用率。</li>
+<li>结合起来，HiveD 实现了私有集群(保证独立于其他租户的细胞的可用性)和共享集群(在其他租户不使用资源时提高利用率和对更多资源的访问)的最佳性能</li>
+</ul>
+</li>
+<li>
+<p>我们评估 HiveD 使用实验的96-GPU 实际集群和跟踪驱动的模拟。评估表明:</p>
+<ul>
+<li>共享异常存在于所有评估的SOTA深度学习调度器中</li>
+<li>HiveD 消除了所有共享异常，将过度队列延迟从1000分钟减少到零，同时保留了这些调度器的设计目标;</li>
+<li>HiveD 保证了无论集群负载如何，都可以共享安全，而基于配额的集群可以导致高负载下租户的7倍过度队列延迟。</li>
+</ul>
+</li>
+<li>
+<p>总之，本文作出了以下贡献:</p>
+<ul>
+<li>我们是第一个观察和识别生产多租户 GPU 集群中共享异常的深度学习训练。</li>
+<li>我们定义了针对异常的共享安全的概念，并提出了一种新的资源抽象，即多级细胞，用于建模虚拟专用集群。</li>
+<li>我们开发了一个优雅和高效的好友小区分配算法来管理具有被证明的共享安全性的小区，并支持低优先级作业。</li>
+<li>我们在一个实际的集群上进行了广泛的评估，并通过仿真，在产品跟踪的驱动下，表明 HiveD 在共享安全性、队列延迟和利用率方面达到了设计目标。</li>
+</ul>
+</li>
+</ul>
+<h2 id="背景与动机">背景与动机</h2>
+<ul>
+<li>
+<p>当前管理多租户 GPU 集群的方法。</p>
+<ul>
+<li>在大型企业中，大型 GPU 集群通常由多个业务团队共享，每个业务团队都是贡献其资源(预算或硬件)的租户。
+<ul>
+<li>租户共享 GPU 集群的方式类似于共享 CPU 集群：
+<ul>
+<li>每个租户都被分配了许多令牌作为其配额。</li>
+<li>每个令牌对应于使用 GPU 和其他类型资源的权利。</li>
+<li>配额表示期望承租者能够“至少”访问其贡献的资源份额</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>为了提高集群中的培训速度
+<ul>
+<li>用户通常为深度学习任务指定 GPU 亲和力需求[52,86]。
+<ul>
+<li>例如，一个64-GPU 的作业通常需要以8 × 8的亲和力运行，即在8个节点上运行作业，每个节点使用8个 GPU，而不是64 × 1，即每个节点使用1个 GPU。</li>
+</ul>
+</li>
+<li>给定关联需求，资源管理器将以保证(硬)或最佳努力(软)的方式满足它们。
+<ul>
+<li>如果没有满足作业关联性要求的放置，则作业将在队列中等待亲和力要求，或如果要求是软性的(例如，64 × 1相对于8 × 8) ，则会以放松亲和力的方式安排。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>共享异常</p>
+<ul>
+<li>在生产 GPU 集群中，我们观察到用户投诉的异常情况:
+<ul>
+<li>一个租户被分配了64个 GPU 的配额，但是报告说它不能运行一个8 × 8深度学习作业。</li>
+</ul>
+</li>
+<li>原因：
+<ul>
+<li>这种异常现象之所以出现，是因为承租者所分配的亲和力已经被其他承租者的工作分割</li>
+</ul>
+</li>
+<li>结果
+<ul>
+<li>即使租户有足够的 GPU 配额，64-GPU 作业也必须在队列中等待，或者以放松关联的方式执行性能下降的作业。</li>
+<li>向承租者保证它至少可以访问其所占的资源的承诺被打破了。</li>
+</ul>
+</li>
+<li>分析
+<ul>
+<li>如果我们将租户比作程序，那么共享异常看起来类似于内存管理中的外部碎片。</li>
+<li>然而，重要的区别在于，在共享的 GPU 集群中，租户希望他们的资源共享得到保证</li>
+<li>显然，配额只能保留资源的数量，而不能保留资源的亲和力。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>减少共享异常的一种方法是设计一种调度策略，以尽量减少全局资源分散。</p>
+<ul>
+<li>这使得深度学习调度器的设计更加复杂，它已经需要管理复杂的多目标优化。
+<ul>
+<li>例如，最小化全局碎片化可能会由于工作间干扰的增加而降低工作绩效[86]。</li>
+</ul>
+</li>
+<li>因此，我们建议将共享异常的关注与其他资源分配目标分开[47]。
+<ul>
+<li>我们没有开发一个能够实现所有可能目标的复杂调度程序，而是设计了 HiveD，一个侧重于消除共享异常的资源预留框架</li>
+<li>并提供了一个干净的界面，以纳入任何最先进的深度学习调度程序，以解决诸如集群利用率[86]、作业完成时间[41,66]和公平性[29,60]等问题</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="hived设计">HiveD设计</h2>
+<h3 id="系统总览">系统总览</h3>
+<ul>
+<li>HiveD 提出保证消除共享异常，作为共享 GPU 集群的先决条件。
+<ul>
+<li>具体来说，如果可以在私有集群中满足具有亲和需求的 GPU 请求序列，那么应该在相应的虚拟私有集群和共享物理集群中满足这些请求序列。</li>
+</ul>
+</li>
+</ul>
+<p><figure 
+	>
+	<a href="https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202305291412564.png" >
+		<img src="https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202305291412564.png"
+			
+			
+			
+			loading="lazy"
+			alt="image-20230529130308520">
+	</a>
+	
+	<figcaption>image-20230529130308520</figcaption>
+	
+</figure></p>
+<ul>
+<li>
+<p>图2说明了整个系统架构。</p>
+<ul>
+<li>HiveD 对 GPU 资源的抽象分为两层
+<ul>
+<li>虚拟专用集群(VCs)层</li>
+<li>物理集群层</li>
+</ul>
+</li>
+<li>HiveD为每个租户提供一个 VC。
+<ul>
+<li>每个 VC 都预先分配了一组细胞格，这是一种新的资源抽象不仅捕获配额，而且捕获 GPU 的亲和结构(图中每个细胞内的数字显示细胞的亲和 GPU 的数目)。</li>
+<li>分配给 VC 的细胞形成一个 VC 视图，其 GPU 亲和结构与相应的私有集群相同。
+<ul>
+<li>任何第三方调度程序都可以合并到 VC 视图中，以实现一定的资源分配目标。</li>
+<li>此外，HiveD 保证任何调度决策都被限制在 VC 视图定义的边界内，就像在它的私有集群上发生一样，从而保证了共享的安全性。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>VC 中的细胞是逻辑的</p>
+<ul>
+<li>当作业在逻辑细胞中使用 GPU 时，
+<ul>
+<li>例如，图2中 Tenant A 的 VC 视图中的4-GPU 细胞中的一个 GPU，逻辑细胞将绑定到从物理集群分配的物理细胞，如图2底部所示。</li>
+<li>如果没有使用任何 GPU，则逻辑细胞将从物理集群解除绑定。</li>
+</ul>
+</li>
+<li>为了提高利用率，可抢占的低优先级作业可以机会性地清除空闲的 GPU。
+<ul>
+<li>这种动态绑定比静态绑定更加灵活:
+<ul>
+<li>动态绑定可以避免硬件故障的物理细胞</li>
+<li>它可以避免低优先级作业使用的细胞以减少抢占</li>
+<li>它还可以包装细胞以最小化 GPU 亲和力的碎片</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>为了实现这一点，HiveD 采用伙伴细胞分配(一种高效而优雅的算法)来处理动态绑定。</p>
+<ul>
+<li>动态绑定的一个关键挑战是保证响应动态工作负载的安全性，即作业不可预测地到达并请求不同级别的细胞。</li>
+<li>证明了伙伴细胞分配算法能够保证共享的安全性:
+<ul>
+<li>在 VC 中任何合法的细胞请求都能够得到满足。</li>
+</ul>
+</li>
+<li>该算法还可以支持低优先级作业。
+<ul>
+<li>图2显示了一个可能的细胞分配，其中物理集群中的细胞绑定到两个 VC 中定义的细胞，并且还绑定到一个低优先级作业。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="细胞结构的虚拟私有集群">细胞结构的虚拟私有集群</h3>
+<ul>
+<li>为了建模一个(私有的)图形处理器集群，HiveD 定义了一个多阶储存细胞结构的层次结构。
+<ul>
+<li>一个细胞在某个级别上是相应的关联 GPU 集合，它们具有互连拓扑。</li>
+<li>然后将每个虚拟私有集群(VC)定义为每个级别上的细胞数，并以相应的私有集群为模型。</li>
+</ul>
+</li>
+</ul>
+<p><figure 
+	>
+	<a href="https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202305291304943.png" >
+		<img src="https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202305291304943.png"
+			
+			
+			
+			loading="lazy"
+			alt="image-20230529130450884">
+	</a>
+	
+	<figcaption>image-20230529130450884</figcaption>
+	
+</figure></p>
+<ul>
+<li>
+<p>图3显示了一个示例</p>
+<ul>
+<li>其中有4个级别的细胞结构:
+<ul>
+<li>1：GPU</li>
+<li>2：PCIe 开关</li>
+<li>3：CPU 套接字</li>
+<li>4：节点级别</li>
+</ul>
+</li>
+<li>集群有一个机架，由四个8-GPU 节点组成，由三个租户 A、 B 和 C 共享。
+<ul>
+<li>图3中的表格总结了每个租户的 VC 的细胞格分配。
+<ul>
+<li>租户 A 和 B 的 VC 都保留一个第3级细胞(同一 CPU 套接字下的4个 GPU) ，一个第2级细胞(同一 CPU 套接字下的2个 GPU PCIe 开关)和一个1级细胞(单个 GPU)。</li>
+<li>租户 C 是一个较大的租户，它保留两个4级细胞(节点级)和一个2级细胞。</li>
+</ul>
+</li>
+<li>给定图3中定义的 VC 视图，HiveD 可以采用第三方调度程序来处理视图。
+<ul>
+<li>从第三方调度器的角度来看，VC 视图与由不同大小(即不同细胞级别)的节点组成的私有集群没有什么不同。
+<ul>
+<li>例如，调度程序可以将租户 C 视为一个私有集群，其中包含两个8-GPU 节点和一个2-GPU 节点，尽管2-GPU 节点实际上是一个2级细胞。</li>
+</ul>
+</li>
+<li>请注意，第三方调度程序可以使用分配细胞中的任何 GPU。
+<ul>
+<li>例如，它可以将两个2-GPU 作业调度到一个4-GPU (level-3)细胞: 细胞是 VC 和物理集群中资源预留的粒度，但不一定是第三方调度程序的作业调度粒度。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>在细胞格层次结构中，一个级别 k 细胞格 c 由一组级别(k-1)细胞格 S 组成。</p>
+<ul>
+<li>S 中的细胞格称为伙伴细胞格; 伙伴细胞格可以合并到下一个更高级别的细胞格中。</li>
+<li>我们假设细胞格具有分层的统一可组合性
+<ul>
+<li>(i)所有级别 k 细胞格在满足租户对级别 k 细胞格的请求方面是等价的，</li>
+<li>并且(ii)所有级别 k 细胞格可以分割成相同数量的级别(k-1)细胞格</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>异质性。</p>
+<ul>
+<li>一个异构集群可以划分为多个具有层次一致可组合性的同构集群。</li>
+<li>这在实践中是合乎逻辑的，因为一个产品集群通常由足够大相同的子集群组成
+<ul>
+<li>为了获得更好的性能，用户通常使用同质的 GPU，并指定所需的 GPU/拓扑类型</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>初始细胞分配。</p>
+<ul>
+<li>集群提供者必须计算出在每个级别上分配给每个租户的 VC 的细胞数。
+<ul>
+<li>如果 VC 分配能够容纳分配给所有 VC 的所有细胞，那么 VC 分配在物理集群中是可行的;</li>
+<li>也就是说，存在从每个 VC 中的逻辑细胞到物理集群中的物理细胞的一对一映射。</li>
+</ul>
+</li>
+<li>最初的细胞VC 的分配取决于预算、业务优先级和工作量等因素，因此它是在 HiveD 之外处理的
+<ul>
+<li>集群可能比分配的细胞节省更多的物理资源来处理硬件故障。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="伙伴细胞分配算法">伙伴细胞分配算法</h3>
+<ul>
+<li>
+<p>HiveD 管理 VC 中的逻辑细胞和物理集群中的物理细胞之间的动态绑定，并处理分配和释放细胞的请求。</p>
+<ul>
+<li>这是由好友细胞分配算法完成的。</li>
+<li>该算法为每个 VC 维护以下信息:
+<ul>
+<li>(i)每个分配的逻辑细胞对应的物理细胞(即绑定) ;</li>
+<li>(ii)每个细胞级别 k 的全局空闲列表，以跟踪该级别的所有未分配的物理细胞。
+<ul>
+<li>该算法始终将可用细胞保持在尽可能高的级别:
+<ul>
+<li>例如，如果级别-(k-1)的所有伙伴细胞都可用于级别-k 的细胞，则只记录级别-k 的细胞。</li>
+</ul>
+</li>
+<li>该算法旨在保持尽可能多的高级细胞可用。算法1显示了算法的伪代码。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>为了在 VC 中分配一个 level-k 细胞，算法从 level-k 开始，如果需要则向上分配:</p>
+<ul>
+<li>它首先检查一个空闲 level-k 细胞是否可用，如果可用则分配一个。</li>
+<li>如果没有，算法将一级一级地向上移动，直到有一个空闲的级别 -l 细胞可用，其中 l &gt; k。</li>
+<li>然后，该算法将递归地将一个空闲的1级细胞划分为多个低级细胞，直到有一个 k 级细胞可用。</li>
+<li>每次分割都会在下一个较低级别产生一组好友细胞格，这些好友细胞格将被添加到该较低级别的空闲列表中。</li>
+<li>其中一个新的低能级细胞再次分裂，直到产生游离的 k 能级细胞。</li>
+</ul>
+</li>
+<li>
+<p>细胞释放过程也是以自底向上的方式进行的。</p>
+<ul>
+<li>当释放一个 level-k 细胞格 c 时，算法将 c 添加到检查 C 的好友细胞的状态。</li>
+<li>如果 c 的好友细胞格都是空闲的，那么算法将把 c 和它的好友细胞格合并到一个级别为(k + 1)的细胞格中。</li>
+<li>合并过程在上升级别时递归地继续，直到没有细胞格可以合并为止。</li>
+<li>这样，好友细胞分配算法减少了 GPU 碎片，并创建了调度需要更高级别细胞的作业的机会。</li>
+</ul>
+</li>
+<li>
+<p>在处理分配请求之前，算法确保请求是合法的，因为它在这个细胞级别的 VC 的分配配额内。HiveD 将细胞格分配存储在一个表 r 中，其中一个租户 t 为 level-k 细胞格预先分配的编号存储在 rt，k 中。伙伴小区分配算法保证在一个可行的初始 VC 分配下满足所有合法小区的请求，这在定理1中有正式描述。</p>
+</li>
+</ul>
+<p><strong>定理1。在层次一致可组合的条件下，如果原来的 VC 分配是可行的，那么伙伴细胞分配算法可以满足任何合法的细胞分配。</strong></p>
+<p><figure 
+	>
+	<a href="https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202305291309206.png" >
+		<img src="https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202305291309206.png"
+			
+			
+			
+			loading="lazy"
+			alt="image-20230529130905146">
+	</a>
+	
+	<figcaption>image-20230529130905146</figcaption>
+	
+</figure></p>
+<h2 id="实现">实现</h2>
+<h2 id="评估">评估</h2>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+        <link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.css"integrity="sha384-RZU/ijkSsFbcmivfdRBQDtwuwVqK7GMOw6IMvKyeWL2K5UAlyp6WonmB8m7Jd0Hn"crossorigin="anonymous"
+            ><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.js"integrity="sha384-pK1WpvzWVBQiP0/GjnvRxV4mOb0oxFuyRxJlk6vVw146n3egcN5C925NCP7a7BY8"crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/contrib/auto-render.min.js"integrity="sha384-vZTG03m&#43;2yp6N6BNi5iM4rW4oIwk5DfcNdFfxkk9ZWpDriOkXX8voJBFrAO7MpVl"crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        renderMathInElement(document.querySelector(`.article-content`), {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ]
+        });})
+</script>
+    
+</article>
+
+    <aside class="related-contents--wrapper">
+    
+    
+</aside>
+
+     
+    
+        
+    <script
+    src="https://giscus.app/client.js"
+    data-repo="Tweakzx/Tweakzx.github.io"
+    data-repo-id="MDEwOlJlcG9zaXRvcnkzMjY5MTY1NTE="
+    data-category="Announcements"
+    data-category-id="DIC_kwDOE3xZx84CTfL-"
+    data-mapping="title"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-theme="light_tritanopia"
+    crossorigin="anonymous"
+    async
+></script>
+<script>
+    function setGiscusTheme(theme) {
+        let giscus = document.querySelector('iframe.giscus-frame');
+        if (giscus) {
+            giscus.contentWindow.postMessage(
+                { 
+                    giscus: {
+                        setConfig: { 
+                            theme: theme 
+                        }
+                    }
+                },
+                "https://giscus.app"
+            );
+        };
+    };
+
+    (function(){
+        addEventListener('message', (e) => {
+            if (event.origin !== 'https://giscus.app') return;
+            handler()
+        });
+        window.addEventListener('onColorSchemeChange', handler);
+
+        function handler() {
+            if (document.documentElement.dataset.scheme === "light") {
+                setGiscusTheme('light_tritanopia');
+            } else {
+                setGiscusTheme('dark_tritanopia');
+            };
+        };
+    }());
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2023 Tweakzx
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.5.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
+            >
+
+            </main>
+    
+        <aside class="sidebar right-sidebar sticky">
+            <section class="widget archives">
+                <div class="widget-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+                </div>
+                <h2 class="widget-title section-title">Table of contents</h2>
+                
+                <div class="widget--toc">
+                    <nav id="TableOfContents">
+  <ol>
+    <li><a href="#引言">引言</a></li>
+    <li><a href="#背景与动机">背景与动机</a></li>
+    <li><a href="#hived设计">HiveD设计</a>
+      <ol>
+        <li><a href="#系统总览">系统总览</a></li>
+        <li><a href="#细胞结构的虚拟私有集群">细胞结构的虚拟私有集群</a></li>
+        <li><a href="#伙伴细胞分配算法">伙伴细胞分配算法</a></li>
+      </ol>
+    </li>
+    <li><a href="#实现">实现</a></li>
+    <li><a href="#评估">评估</a></li>
+  </ol>
+</nav>
+                </div>
+            </section>
+        </aside>
+    
+
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
+                defer="false"
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

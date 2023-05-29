@@ -234,6 +234,8 @@
 <ul>
 <li>尽管 GPU 是 DNN 训练所需要的最主要的资源，</li>
 <li>但是 CPU 和 MEM 的分配策略同样也会显著影响到集群的资源利用效率和训练任务的吞吐量。</li>
+</ul>
+</li>
 <li>Synergy
 <ul>
 <li>针对不同类型的 DNN，深入分析了 CPU 和 MEM 的不同组合对其吞吐量的影响</li>
@@ -242,13 +244,10 @@
 </li>
 </ul>
 </li>
-</ul>
-</li>
 <li>
 <p><strong>[NSDI &lsquo;22] MLaaS in the Wild: Workload Analysis and Scheduling in Large-Scale Heterogeneous GPU Clusters</strong></p>
 <ul>
-<li>随着机器学习 (ML) 技术的持续进步和最近大量数据集的可用性，科技公司正在部署大型 ML 即服务 (MLaaS) 云，通常使用异构 GPU 来提供大量 ML 应用程序。然而，在异构 GPU 集群中运行不同的 ML 工作负载会带来许多挑战。
-<ul>
+<li>随着机器学习 (ML) 技术的持续进步和最近大量数据集的可用性，科技公司正在部署大型 ML 即服务 (MLaaS) 云，通常使用异构 GPU 来提供大量 ML 应用程序。然而，在异构 GPU 集群中运行不同的 ML 工作负载会带来许多挑战。</li>
 <li>在本文中
 <ul>
 <li>我们对从阿里巴巴拥有 6,000 多个 GPU 的生产 MLaaS 集群中收集的为期两个月的工作负载跟踪进行了表征研究。</li>
@@ -268,10 +267,8 @@
 </li>
 </ul>
 </li>
-</ul>
-</li>
 <li>
-<p><strong>[&lsquo;22] Singularity: Planet-Scale, Preemptive and Elastic Scheduling of AI Workloads</strong></p>
+<p><strong>[arXiv &lsquo;22] Singularity: Planet-Scale, Preemptive and Elastic Scheduling of AI Workloads</strong></p>
 <ul>
 <li>Singularity
 <ul>
@@ -322,13 +319,13 @@
 <ul>
 <li>加速器，如 GPU、 TPU、 FPGA 和定制 ASIC 表现出跨模型架构的异构性能行为。</li>
 <li>现有的针对加速器集群的调度器(用于在许多用户之间仲裁这些昂贵的培训资源)已经展示了如何针对各种多任务、多用户目标(如公平性和完成时间)进行优化。不幸的是，现有的调度程序基本上不考虑性能异构性。</li>
+</ul>
+</li>
 <li>异构感知调度器 Gavel
 <ul>
 <li>它系统地推广了大量<strong>现有的调度策略</strong>。Gavel 将这些策略表示为<strong>优化问题</strong>，然后使用我们称为有效吞吐量的抽象将这些问题系统地转换为能够识别异构性的版本。</li>
 <li>然后，Gavel 使用一种<strong>基于循环的调度机制</strong>，以确保在给定目标调度策略的情况下，作业能够得到理想的分配。</li>
 <li>Gavel 的异质性感知策略允许异质集群维持更高的输入负载，并且与异质性不可知策略相比，最终目标如完成时间和平均工作完成时间分别提高了1.4倍和3.5倍。</li>
-</ul>
-</li>
 </ul>
 </li>
 </ul>
@@ -404,6 +401,8 @@
 <li>不可预测的训练时间</li>
 <li>全有或全无的执行模型</li>
 <li>GPU 共享的不灵活性</li>
+</ul>
+</li>
 <li>我们对生产中的大型 GPU 集群的分析表明，现有的大数据调度程序会导致
 <ul>
 <li>较长的排队延迟</li>
@@ -426,8 +425,6 @@
 <ul>
 <li>与生产中使用的基于 Apache YARN 的资源管理器相比，Tiresias 将平均 JCT 提高了 5.5 倍。</li>
 <li>更重要的是，Tiresias 的性能与假设完美知识的解决方案的性能相当。</li>
-</ul>
-</li>
 </ul>
 </li>
 </ul>
