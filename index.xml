@@ -669,18 +669,16 @@
 &lt;li&gt;
 &lt;p&gt;&lt;strong&gt;[OSDI &amp;lsquo;20] AntMan: Dynamic Scaling on GPU Clusters for Deep Learning&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;如何在大规模GPU集群上有效调度深度学习工作， 对于&lt;strong&gt;工作性能&lt;/strong&gt;，&lt;strong&gt;系统吞吐量&lt;/strong&gt;和&lt;strong&gt;硬件利用率&lt;/strong&gt;至关重要。&lt;/p&gt;
+&lt;li&gt;如何在大规模GPU集群上有效调度深度学习工作， 对于&lt;strong&gt;工作性能&lt;/strong&gt;，&lt;strong&gt;系统吞吐量&lt;/strong&gt;和&lt;strong&gt;硬件利用率&lt;/strong&gt;至关重要。
 &lt;ul&gt;
 &lt;li&gt;随着深度学习的工作量变得更加复杂，它变得越来越具有挑战性。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;本文将介绍Antman， 这是一种深入学习的基础设施，该基础架构共同设计了集群调度程序，并已在阿里巴巴部署在生产中，以管理数以万计的每日深度学习工作。&lt;/p&gt;
+&lt;li&gt;本文将介绍AntMan， 这是一种深入学习的基础设施，该基础架构共同设计了集群调度程序，并已在阿里巴巴部署在生产中，以管理数以万计的每日深度学习工作。
 &lt;ul&gt;
-&lt;li&gt;Antman适应深度学习训练的波动资源需求。因此，它利用备用GPU资源在共享GPU上共同执行多个作业。&lt;/li&gt;
-&lt;li&gt;Antman利用深度学习训练的独特特征，在深度学习框架内为显存和计算资源引入动态缩放机制。这允许job之间的细粒度协调并防止工作干扰。&lt;/li&gt;
-&lt;li&gt;评估表明，Antman在我们的多租户集群中不损害公平性的情况下，整体将显存利用率提高了42％，计算资源利用率提高了34％，为有效利用大规模的GPU提出了新方法。&lt;/li&gt;
+&lt;li&gt;AntMan适应深度学习训练的波动资源需求。因此，它利用备用GPU资源在共享GPU上共同执行多个作业。&lt;/li&gt;
+&lt;li&gt;AntMan利用深度学习训练的独特特征，在深度学习框架内为显存和计算资源引入动态缩放机制。这允许job之间的细粒度协调并防止工作干扰。&lt;/li&gt;
+&lt;li&gt;评估表明，AntMan在我们的多租户集群中不损害公平性的情况下，整体将显存利用率提高了42％，计算资源利用率提高了34％，为有效利用大规模的GPU提出了新方法。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
@@ -688,9 +686,8 @@
 &lt;li&gt;
 &lt;p&gt;&lt;strong&gt;[NSDI &amp;lsquo;20] Themis: Fair and Efficient GPU Cluster Scheduling&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;ML 训练工作负载通常是需要批量调度的长时间运行的作业，并且它们的性能对任务的相对位置很敏感
-&lt;ul&gt;
-&lt;li&gt;Themis 作为 ML 训练工作负载的新调度框架。
+&lt;li&gt;ML 训练工作负载通常是需要批量调度的长时间运行的作业，并且它们的性能对任务的相对位置很敏感&lt;/li&gt;
+&lt;li&gt;Themis 是一种ML 训练工作负载的新调度框架。
 &lt;ul&gt;
 &lt;li&gt;该机制是一种以完成时间进行公平调度的GPU分配策略(在一个共享的集群中有N个应用程序的运行时间与在一个1/N集群中单独运行的运行时间的比率)。&lt;/li&gt;
 &lt;li&gt;Themis 的目标是在有效利用集群 GPU 的同时，保证各工作负载调度的公平性并最大限度地减少所有 ML 应用程序的完成时间。&lt;/li&gt;
@@ -701,8 +698,6 @@
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;Themis 在 Apache YARN 3.2.0 上实现，并通过重放大型企业跟踪中的工作负载进行评估，公平性提高了 2.25 倍以上，集群效率提高了 ~5% 到 ~250%。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
