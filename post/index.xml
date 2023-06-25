@@ -6,7 +6,25 @@
     <description>Recent content in Posts on Tweakzx</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Mon, 05 Jun 2023 10:47:21 +0800</lastBuildDate><atom:link href="https://tweakzx.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 18 Jun 2023 20:54:03 +0800</lastBuildDate><atom:link href="https://tweakzx.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>【论文笔记】DeepUM论文阅读笔记</title>
+      <link>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0deepum%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link>
+      <pubDate>Sun, 18 Jun 2023 20:54:03 +0800</pubDate>
+      
+      <guid>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0deepum%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</guid>
+      <description>DeepUM: Tensor Migration and Prefetching in Unified Memory 摘要 深层神经网络(DNN)正在继续变得越来越广泛和深入。因此，它需要大量的 GPU 内存和计算能力。 本文提出了一个利用 CUDA 统一存储器(</description>
+    </item>
+    
+    <item>
+      <title>【论文笔记】Zico论文阅读笔记</title>
+      <link>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0zico%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link>
+      <pubDate>Sun, 11 Jun 2023 23:02:04 +0800</pubDate>
+      
+      <guid>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0zico%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</guid>
+      <description>Zico: Efficient GPU Memory Sharing for Concurrent DNN Training 摘要 最近的一些工作提出了跨多个并发 DNN 培训作业共享 GPU 资源的解决方案 但是没有一个解决这种作业共处引入的快速增长的内存占用问题 这</description>
+    </item>
+    
     <item>
       <title>【论文笔记】gshare论文笔记</title>
       <link>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0gshare%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/</link>
