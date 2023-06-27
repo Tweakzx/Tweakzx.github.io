@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
     <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='部署GaiaGPU 前置工作 配置好GPU环境 配置好k8s集群环境 gpu-admission 部署deployment 创建文件gpu-quota-admission.ya'><title>【Kubernetes】部署GaiaGPU（vCUDA)</title>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='部署GaiaGPU 前置工作 配置好GPU环境 配置好k8s集群环境 gpu-admission 部署deployment 创建文件gpu-quota-admission.ya'><title>【Kubernetes】部署gaiaGPU（vCUDA）</title>
 
 <link rel='canonical' href='https://tweakzx.github.io/p/kubernetes%E9%83%A8%E7%BD%B2gaiagpuvcuda/'>
 
-<link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='【Kubernetes】部署GaiaGPU（vCUDA)'>
+<link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='【Kubernetes】部署gaiaGPU（vCUDA）'>
 <meta property='og:description' content='部署GaiaGPU 前置工作 配置好GPU环境 配置好k8s集群环境 gpu-admission 部署deployment 创建文件gpu-quota-admission.ya'>
 <meta property='og:url' content='https://tweakzx.github.io/p/kubernetes%E9%83%A8%E7%BD%B2gaiagpuvcuda/'>
 <meta property='og:site_name' content='Tweakzx'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='gaiaGPU' /><meta property='article:published_time' content='2023-06-27T10:04:38&#43;08:00'/><meta property='article:modified_time' content='2023-06-27T10:04:38&#43;08:00'/>
-<meta name="twitter:title" content="【Kubernetes】部署GaiaGPU（vCUDA)">
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='容器' /><meta property='article:tag' content='k8s' /><meta property='article:tag' content='gaiagpu' /><meta property='article:published_time' content='2023-06-27T14:57:42&#43;08:00'/><meta property='article:modified_time' content='2023-06-27T14:57:42&#43;08:00'/>
+<meta name="twitter:title" content="【Kubernetes】部署gaiaGPU（vCUDA）">
 <meta name="twitter:description" content="部署GaiaGPU 前置工作 配置好GPU环境 配置好k8s集群环境 gpu-admission 部署deployment 创建文件gpu-quota-admission.ya">
     </head>
     <body class="
@@ -73,7 +73,7 @@
     
 
     <h2 class="article-title">
-        <a href="/p/kubernetes%E9%83%A8%E7%BD%B2gaiagpuvcuda/">【Kubernetes】部署GaiaGPU（vCUDA)</a>
+        <a href="/p/kubernetes%E9%83%A8%E7%BD%B2gaiagpuvcuda/">【Kubernetes】部署gaiaGPU（vCUDA）</a>
     </h2>
 
     
@@ -407,7 +407,7 @@
 </span></code></pre></div><p>修改后wq保存， 保存后自动生效</p>
 <h2 id="gpu-manager">gpu-manager</h2>
 <h3 id="给gpu节点打标签">给gpu节点打标签</h3>
-<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">kubectl get nodes <span class="p">|</span> awk <span class="s1">&#39;{print $1}&#39;</span> <span class="p">|</span> grep -v <span class="s2">&#34;NAME&#34;</span> <span class="p">|</span> xargs -I<span class="o">{}</span> kubectl label node <span class="o">{}</span> nvidia-device-enable<span class="o">=</span><span class="nb">enable</span>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">kubectl label node &lt;your node&gt; nvidia-device-enable<span class="o">=</span><span class="nb">enable</span>
 </code></pre></div><h3 id="部署deamonset">部署deamonset</h3>
 <p>创建文件<code>gpu-manager.yaml</code></p>
 <div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nn">---</span><span class="w">
@@ -570,6 +570,8 @@
 </span><span class="w">  </span><span class="nt">selector</span><span class="p">:</span><span class="w">
 </span><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">gpu-manager-ds</span><span class="w">
 </span></code></pre></div><h2 id="测试">测试</h2>
+<h3 id="创建测试文件">创建测试文件</h3>
+<p>创建文件<code>tensorflow-mnist.yaml</code></p>
 <div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">apps/v1</span><span class="w">
 </span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Deployment</span><span class="w">
 </span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
@@ -613,7 +615,8 @@
 </span><span class="w">            </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="l">8Gi</span><span class="w">
 </span><span class="w">            </span><span class="nt">tencent.com/vcuda-core</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;50&#34;</span><span class="w">
 </span><span class="w">            </span><span class="nt">tencent.com/vcuda-memory</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;35&#34;</span><span class="w">
-</span></code></pre></div>
+</span></code></pre></div><div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">kubectl apply -f tensorflow-mnist.yaml
+</code></pre></div>
 </section>
 
 
@@ -621,7 +624,11 @@
     
     <section class="article-tags">
         
-            <a href="/tags/gaiagpu/">gaiaGPU</a>
+            <a href="/tags/%E5%AE%B9%E5%99%A8/">容器</a>
+        
+            <a href="/tags/k8s/">k8s</a>
+        
+            <a href="/tags/gaiagpu/">gaiagpu</a>
         
     </section>
 
@@ -675,13 +682,55 @@
             <div class="flex article-list--tile">
                 
                     
+<article class="has-image">
+    <a href="/p/kubernetesubuntu%E5%AE%89%E8%A3%85k8s%E9%9B%86%E7%BE%A4/">
+        
+        
+            <div class="article-image">
+                
+                    <img src="https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/20220823230439.png" loading="lazy" data-key="" data-hash="https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/20220823230439.png"/>
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">【Kubernetes】ubuntu安装k8s集群</h2>
+        </div>
+    </a>
+</article>
+                
+                    
 <article class="">
-    <a href="/p/kubernetes%E5%A6%82%E4%BD%95%E8%AE%BF%E9%97%AE%E9%9B%86%E7%BE%A4etcd/">
+    <a href="/p/kubernetes%E5%9C%A8k8s%E9%9B%86%E7%BE%A4%E4%B8%AD%E6%8C%82%E8%BD%BD%E5%9F%BA%E4%BA%8Enfs%E7%9A%84storageclass/">
         
         
 
         <div class="article-details">
-            <h2 class="article-title">【Kubernetes】如何访问集群etcd</h2>
+            <h2 class="article-title">【Kubernetes】在k8s集群中挂载基于NFS的StorageClass</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/kubernetes%E5%9C%A8k8s%E9%9B%86%E7%BE%A4%E5%AE%89%E8%A3%85%E6%B5%8B%E8%AF%95adaptdl/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">【Kubernetes】在k8s集群安装测试adaptdl</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/kubernetes%E5%A6%82%E4%BD%95%E8%AE%A9kubernetes%E9%9B%86%E7%BE%A4%E4%BD%BF%E7%94%A8gpu/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">【Kubernetes】如何让kubernetes集群使用GPU</h2>
         </div>
     </a>
 </article>
@@ -872,7 +921,11 @@
         <li><a href="#部署deamonset">部署deamonset</a></li>
       </ol>
     </li>
-    <li><a href="#测试">测试</a></li>
+    <li><a href="#测试">测试</a>
+      <ol>
+        <li><a href="#创建测试文件">创建测试文件</a></li>
+      </ol>
+    </li>
   </ol>
 </nav>
                 </div>
