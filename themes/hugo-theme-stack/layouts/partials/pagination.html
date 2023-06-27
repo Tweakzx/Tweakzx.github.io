@@ -12,7 +12,7 @@
                 <a class='page-link' href='{{ .URL }}'>
                     {{- .PageNumber -}}
                 </a>
-            {{ else if (and (le (sub .PageNumber $.Paginator.PageNumber) 2) (ge (sub .PageNumber $.Paginator.PageNumber) -2) ) }}
+            {{ else if (and (le (sub .PageNumber $.Paginator.PageNumber) 3) (ge (sub .PageNumber $.Paginator.PageNumber) -3) ) }}
                 <a class='page-link' href='{{ .URL }}'>
                     {{- .PageNumber -}}
                 </a>
