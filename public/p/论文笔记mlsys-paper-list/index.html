@@ -1,8 +1,936 @@
-<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="A reading list for machine learning systems Frameworks [VLDB &amp;lsquo;20] PyTorch Distributed: Experiences on Accelerating Data Parallel Training [NeurIPS &amp;lsquo;19] PyTorch: An Imperative Style, High-Performance Deep Learning Library [OSDI &amp;lsquo;18] Ray: A Distributed Framework for Emerging AI Applications [OSDI &amp;lsquo;16] TensorFlow: A System for Large-Scale Machine Learning Parallelism &amp;amp; Distributed Systems [NSDI &amp;lsquo;23] ARK: GPU-driven Code Execution for Distributed Deep Learning [OSDI &amp;lsquo;22] Unity: Accelerating DNN Training Through Joint Optimization"><title>【论文笔记】MLsys Paper List</title><link rel=canonical href=https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0mlsys-paper-list/><link rel=stylesheet href=/scss/style.min.css><meta property="og:title" content="【论文笔记】MLsys Paper List"><meta property="og:description" content="A reading list for machine learning systems Frameworks [VLDB &amp;lsquo;20] PyTorch Distributed: Experiences on Accelerating Data Parallel Training [NeurIPS &amp;lsquo;19] PyTorch: An Imperative Style, High-Performance Deep Learning Library [OSDI &amp;lsquo;18] Ray: A Distributed Framework for Emerging AI Applications [OSDI &amp;lsquo;16] TensorFlow: A System for Large-Scale Machine Learning Parallelism &amp;amp; Distributed Systems [NSDI &amp;lsquo;23] ARK: GPU-driven Code Execution for Distributed Deep Learning [OSDI &amp;lsquo;22] Unity: Accelerating DNN Training Through Joint Optimization"><meta property="og:url" content="https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0mlsys-paper-list/"><meta property="og:site_name" content="Tweakzx"><meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:published_time" content="2023-05-21T21:38:00+08:00"><meta property="article:modified_time" content="2023-05-21T21:38:00+08:00"><meta name=twitter:title content="【论文笔记】MLsys Paper List"><meta name=twitter:description content="A reading list for machine learning systems Frameworks [VLDB &amp;lsquo;20] PyTorch Distributed: Experiences on Accelerating Data Parallel Training [NeurIPS &amp;lsquo;19] PyTorch: An Imperative Style, High-Performance Deep Learning Library [OSDI &amp;lsquo;18] Ray: A Distributed Framework for Emerging AI Applications [OSDI &amp;lsquo;16] TensorFlow: A System for Large-Scale Machine Learning Parallelism &amp;amp; Distributed Systems [NSDI &amp;lsquo;23] ARK: GPU-driven Code Execution for Distributed Deep Learning [OSDI &amp;lsquo;22] Unity: Accelerating DNN Training Through Joint Optimization"></head><body class="article-page has-toc"><script>(function(){const colorSchemeKey='StackColorScheme';if(!localStorage.getItem(colorSchemeKey)){localStorage.setItem(colorSchemeKey,"auto");}})();</script><script>(function(){const colorSchemeKey='StackColorScheme';const colorSchemeItem=localStorage.getItem(colorSchemeKey);const supportDarkMode=window.matchMedia('(prefers-color-scheme: dark)').matches===true;if(colorSchemeItem=='dark'||colorSchemeItem==='auto'&&supportDarkMode){document.documentElement.dataset.scheme='dark';}else{document.documentElement.dataset.scheme='light';}})();</script><div class="container main-container flex
-extended"><div id=article-toolbar><a href=/ class=back-home><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="15 6 9 12 15 18"/></svg><span>Back</span></a></div><main class="main full-width"><article class=main-article><header class=article-header><div class=article-details><h2 class=article-title><a href=/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0mlsys-paper-list/>【论文笔记】MLsys Paper List</a></h2><footer class=article-time><div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg><time class=article-time--published>May 21, 2023</time></div><div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg><time class=article-time--reading>14 minute read</time></div></footer></div></header><section class=article-content><h1 id=a-reading-list-for-machine-learning-systems><strong>A reading list for machine learning systems</strong></h1><h2 id=frameworks><strong>Frameworks</strong></h2><ul><li><strong>[VLDB &lsquo;20] PyTorch Distributed: Experiences on Accelerating Data Parallel Training</strong></li><li><strong>[NeurIPS &lsquo;19] PyTorch: An Imperative Style, High-Performance Deep Learning Library</strong></li><li><strong>[OSDI &lsquo;18] Ray: A Distributed Framework for Emerging AI Applications</strong></li><li><strong>[OSDI &lsquo;16] TensorFlow: A System for Large-Scale Machine Learning</strong></li></ul><h2 id=parallelism--distributed-systems><strong>Parallelism & Distributed Systems</strong></h2><ul><li><strong>[NSDI &lsquo;23] ARK: GPU-driven Code Execution for Distributed Deep Learning</strong></li><li><strong>[OSDI &lsquo;22] Unity: Accelerating DNN Training Through Joint Optimization of Algebraic Transformations and Parallelization</strong></li><li><strong>[EuroSys &lsquo;22] Varuna: Scalable, Low-cost Training of Massive Deep Learning Models</strong></li><li><strong>[SC &lsquo;21&rsquo;] Chimera: Efficiently Training Large-Scale Neural Networks with Bidirectional Pipelines</strong></li><li><strong>[ICML &lsquo;21] PipeTransformer: Automated Elastic Pipelining for Distributed Training of Large-scale Models</strong></li><li><strong>[OSDI &lsquo;20] A Unified Architecture for Accelerating Distributed DNN Training in Heterogeneous GPU/CPU Clusters</strong></li><li><strong>[ATC &lsquo;20] HetPipe: Enabling Large DNN Training on (Whimpy) Heterogeneous GPU Clusters through Integration of Pipelined Model Parallelism and Data Parallelism</strong></li><li><strong>[NeurIPS &lsquo;19] GPipe: Efficient Training of Giant Neural Networks using Pipeline Parallelism</strong></li><li><strong>[SOSP &lsquo;19] A Generic Communication Scheduler for Distributed DNN Training Acceleration</strong></li><li><strong>[SOSP &lsquo;19] PipeDream: Generalized Pipeline Parallelism for DNN Training</strong></li><li><strong>[EuroSys &lsquo;19] Parallax: Sparsity-aware Data Parallel Training of Deep Neural Networks</strong></li><li><strong>[arXiv &lsquo;18] Horovod: fast and easy distributed deep learning in TensorFlow</strong></li><li><strong>[ATC &lsquo;17] Poseidon: An Efficient Communication Architecture for Distributed Deep Learning on GPU Clusters</strong></li><li><strong>[EuroSys &lsquo;16] STRADS: A Distributed Framework for Scheduled Model Parallel Machine Learning</strong></li><li><strong>[EuroSys &lsquo;16] GeePS: Scalable Deep Learning on Distributed GPUs with a GPU-specialized Parameter Server</strong></li><li><strong>[OSDI &lsquo;14] Scaling Distributed Machine Learning with the Parameter Server</strong></li><li><strong>[NIPS &lsquo;12] Large Scale Distributed Deep Networks</strong></li></ul><h2 id=gpu-cluster-management><strong>GPU Cluster Management</strong></h2><ul><li><p><strong>[NSDI'23] Transparent GPU Sharing in Container Clouds for Deep Learning Workloads</strong></p><ul><li>容器广泛用于数据中心中的资源管理。<ul><li>支持容器云中的深度学习(DL)训练的一个常见实践是静态地将 GPU 完全绑定到容器上。</li><li>由于生产中 DL 作业的资源需求多种多样，大量的 GPU 未得到充分利用。</li><li>因此，GPU 集群具有较低的 GPU 利用率，由于排队，导致作业完成时间较长。</li></ul></li><li>我们提出 TGS (透明 GPU 共享) ，一个系统，提供透明的 GPU 共享到集装箱云中的 DL 训练。<ul><li>与最近 GPU 共享的应用层解决方案形成鲜明对比的是，TGS 在容器下的 OS 层运行。</li><li>透明性允许用户使用任何软件来开发模型并在其容器中运行作业。</li><li>TGS 利用自适应速率控制和透明统一内存，同时实现高 GPU 利用率和性能隔离。</li><li>它确保生产作业不会受到共享 GPU 上机会作业的严重影响。</li><li>我们已经建立了 TGS，并将他与docker和kubernetes整合。实验结果表明:<ul><li>TGS 对生产作业的吞吐量影响不大</li><li>TGS 为机会作业提供了与最先进的应用层解决方案 AntMan 相似的吞吐量，并且与现有的 OS 层解决方案 MPS 相比提高了15倍的吞吐量。</li></ul></li></ul></li></ul></li><li><p><strong>[ASPLOS &lsquo;23] Lucid: A Non-intrusive, Scalable and Interpretable Scheduler for Deep Learning Training Jobs</strong></p><ul><li>虽然最近的深度学习工作负载调度器表现出很好的性能，但在实际应用中很难部署它们，是由于<ul><li>缺乏灵活的入侵方式、</li><li>过高的集成和维护成本</li><li>有限的可伸缩性</li><li>不透明的决策过程</li></ul></li><li>Lucid: 基于可解释模型的非侵入式深度学习工作负载调度器 。<ul><li>它由三个创新模块组成。<ul><li>首先，为了有效地收集作业度量和及时调试作业反馈，引入了一个二维优化剖析器。</li><li>其次，Lucid 利用一种惰性包装策略来规避干扰。</li><li>第三，Lucid 基于估计的作业优先级值和共享分数来编排资源，以实现有效的调度。</li></ul></li><li>此外，Lucid 通过设计良好的系统优化器促进模型性能维护和系统透明调整。</li><li>我们的评估表明，与最先进的抢占式调度器 Tiresias 相比，Lucid 将平均作业完成时间减少了1.3倍。此外，它为实际部署提供了明确的系统解释和优秀的可伸缩性。</li></ul></li></ul></li><li><p><strong>[EuroSys &lsquo;23] Lyra: Elastic Scheduling for Deep Learning Clusters</strong></p><ul><li>训练和推理中的问题:<ul><li>当流量负载较低时，推理集群的 GPU 利用率较低</li><li>由于缺乏资源，训练作业往往需要较长的排队时间</li></ul></li><li>我们引入了 Lyra ，一个新的集群调度器来解决这些问题。<ul><li>Lyra 引入了容量贷款，将空闲推理 GPU 服务器贷款给训练工作。它进一步利用弹性扩展来扩展培训作业的 GPU 分配，以更好地利用借出的资源。</li><li>容量借贷和弹性扩展为集群管理带来了新的挑战。<ul><li>当需要返回借出的服务器时，我们需要最小化作业抢占的数量</li><li>当更多的 GPU 可用时，我们需要将它们分配到弹性作业，并最小化作业完成时间(JCT)</li></ul></li><li>Lyra 使用基于原则的启发式方法来解决这些组合问题。<ul><li>它引入了服务器抢占成本的概念，并在服务器回收期间使用贪婪的方法降低这一成本。</li><li>它进一步依赖于为弹性工作的每个额外工人定义的 JCT 缩减值，以多选择背包问题解决调度问题。</li></ul></li><li>在64-GPU 测试平台上的原型实现和超过50,000个生产作业的15天跟踪的大规模模拟表明<ul><li>Aryl 在平均排队时间和 JCT 方面带来了1.53 x 和1.50 x 的减少</li><li>集群调度器提高了高达26.9% 的集群使用率</li></ul></li></ul></li></ul></li><li><p><strong>[OSDI &lsquo;22] Looking Beyond GPUs for DNN Scheduling on Multi-Tenant Clusters</strong></p><ul><li>此文作者发现，<ul><li>尽管 GPU 是 DNN 训练所需要的最主要的资源，</li><li>但是 CPU 和 MEM 的分配策略同样也会显著影响到集群的资源利用效率和训练任务的吞吐量。</li></ul></li><li>Synergy<ul><li>针对不同类型的 DNN，深入分析了 CPU 和 MEM 的不同组合对其吞吐量的影响</li><li>然后将最优的组合方案应用到了调度策略中</li></ul></li></ul></li><li><p><strong>[NSDI &lsquo;22] MLaaS in the Wild: Workload Analysis and Scheduling in Large-Scale Heterogeneous GPU Clusters</strong></p><ul><li>随着机器学习 (ML) 技术的持续进步和最近大量数据集的可用性，科技公司正在部署大型 ML 即服务 (MLaaS) 云，通常使用异构 GPU 来提供大量 ML 应用程序。然而，在异构 GPU 集群中运行不同的 ML 工作负载会带来许多挑战。</li><li>在本文中<ul><li>我们对从阿里巴巴拥有 6,000 多个 GPU 的生产 MLaaS 集群中收集的为期两个月的工作负载跟踪进行了表征研究。</li><li>我们解释了集群调度所面临的挑战<ul><li>GPU 利用率低</li><li>排队延迟长</li><li>需要高端 GPU</li><li>调度要求苛刻的任务难以调度</li><li>异构机器之间的负载不平衡</li><li>潜在的CPU瓶颈</li></ul></li><li>我们描述了我们当前的解决方案，并呼吁进一步调查仍未解决的挑战。</li><li>我们已经发布了公共访问的跟踪，就工作负载和集群规模而言，这是最全面的。</li></ul></li></ul></li><li><p><strong>[arXiv &lsquo;22] Singularity: Planet-Scale, Preemptive and Elastic Scheduling of AI Workloads</strong></p><ul><li>Singularity<ul><li>微软的全球分布式调度服务，高效和可靠地执行深度学习训练和推理工作负载</li><li>核心：是一个新颖的、<strong>工作负载感知的调度器</strong>，它可以透明地抢占和弹性地扩展深度学习工作负载<ul><li>以提高利用率</li><li>而且不会影响它们在全球 AI 加速器(GPU/FPGA)中的正确性或性能</li></ul></li><li>所有作业都是<strong>可抢占的</strong>、<strong>可迁移的</strong>，并且在默认可以动态调整大小(<strong>弹性)</strong> : 一个活动的作业可以被动态和透明地<ul><li>被抢占和被迁移到不同的节点集、集群、数据中心或者区域，并且可以从执行被抢占的地方精确地恢复</li><li>在给定类型的一组不同的加速器上调整大小</li></ul></li><li>机制透明：不要求用户对代码进行任何更改，也不要求使用任何可能限制灵活性的自定义库。</li><li>可靠：利用Singularity可以获得效率和可靠性增益，而对稳态性能的影响可以忽略不计。</li><li>我们的设计方法是对DNN 网络架构不感知的，并且可以处理各种并行策略(数据/流水线/模型并行)</li></ul></li></ul></li><li><p><strong>[OSDI &lsquo;21] Pollux: Co-adaptive Cluster Scheduling for Goodput-Optimized Deep Learning</strong></p><ul><li>Pollux通过在每个作业层面和整个集群层面自适应地共同优化相互依赖的因素，改善深度学习（DL）集群的调度性能。<ul><li>在训练过程中监测每个作业的状态，Pollux建模了他们的有效吞吐量随着添加或删除资源而发生的变化</li><li>Pollux动态地重新分配资源，以提高整个集群的好产量，同时尊重公平性，不断优化每个DL作业，以更好地利用这些资源。</li><li>在真实的DL作业和跟踪驱动的模拟实验<ul><li>Pollux相对于最先进的DL调度器将平均作业完成时间减少了37-50%</li><li>Pollux促进了竞争资源的DL作业之间的公平性</li></ul></li></ul></li></ul></li><li><p><strong>[NSDI &lsquo;21] Elastic Resource Sharing for Distributed Deep Learning</strong></p></li><li><p><strong>[OSDI &lsquo;20] Heterogeneity-Aware Cluster Scheduling Policies for Deep Learning Workloads</strong></p><ul><li>背景<ul><li>加速器，如 GPU、 TPU、 FPGA 和定制 ASIC 表现出跨模型架构的异构性能行为。</li><li>现有的针对加速器集群的调度器(用于在许多用户之间仲裁这些昂贵的培训资源)已经展示了如何针对各种多任务、多用户目标(如公平性和完成时间)进行优化。不幸的是，现有的调度程序基本上不考虑性能异构性。</li></ul></li><li>异构感知调度器 Gavel<ul><li>它系统地推广了大量<strong>现有的调度策略</strong>。Gavel 将这些策略表示为<strong>优化问题</strong>，然后使用我们称为有效吞吐量的抽象将这些问题系统地转换为能够识别异构性的版本。</li><li>然后，Gavel 使用一种<strong>基于循环的调度机制</strong>，以确保在给定目标调度策略的情况下，作业能够得到理想的分配。</li><li>Gavel 的异质性感知策略允许异质集群维持更高的输入负载，并且与异质性不可知策略相比，最终目标如完成时间和平均工作完成时间分别提高了1.4倍和3.5倍。</li></ul></li></ul></li><li><p><strong>[OSDI &lsquo;20] AntMan: Dynamic Scaling on GPU Clusters for Deep Learning</strong></p><ul><li>如何在大规模GPU集群上有效调度深度学习工作， 对于<strong>工作性能</strong>，<strong>系统吞吐量</strong>和<strong>硬件利用率</strong>至关重要。<ul><li>随着深度学习的工作量变得更加复杂，它变得越来越具有挑战性。</li></ul></li><li>本文将介绍AntMan， 这是一种深入学习的基础设施，该基础架构共同设计了集群调度程序，并已在阿里巴巴部署在生产中，以管理数以万计的每日深度学习工作。<ul><li>AntMan适应深度学习训练的波动资源需求。因此，它利用备用GPU资源在共享GPU上共同执行多个作业。</li><li>AntMan利用深度学习训练的独特特征，在深度学习框架内为显存和计算资源引入动态缩放机制。这允许job之间的细粒度协调并防止工作干扰。</li><li>评估表明，AntMan在我们的多租户集群中不损害公平性的情况下，整体将显存利用率提高了42％，计算资源利用率提高了34％，为有效利用大规模的GPU提出了新方法。</li></ul></li></ul></li><li><p><strong>[NSDI &lsquo;20] Themis: Fair and Efficient GPU Cluster Scheduling</strong></p><ul><li>ML 训练工作负载通常是需要批量调度的长时间运行的作业，并且它们的性能对任务的相对位置很敏感</li><li>Themis 是一种ML 训练工作负载的新调度框架。<ul><li>该机制是一种以完成时间进行公平调度的GPU分配策略(在一个共享的集群中有N个应用程序的运行时间与在一个1/N集群中单独运行的运行时间的比率)。</li><li>Themis 的目标是在有效利用集群 GPU 的同时，保证各工作负载调度的公平性并最大限度地减少所有 ML 应用程序的完成时间。</li><li>Themis 包含两级调度架构<ul><li>其中 ML 作业在调度引擎中对可用资源进行投标，这样可以使调度引擎可以捕获布局敏感性并确保效率。</li><li>调度引擎的分配是通过在短期内将GPU 分配给中标者以换取更多效率，但在长期内仍然确保所有工作完成时间的公平性。</li></ul></li><li>Themis 在 Apache YARN 3.2.0 上实现，并通过重放大型企业跟踪中的工作负载进行评估，公平性提高了 2.25 倍以上，集群效率提高了 ~5% 到 ~250%。</li></ul></li></ul></li><li><p><strong>[EuroSys &lsquo;20] Balancing Efficiency and Fairness in Heterogeneous GPU Clusters for Deep Learning</strong></p><ul><li>Gandiva-fair<ul><li>效率与公平的平衡<ul><li>效率：Gandiva-fair 提供用户之间的性能隔离，使多个用户可以共享一个集群，从而最大限度地提高集群效率</li><li>公平：在活跃用户之间公平分配集群范围 GPU 时间</li></ul></li><li>集群异质性<ul><li>背景：新一代用户面临更高的需求，老一代 GPU 的利用率很低，从而降低了集群效率</li><li>解决方案： Gandiva-fair 描述了来自较新 GPU 的各种作业的可变边际效用，并通过一种新颖的资源交易机制透明地激励用户使用较旧的 GPU</li><li>效果：该机制不影响任何用户的公平性保证的情况下最大限度地提高集群效率</li></ul></li></ul></li></ul></li><li><p><strong>[NSDI &lsquo;19] Tiresias: A GPU Cluster Manager for Distributed Deep Learning</strong></p><ul><li>深度学习 (DL) 训练作业给现有的集群管理器带来了一些独特的挑战，例如<ul><li>不可预测的训练时间</li><li>全有或全无的执行模型</li><li>GPU 共享的不灵活性</li></ul></li><li>我们对生产中的大型 GPU 集群的分析表明，现有的大数据调度程序会导致<ul><li>较长的排队延迟</li><li>较低的整体性能</li></ul></li><li>我们介绍了 Tiresias<ul><li>这是一个为分布式 DL 训练作业量身定制的 GPU 集群管理器，它可以有效地安排和放置 DL 作业以减少它们的作业完成时间 (JCT)。</li><li>鉴于 DL 作业的执行时间通常是不可预测的，我们提出了两种调度算法——<ul><li><strong>离散化二维Gittins索引</strong>：基于部分信息</li><li><strong>离散化二维 LAS</strong>： 与信息无关，旨在最小化平均 JCT</li></ul></li><li>此外，我们描述了何时可以放宽合并放置约束，并提出了一种<strong>放置算法</strong>来利用这些观察结果而无需任何用户输入。</li></ul></li><li>在具有 60 个 P100 GPU 的密歇根 ConFlux 集群上进行的实验和大规模跟踪驱动模拟表明，<ul><li>与生产中使用的基于 Apache YARN 的资源管理器相比，Tiresias 将平均 JCT 提高了 5.5 倍。</li><li>更重要的是，Tiresias 的性能与假设完美知识的解决方案的性能相当。</li></ul></li></ul></li><li><p><strong>[ATC &lsquo;19] Analysis of Large-Scale Multi-Tenant GPU Clusters for DNN Training Workloads</strong></p><ul><li><p>调度框架旨在提供如下特性</p><ul><li>高效率</li><li>资源隔离</li><li>用户间公平共享</li></ul></li><li><p>然而，基于深度神经网络 (DNN) 的工作负载主要在 GPU 上训练，与传统的大数据有两个显着差异数据分析工作负载</p><ul><li>首先，从集群利用率的角度来看，GPU 代表了无法在用户之间以细粒度共享的单一资源</li><li>其次，从工作负载的角度来看，深度学习框架需要gang schedule，这降低了调度的灵活性，并使作业本身在运行时对故障没有弹性</li></ul></li><li><p>在本文中</p><ul><li>我们展示了来自 Microsoft 多租户 GPU 集群的长达两个月的跟踪的详细工作负载特征</li><li>通过将调度程序日志与来自各个作业的日志相关联，我们研究了影响多租户集群上 DNN 训练工作负载的集群利用率的三个不同问题：<ul><li>(1) 队列调度和位置约束的影响</li><li>(2) 位置的影响关于 GPU 利用率</li><li>(3) 训练期间的失败。</li></ul></li><li>根据我们运行大规模操作的经验，我们提供了与用于 DNN 训练工作负载的下一代集群调度器相关的设计指南</li></ul></li></ul></li><li><p><strong>[OSDI &lsquo;18] Gandiva: Introspective cluster scheduling for deep learning</strong></p><ul><li>Gandiva: 一个集群调度框架，使用特定领域知识，优化了GPU集群训练深度学习模型的延迟与效率<ul><li><p>深度学习job的特征</p><ul><li>1）反馈驱动的探索：<ul><li>一个用户经常运行一组作业(或 a multi-job)来获得特定任务的最佳结果</li><li>并使用关于准确性的早期反馈来动态优先考虑或杀死一个作业子集</li><li>同步发生的多个作业的早期反馈是至关重要的</li></ul></li><li>2）深度学习工作在资源使用方面的<strong>异构</strong>，这使得它很难实现最适合的先验。</li><li>3）作业内可预测性：因为作业会重复执行叫做mini-batch的迭代<ul><li>Gandiva利用这个特征解决了1）2）两个问题</li><li>利用可预测性对GPU进行多个job间进行时分复用， 这提供了低延迟</li><li>这种预测性还可以用于内省job性能并动态迁移到最合适的GPU上，提高了集群效率</li></ul></li></ul></li><li><p>我们通过一个原型实现和微基准测试表明</p><ul><li>Gandiva 可以在深度学习过程<strong>加快超参数搜索</strong>一个数量级</li><li>并通过<strong>透明迁移</strong>和<strong>job时分</strong>实现更好的利用，使job与资源的更好地匹配。</li><li>在一个运行在180-GPU 集群中的实际工作负载中，Gandiva 将集群的总利用率提高了26%</li><li>这为深度学习提供了一种管理大型 GPU 集群的新方法。</li></ul></li></ul></li></ul></li></ul><h2 id=memory-management-for-machine-learning><strong>Memory Management for Machine Learning</strong></h2><ul><li><strong>[ASPLOS &lsquo;23] DeepUM: Tensor Migration and Prefetching in Unified Memory</strong></li><li><strong>[ATC &lsquo;22] Memory Harvesting in Multi-GPU Systems with Hierarchical Unified Virtual Memory</strong></li><li><strong>[MobiSys &lsquo;22] Memory-efficient DNN Training on Mobile Devices</strong></li><li><strong>[HPCA &lsquo;22] Enabling Efficient Large-Scale Deep Learning Training with Cache Coherent Disaggregated Memory Systems</strong></li><li><strong>[ASPLOS &lsquo;20] Capuchin: Tensor-based GPU Memory Management for Deep Learning</strong></li><li><strong>[ASPLOS &lsquo;20] SwapAdvisor: Push Deep Learning Beyond the GPU Memory Limit via Smart Swapping</strong></li><li><strong>[ISCA &lsquo;19] Interplay between Hardware Prefetcher and Page Eviction Policy in CPU-GPU Unified Virtual Memory</strong></li><li><strong>[ISCA &lsquo;18] Gist: Efficient Data Encoding for Deep Neural Network Training</strong></li><li><strong>[PPoPP &lsquo;18] SuperNeurons: Dynamic GPU Memory Management for Training Deep Neural Networks</strong></li><li><strong>[MICRO &lsquo;16] vDNN: Virtualized Deep Neural Networks for Scalable, Memory-Efficient Neural Network Design</strong></li></ul><h2 id=scheduling--resource-management><strong>Scheduling & Resource Management</strong></h2><ul><li><strong>[ASPLOS &lsquo;23] ElasticFlow: An Elastic Serverless Training Platform for Distributed Deep Learning</strong></li><li><strong>[arXiv &lsquo;22] EasyScale: Accuracy-consistent Elastic Training for Deep Learning</strong><ul><li>分布式同步GPU训练通常被用于深度学习。<ul><li>使用固定GPU的资源约束<ul><li>使得大规模的深度学习训练工作受到影响</li><li>降低了集群的利用率</li></ul></li><li>纳入资源弹性<ul><li>往往会引入模型精度的非确定性&lt;&mdash;&ndash;缺乏隔离能力</li></ul></li></ul></li><li>本文介绍EasyScale，<ul><li>这是一个弹性框架<ul><li>可以在异构GPU上扩展分布式训练</li><li>同时产生确定性的深度学习模型</li></ul></li><li>实现了弹性的精度一致的模型训练。<ul><li>EasyScale严格遵循数据并行训练流程</li><li>仔细追踪与精度相关的因素</li><li>有效利用深度学习特性进行上下文切换</li></ul></li><li>为了使异构GPU的计算能力达到饱和<ul><li>EasyScale根据我们的作业内和作业间调度策略动态地分配工人</li><li>最大限度地减少GPU的空闲时间</li><li>并相应地提高综合作业的吞吐量。</li></ul></li><li>实验<ul><li>部署在CompanyA的一个在线服务集群中</li><li>EasyScale为弹性深度学习训练作业提供动力，使其适时地利用空闲的GPU</li><li>在不违反SLA的情况下将集群的整体利用率提高了62.1%</li></ul></li></ul></li></ul></li><li><strong>[MLSys &lsquo;22] VirtualFlow: Decoupling Deep Learning Models from the Underlying Hardware</strong></li><li><strong>[SIGCOMM &lsquo;22] Multi-resource interleaving for deep learning training</strong></li><li><strong>[EuroSys &lsquo;22] Out-Of-Order BackProp: An Effective Scheduling Technique for Deep Learning</strong></li><li><strong>[ATC &lsquo;21] Zico: Efficient GPU Memory Sharing for Concurrent DNN Training</strong></li><li><strong>[NeurIPS &lsquo;20] Nimble: Lightweight and Parallel GPU Task Scheduling for Deep Learning</strong></li><li><strong>[OSDI&rsquo; 20] KungFu: Making Training in Distributed Machine Learning Adaptive</strong></li><li><strong>[OSDI &lsquo;20] PipeSwitch: Fast Pipelined Context Switching for Deep Learning Applications</strong></li><li><strong>[MLSys &lsquo;20] Salus: Fine-Grained GPU Sharing Primitives for Deep Learning Applications</strong><ul><li>GPU 利用率不足<ul><li>现代 GPU 本身不支持细粒度共享原语</li><li>分时和抢占是代价昂贵的</li><li>DL 应用程序不能完全使用 GPU 的资源， 且这些资源无法被共享</li></ul></li><li>Salus<ul><li>支持两个 GPU 共享原语，以实现多个 DL 应用程序之间的细粒度 GPU 共享， 原语是：<ul><li>快速作业切换</li><li>内存共享</li></ul></li><li>Salus 实现了一个高效的、统一的执行服务，将 GPU 共享给不同的 DL 应用程序，并通过执行迭代调度和解决相关的内存管理问题来实现细粒度共享。</li><li>我们展示了这些原语可以用来实现灵活的共享策略，比如公平性、优先级排序和为各种用例打包。</li><li>将 Salus 与 TensorFlow 相结合，对流行的 DL 工作进行评估，结果表明 Salus 可以提高 DL 培训工作的平均完成时间3.19 × ，超参数调整的 GPU 利用率2.38 × ，DL 推理应用的 GPU 利用率42 × 以上，不共享 GPU 和7 × 以上 NVIDIA MPS，且开销较小。</li></ul></li></ul></li><li><strong>[SOSP &lsquo;19] Generic Communication Scheduler for Distributed DNN Training Acceleration</strong></li><li><strong>[EuroSys &lsquo;18] Optimus: An Efficient Dynamic Resource Scheduler for Deep Learning Clusters</strong><ul><li>Optimus<ul><li>一个为深度学习集群定制的作业调度器，它基于在线资源性能模型使作业训练时间最小化。</li><li>Optimus使用在线拟合来预测训练期间的模型收敛，并设置性能模型来准确估计训练速度，作为每个作业分配资源的函数。</li><li>基于这些模型，我们设计了一个简单而有效的方法，用于动态分配资源和放置深度学习任务，以尽量减少作业完成时间。</li><li>实验<ul><li>我们在Kubernetes（一个用于容器编排的集群管理器）之上实现了Optimus</li><li>并在一个有7个CPU服务器和6个GPU服务器的深度学习集群上进行了实验</li><li>使用MXNet框架运行9个训练作业</li><li>结果显示，Optimus在作业完成时间和makespan方面分别比有代表性的集群调度器高出约139%和63%</li></ul></li></ul></li></ul></li><li><strong>[HPCA &lsquo;18] Applied Machine Learning at Facebook: A Datacenter Infrastructure Perspective</strong></li></ul><h2 id=serving-systems--inference-acceleration><strong>Serving Systems (& inference acceleration)</strong></h2><ul><li><strong>[EuroSys &lsquo;23] Fast and Efficient Model Serving Using Multi-GPUs with Direct-Host-Access</strong></li><li><strong>[MICRO &lsquo;22] DFX: A Low-latency Multi-FPGA Appliance for Accelerating Transformer-based Text Generation</strong></li><li><strong>[ATC &lsquo;22] Serving Heterogeneous Machine Learning Models on Multi-GPU Servers with Spatio-Temporal Sharing</strong></li><li><strong>[OSDI &lsquo;22] Orca: A Distributed Serving System for Transformer-Based Language Generation Tasks</strong></li><li><strong>[OSDI &lsquo;22] Achieving μs-scale Preemption for Concurrent GPU-accelerated DNN Inferences</strong></li><li><strong>[ATC &lsquo;21] INFaaS: Automated Model-less Inference Serving</strong></li><li><strong>[OSDI &lsquo;20] Serving DNNs like Clockwork: Performance Predictability from the Bottom Up</strong></li><li><strong>[ISCA &lsquo;20] MLPerf Inference Benchmark</strong></li><li><strong>[SOSP &lsquo;19] Nexus: A GPU Cluster Engine for Accelerating DNN-Based Video Analysis</strong></li><li><strong>[ISCA &lsquo;19] MnnFast: a fast and scalable system architecture for memory-augmented neural networks</strong></li><li><strong>[EuroSys &lsquo;19] μLayer: Low Latency On-Device Inference Using Cooperative Single-Layer Acceleration and Processor-Friendly Quantization</strong></li><li><strong>[EuroSys &lsquo;19] GrandSLAm: Guaranteeing SLAs for Jobs in Microservices Execution Frameworks</strong></li><li><strong>[OSDI &lsquo;18] Pretzel: Opening the Black Box of Machine Learning Prediction Serving Systems</strong></li><li><strong>[NSDI &lsquo;17] Clipper: A Low-Latency Online Prediction Serving System</strong></li></ul><h2 id=deep-learning-compiler><strong>Deep Learning Compiler</strong></h2><ul><li><strong>[PLDI &lsquo;21] DeepCuts: A Deep Learning Optimization Framework for Versatile GPU Workloads</strong></li><li><strong>[OSDI &lsquo;18] TVM: An Automated End-to-End Optimizing Compiler for Deep Learning</strong></li></ul><h2 id=very-large-models><strong>Very Large Models</strong></h2><ul><li><strong>[ASPLOS &lsquo;23] Optimus-CC: Efficient Large NLP Model Training with 3D Parallelism Aware Communication Compression</strong></li><li><strong>[arxiv &lsquo;21] ZeRO-Infinity: Breaking the GPU Memory Wall for Extreme Scale Deep Learning</strong></li><li><strong>[ATC &lsquo;21] ZeRO-Offload: Democratizing Billion-Scale Model Training</strong></li><li><strong>[FAST &lsquo;21] Behemoth: A Flash-centric Training Accelerator for Extreme-scale DNNs</strong></li></ul><h2 id=deep-learning-recommendation-models><strong>Deep Learning Recommendation Models</strong></h2><ul><li><strong>[OSDI &lsquo;22] FAERY: An FPGA-accelerated Embedding-based Retrieval System</strong></li><li><strong>[OSDI &lsquo;22] Ekko: A Large-Scale Deep Learning Recommender System with Low-Latency Model Update</strong></li><li><strong>[EuroSys &lsquo;22] Fleche: An Efficient GPU Embedding Cache for Personalized Recommendations</strong></li><li><strong>[ASPLOS &lsquo;22] RecShard: statistical feature-based memory optimization for industry-scale neural recommendation</strong></li><li><strong>[HPCA &lsquo;22] Hercules: Heterogeneity-Aware Inference Serving for At-Scale Personalized Recommendation</strong></li><li><strong>[MLSys &lsquo;21] TT-Rec: Tensor Train Compression for Deep Learning Recommendation Model Embeddings</strong></li><li><strong>[HPCA &lsquo;21] Tensor Casting: Co-Designing Algorithm-Architecture for Personalized Recommendation Training</strong></li><li><strong>[HPCA &lsquo;21] Understanding Training Efficiency of Deep Learning Recommendation Models at Scale</strong></li><li><strong>[ISCA &lsquo;20] DeepRecSys: A System for Optimizing End-To-End At-scale Neural Recommendation Inference</strong></li><li><strong>[HPCA &lsquo;20] The Architectural Implications of Facebook’s DNN-based Personalized Recommendation</strong></li><li><strong>[MICRO &lsquo;19] TensorDIMM: A Practical Near-Memory Processing Architecture for Embeddings and Tensor Operations in Deep Learning</strong></li></ul><h2 id=hardware-support-for-ml><strong>Hardware Support for ML</strong></h2><ul><li><strong>[ISCA &lsquo;18] A Configurable Cloud-Scale DNN Processor for Real-Time AI</strong></li><li><strong>[ISCA &lsquo;17] In-Datacenter Performance Analysis of a Tensor Processing Unit</strong></li></ul><h2 id=ml-at-mobile--embedded-systems><strong>ML at Mobile & Embedded Systems</strong></h2><ul><li><strong>[MobiCom &lsquo;20] SPINN: Synergistic Progressive Inference of Neural Networks over Device and Cloud</strong></li><li><strong>[RTSS &lsquo;19] Pipelined Data-Parallel CPU/GPU Scheduling for Multi-DNN Real-Time Inference</strong></li><li><strong>[ASPLOS &lsquo;17] Neurosurgeon: Collaborative Intelligence Between the Cloud and Mobile Edge</strong></li></ul><h2 id=ml-techniques-for-systems><strong>ML Techniques for Systems</strong></h2><ul><li><strong>[ICML &lsquo;20] An Imitation Learning Approach for Cache Replacement</strong></li><li><strong>[ICML &lsquo;18] Learning Memory Access Patterns</strong></li></ul></section><footer class=article-footer><section class=article-copyright><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg><span>Licensed under CC BY-NC-SA 4.0</span></section></footer><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.css integrity=sha384-RZU/ijkSsFbcmivfdRBQDtwuwVqK7GMOw6IMvKyeWL2K5UAlyp6WonmB8m7Jd0Hn crossorigin=anonymous><script src=https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.js integrity=sha384-pK1WpvzWVBQiP0/GjnvRxV4mOb0oxFuyRxJlk6vVw146n3egcN5C925NCP7a7BY8 crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/contrib/auto-render.min.js integrity=sha384-vZTG03m+2yp6N6BNi5iM4rW4oIwk5DfcNdFfxkk9ZWpDriOkXX8voJBFrAO7MpVl crossorigin=anonymous defer></script><script>window.addEventListener("DOMContentLoaded",()=>{renderMathInElement(document.querySelector(`.article-content`),{delimiters:[{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false},{left:"\\(",right:"\\)",display:false},{left:"\\[",right:"\\]",display:true}]});})</script></article><aside class=related-contents--wrapper></aside><script src=https://giscus.app/client.js data-repo=Tweakzx/Tweakzx.github.io data-repo-id="MDEwOlJlcG9zaXRvcnkzMjY5MTY1NTE=" data-category=Announcements data-category-id=DIC_kwDOE3xZx84CTfL- data-mapping=title data-reactions-enabled=1 data-emit-metadata=0 data-theme=light_tritanopia crossorigin=anonymous async></script><script>function setGiscusTheme(theme){let giscus=document.querySelector('iframe.giscus-frame');if(giscus){giscus.contentWindow.postMessage({giscus:{setConfig:{theme:theme}}},"https://giscus.app");};};(function(){addEventListener('message',(e)=>{if(event.origin!=='https://giscus.app')return;handler()});window.addEventListener('onColorSchemeChange',handler);function handler(){if(document.documentElement.dataset.scheme==="light"){setGiscusTheme('light_tritanopia');}else{setGiscusTheme('dark_tritanopia');};};}());</script><footer class=site-footer><section class=copyright>&copy;
-2020 -
-2023 Tweakzx</section><section class=powerby>Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a><br>Theme <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.5.0>Stack</a></b> designed by <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a></section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
-<button class="pswp__button pswp__button--share" title=Share></button>
-<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
-<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
-<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css integrity="sha256-c0uckgykQ9v5k+IqViZOZKc47Jn7KQil4/MP3ySA3F8=" crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE=" crossorigin=anonymous></main><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">Table of contents</h2><div class=widget--toc><nav id=TableOfContents><ol><li><a href=#frameworks><strong>Frameworks</strong></a></li><li><a href=#parallelism--distributed-systems><strong>Parallelism & Distributed Systems</strong></a></li><li><a href=#gpu-cluster-management><strong>GPU Cluster Management</strong></a></li><li><a href=#memory-management-for-machine-learning><strong>Memory Management for Machine Learning</strong></a></li><li><a href=#scheduling--resource-management><strong>Scheduling & Resource Management</strong></a></li><li><a href=#serving-systems--inference-acceleration><strong>Serving Systems (& inference acceleration)</strong></a></li><li><a href=#deep-learning-compiler><strong>Deep Learning Compiler</strong></a></li><li><a href=#very-large-models><strong>Very Large Models</strong></a></li><li><a href=#deep-learning-recommendation-models><strong>Deep Learning Recommendation Models</strong></a></li><li><a href=#hardware-support-for-ml><strong>Hardware Support for ML</strong></a></li><li><a href=#ml-at-mobile--embedded-systems><strong>ML at Mobile & Embedded Systems</strong></a></li><li><a href=#ml-techniques-for-systems><strong>ML Techniques for Systems</strong></a></li></ol></nav></div></section></aside></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g=" crossorigin=anonymous defer></script><script type=text/javascript src=/ts/main.js defer></script><script>(function(){const customFont=document.createElement('link');customFont.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";customFont.type="text/css";customFont.rel="stylesheet";document.head.appendChild(customFont);}());</script></body></html>
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='A reading list for machine learning systems Frameworks [VLDB &amp;lsquo;20] PyTorch Distributed: Experiences on Accelerating Data Parallel Training [NeurIPS &amp;lsquo;19] PyTorch: An Imperative Style, High-Performance Deep Learning Library [OSDI &amp;lsquo;18] Ray: A Distributed Framework for Emerging AI Applications [OSDI &amp;lsquo;16] TensorFlow: A System for Large-Scale Machine Learning Parallelism &amp;amp; Distributed Systems [NSDI &amp;lsquo;23] ARK: GPU-driven Code Execution for Distributed Deep Learning [OSDI &amp;lsquo;22] Unity: Accelerating DNN Training Through Joint Optimization'><title>【论文笔记】MLsys Paper List</title>
+
+<link rel='canonical' href='https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0mlsys-paper-list/'>
+
+<link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='【论文笔记】MLsys Paper List'>
+<meta property='og:description' content='A reading list for machine learning systems Frameworks [VLDB &amp;lsquo;20] PyTorch Distributed: Experiences on Accelerating Data Parallel Training [NeurIPS &amp;lsquo;19] PyTorch: An Imperative Style, High-Performance Deep Learning Library [OSDI &amp;lsquo;18] Ray: A Distributed Framework for Emerging AI Applications [OSDI &amp;lsquo;16] TensorFlow: A System for Large-Scale Machine Learning Parallelism &amp;amp; Distributed Systems [NSDI &amp;lsquo;23] ARK: GPU-driven Code Execution for Distributed Deep Learning [OSDI &amp;lsquo;22] Unity: Accelerating DNN Training Through Joint Optimization'>
+<meta property='og:url' content='https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0mlsys-paper-list/'>
+<meta property='og:site_name' content='Tweakzx'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2023-05-21T21:38:00&#43;08:00'/><meta property='article:modified_time' content='2023-05-21T21:38:00&#43;08:00'/>
+<meta name="twitter:title" content="【论文笔记】MLsys Paper List">
+<meta name="twitter:description" content="A reading list for machine learning systems Frameworks [VLDB &amp;lsquo;20] PyTorch Distributed: Experiences on Accelerating Data Parallel Training [NeurIPS &amp;lsquo;19] PyTorch: An Imperative Style, High-Performance Deep Learning Library [OSDI &amp;lsquo;18] Ray: A Distributed Framework for Emerging AI Applications [OSDI &amp;lsquo;16] TensorFlow: A System for Large-Scale Machine Learning Parallelism &amp;amp; Distributed Systems [NSDI &amp;lsquo;23] ARK: GPU-driven Code Execution for Distributed Deep Learning [OSDI &amp;lsquo;22] Unity: Accelerating DNN Training Through Joint Optimization">
+    </head>
+    <body class="
+    article-page has-toc
+">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex 
+    
+        extended
+    
+">
+    
+        <div id="article-toolbar">
+            <a href="/" class="back-home">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="15 6 9 12 15 18" />
+</svg>
+
+
+
+                <span>Back</span>
+            </a>
+        </div>
+    
+<main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+
+    <h2 class="article-title">
+        <a href="/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0mlsys-paper-list/">【论文笔记】MLsys Paper List</a>
+    </h2>
+
+    
+
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">May 21, 2023</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    14 minute read
+                </time>
+            </div>
+        
+    </footer>
+    
+</div>
+
+    
+
+</header>
+
+    <section class="article-content">
+    <h1 id="a-reading-list-for-machine-learning-systems"><strong>A reading list for machine learning systems</strong></h1>
+<h2 id="frameworks"><strong>Frameworks</strong></h2>
+<ul>
+<li><strong>[VLDB &lsquo;20] PyTorch Distributed: Experiences on Accelerating Data Parallel Training</strong></li>
+<li><strong>[NeurIPS &lsquo;19] PyTorch: An Imperative Style, High-Performance Deep Learning Library</strong></li>
+<li><strong>[OSDI &lsquo;18] Ray: A Distributed Framework for Emerging AI Applications</strong></li>
+<li><strong>[OSDI &lsquo;16] TensorFlow: A System for Large-Scale Machine Learning</strong></li>
+</ul>
+<h2 id="parallelism--distributed-systems"><strong>Parallelism &amp; Distributed Systems</strong></h2>
+<ul>
+<li><strong>[NSDI &lsquo;23] ARK: GPU-driven Code Execution for Distributed Deep Learning</strong></li>
+<li><strong>[OSDI &lsquo;22] Unity: Accelerating DNN Training Through Joint Optimization of Algebraic Transformations and Parallelization</strong></li>
+<li><strong>[EuroSys &lsquo;22] Varuna: Scalable, Low-cost Training of Massive Deep Learning Models</strong></li>
+<li><strong>[SC &lsquo;21&rsquo;] Chimera: Efficiently Training Large-Scale Neural Networks with Bidirectional Pipelines</strong></li>
+<li><strong>[ICML &lsquo;21] PipeTransformer: Automated Elastic Pipelining for Distributed Training of Large-scale Models</strong></li>
+<li><strong>[OSDI &lsquo;20] A Unified Architecture for Accelerating Distributed DNN Training in Heterogeneous GPU/CPU Clusters</strong></li>
+<li><strong>[ATC &lsquo;20] HetPipe: Enabling Large DNN Training on (Whimpy) Heterogeneous GPU Clusters through Integration of Pipelined Model Parallelism and Data Parallelism</strong></li>
+<li><strong>[NeurIPS &lsquo;19] GPipe: Efficient Training of Giant Neural Networks using Pipeline Parallelism</strong></li>
+<li><strong>[SOSP &lsquo;19] A Generic Communication Scheduler for Distributed DNN Training Acceleration</strong></li>
+<li><strong>[SOSP &lsquo;19] PipeDream: Generalized Pipeline Parallelism for DNN Training</strong></li>
+<li><strong>[EuroSys &lsquo;19] Parallax: Sparsity-aware Data Parallel Training of Deep Neural Networks</strong></li>
+<li><strong>[arXiv &lsquo;18] Horovod: fast and easy distributed deep learning in TensorFlow</strong></li>
+<li><strong>[ATC &lsquo;17] Poseidon: An Efficient Communication Architecture for Distributed Deep Learning on GPU Clusters</strong></li>
+<li><strong>[EuroSys &lsquo;16] STRADS: A Distributed Framework for Scheduled Model Parallel Machine Learning</strong></li>
+<li><strong>[EuroSys &lsquo;16] GeePS: Scalable Deep Learning on Distributed GPUs with a GPU-specialized Parameter Server</strong></li>
+<li><strong>[OSDI &lsquo;14] Scaling Distributed Machine Learning with the Parameter Server</strong></li>
+<li><strong>[NIPS &lsquo;12] Large Scale Distributed Deep Networks</strong></li>
+</ul>
+<h2 id="gpu-cluster-management"><strong>GPU Cluster Management</strong></h2>
+<ul>
+<li>
+<p><strong>[NSDI'23] Transparent GPU Sharing in Container Clouds for Deep Learning Workloads</strong></p>
+<ul>
+<li>容器广泛用于数据中心中的资源管理。
+<ul>
+<li>支持容器云中的深度学习(DL)训练的一个常见实践是静态地将 GPU 完全绑定到容器上。</li>
+<li>由于生产中 DL 作业的资源需求多种多样，大量的 GPU 未得到充分利用。</li>
+<li>因此，GPU 集群具有较低的 GPU 利用率，由于排队，导致作业完成时间较长。</li>
+</ul>
+</li>
+<li>我们提出 TGS (透明 GPU 共享) ，一个系统，提供透明的 GPU 共享到集装箱云中的 DL 训练。
+<ul>
+<li>与最近 GPU 共享的应用层解决方案形成鲜明对比的是，TGS 在容器下的 OS 层运行。</li>
+<li>透明性允许用户使用任何软件来开发模型并在其容器中运行作业。</li>
+<li>TGS 利用自适应速率控制和透明统一内存，同时实现高 GPU 利用率和性能隔离。</li>
+<li>它确保生产作业不会受到共享 GPU 上机会作业的严重影响。</li>
+<li>我们已经建立了 TGS，并将他与docker和kubernetes整合。实验结果表明:
+<ul>
+<li>TGS 对生产作业的吞吐量影响不大</li>
+<li>TGS 为机会作业提供了与最先进的应用层解决方案 AntMan 相似的吞吐量，并且与现有的 OS 层解决方案 MPS 相比提高了15倍的吞吐量。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>[ASPLOS &lsquo;23]  Lucid: A Non-intrusive, Scalable and Interpretable Scheduler for Deep Learning Training Jobs</strong></p>
+<ul>
+<li>虽然最近的深度学习工作负载调度器表现出很好的性能，但在实际应用中很难部署它们，是由于
+<ul>
+<li>缺乏灵活的入侵方式、</li>
+<li>过高的集成和维护成本</li>
+<li>有限的可伸缩性</li>
+<li>不透明的决策过程</li>
+</ul>
+</li>
+<li>Lucid: 基于可解释模型的非侵入式深度学习工作负载调度器 。
+<ul>
+<li>它由三个创新模块组成。
+<ul>
+<li>首先，为了有效地收集作业度量和及时调试作业反馈，引入了一个二维优化剖析器。</li>
+<li>其次，Lucid 利用一种惰性包装策略来规避干扰。</li>
+<li>第三，Lucid 基于估计的作业优先级值和共享分数来编排资源，以实现有效的调度。</li>
+</ul>
+</li>
+<li>此外，Lucid 通过设计良好的系统优化器促进模型性能维护和系统透明调整。</li>
+<li>我们的评估表明，与最先进的抢占式调度器 Tiresias 相比，Lucid 将平均作业完成时间减少了1.3倍。此外，它为实际部署提供了明确的系统解释和优秀的可伸缩性。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>[EuroSys &lsquo;23] Lyra: Elastic Scheduling for Deep Learning Clusters</strong></p>
+<ul>
+<li>训练和推理中的问题:
+<ul>
+<li>当流量负载较低时，推理集群的 GPU 利用率较低</li>
+<li>由于缺乏资源，训练作业往往需要较长的排队时间</li>
+</ul>
+</li>
+<li>我们引入了 Lyra ，一个新的集群调度器来解决这些问题。
+<ul>
+<li>Lyra 引入了容量贷款，将空闲推理 GPU 服务器贷款给训练工作。它进一步利用弹性扩展来扩展培训作业的 GPU 分配，以更好地利用借出的资源。</li>
+<li>容量借贷和弹性扩展为集群管理带来了新的挑战。
+<ul>
+<li>当需要返回借出的服务器时，我们需要最小化作业抢占的数量</li>
+<li>当更多的 GPU 可用时，我们需要将它们分配到弹性作业，并最小化作业完成时间(JCT)</li>
+</ul>
+</li>
+<li>Lyra 使用基于原则的启发式方法来解决这些组合问题。
+<ul>
+<li>它引入了服务器抢占成本的概念，并在服务器回收期间使用贪婪的方法降低这一成本。</li>
+<li>它进一步依赖于为弹性工作的每个额外工人定义的 JCT 缩减值，以多选择背包问题解决调度问题。</li>
+</ul>
+</li>
+<li>在64-GPU 测试平台上的原型实现和超过50,000个生产作业的15天跟踪的大规模模拟表明
+<ul>
+<li>Aryl 在平均排队时间和 JCT 方面带来了1.53 x 和1.50 x 的减少</li>
+<li>集群调度器提高了高达26.9% 的集群使用率</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>[OSDI &lsquo;22] Looking Beyond GPUs for DNN Scheduling on Multi-Tenant Clusters</strong></p>
+<ul>
+<li>此文作者发现，
+<ul>
+<li>尽管 GPU 是 DNN 训练所需要的最主要的资源，</li>
+<li>但是 CPU 和 MEM 的分配策略同样也会显著影响到集群的资源利用效率和训练任务的吞吐量。</li>
+</ul>
+</li>
+<li>Synergy
+<ul>
+<li>针对不同类型的 DNN，深入分析了 CPU 和 MEM 的不同组合对其吞吐量的影响</li>
+<li>然后将最优的组合方案应用到了调度策略中</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>[NSDI &lsquo;22] MLaaS in the Wild: Workload Analysis and Scheduling in Large-Scale Heterogeneous GPU Clusters</strong></p>
+<ul>
+<li>随着机器学习 (ML) 技术的持续进步和最近大量数据集的可用性，科技公司正在部署大型 ML 即服务 (MLaaS) 云，通常使用异构 GPU 来提供大量 ML 应用程序。然而，在异构 GPU 集群中运行不同的 ML 工作负载会带来许多挑战。</li>
+<li>在本文中
+<ul>
+<li>我们对从阿里巴巴拥有 6,000 多个 GPU 的生产 MLaaS 集群中收集的为期两个月的工作负载跟踪进行了表征研究。</li>
+<li>我们解释了集群调度所面临的挑战
+<ul>
+<li>GPU 利用率低</li>
+<li>排队延迟长</li>
+<li>需要高端 GPU</li>
+<li>调度要求苛刻的任务难以调度</li>
+<li>异构机器之间的负载不平衡</li>
+<li>潜在的CPU瓶颈</li>
+</ul>
+</li>
+<li>我们描述了我们当前的解决方案，并呼吁进一步调查仍未解决的挑战。</li>
+<li>我们已经发布了公共访问的跟踪，就工作负载和集群规模而言，这是最全面的。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>[arXiv &lsquo;22] Singularity: Planet-Scale, Preemptive and Elastic Scheduling of AI Workloads</strong></p>
+<ul>
+<li>Singularity
+<ul>
+<li>微软的全球分布式调度服务，高效和可靠地执行深度学习训练和推理工作负载</li>
+<li>核心：是一个新颖的、<strong>工作负载感知的调度器</strong>，它可以透明地抢占和弹性地扩展深度学习工作负载
+<ul>
+<li>以提高利用率</li>
+<li>而且不会影响它们在全球 AI 加速器(GPU/FPGA)中的正确性或性能</li>
+</ul>
+</li>
+<li>所有作业都是<strong>可抢占的</strong>、<strong>可迁移的</strong>，并且在默认可以动态调整大小(<strong>弹性)</strong> : 一个活动的作业可以被动态和透明地
+<ul>
+<li>被抢占和被迁移到不同的节点集、集群、数据中心或者区域，并且可以从执行被抢占的地方精确地恢复</li>
+<li>在给定类型的一组不同的加速器上调整大小</li>
+</ul>
+</li>
+<li>机制透明：不要求用户对代码进行任何更改，也不要求使用任何可能限制灵活性的自定义库。</li>
+<li>可靠：利用Singularity可以获得效率和可靠性增益，而对稳态性能的影响可以忽略不计。</li>
+<li>我们的设计方法是对DNN 网络架构不感知的，并且可以处理各种并行策略(数据/流水线/模型并行)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>[OSDI &lsquo;21] Pollux: Co-adaptive Cluster Scheduling for Goodput-Optimized Deep Learning</strong></p>
+<ul>
+<li>Pollux通过在每个作业层面和整个集群层面自适应地共同优化相互依赖的因素，改善深度学习（DL）集群的调度性能。
+<ul>
+<li>在训练过程中监测每个作业的状态，Pollux建模了他们的有效吞吐量随着添加或删除资源而发生的变化</li>
+<li>Pollux动态地重新分配资源，以提高整个集群的好产量，同时尊重公平性，不断优化每个DL作业，以更好地利用这些资源。</li>
+<li>在真实的DL作业和跟踪驱动的模拟实验
+<ul>
+<li>Pollux相对于最先进的DL调度器将平均作业完成时间减少了37-50%</li>
+<li>Pollux促进了竞争资源的DL作业之间的公平性</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>[NSDI &lsquo;21] Elastic Resource Sharing for Distributed Deep Learning</strong></p>
+</li>
+<li>
+<p><strong>[OSDI &lsquo;20] Heterogeneity-Aware Cluster Scheduling Policies for Deep Learning Workloads</strong></p>
+<ul>
+<li>背景
+<ul>
+<li>加速器，如 GPU、 TPU、 FPGA 和定制 ASIC 表现出跨模型架构的异构性能行为。</li>
+<li>现有的针对加速器集群的调度器(用于在许多用户之间仲裁这些昂贵的培训资源)已经展示了如何针对各种多任务、多用户目标(如公平性和完成时间)进行优化。不幸的是，现有的调度程序基本上不考虑性能异构性。</li>
+</ul>
+</li>
+<li>异构感知调度器 Gavel
+<ul>
+<li>它系统地推广了大量<strong>现有的调度策略</strong>。Gavel 将这些策略表示为<strong>优化问题</strong>，然后使用我们称为有效吞吐量的抽象将这些问题系统地转换为能够识别异构性的版本。</li>
+<li>然后，Gavel 使用一种<strong>基于循环的调度机制</strong>，以确保在给定目标调度策略的情况下，作业能够得到理想的分配。</li>
+<li>Gavel 的异质性感知策略允许异质集群维持更高的输入负载，并且与异质性不可知策略相比，最终目标如完成时间和平均工作完成时间分别提高了1.4倍和3.5倍。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>[OSDI &lsquo;20] AntMan: Dynamic Scaling on GPU Clusters for Deep Learning</strong></p>
+<ul>
+<li>如何在大规模GPU集群上有效调度深度学习工作， 对于<strong>工作性能</strong>，<strong>系统吞吐量</strong>和<strong>硬件利用率</strong>至关重要。
+<ul>
+<li>随着深度学习的工作量变得更加复杂，它变得越来越具有挑战性。</li>
+</ul>
+</li>
+<li>本文将介绍AntMan， 这是一种深入学习的基础设施，该基础架构共同设计了集群调度程序，并已在阿里巴巴部署在生产中，以管理数以万计的每日深度学习工作。
+<ul>
+<li>AntMan适应深度学习训练的波动资源需求。因此，它利用备用GPU资源在共享GPU上共同执行多个作业。</li>
+<li>AntMan利用深度学习训练的独特特征，在深度学习框架内为显存和计算资源引入动态缩放机制。这允许job之间的细粒度协调并防止工作干扰。</li>
+<li>评估表明，AntMan在我们的多租户集群中不损害公平性的情况下，整体将显存利用率提高了42％，计算资源利用率提高了34％，为有效利用大规模的GPU提出了新方法。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>[NSDI &lsquo;20] Themis: Fair and Efficient GPU Cluster Scheduling</strong></p>
+<ul>
+<li>ML 训练工作负载通常是需要批量调度的长时间运行的作业，并且它们的性能对任务的相对位置很敏感</li>
+<li>Themis 是一种ML 训练工作负载的新调度框架。
+<ul>
+<li>该机制是一种以完成时间进行公平调度的GPU分配策略(在一个共享的集群中有N个应用程序的运行时间与在一个1/N集群中单独运行的运行时间的比率)。</li>
+<li>Themis 的目标是在有效利用集群 GPU 的同时，保证各工作负载调度的公平性并最大限度地减少所有 ML 应用程序的完成时间。</li>
+<li>Themis 包含两级调度架构
+<ul>
+<li>其中 ML 作业在调度引擎中对可用资源进行投标，这样可以使调度引擎可以捕获布局敏感性并确保效率。</li>
+<li>调度引擎的分配是通过在短期内将GPU 分配给中标者以换取更多效率，但在长期内仍然确保所有工作完成时间的公平性。</li>
+</ul>
+</li>
+<li>Themis 在 Apache YARN 3.2.0 上实现，并通过重放大型企业跟踪中的工作负载进行评估，公平性提高了 2.25 倍以上，集群效率提高了 ~5% 到 ~250%。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>[EuroSys &lsquo;20] Balancing Efficiency and Fairness in Heterogeneous GPU Clusters for Deep Learning</strong></p>
+<ul>
+<li>Gandiva-fair
+<ul>
+<li>效率与公平的平衡
+<ul>
+<li>效率：Gandiva-fair 提供用户之间的性能隔离，使多个用户可以共享一个集群，从而最大限度地提高集群效率</li>
+<li>公平：在活跃用户之间公平分配集群范围 GPU 时间</li>
+</ul>
+</li>
+<li>集群异质性
+<ul>
+<li>背景：新一代用户面临更高的需求，老一代 GPU 的利用率很低，从而降低了集群效率</li>
+<li>解决方案： Gandiva-fair 描述了来自较新 GPU 的各种作业的可变边际效用，并通过一种新颖的资源交易机制透明地激励用户使用较旧的 GPU</li>
+<li>效果：该机制不影响任何用户的公平性保证的情况下最大限度地提高集群效率</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>[NSDI &lsquo;19] Tiresias: A GPU Cluster Manager for Distributed Deep Learning</strong></p>
+<ul>
+<li>深度学习 (DL) 训练作业给现有的集群管理器带来了一些独特的挑战，例如
+<ul>
+<li>不可预测的训练时间</li>
+<li>全有或全无的执行模型</li>
+<li>GPU 共享的不灵活性</li>
+</ul>
+</li>
+<li>我们对生产中的大型 GPU 集群的分析表明，现有的大数据调度程序会导致
+<ul>
+<li>较长的排队延迟</li>
+<li>较低的整体性能</li>
+</ul>
+</li>
+<li>我们介绍了 Tiresias
+<ul>
+<li>这是一个为分布式 DL 训练作业量身定制的 GPU 集群管理器，它可以有效地安排和放置 DL 作业以减少它们的作业完成时间 (JCT)。</li>
+<li>鉴于 DL 作业的执行时间通常是不可预测的，我们提出了两种调度算法——
+<ul>
+<li><strong>离散化二维Gittins索引</strong>：基于部分信息</li>
+<li><strong>离散化二维 LAS</strong>： 与信息无关，旨在最小化平均 JCT</li>
+</ul>
+</li>
+<li>此外，我们描述了何时可以放宽合并放置约束，并提出了一种<strong>放置算法</strong>来利用这些观察结果而无需任何用户输入。</li>
+</ul>
+</li>
+<li>在具有 60 个 P100 GPU 的密歇根 ConFlux 集群上进行的实验和大规模跟踪驱动模拟表明，
+<ul>
+<li>与生产中使用的基于 Apache YARN 的资源管理器相比，Tiresias 将平均 JCT 提高了 5.5 倍。</li>
+<li>更重要的是，Tiresias 的性能与假设完美知识的解决方案的性能相当。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>[ATC &lsquo;19] Analysis of Large-Scale Multi-Tenant GPU Clusters for DNN Training Workloads</strong></p>
+<ul>
+<li>
+<p>调度框架旨在提供如下特性</p>
+<ul>
+<li>高效率</li>
+<li>资源隔离</li>
+<li>用户间公平共享</li>
+</ul>
+</li>
+<li>
+<p>然而，基于深度神经网络 (DNN) 的工作负载主要在 GPU 上训练，与传统的大数据有两个显着差异数据分析工作负载</p>
+<ul>
+<li>首先，从集群利用率的角度来看，GPU 代表了无法在用户之间以细粒度共享的单一资源</li>
+<li>其次，从工作负载的角度来看，深度学习框架需要gang schedule，这降低了调度的灵活性，并使作业本身在运行时对故障没有弹性</li>
+</ul>
+</li>
+<li>
+<p>在本文中</p>
+<ul>
+<li>我们展示了来自 Microsoft 多租户 GPU 集群的长达两个月的跟踪的详细工作负载特征</li>
+<li>通过将调度程序日志与来自各个作业的日志相关联，我们研究了影响多租户集群上 DNN 训练工作负载的集群利用率的三个不同问题：
+<ul>
+<li>(1) 队列调度和位置约束的影响</li>
+<li>(2) 位置的影响关于 GPU 利用率</li>
+<li>(3) 训练期间的失败。</li>
+</ul>
+</li>
+<li>根据我们运行大规模操作的经验，我们提供了与用于 DNN 训练工作负载的下一代集群调度器相关的设计指南</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>[OSDI &lsquo;18] Gandiva: Introspective cluster scheduling for deep learning</strong></p>
+<ul>
+<li>Gandiva: 一个集群调度框架，使用特定领域知识，优化了GPU集群训练深度学习模型的延迟与效率
+<ul>
+<li>
+<p>深度学习job的特征</p>
+<ul>
+<li>1）反馈驱动的探索：
+<ul>
+<li>一个用户经常运行一组作业(或 a multi-job)来获得特定任务的最佳结果</li>
+<li>并使用关于准确性的早期反馈来动态优先考虑或杀死一个作业子集</li>
+<li>同步发生的多个作业的早期反馈是至关重要的</li>
+</ul>
+</li>
+<li>2）深度学习工作在资源使用方面的<strong>异构</strong>，这使得它很难实现最适合的先验。</li>
+<li>3）作业内可预测性：因为作业会重复执行叫做mini-batch的迭代
+<ul>
+<li>Gandiva利用这个特征解决了1）2）两个问题</li>
+<li>利用可预测性对GPU进行多个job间进行时分复用， 这提供了低延迟</li>
+<li>这种预测性还可以用于内省job性能并动态迁移到最合适的GPU上，提高了集群效率</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>我们通过一个原型实现和微基准测试表明</p>
+<ul>
+<li>Gandiva 可以在深度学习过程<strong>加快超参数搜索</strong>一个数量级</li>
+<li>并通过<strong>透明迁移</strong>和<strong>job时分</strong>实现更好的利用，使job与资源的更好地匹配。</li>
+<li>在一个运行在180-GPU 集群中的实际工作负载中，Gandiva 将集群的总利用率提高了26%</li>
+<li>这为深度学习提供了一种管理大型 GPU 集群的新方法。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="memory-management-for-machine-learning"><strong>Memory Management for Machine Learning</strong></h2>
+<ul>
+<li><strong>[ASPLOS &lsquo;23] DeepUM: Tensor Migration and Prefetching in Unified Memory</strong></li>
+<li><strong>[ATC &lsquo;22] Memory Harvesting in Multi-GPU Systems with Hierarchical Unified Virtual Memory</strong></li>
+<li><strong>[MobiSys &lsquo;22] Memory-efficient DNN Training on Mobile Devices</strong></li>
+<li><strong>[HPCA &lsquo;22] Enabling Efficient Large-Scale Deep Learning Training with Cache Coherent Disaggregated Memory Systems</strong></li>
+<li><strong>[ASPLOS &lsquo;20] Capuchin: Tensor-based GPU Memory Management for Deep Learning</strong></li>
+<li><strong>[ASPLOS &lsquo;20] SwapAdvisor: Push Deep Learning Beyond the GPU Memory Limit via Smart Swapping</strong></li>
+<li><strong>[ISCA &lsquo;19] Interplay between Hardware Prefetcher and Page Eviction Policy in CPU-GPU Unified Virtual Memory</strong></li>
+<li><strong>[ISCA &lsquo;18] Gist: Efficient Data Encoding for Deep Neural Network Training</strong></li>
+<li><strong>[PPoPP &lsquo;18] SuperNeurons: Dynamic GPU Memory Management for Training Deep Neural Networks</strong></li>
+<li><strong>[MICRO &lsquo;16] vDNN: Virtualized Deep Neural Networks for Scalable, Memory-Efficient Neural Network Design</strong></li>
+</ul>
+<h2 id="scheduling--resource-management"><strong>Scheduling &amp; Resource Management</strong></h2>
+<ul>
+<li><strong>[ASPLOS &lsquo;23] ElasticFlow: An Elastic Serverless Training Platform for Distributed Deep Learning</strong></li>
+<li><strong>[arXiv &lsquo;22] EasyScale: Accuracy-consistent Elastic Training for Deep Learning</strong>
+<ul>
+<li>分布式同步GPU训练通常被用于深度学习。
+<ul>
+<li>使用固定GPU的资源约束
+<ul>
+<li>使得大规模的深度学习训练工作受到影响</li>
+<li>降低了集群的利用率</li>
+</ul>
+</li>
+<li>纳入资源弹性
+<ul>
+<li>往往会引入模型精度的非确定性&lt;&mdash;&ndash;缺乏隔离能力</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>本文介绍EasyScale，
+<ul>
+<li>这是一个弹性框架
+<ul>
+<li>可以在异构GPU上扩展分布式训练</li>
+<li>同时产生确定性的深度学习模型</li>
+</ul>
+</li>
+<li>实现了弹性的精度一致的模型训练。
+<ul>
+<li>EasyScale严格遵循数据并行训练流程</li>
+<li>仔细追踪与精度相关的因素</li>
+<li>有效利用深度学习特性进行上下文切换</li>
+</ul>
+</li>
+<li>为了使异构GPU的计算能力达到饱和
+<ul>
+<li>EasyScale根据我们的作业内和作业间调度策略动态地分配工人</li>
+<li>最大限度地减少GPU的空闲时间</li>
+<li>并相应地提高综合作业的吞吐量。</li>
+</ul>
+</li>
+<li>实验
+<ul>
+<li>部署在CompanyA的一个在线服务集群中</li>
+<li>EasyScale为弹性深度学习训练作业提供动力，使其适时地利用空闲的GPU</li>
+<li>在不违反SLA的情况下将集群的整体利用率提高了62.1%</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>[MLSys &lsquo;22] VirtualFlow: Decoupling Deep Learning Models from the Underlying Hardware</strong></li>
+<li><strong>[SIGCOMM &lsquo;22] Multi-resource interleaving for deep learning training</strong></li>
+<li><strong>[EuroSys &lsquo;22] Out-Of-Order BackProp: An Effective Scheduling Technique for Deep Learning</strong></li>
+<li><strong>[ATC &lsquo;21] Zico: Efficient GPU Memory Sharing for Concurrent DNN Training</strong></li>
+<li><strong>[NeurIPS &lsquo;20] Nimble: Lightweight and Parallel GPU Task Scheduling for Deep Learning</strong></li>
+<li><strong>[OSDI&rsquo; 20] KungFu: Making Training in Distributed Machine Learning Adaptive</strong></li>
+<li><strong>[OSDI &lsquo;20] PipeSwitch: Fast Pipelined Context Switching for Deep Learning Applications</strong></li>
+<li><strong>[MLSys &lsquo;20] Salus: Fine-Grained GPU Sharing Primitives for Deep Learning Applications</strong>
+<ul>
+<li>GPU 利用率不足
+<ul>
+<li>现代 GPU 本身不支持细粒度共享原语</li>
+<li>分时和抢占是代价昂贵的</li>
+<li>DL 应用程序不能完全使用 GPU 的资源， 且这些资源无法被共享</li>
+</ul>
+</li>
+<li>Salus
+<ul>
+<li>支持两个 GPU 共享原语，以实现多个 DL 应用程序之间的细粒度 GPU 共享， 原语是：
+<ul>
+<li>快速作业切换</li>
+<li>内存共享</li>
+</ul>
+</li>
+<li>Salus 实现了一个高效的、统一的执行服务，将 GPU 共享给不同的 DL 应用程序，并通过执行迭代调度和解决相关的内存管理问题来实现细粒度共享。</li>
+<li>我们展示了这些原语可以用来实现灵活的共享策略，比如公平性、优先级排序和为各种用例打包。</li>
+<li>将 Salus 与 TensorFlow 相结合，对流行的 DL 工作进行评估，结果表明 Salus 可以提高 DL 培训工作的平均完成时间3.19 × ，超参数调整的 GPU 利用率2.38 × ，DL 推理应用的 GPU 利用率42 × 以上，不共享 GPU 和7 × 以上 NVIDIA MPS，且开销较小。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>[SOSP &lsquo;19] Generic Communication Scheduler for Distributed DNN Training Acceleration</strong></li>
+<li><strong>[EuroSys &lsquo;18] Optimus: An Efficient Dynamic Resource Scheduler for Deep Learning Clusters</strong>
+<ul>
+<li>Optimus
+<ul>
+<li>一个为深度学习集群定制的作业调度器，它基于在线资源性能模型使作业训练时间最小化。</li>
+<li>Optimus使用在线拟合来预测训练期间的模型收敛，并设置性能模型来准确估计训练速度，作为每个作业分配资源的函数。</li>
+<li>基于这些模型，我们设计了一个简单而有效的方法，用于动态分配资源和放置深度学习任务，以尽量减少作业完成时间。</li>
+<li>实验
+<ul>
+<li>我们在Kubernetes（一个用于容器编排的集群管理器）之上实现了Optimus</li>
+<li>并在一个有7个CPU服务器和6个GPU服务器的深度学习集群上进行了实验</li>
+<li>使用MXNet框架运行9个训练作业</li>
+<li>结果显示，Optimus在作业完成时间和makespan方面分别比有代表性的集群调度器高出约139%和63%</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>[HPCA &lsquo;18] Applied Machine Learning at Facebook: A Datacenter Infrastructure Perspective</strong></li>
+</ul>
+<h2 id="serving-systems--inference-acceleration"><strong>Serving Systems (&amp; inference acceleration)</strong></h2>
+<ul>
+<li><strong>[EuroSys &lsquo;23] Fast and Efficient Model Serving Using Multi-GPUs with Direct-Host-Access</strong></li>
+<li><strong>[MICRO &lsquo;22] DFX: A Low-latency Multi-FPGA Appliance for Accelerating Transformer-based Text Generation</strong></li>
+<li><strong>[ATC &lsquo;22] Serving Heterogeneous Machine Learning Models on Multi-GPU Servers with Spatio-Temporal Sharing</strong></li>
+<li><strong>[OSDI &lsquo;22] Orca: A Distributed Serving System for Transformer-Based Language Generation Tasks</strong></li>
+<li><strong>[OSDI &lsquo;22] Achieving μs-scale Preemption for Concurrent GPU-accelerated DNN Inferences</strong></li>
+<li><strong>[ATC &lsquo;21] INFaaS: Automated Model-less Inference Serving</strong></li>
+<li><strong>[OSDI &lsquo;20] Serving DNNs like Clockwork: Performance Predictability from the Bottom Up</strong></li>
+<li><strong>[ISCA &lsquo;20] MLPerf Inference Benchmark</strong></li>
+<li><strong>[SOSP &lsquo;19] Nexus: A GPU Cluster Engine for Accelerating DNN-Based Video Analysis</strong></li>
+<li><strong>[ISCA &lsquo;19] MnnFast: a fast and scalable system architecture for memory-augmented neural networks</strong></li>
+<li><strong>[EuroSys &lsquo;19] μLayer: Low Latency On-Device Inference Using Cooperative Single-Layer Acceleration and Processor-Friendly Quantization</strong></li>
+<li><strong>[EuroSys &lsquo;19] GrandSLAm: Guaranteeing SLAs for Jobs in Microservices Execution Frameworks</strong></li>
+<li><strong>[OSDI &lsquo;18] Pretzel: Opening the Black Box of Machine Learning Prediction Serving Systems</strong></li>
+<li><strong>[NSDI &lsquo;17] Clipper: A Low-Latency Online Prediction Serving System</strong></li>
+</ul>
+<h2 id="deep-learning-compiler"><strong>Deep Learning Compiler</strong></h2>
+<ul>
+<li><strong>[PLDI &lsquo;21] DeepCuts: A Deep Learning Optimization Framework for Versatile GPU Workloads</strong></li>
+<li><strong>[OSDI &lsquo;18] TVM: An Automated End-to-End Optimizing Compiler for Deep Learning</strong></li>
+</ul>
+<h2 id="very-large-models"><strong>Very Large Models</strong></h2>
+<ul>
+<li><strong>[ASPLOS &lsquo;23] Optimus-CC: Efficient Large NLP Model Training with 3D Parallelism Aware Communication Compression</strong></li>
+<li><strong>[arxiv &lsquo;21] ZeRO-Infinity: Breaking the GPU Memory Wall for Extreme Scale Deep Learning</strong></li>
+<li><strong>[ATC &lsquo;21] ZeRO-Offload: Democratizing Billion-Scale Model Training</strong></li>
+<li><strong>[FAST &lsquo;21] Behemoth: A Flash-centric Training Accelerator for Extreme-scale DNNs</strong></li>
+</ul>
+<h2 id="deep-learning-recommendation-models"><strong>Deep Learning Recommendation Models</strong></h2>
+<ul>
+<li><strong>[OSDI &lsquo;22] FAERY: An FPGA-accelerated Embedding-based Retrieval System</strong></li>
+<li><strong>[OSDI &lsquo;22] Ekko: A Large-Scale Deep Learning Recommender System with Low-Latency Model Update</strong></li>
+<li><strong>[EuroSys &lsquo;22] Fleche: An Efficient GPU Embedding Cache for Personalized Recommendations</strong></li>
+<li><strong>[ASPLOS &lsquo;22] RecShard: statistical feature-based memory optimization for industry-scale neural recommendation</strong></li>
+<li><strong>[HPCA &lsquo;22] Hercules: Heterogeneity-Aware Inference Serving for At-Scale Personalized Recommendation</strong></li>
+<li><strong>[MLSys &lsquo;21] TT-Rec: Tensor Train Compression for Deep Learning Recommendation Model Embeddings</strong></li>
+<li><strong>[HPCA &lsquo;21] Tensor Casting: Co-Designing Algorithm-Architecture for Personalized Recommendation Training</strong></li>
+<li><strong>[HPCA &lsquo;21] Understanding Training Efficiency of Deep Learning Recommendation Models at Scale</strong></li>
+<li><strong>[ISCA &lsquo;20] DeepRecSys: A System for Optimizing End-To-End At-scale Neural Recommendation Inference</strong></li>
+<li><strong>[HPCA &lsquo;20] The Architectural Implications of Facebook’s DNN-based Personalized Recommendation</strong></li>
+<li><strong>[MICRO &lsquo;19] TensorDIMM: A Practical Near-Memory Processing Architecture for Embeddings and Tensor Operations in Deep Learning</strong></li>
+</ul>
+<h2 id="hardware-support-for-ml"><strong>Hardware Support for ML</strong></h2>
+<ul>
+<li><strong>[ISCA &lsquo;18] A Configurable Cloud-Scale DNN Processor for Real-Time AI</strong></li>
+<li><strong>[ISCA &lsquo;17] In-Datacenter Performance Analysis of a Tensor Processing Unit</strong></li>
+</ul>
+<h2 id="ml-at-mobile--embedded-systems"><strong>ML at Mobile &amp; Embedded Systems</strong></h2>
+<ul>
+<li><strong>[MobiCom &lsquo;20] SPINN: Synergistic Progressive Inference of Neural Networks over Device and Cloud</strong></li>
+<li><strong>[RTSS &lsquo;19] Pipelined Data-Parallel CPU/GPU Scheduling for Multi-DNN Real-Time Inference</strong></li>
+<li><strong>[ASPLOS &lsquo;17] Neurosurgeon: Collaborative Intelligence Between the Cloud and Mobile Edge</strong></li>
+</ul>
+<h2 id="ml-techniques-for-systems"><strong>ML Techniques for Systems</strong></h2>
+<ul>
+<li><strong>[ICML &lsquo;20] An Imitation Learning Approach for Cache Replacement</strong></li>
+<li><strong>[ICML &lsquo;18] Learning Memory Access Patterns</strong></li>
+</ul>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+        <link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.css"integrity="sha384-RZU/ijkSsFbcmivfdRBQDtwuwVqK7GMOw6IMvKyeWL2K5UAlyp6WonmB8m7Jd0Hn"crossorigin="anonymous"
+            ><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.js"integrity="sha384-pK1WpvzWVBQiP0/GjnvRxV4mOb0oxFuyRxJlk6vVw146n3egcN5C925NCP7a7BY8"crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/contrib/auto-render.min.js"integrity="sha384-vZTG03m&#43;2yp6N6BNi5iM4rW4oIwk5DfcNdFfxkk9ZWpDriOkXX8voJBFrAO7MpVl"crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        renderMathInElement(document.querySelector(`.article-content`), {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ]
+        });})
+</script>
+    
+</article>
+
+    <aside class="related-contents--wrapper">
+    
+    
+</aside>
+
+     
+    
+        
+    <script
+    src="https://giscus.app/client.js"
+    data-repo="Tweakzx/Tweakzx.github.io"
+    data-repo-id="MDEwOlJlcG9zaXRvcnkzMjY5MTY1NTE="
+    data-category="Announcements"
+    data-category-id="DIC_kwDOE3xZx84CTfL-"
+    data-mapping="title"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-theme="light_tritanopia"
+    crossorigin="anonymous"
+    async
+></script>
+<script>
+    function setGiscusTheme(theme) {
+        let giscus = document.querySelector('iframe.giscus-frame');
+        if (giscus) {
+            giscus.contentWindow.postMessage(
+                { 
+                    giscus: {
+                        setConfig: { 
+                            theme: theme 
+                        }
+                    }
+                },
+                "https://giscus.app"
+            );
+        };
+    };
+
+    (function(){
+        addEventListener('message', (e) => {
+            if (event.origin !== 'https://giscus.app') return;
+            handler()
+        });
+        window.addEventListener('onColorSchemeChange', handler);
+
+        function handler() {
+            if (document.documentElement.dataset.scheme === "light") {
+                setGiscusTheme('light_tritanopia');
+            } else {
+                setGiscusTheme('dark_tritanopia');
+            };
+        };
+    }());
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2023 Tweakzx
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.5.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
+            >
+
+            </main>
+    
+        <aside class="sidebar right-sidebar sticky">
+            <section class="widget archives">
+                <div class="widget-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+                </div>
+                <h2 class="widget-title section-title">Table of contents</h2>
+                
+                <div class="widget--toc">
+                    <nav id="TableOfContents">
+  <ol>
+    <li><a href="#frameworks"><strong>Frameworks</strong></a></li>
+    <li><a href="#parallelism--distributed-systems"><strong>Parallelism &amp; Distributed Systems</strong></a></li>
+    <li><a href="#gpu-cluster-management"><strong>GPU Cluster Management</strong></a></li>
+    <li><a href="#memory-management-for-machine-learning"><strong>Memory Management for Machine Learning</strong></a></li>
+    <li><a href="#scheduling--resource-management"><strong>Scheduling &amp; Resource Management</strong></a></li>
+    <li><a href="#serving-systems--inference-acceleration"><strong>Serving Systems (&amp; inference acceleration)</strong></a></li>
+    <li><a href="#deep-learning-compiler"><strong>Deep Learning Compiler</strong></a></li>
+    <li><a href="#very-large-models"><strong>Very Large Models</strong></a></li>
+    <li><a href="#deep-learning-recommendation-models"><strong>Deep Learning Recommendation Models</strong></a></li>
+    <li><a href="#hardware-support-for-ml"><strong>Hardware Support for ML</strong></a></li>
+    <li><a href="#ml-at-mobile--embedded-systems"><strong>ML at Mobile &amp; Embedded Systems</strong></a></li>
+    <li><a href="#ml-techniques-for-systems"><strong>ML Techniques for Systems</strong></a></li>
+  </ol>
+</nav>
+                </div>
+            </section>
+        </aside>
+    
+
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
+                defer="false"
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

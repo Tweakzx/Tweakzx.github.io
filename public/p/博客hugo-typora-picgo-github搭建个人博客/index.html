@@ -1,52 +1,361 @@
-<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="博客搭建教程"><title>【博客】Hugo+Typora+PicGO+Github搭建个人博客</title><link rel=canonical href=https://tweakzx.github.io/p/%E5%8D%9A%E5%AE%A2hugo-typora-picgo-github%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/><link rel=stylesheet href=/scss/style.min.css><meta property="og:title" content="【博客】Hugo+Typora+PicGO+Github搭建个人博客"><meta property="og:description" content="博客搭建教程"><meta property="og:url" content="https://tweakzx.github.io/p/%E5%8D%9A%E5%AE%A2hugo-typora-picgo-github%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/"><meta property="og:site_name" content="Tweakzx"><meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:published_time" content="2023-02-07T10:57:40+08:00"><meta property="article:modified_time" content="2023-02-07T10:57:40+08:00"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202302071614641.png"><meta name=twitter:title content="【博客】Hugo+Typora+PicGO+Github搭建个人博客"><meta name=twitter:description content="博客搭建教程"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202302071614641.png"></head><body class="article-page has-toc"><script>(function(){const colorSchemeKey='StackColorScheme';if(!localStorage.getItem(colorSchemeKey)){localStorage.setItem(colorSchemeKey,"auto");}})();</script><script>(function(){const colorSchemeKey='StackColorScheme';const colorSchemeItem=localStorage.getItem(colorSchemeKey);const supportDarkMode=window.matchMedia('(prefers-color-scheme: dark)').matches===true;if(colorSchemeItem=='dark'||colorSchemeItem==='auto'&&supportDarkMode){document.documentElement.dataset.scheme='dark';}else{document.documentElement.dataset.scheme='light';}})();</script><div class="container main-container flex
-extended"><div id=article-toolbar><a href=/ class=back-home><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="15 6 9 12 15 18"/></svg><span>Back</span></a></div><main class="main full-width"><article class="has-image main-article"><header class=article-header><div class=article-image><a href=/p/%E5%8D%9A%E5%AE%A2hugo-typora-picgo-github%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/><img src=https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202302071614641.png loading=lazy alt="Featured image of post 【博客】Hugo+Typora+PicGO+Github搭建个人博客"></a></div><div class=article-details><header class=article-category><a href=/categories/%E5%8D%9A%E5%AE%A2/>博客</a></header><h2 class=article-title><a href=/p/%E5%8D%9A%E5%AE%A2hugo-typora-picgo-github%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/>【博客】Hugo+Typora+PicGO+Github搭建个人博客</a></h2><h3 class=article-subtitle>博客搭建教程</h3><footer class=article-time><div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg><time class=article-time--published>Feb 07, 2023</time></div><div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg><time class=article-time--reading>6 minute read</time></div></footer></div></header><section class=article-content><h1 id=hugotyporapicgogithub搭建个人博客>Hugo+Typora+PicGO+Github搭建个人博客</h1><blockquote><ul><li><p>我之前使用过typecho来搭建个人博客，由于是搭建在服务器上，我需要使用宝塔linux来完成各种配置，花花绿绿的各种环境让我对搭建博客多少有些累觉不爱</p></li><li><p>不过随着我阿里云服务器的到期，我决定趁机使用github托管我的个人网站，但是我不想麻烦区配置各种后端环境， 所以选择使用hugo。</p></li><li><p>与其说我精挑细选了一种博客框架，倒不如说我的目的只是想要快速搭一个博客出来，技术的选型其实并没有花太多心思。</p></li></ul></blockquote><p>你现在看到的博客使用到的工具链是：Hugo+Typora+PicGO+Github，它们分别的功能是</p><ul><li><p>hugo: 编译静态网站</p></li><li><p>typora：编写博客内容</p></li><li><p>picgo：配合github搭建图床， 与typora联动上传博客中的图片</p></li><li><p>github：一方面网站需要使用到github提供的pages功能， 另一方面我也使用了github作为图床</p></li></ul><p>下面是搭建这个博客的一些步骤， 记录下来一方面方便他人参考，另一方面如果我要重新搭建博客也方便我自己参考。</p><p>搭建前的一些环境配置</p><ul><li>系统： windows</li><li>包管理器：scoop （非必须）</li><li>版本控制：git</li><li>markdown编辑器：Typora</li></ul><h2 id=github创建项目>github创建项目</h2><ol><li>打开github新建一个库</li><li>建议项目名与github用户名保持一致，比如我的是 tweakzx，那么输入的 Repository name 就是 tweakzx.github.io</li></ol><h2 id=hugo创建站点>hugo创建站点</h2><h3 id=hugo-安装>hugo 安装</h3><p>参看官方的安装教程<a class=link href=https://gohugo.io/installation/ target=_blank rel=noopener>Installation | Hugo (gohugo.io)</a></p><p>我使用的系统是Windows的，我推荐以下两种安装方式</p><p><strong>Chocolatey (Windows)</strong></p><p>如果使用 Windows 并且使用 Chocolatey 作为包管理器，可以使用如下一行代码来安装 Hugo ：</p><pre><code>choco install hugo -confirm
-</code></pre><p>如果想要使用支持 Sass/SCSS 的扩展版Hugo的话，可以使用如下命令：</p><pre><code>choco install hugo-extended -confirm
-</code></pre><p><strong>Scoop (Windows)</strong></p><p>如果使用 Windows 并且使用 Scoop 作为包管理器，可以使用如下一行代码来安装 Hugo ：</p><pre><code>scoop install hugo
-</code></pre><p>如果想要使用支持 Sass/SCSS 的扩展版Hugo的话，可以使用如下命令：</p><pre><code>scoop install hugo-extended
-</code></pre><h3 id=hugo-生成站点>hugo 生成站点</h3><p>创建一个用于存放网站文件的文件夹， 进入到这个文件夹，使用命令创建网站， 自定义一个站点名称</p><div class=highlight><pre class=chroma><code class=language-shell data-lang=shell>hugo new site &lt;BLOG NAME&gt;
-</code></pre></div><p>创建成功会看到官方的指导流程</p><div class=highlight><pre class=chroma><code class=language-shell data-lang=shell>Congratulations! Your new Hugo site is created in D:<span class=se>\s</span>oftware<span class=se>\S</span>coop<span class=se>\a</span>pps<span class=se>\h</span>ugo-extended<span class=se>\t</span>est.
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='博客搭建教程'><title>【博客】Hugo&#43;Typora&#43;PicGO&#43;Github搭建个人博客</title>
 
-Just a few more steps and you<span class=err>&#39;</span>re ready to go:
+<link rel='canonical' href='https://tweakzx.github.io/p/%E5%8D%9A%E5%AE%A2hugo-typora-picgo-github%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/'>
+
+<link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='【博客】Hugo&#43;Typora&#43;PicGO&#43;Github搭建个人博客'>
+<meta property='og:description' content='博客搭建教程'>
+<meta property='og:url' content='https://tweakzx.github.io/p/%E5%8D%9A%E5%AE%A2hugo-typora-picgo-github%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/'>
+<meta property='og:site_name' content='Tweakzx'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2023-02-07T10:57:40&#43;08:00'/><meta property='article:modified_time' content='2023-02-07T10:57:40&#43;08:00'/><meta property='og:image' content='https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202302071614641.png' />
+<meta name="twitter:title" content="【博客】Hugo&#43;Typora&#43;PicGO&#43;Github搭建个人博客">
+<meta name="twitter:description" content="博客搭建教程"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202302071614641.png' />
+    </head>
+    <body class="
+    article-page has-toc
+">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex 
+    
+        extended
+    
+">
+    
+        <div id="article-toolbar">
+            <a href="/" class="back-home">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="15 6 9 12 15 18" />
+</svg>
+
+
+
+                <span>Back</span>
+            </a>
+        </div>
+    
+<main class="main full-width">
+    <article class="has-image main-article">
+    <header class="article-header">
+        <div class="article-image">
+            <a href="/p/%E5%8D%9A%E5%AE%A2hugo-typora-picgo-github%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/">
+                
+                    <img src="https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202302071614641.png" loading="lazy" alt="Featured image of post 【博客】Hugo&#43;Typora&#43;PicGO&#43;Github搭建个人博客" />
+                
+            </a>
+        </div>
+    
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/%E5%8D%9A%E5%AE%A2/" >
+                博客
+            </a>
+        
+    </header>
+    
+
+    <h2 class="article-title">
+        <a href="/p/%E5%8D%9A%E5%AE%A2hugo-typora-picgo-github%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/">【博客】Hugo&#43;Typora&#43;PicGO&#43;Github搭建个人博客</a>
+    </h2>
+
+    
+    <h3 class="article-subtitle">
+        博客搭建教程
+    </h3>
+    
+
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Feb 07, 2023</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    6 minute read
+                </time>
+            </div>
+        
+    </footer>
+    
+</div>
+
+    
+
+</header>
+
+    <section class="article-content">
+    <h1 id="hugotyporapicgogithub搭建个人博客">Hugo+Typora+PicGO+Github搭建个人博客</h1>
+<blockquote>
+<ul>
+<li>
+<p>我之前使用过typecho来搭建个人博客，由于是搭建在服务器上，我需要使用宝塔linux来完成各种配置，花花绿绿的各种环境让我对搭建博客多少有些累觉不爱</p>
+</li>
+<li>
+<p>不过随着我阿里云服务器的到期，我决定趁机使用github托管我的个人网站，但是我不想麻烦区配置各种后端环境， 所以选择使用hugo。</p>
+</li>
+<li>
+<p>与其说我精挑细选了一种博客框架，倒不如说我的目的只是想要快速搭一个博客出来，技术的选型其实并没有花太多心思。</p>
+</li>
+</ul>
+</blockquote>
+<p>你现在看到的博客使用到的工具链是：Hugo+Typora+PicGO+Github，它们分别的功能是</p>
+<ul>
+<li>
+<p>hugo: 编译静态网站</p>
+</li>
+<li>
+<p>typora：编写博客内容</p>
+</li>
+<li>
+<p>picgo：配合github搭建图床， 与typora联动上传博客中的图片</p>
+</li>
+<li>
+<p>github：一方面网站需要使用到github提供的pages功能， 另一方面我也使用了github作为图床</p>
+</li>
+</ul>
+<p>下面是搭建这个博客的一些步骤， 记录下来一方面方便他人参考，另一方面如果我要重新搭建博客也方便我自己参考。</p>
+<p>搭建前的一些环境配置</p>
+<ul>
+<li>系统： windows</li>
+<li>包管理器：scoop （非必须）</li>
+<li>版本控制：git</li>
+<li>markdown编辑器：Typora</li>
+</ul>
+<h2 id="github创建项目">github创建项目</h2>
+<ol>
+<li>打开github新建一个库</li>
+<li>建议项目名与github用户名保持一致，比如我的是 tweakzx，那么输入的 Repository name 就是 tweakzx.github.io</li>
+</ol>
+<h2 id="hugo创建站点">hugo创建站点</h2>
+<h3 id="hugo-安装">hugo 安装</h3>
+<p>参看官方的安装教程<a class="link" href="https://gohugo.io/installation/"  target="_blank" rel="noopener"
+    >Installation | Hugo (gohugo.io)</a></p>
+<p>我使用的系统是Windows的，我推荐以下两种安装方式</p>
+<p><strong>Chocolatey (Windows)</strong></p>
+<p>如果使用 Windows 并且使用 Chocolatey 作为包管理器，可以使用如下一行代码来安装 Hugo ：</p>
+<pre><code>choco install hugo -confirm
+</code></pre><p>如果想要使用支持 Sass/SCSS 的扩展版Hugo的话，可以使用如下命令：</p>
+<pre><code>choco install hugo-extended -confirm
+</code></pre><p><strong>Scoop (Windows)</strong></p>
+<p>如果使用 Windows 并且使用 Scoop 作为包管理器，可以使用如下一行代码来安装 Hugo ：</p>
+<pre><code>scoop install hugo
+</code></pre><p>如果想要使用支持 Sass/SCSS 的扩展版Hugo的话，可以使用如下命令：</p>
+<pre><code>scoop install hugo-extended
+</code></pre><h3 id="hugo-生成站点">hugo 生成站点</h3>
+<p>创建一个用于存放网站文件的文件夹， 进入到这个文件夹，使用命令创建网站， 自定义一个站点名称</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">hugo new site &lt;BLOG NAME&gt;
+</code></pre></div><p>创建成功会看到官方的指导流程</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">Congratulations! Your new Hugo site is created in D:<span class="se">\s</span>oftware<span class="se">\S</span>coop<span class="se">\a</span>pps<span class="se">\h</span>ugo-extended<span class="se">\t</span>est.
+
+Just a few more steps and you<span class="err">&#39;</span>re ready to go:
 
 1. Download a theme into the same-named folder.
    Choose a theme from https://themes.gohugo.io/ or
-   create your own with the <span class=s2>&#34;hugo new theme &lt;THEMENAME&gt;&#34;</span> command.
+   create your own with the <span class="s2">&#34;hugo new theme &lt;THEMENAME&gt;&#34;</span> command.
 2. Perhaps you want to add some content. You can add single files
-   with <span class=s2>&#34;hugo new &lt;SECTIONNAME&gt;\&lt;FILENAME&gt;.&lt;FORMAT&gt;&#34;</span>.
-3. Start the built-in live server via <span class=s2>&#34;hugo server&#34;</span>.
+   with <span class="s2">&#34;hugo new &lt;SECTIONNAME&gt;\&lt;FILENAME&gt;.&lt;FORMAT&gt;&#34;</span>.
+3. Start the built-in live server via <span class="s2">&#34;hugo server&#34;</span>.
 
-Visit https://gohugo.io/ <span class=k>for</span> quickstart guide and full documentation.
-</code></pre></div><p>然后你会在该位置发现一个站点名称命名的文件夹，进入这个文件夹</p><h3 id=hugo-主题>hugo 主题</h3><p>我选择的是Stack主题，当然你可以去官网或者github选择你喜欢的主题<a class=link href=https://themes.gohugo.io/ target=_blank rel=noopener>Complete List | Hugo Themes (gohugo.io)</a></p><div class=highlight><pre class=chroma><code class=language-shell data-lang=shell><span class=nb>cd</span> &lt;BLOG NAME&gt;
+Visit https://gohugo.io/ <span class="k">for</span> quickstart guide and full documentation.
+</code></pre></div><p>然后你会在该位置发现一个站点名称命名的文件夹，进入这个文件夹</p>
+<h3 id="hugo-主题">hugo 主题</h3>
+<p>我选择的是Stack主题，当然你可以去官网或者github选择你喜欢的主题<a class="link" href="https://themes.gohugo.io/"  target="_blank" rel="noopener"
+    >Complete List | Hugo Themes (gohugo.io)</a></p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="nb">cd</span> &lt;BLOG NAME&gt;
 git clone https://github.com/CaiJimmy/hugo-theme-stack.git ./themes/hugo-theme-stack
 
-<span class=c1>## 复制stack的exampleSite下的配置, 并删除原本的config.toml</span>
+<span class="c1">## 复制stack的exampleSite下的配置, 并删除原本的config.toml</span>
 cp -rf themes/hugo-theme-stack/exampleSite/config.yaml ./
 rm ./config.toml
-</code></pre></div><p>编辑config.yaml， 注意修改baseurl， 其他配置自定义修改吧</p><div class=highlight><pre class=chroma><code class=language-yaml data-lang=yaml><span class=nt>baseurl</span><span class=p>:</span><span class=w>  </span><span class=l>https://tweakzx.github.io/</span><span class=w>
-</span><span class=w></span><span class=nt>languageCode</span><span class=p>:</span><span class=w> </span><span class=l>zh-cn</span><span class=w>
-</span><span class=w></span><span class=nt>theme</span><span class=p>:</span><span class=w> </span><span class=l>hugo-theme-stack</span><span class=w>
-</span><span class=w></span><span class=nt>paginate</span><span class=p>:</span><span class=w> </span><span class=m>5</span><span class=w>
-</span><span class=w></span><span class=nt>title</span><span class=p>:</span><span class=w> </span><span class=l>Tweakzx</span><span class=w>
-</span><span class=w>
-</span><span class=w></span><span class=nn>...</span><span class=w>
-</span><span class=w>
-</span></code></pre></div><h3 id=上传github的方式>上传Github的方式</h3><p>其实这里分为两种编译方式</p><ul><li><p>在线编译：上传整个站点文件，在线编译生成html静态文件，</p></li><li><p>本地编译：本地编译，直接上传静态文件， 也就是public 文件夹</p></li></ul><p>在线编译的方式需要在Github Action里找到Hugo 编译的 Action模板直接用就可以了</p><blockquote><p>我选择了使用本地编译然后上传静态文件的方式， 主要原因是当时不太懂，瞎搞的， 于是顺其自然了， 要是能重来， 我要选在线编译。</p></blockquote><p>本地编译上传静态文件也是有好处的</p><ul><li>配置简单， 无需复杂操作</li><li>本地编译成功的东西部署之后可以立刻看到， 不用等github服务器慢吞吞的编译，</li><li>如果本地成功编译预览没有问题，部署后看到的肯定也没有问题， 如果自己做了一些自定义的设置， 可能在GIthub端可能就不一样，甚至无法正常编译</li><li>而且自己的配置信息可以不用被别人看到， 如果有一些敏感信息也比较安全</li></ul><blockquote><p>注意，一定要上传到仓库的default分支才可以，default分支一般是main分支， 我创建的比较早所以是master。</p></blockquote><h2 id=github-action的配置>Github Action的配置</h2><p>进入Github 仓库， 点击Settings->Code and automations->Pages</p><p>可以看到有个Static HTML的workflow， 点击配置</p><p><figure><a href=https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202302071559176.png><img src=https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202302071559176.png loading=lazy alt=image-20230207155747151></a><figcaption>image-20230207155747151</figcaption></figure></p><p>完成之后就可以在上方看到一个网址， 点击访问就可以看到网站部署成功。</p><p><figure><a href=https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202302071559078.png><img src=https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202302071559078.png loading=lazy alt=image-20230207155914140></a><figcaption>image-20230207155914140</figcaption></figure></p><h2 id=撰写博客的流程>撰写博客的流程</h2><h3 id=创建博文>创建博文</h3><p>我个人的博客创建时会用【】框住主题， 然后起名，这样方便我分类并查找。</p><div class=highlight><pre class=chroma><code class=language-shell data-lang=shell>hugo new ./content/post/【主题】博文题目.md
-</code></pre></div><h3 id=编辑博文>编辑博文</h3><p>使用Typora编辑刚刚创建的md文档， 在顶端设置好配置信息， 例如作者， 头图等等。</p><div class=highlight><pre class=chroma><code class=language-yaml data-lang=yaml><span class=nt>title</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;【博客】Hugo+Typora+PicGO+Github搭建个人博客&#34;</span><span class=w>
-</span><span class=w></span><span class=nt>author</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;Tweakzx&#34;</span><span class=w>
-</span><span class=w></span><span class=nt>date</span><span class=p>:</span><span class=w> </span><span class=ld>2022-08-23T10:57:40</span><span class=m>+08</span><span class=p>:</span><span class=m>00</span><span class=w>
-</span><span class=w></span><span class=nt>description</span><span class=p>:</span><span class=w> 
-</span><span class=w></span><span class=nt>categories</span><span class=p>:</span><span class=w> 
-</span><span class=w></span><span class=nt>tags</span><span class=p>:</span><span class=w> 
-</span><span class=w></span><span class=nt>image</span><span class=p>:</span><span class=w> 
-</span><span class=w></span><span class=nt>draft</span><span class=p>:</span><span class=w> </span><span class=kc>true</span><span class=w>
-</span></code></pre></div><h3 id=本地预览>本地预览</h3><p>本地编辑完成后， 或者完成过程中， 可以预览效果， 将<code>draft:true</code>改为<code>false</code></p><p>然后在网站根目录运行</p><div class=highlight><pre class=chroma><code class=language-shell data-lang=shell>hugo server
-</code></pre></div><p>单击<code>http://localhost:1313/</code>, 即可本地预览。</p><h3 id=上传github>上传Github</h3><p>为了实现一键更新博客， 需要写一个bat脚本， 但是如果你想要使用<strong>手动更新</strong>的话， 这一步可以不用做</p><p>新建并编辑upload.bat 文件， 双击上传</p><div class=highlight><pre class=chroma><code class=language-shell data-lang=shell><span class=nb>cd</span> &lt;网站根目录路径&gt;
+</code></pre></div><p>编辑config.yaml， 注意修改baseurl， 其他配置自定义修改吧</p>
+<div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">baseurl</span><span class="p">:</span><span class="w">  </span><span class="l">https://tweakzx.github.io/</span><span class="w">
+</span><span class="w"></span><span class="nt">languageCode</span><span class="p">:</span><span class="w"> </span><span class="l">zh-cn</span><span class="w">
+</span><span class="w"></span><span class="nt">theme</span><span class="p">:</span><span class="w"> </span><span class="l">hugo-theme-stack</span><span class="w">
+</span><span class="w"></span><span class="nt">paginate</span><span class="p">:</span><span class="w"> </span><span class="m">5</span><span class="w">
+</span><span class="w"></span><span class="nt">title</span><span class="p">:</span><span class="w"> </span><span class="l">Tweakzx</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="nn">...</span><span class="w">
+</span><span class="w">
+</span></code></pre></div><h3 id="上传github的方式">上传Github的方式</h3>
+<p>其实这里分为两种编译方式</p>
+<ul>
+<li>
+<p>在线编译：上传整个站点文件，在线编译生成html静态文件，</p>
+</li>
+<li>
+<p>本地编译：本地编译，直接上传静态文件， 也就是public 文件夹</p>
+</li>
+</ul>
+<p>在线编译的方式需要在Github Action里找到Hugo 编译的 Action模板直接用就可以了</p>
+<blockquote>
+<p>我选择了使用本地编译然后上传静态文件的方式， 主要原因是当时不太懂，瞎搞的， 于是顺其自然了， 要是能重来， 我要选在线编译。</p>
+</blockquote>
+<p>本地编译上传静态文件也是有好处的</p>
+<ul>
+<li>配置简单， 无需复杂操作</li>
+<li>本地编译成功的东西部署之后可以立刻看到， 不用等github服务器慢吞吞的编译，</li>
+<li>如果本地成功编译预览没有问题，部署后看到的肯定也没有问题， 如果自己做了一些自定义的设置， 可能在GIthub端可能就不一样，甚至无法正常编译</li>
+<li>而且自己的配置信息可以不用被别人看到， 如果有一些敏感信息也比较安全</li>
+</ul>
+<blockquote>
+<p>注意，一定要上传到仓库的default分支才可以，default分支一般是main分支， 我创建的比较早所以是master。</p>
+</blockquote>
+<h2 id="github-action的配置">Github Action的配置</h2>
+<p>进入Github 仓库， 点击Settings-&gt;Code and automations-&gt;Pages</p>
+<p>可以看到有个Static HTML的workflow， 点击配置</p>
+<p><figure 
+	>
+	<a href="https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202302071559176.png" >
+		<img src="https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202302071559176.png"
+			
+			
+			
+			loading="lazy"
+			alt="image-20230207155747151">
+	</a>
+	
+	<figcaption>image-20230207155747151</figcaption>
+	
+</figure></p>
+<p>完成之后就可以在上方看到一个网址， 点击访问就可以看到网站部署成功。</p>
+<p><figure 
+	>
+	<a href="https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202302071559078.png" >
+		<img src="https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202302071559078.png"
+			
+			
+			
+			loading="lazy"
+			alt="image-20230207155914140">
+	</a>
+	
+	<figcaption>image-20230207155914140</figcaption>
+	
+</figure></p>
+<h2 id="撰写博客的流程">撰写博客的流程</h2>
+<h3 id="创建博文">创建博文</h3>
+<p>我个人的博客创建时会用【】框住主题， 然后起名，这样方便我分类并查找。</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">hugo new ./content/post/【主题】博文题目.md
+</code></pre></div><h3 id="编辑博文">编辑博文</h3>
+<p>使用Typora编辑刚刚创建的md文档， 在顶端设置好配置信息， 例如作者， 头图等等。</p>
+<div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">title</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;【博客】Hugo+Typora+PicGO+Github搭建个人博客&#34;</span><span class="w">
+</span><span class="w"></span><span class="nt">author</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;Tweakzx&#34;</span><span class="w">
+</span><span class="w"></span><span class="nt">date</span><span class="p">:</span><span class="w"> </span><span class="ld">2022-08-23T10:57:40</span><span class="m">+08</span><span class="p">:</span><span class="m">00</span><span class="w">
+</span><span class="w"></span><span class="nt">description</span><span class="p">:</span><span class="w"> 
+</span><span class="w"></span><span class="nt">categories</span><span class="p">:</span><span class="w"> 
+</span><span class="w"></span><span class="nt">tags</span><span class="p">:</span><span class="w"> 
+</span><span class="w"></span><span class="nt">image</span><span class="p">:</span><span class="w"> 
+</span><span class="w"></span><span class="nt">draft</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span></code></pre></div><h3 id="本地预览">本地预览</h3>
+<p>本地编辑完成后， 或者完成过程中， 可以预览效果， 将<code>draft:true</code>改为<code>false</code></p>
+<p>然后在网站根目录运行</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">hugo server
+</code></pre></div><p>单击<code>http://localhost:1313/</code>,  即可本地预览。</p>
+<h3 id="上传github">上传Github</h3>
+<p>为了实现一键更新博客， 需要写一个bat脚本， 但是如果你想要使用<strong>手动更新</strong>的话， 这一步可以不用做</p>
+<p>新建并编辑upload.bat 文件， 双击上传</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="nb">cd</span> &lt;网站根目录路径&gt;
 hugo
-<span class=nb>cd</span> public
+<span class="nb">cd</span> public
 git add .
-git commit -m <span class=s2>&#34;updatde-blog-post&#34;</span>
+git commit -m <span class="s2">&#34;updatde-blog-post&#34;</span>
 git push origin master:master
-</code></pre></div><h3 id=个人技巧>个人技巧</h3><p>我会在./content文件下另外创建两个文件夹， 一个todo， 一个doing。todo文件只有题目， 是打算写的文章； doing是写了一半的文章</p><p>当我开始写文章时</p><ul><li>如果只是打算写但是现在不想写， 我会创建到todo文件夹</li><li>如果马上就要开始写，我会创建到doing文件夹</li><li>开始写todo的文章时我会把该文章移入doing文件夹</li><li>如果大体上已经写完，可以发布，日后只需要一些简单的编辑的话，我会放入post文件夹</li></ul><h2 id=picgo图床的搭建>picgo图床的搭建</h2><p>我选择使用github作为图床， 方便简单， 就是不好访问。</p><p>可能之后会转向七牛云， 不过七牛云需要一个固定的域名， 如果没有的话就比较麻烦了。</p><h3 id=创建github仓库>创建github仓库</h3><ul><li>创建一个github仓库， 必须是public</li><li>在个人设置里Settings->Developer settings生成一个token，repo要打勾， 不过具体的权限与时间自行斟酌吧。</li><li>复制这个token</li></ul><h3 id=安装并配置picgo>安装并配置Picgo</h3><ul><li>下载安装<a class=link href=https://picgo.github.io/PicGo-Doc/zh/guide/ target=_blank rel=noopener>PicGo is Here | PicGo</a></li><li>配置picgo<ul><li>仓库名：刚刚创建的仓库名</li><li>分支名：注意是main还是master</li><li>Token：刚刚生成的token</li><li>存储路径， 如果有路径</li><li>配置CDN： 使用 <a href=https://cdn.jsdelivr.net/gh/>https://cdn.jsdelivr.net/gh/</a> 用户名/仓库名@main 即可</li></ul></li></ul><h2 id=配置giscus评论区>配置giscus评论区</h2><ul><li><p>在giscus官网，输入自定义配置，生成相关配置ID <a class=link href=https://giscus.app/zh-CN target=_blank rel=noopener>giscus</a></p><ul><li>生成repoID</li><li>生成categoryID</li><li>选择合适的主题</li></ul></li><li><p>修改config.yaml即可</p></li></ul><pre><code>giscus:
+</code></pre></div><h3 id="个人技巧">个人技巧</h3>
+<p>我会在./content文件下另外创建两个文件夹， 一个todo， 一个doing。todo文件只有题目， 是打算写的文章； doing是写了一半的文章</p>
+<p>当我开始写文章时</p>
+<ul>
+<li>如果只是打算写但是现在不想写， 我会创建到todo文件夹</li>
+<li>如果马上就要开始写，我会创建到doing文件夹</li>
+<li>开始写todo的文章时我会把该文章移入doing文件夹</li>
+<li>如果大体上已经写完，可以发布，日后只需要一些简单的编辑的话，我会放入post文件夹</li>
+</ul>
+<h2 id="picgo图床的搭建">picgo图床的搭建</h2>
+<p>我选择使用github作为图床， 方便简单， 就是不好访问。</p>
+<p>可能之后会转向七牛云， 不过七牛云需要一个固定的域名， 如果没有的话就比较麻烦了。</p>
+<h3 id="创建github仓库">创建github仓库</h3>
+<ul>
+<li>创建一个github仓库， 必须是public</li>
+<li>在个人设置里Settings-&gt;Developer settings生成一个token，repo要打勾， 不过具体的权限与时间自行斟酌吧。</li>
+<li>复制这个token</li>
+</ul>
+<h3 id="安装并配置picgo">安装并配置Picgo</h3>
+<ul>
+<li>下载安装<a class="link" href="https://picgo.github.io/PicGo-Doc/zh/guide/"  target="_blank" rel="noopener"
+    >PicGo is Here | PicGo</a></li>
+<li>配置picgo
+<ul>
+<li>仓库名：刚刚创建的仓库名</li>
+<li>分支名：注意是main还是master</li>
+<li>Token：刚刚生成的token</li>
+<li>存储路径， 如果有路径</li>
+<li>配置CDN： 使用 <a href="https://cdn.jsdelivr.net/gh/">https://cdn.jsdelivr.net/gh/</a> 用户名/仓库名@main 即可</li>
+</ul>
+</li>
+</ul>
+<h2 id="配置giscus评论区">配置giscus评论区</h2>
+<ul>
+<li>
+<p>在giscus官网，输入自定义配置，生成相关配置ID <a class="link" href="https://giscus.app/zh-CN"  target="_blank" rel="noopener"
+    >giscus</a></p>
+<ul>
+<li>生成repoID</li>
+<li>生成categoryID</li>
+<li>选择合适的主题</li>
+</ul>
+</li>
+<li>
+<p>修改config.yaml即可</p>
+</li>
+</ul>
+<pre><code>giscus:
 	repo: &quot;Tweakzx/Tweakzx.github.io&quot;
 	repoID: &quot;&quot;
 	category: &quot;Announcements&quot;
@@ -54,10 +363,276 @@ git push origin master:master
 	mapping: &quot;title&quot;
 	lightTheme: &quot;light_tritanopia&quot;
 	emitMetadata: 0
-</code></pre></section><footer class=article-footer><section class=article-copyright><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg><span>Licensed under CC BY-NC-SA 4.0</span></section></footer><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.css integrity=sha384-RZU/ijkSsFbcmivfdRBQDtwuwVqK7GMOw6IMvKyeWL2K5UAlyp6WonmB8m7Jd0Hn crossorigin=anonymous><script src=https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.js integrity=sha384-pK1WpvzWVBQiP0/GjnvRxV4mOb0oxFuyRxJlk6vVw146n3egcN5C925NCP7a7BY8 crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/contrib/auto-render.min.js integrity=sha384-vZTG03m+2yp6N6BNi5iM4rW4oIwk5DfcNdFfxkk9ZWpDriOkXX8voJBFrAO7MpVl crossorigin=anonymous defer></script><script>window.addEventListener("DOMContentLoaded",()=>{renderMathInElement(document.querySelector(`.article-content`),{delimiters:[{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false},{left:"\\(",right:"\\)",display:false},{left:"\\[",right:"\\]",display:true}]});})</script></article><aside class=related-contents--wrapper></aside><script src=https://giscus.app/client.js data-repo=Tweakzx/Tweakzx.github.io data-repo-id="MDEwOlJlcG9zaXRvcnkzMjY5MTY1NTE=" data-category=Announcements data-category-id=DIC_kwDOE3xZx84CTfL- data-mapping=title data-reactions-enabled=1 data-emit-metadata=0 data-theme=light_tritanopia crossorigin=anonymous async></script><script>function setGiscusTheme(theme){let giscus=document.querySelector('iframe.giscus-frame');if(giscus){giscus.contentWindow.postMessage({giscus:{setConfig:{theme:theme}}},"https://giscus.app");};};(function(){addEventListener('message',(e)=>{if(event.origin!=='https://giscus.app')return;handler()});window.addEventListener('onColorSchemeChange',handler);function handler(){if(document.documentElement.dataset.scheme==="light"){setGiscusTheme('light_tritanopia');}else{setGiscusTheme('dark_tritanopia');};};}());</script><footer class=site-footer><section class=copyright>&copy;
-2020 -
-2023 Tweakzx</section><section class=powerby>Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a><br>Theme <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.5.0>Stack</a></b> designed by <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a></section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
-<button class="pswp__button pswp__button--share" title=Share></button>
-<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
-<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
-<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css integrity="sha256-c0uckgykQ9v5k+IqViZOZKc47Jn7KQil4/MP3ySA3F8=" crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE=" crossorigin=anonymous></main><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">Table of contents</h2><div class=widget--toc><nav id=TableOfContents><ol><li><a href=#github创建项目>github创建项目</a></li><li><a href=#hugo创建站点>hugo创建站点</a><ol><li><a href=#hugo-安装>hugo 安装</a></li><li><a href=#hugo-生成站点>hugo 生成站点</a></li><li><a href=#hugo-主题>hugo 主题</a></li><li><a href=#上传github的方式>上传Github的方式</a></li></ol></li><li><a href=#github-action的配置>Github Action的配置</a></li><li><a href=#撰写博客的流程>撰写博客的流程</a><ol><li><a href=#创建博文>创建博文</a></li><li><a href=#编辑博文>编辑博文</a></li><li><a href=#本地预览>本地预览</a></li><li><a href=#上传github>上传Github</a></li><li><a href=#个人技巧>个人技巧</a></li></ol></li><li><a href=#picgo图床的搭建>picgo图床的搭建</a><ol><li><a href=#创建github仓库>创建github仓库</a></li><li><a href=#安装并配置picgo>安装并配置Picgo</a></li></ol></li><li><a href=#配置giscus评论区>配置giscus评论区</a></li></ol></nav></div></section></aside></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g=" crossorigin=anonymous defer></script><script type=text/javascript src=/ts/main.js defer></script><script>(function(){const customFont=document.createElement('link');customFont.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";customFont.type="text/css";customFont.rel="stylesheet";document.head.appendChild(customFont);}());</script></body></html>
+</code></pre>
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+        <link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.css"integrity="sha384-RZU/ijkSsFbcmivfdRBQDtwuwVqK7GMOw6IMvKyeWL2K5UAlyp6WonmB8m7Jd0Hn"crossorigin="anonymous"
+            ><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.js"integrity="sha384-pK1WpvzWVBQiP0/GjnvRxV4mOb0oxFuyRxJlk6vVw146n3egcN5C925NCP7a7BY8"crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/contrib/auto-render.min.js"integrity="sha384-vZTG03m&#43;2yp6N6BNi5iM4rW4oIwk5DfcNdFfxkk9ZWpDriOkXX8voJBFrAO7MpVl"crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        renderMathInElement(document.querySelector(`.article-content`), {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ]
+        });})
+</script>
+    
+</article>
+
+    <aside class="related-contents--wrapper">
+    
+    
+</aside>
+
+     
+    
+        
+    <script
+    src="https://giscus.app/client.js"
+    data-repo="Tweakzx/Tweakzx.github.io"
+    data-repo-id="MDEwOlJlcG9zaXRvcnkzMjY5MTY1NTE="
+    data-category="Announcements"
+    data-category-id="DIC_kwDOE3xZx84CTfL-"
+    data-mapping="title"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-theme="light_tritanopia"
+    crossorigin="anonymous"
+    async
+></script>
+<script>
+    function setGiscusTheme(theme) {
+        let giscus = document.querySelector('iframe.giscus-frame');
+        if (giscus) {
+            giscus.contentWindow.postMessage(
+                { 
+                    giscus: {
+                        setConfig: { 
+                            theme: theme 
+                        }
+                    }
+                },
+                "https://giscus.app"
+            );
+        };
+    };
+
+    (function(){
+        addEventListener('message', (e) => {
+            if (event.origin !== 'https://giscus.app') return;
+            handler()
+        });
+        window.addEventListener('onColorSchemeChange', handler);
+
+        function handler() {
+            if (document.documentElement.dataset.scheme === "light") {
+                setGiscusTheme('light_tritanopia');
+            } else {
+                setGiscusTheme('dark_tritanopia');
+            };
+        };
+    }());
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2023 Tweakzx
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.5.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
+            >
+
+            </main>
+    
+        <aside class="sidebar right-sidebar sticky">
+            <section class="widget archives">
+                <div class="widget-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+                </div>
+                <h2 class="widget-title section-title">Table of contents</h2>
+                
+                <div class="widget--toc">
+                    <nav id="TableOfContents">
+  <ol>
+    <li><a href="#github创建项目">github创建项目</a></li>
+    <li><a href="#hugo创建站点">hugo创建站点</a>
+      <ol>
+        <li><a href="#hugo-安装">hugo 安装</a></li>
+        <li><a href="#hugo-生成站点">hugo 生成站点</a></li>
+        <li><a href="#hugo-主题">hugo 主题</a></li>
+        <li><a href="#上传github的方式">上传Github的方式</a></li>
+      </ol>
+    </li>
+    <li><a href="#github-action的配置">Github Action的配置</a></li>
+    <li><a href="#撰写博客的流程">撰写博客的流程</a>
+      <ol>
+        <li><a href="#创建博文">创建博文</a></li>
+        <li><a href="#编辑博文">编辑博文</a></li>
+        <li><a href="#本地预览">本地预览</a></li>
+        <li><a href="#上传github">上传Github</a></li>
+        <li><a href="#个人技巧">个人技巧</a></li>
+      </ol>
+    </li>
+    <li><a href="#picgo图床的搭建">picgo图床的搭建</a>
+      <ol>
+        <li><a href="#创建github仓库">创建github仓库</a></li>
+        <li><a href="#安装并配置picgo">安装并配置Picgo</a></li>
+      </ol>
+    </li>
+    <li><a href="#配置giscus评论区">配置giscus评论区</a></li>
+  </ol>
+</nav>
+                </div>
+            </section>
+        </aside>
+    
+
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
+                defer="false"
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

@@ -1,106 +1,295 @@
-<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="在k8s集群上部署测试Adaptdl 环境配置 Centos Linux realease 7.9.2009 三台（GPU节点），CentOS Linux release 7.7.1908 一台（Master节点） 内核：3.10.0-106"><title>【Kubernetes】在k8s集群安装测试adaptdl</title><link rel=canonical href=https://tweakzx.github.io/p/kubernetes%E5%9C%A8k8s%E9%9B%86%E7%BE%A4%E5%AE%89%E8%A3%85%E6%B5%8B%E8%AF%95adaptdl/><link rel=stylesheet href=/scss/style.min.css><meta property="og:title" content="【Kubernetes】在k8s集群安装测试adaptdl"><meta property="og:description" content="在k8s集群上部署测试Adaptdl 环境配置 Centos Linux realease 7.9.2009 三台（GPU节点），CentOS Linux release 7.7.1908 一台（Master节点） 内核：3.10.0-106"><meta property="og:url" content="https://tweakzx.github.io/p/kubernetes%E5%9C%A8k8s%E9%9B%86%E7%BE%A4%E5%AE%89%E8%A3%85%E6%B5%8B%E8%AF%95adaptdl/"><meta property="og:site_name" content="Tweakzx"><meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:published_time" content="2023-01-09T21:15:48+08:00"><meta property="article:modified_time" content="2023-01-09T21:15:48+08:00"><meta name=twitter:title content="【Kubernetes】在k8s集群安装测试adaptdl"><meta name=twitter:description content="在k8s集群上部署测试Adaptdl 环境配置 Centos Linux realease 7.9.2009 三台（GPU节点），CentOS Linux release 7.7.1908 一台（Master节点） 内核：3.10.0-106"></head><body class="article-page has-toc"><script>(function(){const colorSchemeKey='StackColorScheme';if(!localStorage.getItem(colorSchemeKey)){localStorage.setItem(colorSchemeKey,"auto");}})();</script><script>(function(){const colorSchemeKey='StackColorScheme';const colorSchemeItem=localStorage.getItem(colorSchemeKey);const supportDarkMode=window.matchMedia('(prefers-color-scheme: dark)').matches===true;if(colorSchemeItem=='dark'||colorSchemeItem==='auto'&&supportDarkMode){document.documentElement.dataset.scheme='dark';}else{document.documentElement.dataset.scheme='light';}})();</script><div class="container main-container flex
-extended"><div id=article-toolbar><a href=/ class=back-home><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="15 6 9 12 15 18"/></svg><span>Back</span></a></div><main class="main full-width"><article class=main-article><header class=article-header><div class=article-details><header class=article-category><a href=/categories/kubernetes/>kubernetes</a></header><h2 class=article-title><a href=/p/kubernetes%E5%9C%A8k8s%E9%9B%86%E7%BE%A4%E5%AE%89%E8%A3%85%E6%B5%8B%E8%AF%95adaptdl/>【Kubernetes】在k8s集群安装测试adaptdl</a></h2><footer class=article-time><div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg><time class=article-time--published>Jan 09, 2023</time></div><div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg><time class=article-time--reading>4 minute read</time></div></footer></div></header><section class=article-content><h1 id=在k8s集群上部署测试adaptdl>在k8s集群上部署测试Adaptdl</h1><h2 id=环境配置>环境配置</h2><ul><li>Centos Linux realease 7.9.2009 三台（GPU节点），CentOS Linux release 7.7.1908 一台（Master节点）</li><li>内核：3.10.0-1062.18.1.el7.x86_64</li><li>Docker-ce：18.09.7</li><li>Kubernetes：1.16.15</li><li>Nvidia Driver： 460.32.03两台，510.47.03一台</li><li>Helm: 3.1.1</li><li>安装配置Nvidia-docker2， 集群可以使用<strong>nvidia.com/gpu</strong></li><li>配置NFS，在集群中<strong>配置StorageClass</strong></li></ul><h2 id=配置docker私有仓库>配置docker私有仓库</h2><p>Adaptdl提供的安装方法<a class=link href=https://adaptdl.readthedocs.io/en/latest/installation/install-adaptdl.html#install-the-adaptdl-helm-chart target=_blank rel=noopener>Installing the AdaptDL Scheduler — AdaptDL documentation</a>里面提到， 使用<code>--set docker-registry.enabled=true</code> 可以安装一个Docker Registry， 但是这是不安全的， 建议使用别的docker registry来替代， 在安装的时候将<code>--set docker-registry.enabled=true</code> 省略掉。</p><p>我自己尝试使用adaptdl自带的registry结果在submit job的时候无法拉去到镜像， 试了很多别的方法， 发现没有效果， 只能自己搭建私有仓库来尝试解决， 万幸确实解决了。</p><h3 id=在91节点上配置registry>在[91]节点上配置registry</h3><p>拉取镜像</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash>docker pull registr
-</code></pre></div><p>搭建私有仓库</p><pre><code>docker run -d --name registry -p 5000:5000 -v /opt/registry:/var/lib/registry   registry:latest
-</code></pre><p>查看是否建成</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash><span class=c1># ls  /opt/registry</span>
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='在k8s集群上部署测试Adaptdl 环境配置 Centos Linux realease 7.9.2009 三台（GPU节点），CentOS Linux release 7.7.1908 一台（Master节点） 内核：3.10.0-106'><title>【Kubernetes】在k8s集群安装测试adaptdl</title>
+
+<link rel='canonical' href='https://tweakzx.github.io/p/kubernetes%E5%9C%A8k8s%E9%9B%86%E7%BE%A4%E5%AE%89%E8%A3%85%E6%B5%8B%E8%AF%95adaptdl/'>
+
+<link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='【Kubernetes】在k8s集群安装测试adaptdl'>
+<meta property='og:description' content='在k8s集群上部署测试Adaptdl 环境配置 Centos Linux realease 7.9.2009 三台（GPU节点），CentOS Linux release 7.7.1908 一台（Master节点） 内核：3.10.0-106'>
+<meta property='og:url' content='https://tweakzx.github.io/p/kubernetes%E5%9C%A8k8s%E9%9B%86%E7%BE%A4%E5%AE%89%E8%A3%85%E6%B5%8B%E8%AF%95adaptdl/'>
+<meta property='og:site_name' content='Tweakzx'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2023-01-09T21:15:48&#43;08:00'/><meta property='article:modified_time' content='2023-01-09T21:15:48&#43;08:00'/>
+<meta name="twitter:title" content="【Kubernetes】在k8s集群安装测试adaptdl">
+<meta name="twitter:description" content="在k8s集群上部署测试Adaptdl 环境配置 Centos Linux realease 7.9.2009 三台（GPU节点），CentOS Linux release 7.7.1908 一台（Master节点） 内核：3.10.0-106">
+    </head>
+    <body class="
+    article-page has-toc
+">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex 
+    
+        extended
+    
+">
+    
+        <div id="article-toolbar">
+            <a href="/" class="back-home">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="15 6 9 12 15 18" />
+</svg>
+
+
+
+                <span>Back</span>
+            </a>
+        </div>
+    
+<main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/kubernetes/" >
+                kubernetes
+            </a>
+        
+    </header>
+    
+
+    <h2 class="article-title">
+        <a href="/p/kubernetes%E5%9C%A8k8s%E9%9B%86%E7%BE%A4%E5%AE%89%E8%A3%85%E6%B5%8B%E8%AF%95adaptdl/">【Kubernetes】在k8s集群安装测试adaptdl</a>
+    </h2>
+
+    
+
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Jan 09, 2023</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    4 minute read
+                </time>
+            </div>
+        
+    </footer>
+    
+</div>
+
+    
+
+</header>
+
+    <section class="article-content">
+    <h1 id="在k8s集群上部署测试adaptdl">在k8s集群上部署测试Adaptdl</h1>
+<h2 id="环境配置">环境配置</h2>
+<ul>
+<li>Centos Linux realease 7.9.2009 三台（GPU节点），CentOS Linux release 7.7.1908 一台（Master节点）</li>
+<li>内核：3.10.0-1062.18.1.el7.x86_64</li>
+<li>Docker-ce：18.09.7</li>
+<li>Kubernetes：1.16.15</li>
+<li>Nvidia Driver： 460.32.03两台，510.47.03一台</li>
+<li>Helm: 3.1.1</li>
+<li>安装配置Nvidia-docker2， 集群可以使用<strong>nvidia.com/gpu</strong></li>
+<li>配置NFS，在集群中<strong>配置StorageClass</strong></li>
+</ul>
+<h2 id="配置docker私有仓库">配置docker私有仓库</h2>
+<p>Adaptdl提供的安装方法<a class="link" href="https://adaptdl.readthedocs.io/en/latest/installation/install-adaptdl.html#install-the-adaptdl-helm-chart"  target="_blank" rel="noopener"
+    >Installing the AdaptDL Scheduler — AdaptDL documentation</a>里面提到， 使用<code>--set docker-registry.enabled=true</code> 可以安装一个Docker Registry， 但是这是不安全的， 建议使用别的docker registry来替代， 在安装的时候将<code>--set docker-registry.enabled=true</code> 省略掉。</p>
+<p>我自己尝试使用adaptdl自带的registry结果在submit job的时候无法拉去到镜像， 试了很多别的方法， 发现没有效果， 只能自己搭建私有仓库来尝试解决， 万幸确实解决了。</p>
+<h3 id="在91节点上配置registry">在[91]节点上配置registry</h3>
+<p>拉取镜像</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">docker pull registr
+</code></pre></div><p>搭建私有仓库</p>
+<pre><code>docker run -d --name registry -p 5000:5000 -v /opt/registry:/var/lib/registry   registry:latest
+</code></pre><p>查看是否建成</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># ls  /opt/registry</span>
 docker
-<span class=c1># docker ps |grep registry</span>
-4375a31c83e3 registry:latest  <span class=s2>&#34;/entrypoint.sh /etc…&#34;</span>   <span class=m>44</span> minutes ago Up <span class=m>44</span> minutes 0.0.0.0:5000-&gt;5000/tcp registry
-<span class=c1># netstat  -antup | grep 5000</span>
-tcp6  <span class=m>0</span>   <span class=m>0</span> :::5000  :::*   LISTEN  10552/docker-proxy 
-</code></pre></div><p>查看镜像列表， 你可以发现此刻仓库镜像为空</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash><span class=c1># curl http://10.10.108.91:5000/v2/_catalog </span>
-<span class=o>{</span><span class=s2>&#34;repositories&#34;</span>:<span class=o>[]}</span> 
-</code></pre></div><h3 id=在其他节点10-14-15上使用私有仓库>在其他节点[10, 14, 15]上使用私有仓库</h3><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash>vim  /etc/docker/daemon.json   
-</code></pre></div><p>修改daemon.json， 写入以下内容</p><pre><code>&quot;insecure-registries&quot;: [ &quot;10.10.108.91:5000&quot; ],
-</code></pre><p>之后重启docker</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash>systemctl daemon-reload
+<span class="c1"># docker ps |grep registry</span>
+4375a31c83e3 registry:latest  <span class="s2">&#34;/entrypoint.sh /etc…&#34;</span>   <span class="m">44</span> minutes ago Up <span class="m">44</span> minutes 0.0.0.0:5000-&gt;5000/tcp registry
+<span class="c1"># netstat  -antup | grep 5000</span>
+tcp6  <span class="m">0</span>   <span class="m">0</span> :::5000  :::*   LISTEN  10552/docker-proxy 
+</code></pre></div><p>查看镜像列表， 你可以发现此刻仓库镜像为空</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># curl http://10.10.108.91:5000/v2/_catalog </span>
+<span class="o">{</span><span class="s2">&#34;repositories&#34;</span>:<span class="o">[]}</span> 
+</code></pre></div><h3 id="在其他节点10-14-15上使用私有仓库">在其他节点[10, 14, 15]上使用私有仓库</h3>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">vim  /etc/docker/daemon.json   
+</code></pre></div><p>修改daemon.json， 写入以下内容</p>
+<pre><code>&quot;insecure-registries&quot;: [ &quot;10.10.108.91:5000&quot; ],
+</code></pre><p>之后重启docker</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">systemctl daemon-reload
 systemctl restart docker 
-</code></pre></div><h3 id=从其他节点上上传镜像到仓库>从其他节点上上传镜像到仓库</h3><pre><code>docker pull busybox
+</code></pre></div><h3 id="从其他节点上上传镜像到仓库">从其他节点上上传镜像到仓库</h3>
+<pre><code>docker pull busybox
 docker tag busybox:latest 10.10.108.91:5000/busybox:latest
 docker push 10.10.108.91:5000/busybox:latest
-</code></pre><p>先下载busybox， 改名之后再上传到私有仓库， 之后查看镜像列表， 发现私有仓库里多了busybox</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash><span class=c1># curl http://10.10.108.91:5000/v2/_catalog </span>
-<span class=o>{</span><span class=s2>&#34;repositories&#34;</span>:<span class=o>[</span><span class=s2>&#34;adaptdl-submit&#34;</span>,<span class=s2>&#34;busybox&#34;</span><span class=o>]}</span>
-</code></pre></div><p>私有仓库配置成功</p><h2 id=安装helm>安装Helm</h2><p>建议下载helm3， 具体版本支持策略可以看<a class=link href=https://helm.sh/zh/docs/topics/version_skew/ target=_blank rel=noopener>Helm | Helm版本支持策略</a>， 安装方法参考<a class=link href=https://helm.sh/zh/docs/intro/install/ target=_blank rel=noopener>Helm | 安装Helm</a></p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash>wget https://get.helm.sh/helm-v3.1.1-linux-amd64.tar.gz
+</code></pre><p>先下载busybox， 改名之后再上传到私有仓库， 之后查看镜像列表， 发现私有仓库里多了busybox</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># curl http://10.10.108.91:5000/v2/_catalog </span>
+<span class="o">{</span><span class="s2">&#34;repositories&#34;</span>:<span class="o">[</span><span class="s2">&#34;adaptdl-submit&#34;</span>,<span class="s2">&#34;busybox&#34;</span><span class="o">]}</span>
+</code></pre></div><p>私有仓库配置成功</p>
+<h2 id="安装helm">安装Helm</h2>
+<p>建议下载helm3， 具体版本支持策略可以看<a class="link" href="https://helm.sh/zh/docs/topics/version_skew/"  target="_blank" rel="noopener"
+    >Helm | Helm版本支持策略</a>， 安装方法参考<a class="link" href="https://helm.sh/zh/docs/intro/install/"  target="_blank" rel="noopener"
+    >Helm | 安装Helm</a></p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">wget https://get.helm.sh/helm-v3.1.1-linux-amd64.tar.gz
 tar -zxvf helm-v3.1.1-linux-amd64.tar.gz
 mv linux-amd64/helm /usr/local/bin/helm
 
-<span class=c1># 查看是否安装成功</span>
+<span class="c1"># 查看是否安装成功</span>
 helm version
-</code></pre></div><h2 id=helm安装adaptdl>Helm安装Adaptdl</h2><h3 id=adaptdl官方提供的安装策略>Adaptdl官方提供的安装策略</h3><pre><code>helm install adaptdl adaptdl-sched --repo https://github.com/petuum/adaptdl/raw/helm-repo --namespace adaptdl --create-namespace --set docker-registry.enabled=true
-</code></pre><p>我执行这个命令， 出现了很多问题， 例如</p><ul><li>获取https://github.com/petuum/adaptdl/raw/helm-repo 超时</li><li>无法识别&ndash;create-namespace 参数</li><li>validator-webhook.yaml报错Invalid value: []string{&ldquo;v1&rdquo;}: must include at least one of v1beta1</li><li>安装成功后， 仓库拉取镜像超时</li></ul><h3 id=我的安装过程>我的安装过程</h3><p>本地下载adpatdl-sched</p><pre><code>wget https://raw.githubusercontent.com/petuum/adaptdl/helm-repo/adaptdl-sched-0.2.11.tgz
-</code></pre><p>解包修改一点内容</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash>tar -zxvf adaptdl-sched-0.2.11.tgz
+</code></pre></div><h2 id="helm安装adaptdl">Helm安装Adaptdl</h2>
+<h3 id="adaptdl官方提供的安装策略">Adaptdl官方提供的安装策略</h3>
+<pre><code>helm install adaptdl adaptdl-sched --repo https://github.com/petuum/adaptdl/raw/helm-repo --namespace adaptdl --create-namespace --set docker-registry.enabled=true
+</code></pre><p>我执行这个命令， 出现了很多问题， 例如</p>
+<ul>
+<li>获取https://github.com/petuum/adaptdl/raw/helm-repo 超时</li>
+<li>无法识别&ndash;create-namespace 参数</li>
+<li>validator-webhook.yaml报错Invalid value: []string{&ldquo;v1&rdquo;}: must include at least one of v1beta1</li>
+<li>安装成功后， 仓库拉取镜像超时</li>
+</ul>
+<h3 id="我的安装过程">我的安装过程</h3>
+<p>本地下载adpatdl-sched</p>
+<pre><code>wget https://raw.githubusercontent.com/petuum/adaptdl/helm-repo/adaptdl-sched-0.2.11.tgz
+</code></pre><p>解包修改一点内容</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">tar -zxvf adaptdl-sched-0.2.11.tgz
 vim adaptdl-sched/templates/validator-webhook.yaml
-</code></pre></div><p>将admissionReviewVersions由v1改为v1beta1</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash>webhooks:
-  - name: <span class=o>{{</span> .Release.Name <span class=o>}}</span>-validator.<span class=o>{{</span> .Release.Namespace <span class=o>}}</span>.svc.cluster.local
+</code></pre></div><p>将admissionReviewVersions由v1改为v1beta1</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">webhooks:
+  - name: <span class="o">{{</span> .Release.Name <span class="o">}}</span>-validator.<span class="o">{{</span> .Release.Namespace <span class="o">}}</span>.svc.cluster.local
     clientConfig:
-      caBundle: <span class=o>{{</span> <span class=nv>$cert</span>.Cert <span class=p>|</span> b64enc <span class=o>}}</span>
+      caBundle: <span class="o">{{</span> <span class="nv">$cert</span>.Cert <span class="p">|</span> b64enc <span class="o">}}</span>
       service:
-        name: <span class=o>{{</span> .Release.Name <span class=o>}}</span>-validator
-        namespace: <span class=o>{{</span> .Release.Namespace <span class=o>}}</span>
-        path: <span class=s2>&#34;/validate&#34;</span>
+        name: <span class="o">{{</span> .Release.Name <span class="o">}}</span>-validator
+        namespace: <span class="o">{{</span> .Release.Namespace <span class="o">}}</span>
+        path: <span class="s2">&#34;/validate&#34;</span>
     rules:
-      - operations: <span class=o>[</span><span class=s2>&#34;CREATE&#34;</span>, <span class=s2>&#34;UPDATE&#34;</span><span class=o>]</span>
-        apiGroups: <span class=o>[</span><span class=s2>&#34;adaptdl.petuum.com&#34;</span><span class=o>]</span>
-        apiVersions: <span class=o>[</span><span class=s2>&#34;v1&#34;</span><span class=o>]</span>
-        resources: <span class=o>[</span><span class=s2>&#34;adaptdljobs&#34;</span><span class=o>]</span>
+      - operations: <span class="o">[</span><span class="s2">&#34;CREATE&#34;</span>, <span class="s2">&#34;UPDATE&#34;</span><span class="o">]</span>
+        apiGroups: <span class="o">[</span><span class="s2">&#34;adaptdl.petuum.com&#34;</span><span class="o">]</span>
+        apiVersions: <span class="o">[</span><span class="s2">&#34;v1&#34;</span><span class="o">]</span>
+        resources: <span class="o">[</span><span class="s2">&#34;adaptdljobs&#34;</span><span class="o">]</span>
     admissionReviewVersions:
       - v1beta1
     sideEffects: None
-</code></pre></div><p>重新打包</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash>helm package adaptdl-sched
-</code></pre></div><p>创建namespace</p><pre><code>kubectl create namespace adaptdl
-</code></pre><p>安装adaptdl</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash>helm install adaptdl adaptdl-sched-0.2.11.tgz --namespace adaptdl
-</code></pre></div><p>使用私有仓库</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash><span class=nb>export</span> <span class=nv>ADAPTDL_SUBMIT_REPO</span><span class=o>=</span>10.10.108.91:5000/adaptdl-submit
-<span class=nb>export</span> <span class=nv>ADAPTDL_SUBMIT_REPO_CREDS</span><span class=o>=</span>mysecret
-</code></pre></div><p>查看效果</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash><span class=c1># kubectl get pods -A </span>
+</code></pre></div><p>重新打包</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">helm package adaptdl-sched
+</code></pre></div><p>创建namespace</p>
+<pre><code>kubectl create namespace adaptdl
+</code></pre><p>安装adaptdl</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">helm install adaptdl adaptdl-sched-0.2.11.tgz --namespace adaptdl
+</code></pre></div><p>使用私有仓库</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="nb">export</span> <span class="nv">ADAPTDL_SUBMIT_REPO</span><span class="o">=</span>10.10.108.91:5000/adaptdl-submit
+<span class="nb">export</span> <span class="nv">ADAPTDL_SUBMIT_REPO_CREDS</span><span class="o">=</span>mysecret
+</code></pre></div><p>查看效果</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># kubectl get pods -A </span>
 NAMESPACE     NAME                                       READY   STATUS      RESTARTS   AGE
-adaptdl       adaptdl-adaptdl-sched-67c844b5b6-zpqk8     3/3     Running     <span class=m>0</span>          56m
-adaptdl       adaptdl-validator-5f48976d4d-kr9cf         1/1     Running     <span class=m>0</span>          56m
-</code></pre></div><h2 id=测试>测试</h2><h3 id=hello-world>Hello-world</h3><p>这一部分参考<a class=link href=https://adaptdl.readthedocs.io/en/latest/commandline/simple-job.html#writing-a-simple-program target=_blank rel=noopener>Submitting a Simple Job — AdaptDL documentation</a></p><pre><code>mkdir hello_world
+adaptdl       adaptdl-adaptdl-sched-67c844b5b6-zpqk8     3/3     Running     <span class="m">0</span>          56m
+adaptdl       adaptdl-validator-5f48976d4d-kr9cf         1/1     Running     <span class="m">0</span>          56m
+</code></pre></div><h2 id="测试">测试</h2>
+<h3 id="hello-world">Hello-world</h3>
+<p>这一部分参考<a class="link" href="https://adaptdl.readthedocs.io/en/latest/commandline/simple-job.html#writing-a-simple-program"  target="_blank" rel="noopener"
+    >Submitting a Simple Job — AdaptDL documentation</a></p>
+<pre><code>mkdir hello_world
 cd hello_world
-</code></pre><h4 id=创建文件>创建文件</h4><p>一共要创建三个文件</p><ul><li>hello_world.py</li><li>Dockerfile</li><li>adaptdljob.yaml</li></ul><p>hello_world/hello_world.py</p><div class=highlight><pre class=chroma><code class=language-python data-lang=python><span class=kn>import</span> <span class=nn>adaptdl.env</span>
-<span class=kn>import</span> <span class=nn>os</span>
-<span class=kn>import</span> <span class=nn>time</span>
+</code></pre><h4 id="创建文件">创建文件</h4>
+<p>一共要创建三个文件</p>
+<ul>
+<li>hello_world.py</li>
+<li>Dockerfile</li>
+<li>adaptdljob.yaml</li>
+</ul>
+<p>hello_world/hello_world.py</p>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">adaptdl.env</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">time</span>
 
-<span class=k>print</span><span class=p>(</span><span class=s2>&#34;Hello, world!&#34;</span><span class=p>)</span>
+<span class="k">print</span><span class="p">(</span><span class="s2">&#34;Hello, world!&#34;</span><span class="p">)</span>
 
-<span class=k>with</span> <span class=nb>open</span><span class=p>(</span><span class=n>os</span><span class=o>.</span><span class=n>path</span><span class=o>.</span><span class=n>join</span><span class=p>(</span><span class=n>adaptdl</span><span class=o>.</span><span class=n>env</span><span class=o>.</span><span class=n>share_path</span><span class=p>(),</span> <span class=s2>&#34;foo.txt&#34;</span><span class=p>),</span> <span class=s2>&#34;w&#34;</span><span class=p>)</span> <span class=k>as</span> <span class=n>f</span><span class=p>:</span>
-    <span class=n>f</span><span class=o>.</span><span class=n>write</span><span class=p>(</span><span class=s2>&#34;Hello, world!&#34;</span><span class=p>)</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">adaptdl</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">share_path</span><span class="p">(),</span> <span class="s2">&#34;foo.txt&#34;</span><span class="p">),</span> <span class="s2">&#34;w&#34;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&#34;Hello, world!&#34;</span><span class="p">)</span>
 
-<span class=n>time</span><span class=o>.</span><span class=n>sleep</span><span class=p>(</span><span class=mi>100</span><span class=p>)</span>
-</code></pre></div><p>hello_world/Dockerfile</p><div class=highlight><pre class=chroma><code class=language-dockerfile data-lang=dockerfile><span class=k>FROM</span><span class=s> python:3.7-slim</span><span class=err>
-</span><span class=err></span><span class=k>RUN</span> python3 -m pip install adaptdl<span class=err>
-</span><span class=err>
-</span><span class=err></span><span class=k>COPY</span> hello_world.py /root/hello_world.py<span class=err>
-</span><span class=err>
-</span><span class=err></span><span class=k>ENV</span> <span class=nv>PYTHONUNBUFFERED</span><span class=o>=</span><span class=nb>true</span>
-</code></pre></div><p>hello_world/adaptdljob.yaml</p><div class=highlight><pre class=chroma><code class=language-yaml data-lang=yaml><span class=nt>apiVersion</span><span class=p>:</span><span class=w> </span><span class=l>adaptdl.petuum.com/v1</span><span class=w>
-</span><span class=w></span><span class=nt>kind</span><span class=p>:</span><span class=w> </span><span class=l>AdaptDLJob</span><span class=w>
-</span><span class=w></span><span class=nt>metadata</span><span class=p>:</span><span class=w>
-</span><span class=w>  </span><span class=nt>generateName</span><span class=p>:</span><span class=w> </span><span class=l>hello-world-</span><span class=w>
-</span><span class=w></span><span class=nt>spec</span><span class=p>:</span><span class=w>
-</span><span class=w>  </span><span class=nt>template</span><span class=p>:</span><span class=w>
-</span><span class=w>    </span><span class=nt>spec</span><span class=p>:</span><span class=w>
-</span><span class=w>      </span><span class=nt>containers</span><span class=p>:</span><span class=w>
-</span><span class=w>      </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>main</span><span class=w>
-</span><span class=w>        </span><span class=nt>command</span><span class=p>:</span><span class=w>
-</span><span class=w>        </span>- <span class=l>python3</span><span class=w>
-</span><span class=w>        </span>- <span class=l>/root/hello_world.py</span><span class=w>
-</span></code></pre></div><h4 id=提交任务>提交任务</h4><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash>adaptdl submit hello_world/ --checkpoint-storage-class<span class=o>=</span>course-nfs-storage
-</code></pre></div><p>查看效果</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash><span class=c1># kubectl get pods -A </span>
-default hello-world-vbfp9-3f6dd75e-cf18-447a-a49a-3e1f39234b7a-0-0 1/1 Running <span class=m>0</span>  6s
-<span class=c1># adaptdl ls</span>
-Name                Status     Start<span class=o>(</span>UTC<span class=o>)</span>    Runtime  Rplc  Rtrt    
-hello-world-vbfp9   Running    Jan-10 07:29  <span class=m>0</span> min    <span class=m>1</span>     <span class=m>0</span>
-<span class=c1># kubectl logs hello-world-6r2h6-57779eff-089b-47d9-ab44-fb23d7433518-0-0 </span>
+<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+</code></pre></div><p>hello_world/Dockerfile</p>
+<div class="highlight"><pre class="chroma"><code class="language-dockerfile" data-lang="dockerfile"><span class="k">FROM</span><span class="s"> python:3.7-slim</span><span class="err">
+</span><span class="err"></span><span class="k">RUN</span> python3 -m pip install adaptdl<span class="err">
+</span><span class="err">
+</span><span class="err"></span><span class="k">COPY</span> hello_world.py /root/hello_world.py<span class="err">
+</span><span class="err">
+</span><span class="err"></span><span class="k">ENV</span> <span class="nv">PYTHONUNBUFFERED</span><span class="o">=</span><span class="nb">true</span>
+</code></pre></div><p>hello_world/adaptdljob.yaml</p>
+<div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">adaptdl.petuum.com/v1</span><span class="w">
+</span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">AdaptDLJob</span><span class="w">
+</span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">generateName</span><span class="p">:</span><span class="w"> </span><span class="l">hello-world-</span><span class="w">
+</span><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">template</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="nt">containers</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">main</span><span class="w">
+</span><span class="w">        </span><span class="nt">command</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span>- <span class="l">python3</span><span class="w">
+</span><span class="w">        </span>- <span class="l">/root/hello_world.py</span><span class="w">
+</span></code></pre></div><h4 id="提交任务">提交任务</h4>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">adaptdl submit hello_world/ --checkpoint-storage-class<span class="o">=</span>course-nfs-storage
+</code></pre></div><p>查看效果</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># kubectl get pods -A </span>
+default hello-world-vbfp9-3f6dd75e-cf18-447a-a49a-3e1f39234b7a-0-0 1/1 Running <span class="m">0</span>  6s
+<span class="c1"># adaptdl ls</span>
+Name                Status     Start<span class="o">(</span>UTC<span class="o">)</span>    Runtime  Rplc  Rtrt    
+hello-world-vbfp9   Running    Jan-10 07:29  <span class="m">0</span> min    <span class="m">1</span>     <span class="m">0</span>
+<span class="c1"># kubectl logs hello-world-6r2h6-57779eff-089b-47d9-ab44-fb23d7433518-0-0 </span>
 Hello, world!
-</code></pre></div><h3 id=bert>BERT</h3><p>这部分的代码在adaptdl/examples/BERT中</p><p>docker build的时候， 只能读取与Dockerfile同目录以下的内容， 目录外的内容无法使用， 所以你可能要对Dockerfile做一下修改， 然后将adaptdl的源码文件复制一份到BERT/目录下， 然后</p><pre><code>adaptdl submit examples/BERT/ --checkpoint-storage-class=course-nfs-storage
-</code></pre><p>查看运行状态，以及输出</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash><span class=c1># kubectl logs mlm-task-bnqxw-390a44d3-ca34-4cb9-9ea7-091b1d4ec4db-0-0</span>
+</code></pre></div><h3 id="bert">BERT</h3>
+<p>这部分的代码在adaptdl/examples/BERT中</p>
+<p>docker build的时候， 只能读取与Dockerfile同目录以下的内容， 目录外的内容无法使用， 所以你可能要对Dockerfile做一下修改， 然后将adaptdl的源码文件复制一份到BERT/目录下， 然后</p>
+<pre><code>adaptdl submit examples/BERT/ --checkpoint-storage-class=course-nfs-storage
+</code></pre><p>查看运行状态，以及输出</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># kubectl logs mlm-task-bnqxw-390a44d3-ca34-4cb9-9ea7-091b1d4ec4db-0-0</span>
 INFO:root:Downloading file wikitext-2-v1.zip to .data/wikitext-2-v1.zip.
-wikitext-2-v1.zip: 100%<span class=p>|</span>██████████<span class=p>|</span> 4.48M/4.48M <span class=o>[</span>00:05&lt;00:00, 811kB/s<span class=o>]</span> 
+wikitext-2-v1.zip: 100%<span class="p">|</span>██████████<span class="p">|</span> 4.48M/4.48M <span class="o">[</span>00:05&lt;00:00, 811kB/s<span class="o">]</span> 
 INFO:root:File .data/wikitext-2-v1.zip downloaded.
 INFO:root:Opening zip file .data/wikitext-2-v1.zip.
 INFO:root:Creating train data
-INFO:root:Creating <span class=nb>test</span> data
+INFO:root:Creating <span class="nb">test</span> data
 INFO:root:Creating valid data
-1lines <span class=o>[</span>00:00,  3.76lines/s<span class=o>]</span>
+1lines <span class="o">[</span>00:00,  3.76lines/s<span class="o">]</span>
 INFO:root:File .data/wikitext-2-v1.zip already exists.
 INFO:root:Opening zip file .data/wikitext-2-v1.zip.
 INFO:root:.data/wikitext-2/ already extracted.
@@ -108,14 +297,372 @@ INFO:root:.data/wikitext-2/wiki.test.tokens already extracted.
 INFO:root:.data/wikitext-2/wiki.valid.tokens already extracted.
 INFO:root:.data/wikitext-2/wiki.train.tokens already extracted.
 INFO:root:Creating train data
-INFO:root:Creating <span class=nb>test</span> data
+INFO:root:Creating <span class="nb">test</span> data
 INFO:root:Creating valid data
-</code></pre></div><h2 id=问题>问题</h2><blockquote><p>Error: No Docker registry could be found!</p></blockquote><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash><span class=nb>export</span> <span class=nv>ADAPTDL_SUBMIT_REPO</span><span class=o>=</span>10.10.108.91:5000/adaptdl-submit
-<span class=nb>export</span> <span class=nv>ADAPTDL_SUBMIT_REPO_CREDS</span><span class=o>=</span>mysecret
-</code></pre></div><p>解决：记得在Master节点上设置仓库的环境变量</p><blockquote><p>Unsupported storageclass from available storageclasses []</p></blockquote><p><a href=https://github.com/petuum/adaptdl/issues/112#issue-1115791420>https://github.com/petuum/adaptdl/issues/112#issue-1115791420</a></p><p>解决：配置StorageClass， 在提交job的时候指定<code>--checkpoint-storage-class=...</code></p><h2 id=参考链接>参考链接</h2><ol><li><a class=link href=https://adaptdl.readthedocs.io/en/latest/installation/install-adaptdl.html#install-the-adaptdl-helm-chart target=_blank rel=noopener>Installing the AdaptDL Scheduler — AdaptDL documentation</a></li><li><a class=link href=https://adaptdl.readthedocs.io/en/latest/commandline/simple-job.html#writing-a-simple-program target=_blank rel=noopener>Submitting a Simple Job — AdaptDL documentation</a></li><li><a class=link href=https://zhuanlan.zhihu.com/p/400598575 target=_blank rel=noopener>docker私有镜像仓库的配置和使用 - 知乎 (zhihu.com)</a></li><li><a class=link href=https://adaptdl.readthedocs.io/_/downloads/en/latest/pdf/ target=_blank rel=noopener>AdaptDL</a></li><li><a class=link href=https://github.com/petuum/adaptdl/issues/112 target=_blank rel=noopener>hello_world can not run · Issue #112 · petuum/adaptdl (github.com)</a></li><li><a class=link href=https://helm.sh/zh/docs/topics/version_skew/ target=_blank rel=noopener>Helm | Helm版本支持策略</a></li><li><a class=link href=https://helm.sh/zh/docs/intro/install/ target=_blank rel=noopener>Helm | 安装Helm</a></li><li><a class=link href=https://adaptdl.readthedocs.io/en/latest/commandline/simple-job.html#writing-a-simple-program target=_blank rel=noopener>Submitting a Simple Job — AdaptDL documentation</a></li></ol></section><footer class=article-footer><section class=article-copyright><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg><span>Licensed under CC BY-NC-SA 4.0</span></section></footer><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.css integrity=sha384-RZU/ijkSsFbcmivfdRBQDtwuwVqK7GMOw6IMvKyeWL2K5UAlyp6WonmB8m7Jd0Hn crossorigin=anonymous><script src=https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.js integrity=sha384-pK1WpvzWVBQiP0/GjnvRxV4mOb0oxFuyRxJlk6vVw146n3egcN5C925NCP7a7BY8 crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/contrib/auto-render.min.js integrity=sha384-vZTG03m+2yp6N6BNi5iM4rW4oIwk5DfcNdFfxkk9ZWpDriOkXX8voJBFrAO7MpVl crossorigin=anonymous defer></script><script>window.addEventListener("DOMContentLoaded",()=>{renderMathInElement(document.querySelector(`.article-content`),{delimiters:[{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false},{left:"\\(",right:"\\)",display:false},{left:"\\[",right:"\\]",display:true}]});})</script></article><aside class=related-contents--wrapper><h2 class=section-title>Related contents</h2><div class=related-contents><div class="flex article-list--tile"><article><a href=/p/kubernetes%E9%83%A8%E7%BD%B2gaiagpuvcuda/><div class=article-details><h2 class=article-title>【Kubernetes】部署gaiaGPU（vCUDA）</h2></div></a></article><article><a href=/p/kubernetes%E5%9C%A8k8s%E9%9B%86%E7%BE%A4%E4%B8%AD%E6%8C%82%E8%BD%BD%E5%9F%BA%E4%BA%8Enfs%E7%9A%84storageclass/><div class=article-details><h2 class=article-title>【Kubernetes】在k8s集群中挂载基于NFS的StorageClass</h2></div></a></article><article><a href=/p/kubernetes%E5%A6%82%E4%BD%95%E8%AE%A9kubernetes%E9%9B%86%E7%BE%A4%E4%BD%BF%E7%94%A8gpu/><div class=article-details><h2 class=article-title>【Kubernetes】如何让kubernetes集群使用GPU</h2></div></a></article><article class=has-image><a href=/p/kubernetesubuntu%E5%AE%89%E8%A3%85k8s%E9%9B%86%E7%BE%A4/><div class=article-image><img src=https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/20220823230439.png loading=lazy data-key data-hash=https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/20220823230439.png></div><div class=article-details><h2 class=article-title>【Kubernetes】ubuntu安装k8s集群</h2></div></a></article></div></div></aside><script src=https://giscus.app/client.js data-repo=Tweakzx/Tweakzx.github.io data-repo-id="MDEwOlJlcG9zaXRvcnkzMjY5MTY1NTE=" data-category=Announcements data-category-id=DIC_kwDOE3xZx84CTfL- data-mapping=title data-reactions-enabled=1 data-emit-metadata=0 data-theme=light_tritanopia crossorigin=anonymous async></script><script>function setGiscusTheme(theme){let giscus=document.querySelector('iframe.giscus-frame');if(giscus){giscus.contentWindow.postMessage({giscus:{setConfig:{theme:theme}}},"https://giscus.app");};};(function(){addEventListener('message',(e)=>{if(event.origin!=='https://giscus.app')return;handler()});window.addEventListener('onColorSchemeChange',handler);function handler(){if(document.documentElement.dataset.scheme==="light"){setGiscusTheme('light_tritanopia');}else{setGiscusTheme('dark_tritanopia');};};}());</script><footer class=site-footer><section class=copyright>&copy;
-2020 -
-2023 Tweakzx</section><section class=powerby>Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a><br>Theme <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.5.0>Stack</a></b> designed by <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a></section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
-<button class="pswp__button pswp__button--share" title=Share></button>
-<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
-<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
-<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css integrity="sha256-c0uckgykQ9v5k+IqViZOZKc47Jn7KQil4/MP3ySA3F8=" crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE=" crossorigin=anonymous></main><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">Table of contents</h2><div class=widget--toc><nav id=TableOfContents><ol><li><a href=#环境配置>环境配置</a></li><li><a href=#配置docker私有仓库>配置docker私有仓库</a><ol><li><a href=#在91节点上配置registry>在[91]节点上配置registry</a></li><li><a href=#在其他节点10-14-15上使用私有仓库>在其他节点[10, 14, 15]上使用私有仓库</a></li><li><a href=#从其他节点上上传镜像到仓库>从其他节点上上传镜像到仓库</a></li></ol></li><li><a href=#安装helm>安装Helm</a></li><li><a href=#helm安装adaptdl>Helm安装Adaptdl</a><ol><li><a href=#adaptdl官方提供的安装策略>Adaptdl官方提供的安装策略</a></li><li><a href=#我的安装过程>我的安装过程</a></li></ol></li><li><a href=#测试>测试</a><ol><li><a href=#hello-world>Hello-world</a><ol><li><a href=#创建文件>创建文件</a></li><li><a href=#提交任务>提交任务</a></li></ol></li><li><a href=#bert>BERT</a></li></ol></li><li><a href=#问题>问题</a></li><li><a href=#参考链接>参考链接</a></li></ol></nav></div></section></aside></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g=" crossorigin=anonymous defer></script><script type=text/javascript src=/ts/main.js defer></script><script>(function(){const customFont=document.createElement('link');customFont.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";customFont.type="text/css";customFont.rel="stylesheet";document.head.appendChild(customFont);}());</script></body></html>
+</code></pre></div><h2 id="问题">问题</h2>
+<blockquote>
+<p>Error: No Docker registry could be found!</p>
+</blockquote>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="nb">export</span> <span class="nv">ADAPTDL_SUBMIT_REPO</span><span class="o">=</span>10.10.108.91:5000/adaptdl-submit
+<span class="nb">export</span> <span class="nv">ADAPTDL_SUBMIT_REPO_CREDS</span><span class="o">=</span>mysecret
+</code></pre></div><p>解决：记得在Master节点上设置仓库的环境变量</p>
+<blockquote>
+<p>Unsupported storageclass from available storageclasses []</p>
+</blockquote>
+<p><a href="https://github.com/petuum/adaptdl/issues/112#issue-1115791420">https://github.com/petuum/adaptdl/issues/112#issue-1115791420</a></p>
+<p>解决：配置StorageClass， 在提交job的时候指定<code>--checkpoint-storage-class=...</code></p>
+<h2 id="参考链接">参考链接</h2>
+<ol>
+<li><a class="link" href="https://adaptdl.readthedocs.io/en/latest/installation/install-adaptdl.html#install-the-adaptdl-helm-chart"  target="_blank" rel="noopener"
+    >Installing the AdaptDL Scheduler — AdaptDL documentation</a></li>
+<li><a class="link" href="https://adaptdl.readthedocs.io/en/latest/commandline/simple-job.html#writing-a-simple-program"  target="_blank" rel="noopener"
+    >Submitting a Simple Job — AdaptDL documentation</a></li>
+<li><a class="link" href="https://zhuanlan.zhihu.com/p/400598575"  target="_blank" rel="noopener"
+    >docker私有镜像仓库的配置和使用 - 知乎 (zhihu.com)</a></li>
+<li><a class="link" href="https://adaptdl.readthedocs.io/_/downloads/en/latest/pdf/"  target="_blank" rel="noopener"
+    >AdaptDL</a></li>
+<li><a class="link" href="https://github.com/petuum/adaptdl/issues/112"  target="_blank" rel="noopener"
+    >hello_world can not run · Issue #112 · petuum/adaptdl (github.com)</a></li>
+<li><a class="link" href="https://helm.sh/zh/docs/topics/version_skew/"  target="_blank" rel="noopener"
+    >Helm | Helm版本支持策略</a></li>
+<li><a class="link" href="https://helm.sh/zh/docs/intro/install/"  target="_blank" rel="noopener"
+    >Helm | 安装Helm</a></li>
+<li><a class="link" href="https://adaptdl.readthedocs.io/en/latest/commandline/simple-job.html#writing-a-simple-program"  target="_blank" rel="noopener"
+    >Submitting a Simple Job — AdaptDL documentation</a></li>
+</ol>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+        <link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.css"integrity="sha384-RZU/ijkSsFbcmivfdRBQDtwuwVqK7GMOw6IMvKyeWL2K5UAlyp6WonmB8m7Jd0Hn"crossorigin="anonymous"
+            ><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.js"integrity="sha384-pK1WpvzWVBQiP0/GjnvRxV4mOb0oxFuyRxJlk6vVw146n3egcN5C925NCP7a7BY8"crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/contrib/auto-render.min.js"integrity="sha384-vZTG03m&#43;2yp6N6BNi5iM4rW4oIwk5DfcNdFfxkk9ZWpDriOkXX8voJBFrAO7MpVl"crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        renderMathInElement(document.querySelector(`.article-content`), {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ]
+        });})
+</script>
+    
+</article>
+
+    <aside class="related-contents--wrapper">
+    
+    
+        <h2 class="section-title">Related contents</h2>
+        <div class="related-contents">
+            <div class="flex article-list--tile">
+                
+                    
+<article class="">
+    <a href="/p/kubernetes%E9%83%A8%E7%BD%B2gaiagpuvcuda/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">【Kubernetes】部署gaiaGPU（vCUDA）</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/kubernetes%E5%9C%A8k8s%E9%9B%86%E7%BE%A4%E4%B8%AD%E6%8C%82%E8%BD%BD%E5%9F%BA%E4%BA%8Enfs%E7%9A%84storageclass/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">【Kubernetes】在k8s集群中挂载基于NFS的StorageClass</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/kubernetes%E5%A6%82%E4%BD%95%E8%AE%A9kubernetes%E9%9B%86%E7%BE%A4%E4%BD%BF%E7%94%A8gpu/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">【Kubernetes】如何让kubernetes集群使用GPU</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="has-image">
+    <a href="/p/kubernetesubuntu%E5%AE%89%E8%A3%85k8s%E9%9B%86%E7%BE%A4/">
+        
+        
+            <div class="article-image">
+                
+                    <img src="https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/20220823230439.png" loading="lazy" data-key="" data-hash="https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/20220823230439.png"/>
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">【Kubernetes】ubuntu安装k8s集群</h2>
+        </div>
+    </a>
+</article>
+                
+            </div>
+        </div>
+    
+</aside>
+
+     
+    
+        
+    <script
+    src="https://giscus.app/client.js"
+    data-repo="Tweakzx/Tweakzx.github.io"
+    data-repo-id="MDEwOlJlcG9zaXRvcnkzMjY5MTY1NTE="
+    data-category="Announcements"
+    data-category-id="DIC_kwDOE3xZx84CTfL-"
+    data-mapping="title"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-theme="light_tritanopia"
+    crossorigin="anonymous"
+    async
+></script>
+<script>
+    function setGiscusTheme(theme) {
+        let giscus = document.querySelector('iframe.giscus-frame');
+        if (giscus) {
+            giscus.contentWindow.postMessage(
+                { 
+                    giscus: {
+                        setConfig: { 
+                            theme: theme 
+                        }
+                    }
+                },
+                "https://giscus.app"
+            );
+        };
+    };
+
+    (function(){
+        addEventListener('message', (e) => {
+            if (event.origin !== 'https://giscus.app') return;
+            handler()
+        });
+        window.addEventListener('onColorSchemeChange', handler);
+
+        function handler() {
+            if (document.documentElement.dataset.scheme === "light") {
+                setGiscusTheme('light_tritanopia');
+            } else {
+                setGiscusTheme('dark_tritanopia');
+            };
+        };
+    }());
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2023 Tweakzx
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.5.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
+            >
+
+            </main>
+    
+        <aside class="sidebar right-sidebar sticky">
+            <section class="widget archives">
+                <div class="widget-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+                </div>
+                <h2 class="widget-title section-title">Table of contents</h2>
+                
+                <div class="widget--toc">
+                    <nav id="TableOfContents">
+  <ol>
+    <li><a href="#环境配置">环境配置</a></li>
+    <li><a href="#配置docker私有仓库">配置docker私有仓库</a>
+      <ol>
+        <li><a href="#在91节点上配置registry">在[91]节点上配置registry</a></li>
+        <li><a href="#在其他节点10-14-15上使用私有仓库">在其他节点[10, 14, 15]上使用私有仓库</a></li>
+        <li><a href="#从其他节点上上传镜像到仓库">从其他节点上上传镜像到仓库</a></li>
+      </ol>
+    </li>
+    <li><a href="#安装helm">安装Helm</a></li>
+    <li><a href="#helm安装adaptdl">Helm安装Adaptdl</a>
+      <ol>
+        <li><a href="#adaptdl官方提供的安装策略">Adaptdl官方提供的安装策略</a></li>
+        <li><a href="#我的安装过程">我的安装过程</a></li>
+      </ol>
+    </li>
+    <li><a href="#测试">测试</a>
+      <ol>
+        <li><a href="#hello-world">Hello-world</a>
+          <ol>
+            <li><a href="#创建文件">创建文件</a></li>
+            <li><a href="#提交任务">提交任务</a></li>
+          </ol>
+        </li>
+        <li><a href="#bert">BERT</a></li>
+      </ol>
+    </li>
+    <li><a href="#问题">问题</a></li>
+    <li><a href="#参考链接">参考链接</a></li>
+  </ol>
+</nav>
+                </div>
+            </section>
+        </aside>
+    
+
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
+                defer="false"
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

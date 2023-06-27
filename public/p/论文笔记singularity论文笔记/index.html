@@ -1,8 +1,1193 @@
-<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="Singularity: Planet-Scale, Preemptive and Elastic Scheduling of AI Workloads Abstract Singularity 微软的全球分布式调度服务，高效和可靠地执行深度学习训练和推理工作负载 核心：是一个新颖的、工作负载感知的调度器，它可以透"><title>【论文笔记】Singularity论文笔记</title><link rel=canonical href=https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0singularity%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/><link rel=stylesheet href=/scss/style.min.css><meta property="og:title" content="【论文笔记】Singularity论文笔记"><meta property="og:description" content="Singularity: Planet-Scale, Preemptive and Elastic Scheduling of AI Workloads Abstract Singularity 微软的全球分布式调度服务，高效和可靠地执行深度学习训练和推理工作负载 核心：是一个新颖的、工作负载感知的调度器，它可以透"><meta property="og:url" content="https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0singularity%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/"><meta property="og:site_name" content="Tweakzx"><meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:published_time" content="2023-03-17T11:37:06+08:00"><meta property="article:modified_time" content="2023-03-17T11:37:06+08:00"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202303171218307.png"><meta name=twitter:title content="【论文笔记】Singularity论文笔记"><meta name=twitter:description content="Singularity: Planet-Scale, Preemptive and Elastic Scheduling of AI Workloads Abstract Singularity 微软的全球分布式调度服务，高效和可靠地执行深度学习训练和推理工作负载 核心：是一个新颖的、工作负载感知的调度器，它可以透"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202303171218307.png"></head><body class="article-page has-toc"><script>(function(){const colorSchemeKey='StackColorScheme';if(!localStorage.getItem(colorSchemeKey)){localStorage.setItem(colorSchemeKey,"auto");}})();</script><script>(function(){const colorSchemeKey='StackColorScheme';const colorSchemeItem=localStorage.getItem(colorSchemeKey);const supportDarkMode=window.matchMedia('(prefers-color-scheme: dark)').matches===true;if(colorSchemeItem=='dark'||colorSchemeItem==='auto'&&supportDarkMode){document.documentElement.dataset.scheme='dark';}else{document.documentElement.dataset.scheme='light';}})();</script><div class="container main-container flex
-extended"><div id=article-toolbar><a href=/ class=back-home><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="15 6 9 12 15 18"/></svg><span>Back</span></a></div><main class="main full-width"><article class="has-image main-article"><header class=article-header><div class=article-image><a href=/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0singularity%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/><img src=https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202303171218307.png loading=lazy alt="Featured image of post 【论文笔记】Singularity论文笔记"></a></div><div class=article-details><h2 class=article-title><a href=/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0singularity%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/>【论文笔记】Singularity论文笔记</a></h2><footer class=article-time><div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg><time class=article-time--published>Mar 17, 2023</time></div><div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg><time class=article-time--reading>29 minute read</time></div></footer></div></header><section class=article-content><h1 id=singularity-planet-scale-preemptive-and-elastic-scheduling-of-ai-workloads>Singularity: Planet-Scale, Preemptive and Elastic Scheduling of AI Workloads</h1><p><strong>Abstract</strong></p><ul><li>Singularity<ul><li>微软的全球分布式调度服务，高效和可靠地执行深度学习训练和推理工作负载</li><li>核心：是一个新颖的、<strong>工作负载感知的调度器</strong>，它可以透明地抢占和弹性地扩展深度学习工作负载<ul><li>以提高利用率</li><li>而且不会影响它们在全球 AI 加速器(GPU/FPGA)中的正确性或性能</li></ul></li><li>所有作业都是<strong>可抢占的</strong>、<strong>可迁移的</strong>，并且在默认可以动态调整大小(<strong>弹性)</strong> : 一个活动的作业可以被动态和透明地<ul><li>被抢占和被迁移到不同的节点集、集群、数据中心或者区域，并且可以从执行被抢占的地方精确地恢复</li><li>在给定类型的一组不同的加速器上调整大小</li></ul></li><li>机制透明：不要求用户对代码进行任何更改，也不要求使用任何可能限制灵活性的自定义库。</li><li>可靠：利用Singularity可以获得效率和可靠性增益，而对稳态性能的影响可以忽略不计。</li><li>我们的设计方法是对DNN 网络架构不感知的，并且可以处理各种并行策略(数据/流水线/模型并行)</li></ul></li></ul><h2 id=introduction>Introduction</h2><p>Singularity的建立有一个关键目标: <strong>通过在全球规模的加速器的固定容量池中最大化总有用吞吐量来降低人工智能的成本，同时为多个定价层次提供严格的 SLA</strong>。图1显示了 Singularity的高级体系结构，包括其分层调度系统，该系统由在全球、区域和工作负载范围内调度微服务组成。</p><p><figure><a href=https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202303171304329.png><img src=https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202303171304329.png loading=lazy alt=image-20230317130437261></a><figcaption>image-20230317130437261</figcaption></figure></p><h3 id=设计目标>设计目标</h3><ul><li><p><strong>不闲置资源</strong>:</p><ul><li>Singularity将所有加速器（<strong>舰队</strong>）视为一个单一逻辑的共享的集群，并避免任何资源碎片化或静态容量保留。</li><li>机会性地使用空闲容量</li></ul></li><li><p><strong>提供job级别的 SLA</strong>: Singularity通过尊重作业级别的 SLA 来提供<strong>隔离</strong>。</p><blockquote><p>例如，Singularity适合于增加推理作业的负载，通过弹性缩小或抢占训练作业来释放容量。</p></blockquote></li><li><p><strong>失败恢复</strong>: 作业从它们被抢占的地方恢复，从而最小化浪费</p></li></ul><h3 id=关键机制>关键机制</h3><ul><li><p>两个关键的核心调度原语:</p><ul><li><strong>抢占和迁移</strong>: Singularity可以<strong>透明地checkpoint、抢占和迁移</strong>所有跨节点甚至跨集群和区域的 DNN 作业。checkpoint是通过使用一个<strong>有效的同步屏障</strong>来实现对分布式作业的所有Worker的分布式状态的一致切割。</li><li><strong>调整大小/弹性</strong>: Singularity使所有作业都能够以透明的方式动态和弹性地调整大小，以便使用可变数量的 AI 加速器。</li></ul></li><li><p>机制特点</p><ul><li>透明<ul><li>含义：1）不需要修改用户脚本，2）不依赖于框架/库</li><li>好处：为任意的深度学习工作负载提供一致的 SLA ，而不依赖于用户的任何合作来维护 SLA</li><li>因此：checkpoint、迁移和弹性在默认情况下对所有作业都是启用的</li></ul></li><li>保存工作<ul><li>迁移或调整大小的作业在程序执行的同一点恢复，其状态(例如，程序计数器、堆栈等)与被抢占或调整大小时完全相同。</li></ul></li></ul></li><li><p>Singularity中透明抢占、迁移和弹性的<strong>核心</strong>：<strong>自动将作业与加速器资源分离（解耦）</strong></p><ul><li><p>Singularity中的Worker和加速器设备之间的<strong>动态绑定</strong>的，并且在工作的生命周期中不断变化。要扩展或缩小作业，我们只需更改Worker映射到的设备数量。</p><blockquote><p>这对用户来说是完全透明的，因为不管运行作业的物理设备的数量如何，作业的Worker的总数保持不变。</p></blockquote></li><li><p>Singularity使用了一种称为<strong>副本拼接</strong>的新技术：在同一个设备上对多个Worker进行时分，开销可以忽略不计，同时允许每个Worker使用整个设备内存。</p><ul><li>副本拼接依赖领域知识去利用分布式训练job的Worker之间在程序执行的特定点上的内存内容相似性</li></ul></li></ul></li><li><p>解耦的实现：<strong>设备代理</strong></p><ul><li>设备代理在自己的地址空间中运行，并且有一个到物理加速器设备的双射。当作业Worker初始化设备 API 时，它们被<strong>拦截并通过共享内存发送到设备代理进程</strong>，该进程的生命周期与作业Worker进程的生命周期解耦。</li><li>这种分离实现了两个关键的好处:<ul><li>主机地址空间可以保持Clean：不会有设备特定的映射和其他由 GPU 库(如 CUDA)创建带来的副作用 &ndash;> 从而可以使用<strong>CRIU</strong>来checkpoint和迁移主机进程</li><li>它允许动态的，透明的，时分的多个Worker在同一个设备上工作，多路复用和Worker间调度交由代理设备执行</li></ul></li></ul></li></ul><h3 id=贡献>贡献</h3><ul><li><strong>checkpoint机制</strong>：一种透明和健壮的机制来checkpoint那些不支持checkpoint的通用 DNN 作业，从而使所有作业可以自动checkpoint，抢占和可迁移。</li><li><strong>分布式屏障</strong>：基于新颖的，语义感知的技术，以完全透明的方式实现了一个DNN job的所有Worker之间的分布式屏障。这是实现 DNN 训练 job (包括程序计数器、堆栈、 CPU 和 GPU 内存等)跨多台机器的分布式状态的一致性削减的关键，这样就可以精准地从被抢占时的点重新启动</li><li><strong>副本拼接</strong>：该技术允许在同一 GPU 上透明地对 DNN 作业的多个Worker进行时分，开销可以忽略不计(2-3%) ，并且使用超轻量级上下文切换以一种健壮和通用的方式。</li><li>我们评估我们的核心机制的功效和端到端的效率，通过使用不同类型的并行性(数据，流水线，或张量并行性)的模型进行详细的实验<ul><li><strong>性能开销</strong>：对于大范围的工作负载，GPU 调用的<strong>动态拦截</strong>、<strong>透明分布式屏障</strong>算法和透明时分的稳态性能开销可以忽略不计，均在3% 以内</li><li><strong>稳健性</strong>：尽管 PyTorch 和 CUDA 的版本发生了迅速变化，但这种方法仍然是健壮的和实用的。</li><li><strong>延迟</strong>： Singularity中的迁移和弹性延迟是合理的(几十秒) ，没有重复计算，</li><li><strong>checkpoint大小</strong>：checkpoint大小与用户级checkpoint相当。</li></ul></li></ul><h2 id=核心调度机制总览>核心调度机制总览</h2><p>为了提高利用率和可靠性，Singularity所有作业在默认情况下都可以抢占和调整大小。</p><p>分布在多个节点上的使用各种并行方式的作业都可以进行checkpoint，使用透明时分在一个潜在的不同的区域，不同数量的设备上在稍后恢复</p><ul><li>在本节中，我们首先描述这些机制的三个关键方面:<ul><li><strong>透明性</strong>：对用户代码没有更改或约束</li><li><strong>工作保存</strong>：作业从先前被抢占的同一个程序执行点恢复</li><li><strong>解耦执行</strong></li></ul></li></ul><h3 id=用户透明>用户透明</h3><ul><li><p>现有的checkpoint和弹性方法</p><ul><li><p>依赖于<strong>用户直接编写代码</strong>来实现这些机制</p><ul><li><p>让用户负担了保存/恢复 python 程序状态的复杂性</p><blockquote><p>例如，循环变量、控制流、学习速率调度器、数据加载器状态、指令指针等</p></blockquote></li><li><p>需要确保程序在正确的点恢复</p></li><li><p>当作业向上或向下扩展时，需要改变超参数</p></li></ul></li><li><p>或者使用处理checkpoint和弹性的<strong>特定库</strong>(Pytorch Elasstic/Deepspeed)</p><ul><li>用户失去了灵活性，因为这些库控制了训练循环以保持checkpoint易于处理。这限制了用户的可定制性; 因此这种库的采用率很低。今天大多数 DNN 的训练工作量是不可checkpoint或可调整的。</li></ul></li></ul></li><li><p>Singularity的核心机制（checkpoint/迁移/弹性）不需要用户的任何合作，默认情况下是自动的。</p><ul><li>它使得调度程序能够依赖这些机制作为所有作业的<a class=link href=https://stackoverflow.com/questions/646794/what-is-a-first-class-programming-construct target=_blank rel=noopener>first-class constructs</a>，以提供严格的 SLA</li><li>它完全隐藏了checkpoint的复杂性和弹性，使得用户可以专注于编写具有完全灵活性的代码</li></ul></li></ul><h3 id=工作保存>工作保存</h3><ul><li>Singularity使用的checkpoint是由作业的各个Worker的一致<strong>地址空间快照</strong>组成。<ul><li>当这些快照捕获完整的程序状态(如指令指针、堆栈、堆等)时，作业从被抢占的位置准确地恢复，没有丢失任何工作。</li><li>相比之下，现存的checkpoint和弹性机制迫使程序从以前的模型checkpoint重新启动，从而重新执行初始化工作和自上一个checkpoint以来执行的工作</li></ul></li></ul><h3 id=解耦执行>解耦执行</h3><ul><li>提高<strong>作业的可靠性</strong>和<strong>船队的效率/利用率</strong>的目标是高度协同的<ul><li>Singularity调度程序通过<strong>解耦作业与底层资源之间的映射</strong>来处理这些目标。Singularity调度器透明地虚拟世界大小和rank分配。</li><li>这种解耦是至关重要的：对于透明的checkpoint和抢占作业以及随后在不同的节点、集群、数据中心恢复它们来说，这些节点、集群、数据中心与之前的checkpoint状态具有相同或不同的 GPU 数量。</li><li>在作业的稳定状态执行期间，Singularity调度器还透明地将作业工作进程的训练逻辑与其与 GPU 的交互解耦。</li></ul></li></ul><h3 id=用户利好>用户利好</h3><ul><li>透明和节省工作量的checkpoint、迁移和灵活性从根本上增强了调度器的能力:<ul><li><strong>提高了容错性</strong>。任何作业(不管用户是否已经编写了checkpoint逻辑)都可以在发生硬件故障(GPU/节点/网络)时从系统自动获取的最新checkpoint精确地恢复，而不是从头开始。这显著提高了有用的舰队范围吞吐量。</li><li><strong>机会性使用容量</strong>。透明的抢占和迁移允许作业在任何地方使用空闲资源，而不管集群/区域边界如何。此外，它使得具有较低 SLA 的作业可以机会性地使用空闲容量，并且当具有较高 SLA 的作业到达时，可以迅速抢占(而不会丢失作业)。透明弹性使就业机会能够扩大使用闲置产能，并在产能变得稀缺时收缩。</li><li><strong>针对本地的后台碎片整理</strong>。用于容错(例如机架)、设备与设备互连、数据本地等的局部或拓扑域在作业进入和离开系统时会变得支离破碎，这使得用局部约束调度大型作业变得困难。小作业的迁移使调度程序能够对局部域进行碎片整理，以放置更大的作业。</li><li><strong>在线升级</strong>。可以在不杀死作业的情况下进行全舰队范围的实时升级，因为在这些机器上运行的作业可以廉价且透明地迁移到不同的集群。</li></ul></li></ul><h3 id=训练效率吞吐的sla>训练效率吞吐的SLA</h3><ul><li><p>传统的 SLA（延迟，5个9的可用性)，适用于推理工作量，他们不适合 DNN 训练。</p></li><li><p>Singularity引入了 <strong>GPU fraction</strong>度量：在抢占和灵活性面前量化吞吐量。</p><ul><li><p><figure><a href=https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202303171734416.png><img src=https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202303171734416.png loading=lazy alt=image-20230317173405341></a><figcaption>image-20230317173405341</figcaption></figure></p></li><li><p>表1描述了 Singularity提供的多层 SLA。</p><blockquote><p>一个需要 N 个 GPU (基于软配额)的任务可能获得多于 N 个或少于 N 个 GPU，这取决于竞争集群负载。用户只需支付实际使用的费用，而不需要支付配额;</p></blockquote></li></ul></li><li><p>符号定义</p><ul><li>$T_{ideal}$ 是某一个job在 N 个专用 GPU 上非抢占式运行所需的现实世界完成时间</li><li>$T_{real}$ 是在Singularity 中的实际完成时间</li></ul></li><li><p><strong>GPU time fraction of a job</strong> = $T_{ideal}$ / $T_{real}$。</p><ul><li>$T_{real}$ > = $T_{ideal}$，在允许资源超额订阅的情况下，因为作业在执行过程中可能被 Singularity抢占或缩小。</li><li>在Singularity中运行会相对慢一些，如果工作在一个专用容量设置中需要 H 小时<ul><li>高级 SLA 工作：最多需要 H/0.95小时</li><li>标准 SLA : 最多需要 H/0.7小时</li></ul></li><li>GPU 分数 SLA 以小时粒度强制执行。Singularity中的调度策略旨在最大化舰队范围的吞吐量，同时最小化违反这些 SLA 的情况。</li></ul></li></ul><h2 id=特定领域拦截的方法>特定领域拦截的方法</h2><ul><li><p><strong>设备代理的定义与组成</strong></p><ul><li>任何与加速器的交互都必须经过特定的库(例如，用于 NVIDIA GPU 的 CUDA、用于 AMD GPU 的 ROCm) 。 Singularity通过 <strong>LD_PRELOAD</strong> 机制动态拦截它。大多数此功能驻留在设备代理中。</li><li>设备代理可以被视为<strong>加速器设备</strong>的<strong>硬件抽象层服务</strong><ul><li>组成：<ul><li>服务器组件：每个设备有一个</li><li>客户端组件：嵌入在与设备交互的每个进程中</li></ul></li><li>主机调用的所有加速器特定的 API 都会被<strong>拦截</strong>并发送到设备代理服务器，该服务器在一个独立的地址 $space^1$中运行。</li><li>在单独的地址空间中运行设备 API 有两个好处:<ul><li>它保持主机地址空间<strong>没有设备映射</strong>和<strong>其他类似的依赖关系</strong>，避免影响checkpoint实用程序，如CRIU</li><li>它允许<strong>设备代理</strong>在弹性时分期间有效地跨多个工作进程<strong>共享</strong></li></ul></li></ul></li></ul></li><li><p><strong>设备代理的通信与体系结构</strong></p><ul><li><p>主机进程和设备-代理之间的通信处于分派到设备的关键路径上，因此我们使用<strong>无锁共享内存通道</strong>，使得每次调用没有上下文切换开销，从而降低了延迟。</p></li><li><p><figure><a href=https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202303172258100.png><img src=https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202303172258100.png loading=lazy alt=image-20230317225820981></a><figcaption>image-20230317225820981</figcaption></figure></p></li><li><p>设备-代理中有两种类型的拦截器:</p><ul><li><p>分派拦截器($D_{Int}$ )</p><ul><li>$D_{Int}$ 是语义无关的，它只处理将 API 跨地址空间发送到设备代理服务器，处理参数/响应的序列化/反序列化</li></ul></li><li><p>语义感知拦截器($SA_{Int}$)。</p><ul><li>$SA_{Int}$ 在客户端或服务器端(分别称为**客户端 $SA_{Int}$** 和**服务器 $SA_{Int}$** )合并自定义逻辑，以实现诸如屏障、时间分片、内存管理等功能</li></ul></li><li><p>请注意，$D_{Int}$ 和 $SA_{Int}$ 并不相互排斥;</p><blockquote><p>例如，同一个 API 可能同时具有客户端 $SA_{Int}$ 、跨地址空间 $D_{Int}$ 和服务器 $SA_{Int}$ 。</p></blockquote></li></ul></li></ul></li></ul><h3 id=限制d_int的拦截面积>限制$D_{Int}$的拦截面积</h3><ul><li><p>目标：为了在生产系统中实用和可维护</p><ul><li>拦截层必须是完整的(作业调用的<strong>所有设备调用</strong>必须被拦截并发送到设备-代理服务器)</li><li>并且<strong>可伸缩</strong>(低工程成本)</li></ul></li><li><p>背景：鉴于直接发布内核的新库(如 Apex、 Thust、 Deepspeed、 OpenAI Triton)的发展速度很快，拦截所有这些与设备交互的 API 的幼稚方法是不切实际的。</p></li><li><p>Singularity通过在<strong>低层拦截</strong>来限制 $D_{Int}$ 的表面积</p><ul><li>低层：用于启动内核的驱动程序 API (例如，用于 NVIDIA GPU 的 cudaLaunchKernel)</li><li>好处：<ul><li>这确保了良好的覆盖范围，</li><li>同时具有可伸缩性，因为其他定义客制化内核的库，最终都要通过launch API。</li></ul></li><li>Singularity有一个自动的代码生成器，可以生成所有 $D_{Int}$ 的存根; 它只需要一个特定加速器库(CUDA)的头文件列表，以及一些注释来指示状态变化调用</li></ul></li></ul><h3 id=sa_int-的硬件抽象>$SA_{Int}$ 的硬件抽象</h3><ul><li><p>虽然 $D_{Int}$ 的是自动生成的，但是大部分的自定义功能(例如，分布式屏障，用于时分的上下文切换)都驻留在 $SA_{Int}$ 中。</p></li><li><p>$SA_{Int}$ 中的大多数逻辑都是与设备无关的，并且使用一个映射到设备特定 API 的硬件抽象层(例如 nccl_allreduce)。</p><blockquote><p>加速器的硬件抽象层(HAL)封装了加速器通用的关键功能。虽然当前的实现是特定于 NVIDIA GPU 的，但是要处理一种新的设备类型，只需要实现该设备的硬件抽象层，将该设备的特定 API 与 HAL 中的等效 API 映射在一起。</p></blockquote></li><li><p>有三种与设备无关的功能需要使用$SA_{Int}$: 内存分配、通信和设备同步。</p><ul><li><strong>内存分配</strong>。 内存分配API (例如 cudaMalloc、 cudaFree)需要一个 $SA_{Int}$ ，因为设备代理接管了内存分配。这使得设备代理对 GPU 内存中实际使用的区域具有完全的可见性，这有助于减少checkpoint大小。它还允许设备代理使用自定义内存分配机制，以帮助在同一 GPU 上对多个Worker进行透明的时分，从而获得弹性。</li><li><strong>通信</strong>。多数加速器都有集体通信库(例如，NVIDIA 图形处理器的 NCCL，AMD 图形处理器的 RCCL)。在这些 API 上使用 $SA_{Int}$ 可以实现分布式屏障的算法，以便在分布式作业的多个Worker之间进行同步，从而获得一致的checkpoint。Singularity通过搭载相同的通信 API来提供了一个通用的障碍实现。这些 API 上的 $SA_{Int}$ 还有助于在弹性时分期间管理集合调用。</li><li><strong>设备同步</strong>。设备同步 API 需要 $SA_{Int}$来处理透明弹性。Singularity中的时分是语义感知的，因为必须正确处理跨时间分片级别的通信。正确处理同步 API (例如 CUDA 中的 cudaStreamWaitEvent)对于时分的正确性和活性至关重要。</li></ul></li></ul><h3 id=宿主机特定功能的sa_int>宿主机特定功能的$SA_{Int}$</h3><ul><li>Singularity还使用 $SA_{Int}$ 来选择 CPU 库<ul><li>特别是 libc 的 I/O 库(例如，open、 read、 write 等)会被拦截来跟踪/记录作业对本地文件系统的更新，这样变异的文件就可以随着进程checkpoint一起迁移。</li><li>与设备库 API 的 $SA_{Int}$ 不同，主机 $SA_{Int}$ 没有相应的 $D_{Int}$ ，而是在主机地址空间中运行。</li></ul></li></ul><h2 id=透明迁移的设计>透明迁移的设计</h2><ul><li><p>在Singularity中，运行 DNN 作业的抢占、恢复和调整涉及到一致的checkpoint和恢复<strong>四大状态</strong></p><ul><li>CPU 中的<strong>程序状态</strong>(例如堆栈、堆、指令指针等)</li><li>GPU 中的<strong>模型训练状态</strong>(例如模型参数、优化器状态等)</li><li>处理 CPU 和 GPU 之间交互的<strong>控制状态</strong>(活动流、同步事件)</li><li>处理不同类型并行性(数据/管道/张量并行等)的 GPU 间和节点间<strong>通信状态</strong></li></ul></li><li><p>对于调度迁移，以及从计划外的故障中恢复，Singularity的透明checkpoint逻辑在两种模式下执行</p><ul><li>当调度程序决定需要<strong>抢占</strong>作业时，基于扩展命令的随需应变</li><li>基于用户指定的<strong>间隔</strong>(时代级或基于时间)。</li></ul></li><li><p>实现通用 DNN 作业的透明checkpoint是具有挑战性的，原因有</p><ul><li>首先，在检查一个给定作业的时候，Singularity必须确保跨越多个主机和 GPU 的分布式状态的一致性; 一个分布式作业的所有Worker必须在集体通信方面处于一个安全和一致的状态(例如，allreduce)。</li><li>其次，CPU 和 GPU 之间的运行状态(例如，活动句柄，存储在主机内存中的设备地址)必须始终如一地恢复，尽管状态管理是由专有的闭源库(如 CUDA)完成的。</li><li>第三，checkpoint的空间开销必须保持在较低的水平，以适应有数百个Worker的大型分布式作业。</li></ul></li></ul><h3 id=checkpoint程序状态cpu>Checkpoint程序状态（CPU）</h3><ul><li>有多种系统提供地址空间迁移，其中 <strong>CRIU</strong> 是使用最广泛的。<ul><li>然而，CRIU 的一个关键限制是它<strong>不处理使用 GPU 的进程</strong>的设备映射。</li><li>要使用 CRIU，主机地址空间必须与特定于设备的库隔离。</li><li>幸运的是，设备代理为我们提供了这种隔离。设备代理服务器大部分是无状态的，因此没有checkpoint; 它只是在目的地重新启动。</li></ul></li></ul><h3 id=checkpoint设备状态>Checkpoint设备状态</h3><ul><li><p><strong>保存方式</strong>：模型状态(例如，参数)由<strong>设备代理进程</strong>通过<strong>device to host</strong>的 <strong>memcpy</strong> 进行checkpoint。</p></li><li><p><strong>特点</strong>：由于 Singularity中的内存分配 $SA_{Int}$，设备代理知道 GPU 内存的哪些区域实际上正在使用，因此显著减少了checkpoint大小。</p></li><li><p><strong>挑战</strong>：在目的地恢复时，设备内存可能被<strong>映射到</strong>新设备-代理服务器地址空间中的<strong>不同地址</strong>，从而使主机进程中的<strong>指针失效</strong>。</p></li><li><p><strong>内存地址映射</strong>：</p><ul><li>为了避免这种情况，设备代理在启动时<strong>占用了整个 GPU 内存</strong>(被设备库跟踪的状态有些松弛)</li><li>有一个 服务器$SA_{Int}$ ，服务于设备分配器(cudaMalloc)所执行的**mmap**， 保证始终映射到相同的 CPU 地址。</li></ul></li><li><p><strong>设备句柄映射</strong>：保证CPU中设备句柄的一致性</p><ul><li><p>与内存指针类似，主机地址空间还保留指向设备状态的其他句柄。</p><blockquote><p>例如，cudaStreamCreate 返回一个不透明的句柄，主机可以在后续的 GPU 调用中将其用作引用。但是，由于设备代理服务器在迁移后重新启动，句柄将无效。</p></blockquote></li><li><p><strong>句柄虚拟化</strong>：为了在迁移过程中保持这些句柄的保真度，我们对这些句柄进行虚拟化。设备代理不返回设备返回的实际句柄，而是返回一个虚拟句柄，并将此映射作为客户端状态的一部分进行记忆。</p></li><li><p><strong>效果</strong>：恢复和重播后，物理句柄可能会更改，但虚拟句柄保持稳定。所有有状态的 API 调用(例如，创建上下文、流、事件等)都有注释，这些调用的 $D_{Int}$ 会自动记录它们，以便在恢复时重播。</p></li></ul></li></ul><h3 id=通信状态>通信状态</h3><ul><li><p><strong>静默</strong>：DNN Worker之间的大多数通信都是通过集体通信库(例如 NCCL)进行的，我们无法处理飞行中的通信。因此，在checkpoint时，我们<strong>静默</strong>所有job，以确保没有飞行中的集体通信调用。</p></li><li><p><strong>死锁产生</strong>：</p><ul><li>要完成一个集体调用(例如 allreduce) ，需要所有参与的Worker都完成该调用</li><li>如果一个Worker在第 n 次 allreduce 调用已经返回后进行了checkpoint，而另一个Worker可能已经发出了第 n+1次调用，这个调用永远不会完成，从而导致<strong>死锁</strong>。</li><li>因此，在checkpoint之前，所有Worker必须完成同一个集体调用。Singularity使用了一种新的<strong>分布式屏障算法</strong>，以完全透明的方式实现这一特性。</li></ul></li><li><p><strong>分布式Barrier</strong></p><ul><li><strong>meta-allreduces</strong>：为了避免引入新的故障路径，Singularity中的障碍算法依赖于作业用于集体通信的同一个通信库，通过引入附加的<strong>meta-allreduces</strong>来交换障碍协议状态。需要确保附加的meta-allreduces相对于常规的allreduces的排序在所有节点间是一致的，以满足避免死锁的程序顺序要求。</li><li><strong>算法</strong>：为了保证程序顺序一致性，在每一个数据allreduce操作执行之前， 我们的算法会发射一个异步串联meta-allreduce。<ul><li><p>Worker包含两个阶段</p><ul><li>第1阶段是稳定状态</li><li>第2阶段是接收到障碍请求。</li></ul></li><li><p>串联 meta-allreduce 是有效载荷上的一个 <strong>SUM allreduce</strong>，由两个整数组成:</p><ul><li>$Need_ {bar}$: 如果一个 worker 已经接收到了一个屏障命令，那么它会发送一个“1”，否则发送“0”。如果 SUM (need) > 0，则Worker知道有人已经启动了屏障协议，并切换到第2阶段。</li><li>$Ack_{block}$: 如果Worker已经切换到第二阶段，它将发送一个“1”，也就是说，它承认它已经直接或间接地看到了一个障碍请求，否则发送“0”。如果 SUM (ack) = = world _ size (即rank的总数) ，则Worker知道每个人都已经认可，并且可以安全地获得障碍。</li></ul></li><li><p>一旦Worker进入阶段2，它就进入了<strong>同步模式</strong>: 该Worker执行的每个集体调用都是同步的; 这确保了屏障协议的及时终止。</p></li></ul></li><li><strong>开销</strong>：开销很小障碍算法保证在<strong>最多两个小批内完成</strong>，并保证在屏障时没有飞行中的集体调用。它在阶段1的开销非常小，因为meta-allreduce只需要2字节，而且是异步的</li><li><strong>局限性</strong>：适用于数据并行作业</li></ul></li><li><p>关于tensor并行和pipline并行</p><ul><li>张量并行和管道并行作业还有额外的复杂性，这些作业可以在不同的节点组之间执行多个 allreduce，此外还有对等调用，如 send/recv (用于流水线)。</li><li><strong>解决方案</strong>：<ul><li>我们可以扩展上述算法，来推断出流水线和数据通信的相对顺序</li><li>为了尽可能简单和减少checkpoint的大小，我们通过使用领域知识，确定一个小批的结束，在这一时间点上没有飞行中的通信，无论是tensor并行和pipline并行。</li><li>我们使用与上面相同的串联 meta-allreduce 协议，但是在小批处理结束时只使用一次来实现障碍</li></ul></li><li><strong>tradeoff</strong>：将障碍延迟到mini-batch结束(对于大型模型来说只需要几秒钟) ，带来了时间延迟，但是与在mini-batch执行中进行屏障相比，减小了checkpoint大小</li></ul></li></ul><h3 id=文件系统状态>文件系统状态</h3><ul><li>背景：Worker有时安装本地软件包，更新本地文件。迁移到新节点后需要保留这些内容。</li><li>挑战：执行容器维度的文件系统状态diff操作的代价太高。</li><li>解决方案：<ul><li>使用Libc 文件系统 API 上的host $SA_{Int}$</li><li>每当以可写模式打开本地文件时，我们将文件名附加到日志中，并在checkpoint期间复制这些文件。</li><li>通过使用内容checksum，在远程存储的数据副本实现跨Worker去重。</li></ul></li></ul><h3 id=checkpointrestore工作流>Checkpoint/Restore工作流</h3><ul><li>工作流<ul><li>在成功获得一个屏障之后，每个Worker使用CRIU执行checkpoint。</li><li>CRIU镜像和GPU状态镜像，随后被移动到远程存储。</li><li><strong>CPU</strong>：在新的目的地上，使用CRIU的restore，程序从它被checkpoint的状态重新开始</li><li><strong>GPU</strong>：<ul><li>设备代理客户端执行的第一个操作是重新生成一个新的设备代理服务器，然后重播状态，使 GPU 恢复到checkpoint之前的状态。</li><li>设备代理服务器还将 GPU 张量复制回checkpoint之前的相同地址的 GPU RAM。</li></ul></li></ul></li><li>设备-代理最终执行一个新的会合，worker可以发现彼此的新位置，并重新建立通信环。</li><li><strong>checkpoint执行时机</strong>：除了由调度程序启动的随需checkpoint之外，Singularity中的每个作业都以用户指定的频率(例如，每30分钟)接受checkpoint，以处理计划外的故障。</li></ul><h3 id=压缩checkpoints>压缩Checkpoints</h3><p>Singularity采用多种技术来减小checkpoint的大小。</p><ul><li>GPU镜像大小：<ul><li>Singularity执行每个缓冲区的<strong>内容校验求和</strong>，以便在Worker之间进行去重。</li><li>只有在没有其他Worker上传相同的缓冲区时才上传缓冲区</li><li>通过这种方式，Singularity中 GPU镜像的大小与用户级checkpoint的大小相似。</li></ul></li><li>CRIU镜像的CPU 地址空间是在空间和时间两方面进行去重的<ul><li><strong>空间</strong>：在主训练过程和数据加载过程之间存在高度的内容重叠; 我们拦截 CRIU 发出的写调用来执行基于内容散列的页面分解</li><li><strong>时间</strong>：在不同时间点采取的同一进程的checkpoint之间存在高度的重叠(因为地址空间变化很小) ; 时间维度上的去重使得之后的增量checkpoint比第一个 CRIU checkpoint小得多。</li></ul></li></ul><h2 id=透明弹性的设计>透明弹性的设计</h2><ul><li><p>Singularity的弹性实现是不改变世界大小的， 改变的是worker和device之间的映射。</p></li><li><p><figure><a href=https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202303192323539.png><img src=https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202303192323539.png loading=lazy></a></figure></p></li><li><p>透明弹性建立在Singularity中的<strong>透明迁移支持</strong>的基础之上。</p></li><li><p>技术挑战：</p><ul><li><strong>时分复用</strong>：一个训练工作的多个Worker在同一个 GPU 上进行时分共享时，Worker之间的细粒度通信必须像在不同的 GPU 上一样</li><li><strong>空分复用</strong>：对于大模型来说，每个Worker几乎可以利用 GPU 上的整个RAM; 在同一个 GPU 上运行多个Worker，需要将 GPU 状态在设备和内存之间来回交换， 代价昂贵。</li><li><strong>调度死锁</strong>：为了支持使用数据并行、流水线并行和张量并行相结合的作业，需要在 GPU 上仔细安排Worker，以便数据并行副本和相同的模型并行碎片在同一GPU上进行时分，并防止通信调度中出现死锁。</li></ul></li></ul><h3 id=语义感知的时分>语义感知的时分</h3><ul><li><p>原因：</p><ul><li>一个独立的Worker占有独立的内存是不可取的， 因为大模型的每个Worker往往需要整个GPU RAM， 这样的运行方式会耗尽内存</li><li>所以，时分需要语义感知</li></ul></li><li><p>Singularity中的设备代理使得这样的时分成为可能。</p><ul><li>因为设备代理与主机进程解耦，所以我们在多个主机进程(即多个rank)之间共享相同的设备代理。</li><li>当所有与 GPU 的交互都通过设备-代理进行时，它智能地安排多个rank，在给定的时间只允许一个rank在 GPU 上执行，然后选择特定的点来切换到另一个rank。</li><li>从概念上讲，在上下文切换的时候，设备代理将原始rank使用的 GPU 内存<strong>换出</strong>，然后<strong>换入</strong>新rank的GPU 内存，从而使每个Worker能够使用几乎整个 GPU 内存。</li></ul></li><li><p>为了保持低开销，我们必须在绝对必要的情况下切换上下文。</p><ul><li>在后向传播之后，数据-并行rank参与集体通信以交换梯度，这需要所有rank参与(并贡献其各自的梯度) ，必须进行上下文切换。</li><li>请注意，在单个小批处理中，为了重叠使计算与通信开销，框架可能会发出多个异步 allreduce 调用， 然后在某个点进行同步。在这个同步点，设备代理切换到共享 GPU 的下一个rank，独占地运行，直到达到同步点，然后上下文切换到下一个rank，以此类推。</li></ul></li><li><p>集体通信通过专有库进行。</p><ul><li><strong>通信器</strong>：NCCL 有一个通信器的概念，它被初始化为一个特定的参与rank环，随后的操作只是引用通信器。</li><li><strong>解耦：</strong> 为了保持 NCCL 通信器与用户级时分的交互可控，我们将作业的逻辑数据并行世界大小与 NCCL 看到的世界大小解耦; 在我们的方法中，NCCL 只看到每个 GPU 一个rank。</li><li><strong>梯度累计</strong>：在时分过程中，设备-代理透明地在抓取缓冲区中进行本地累积，并且只有共享 GPU 的最后一个rank使用本地累计梯度执行实际的nccl_allreduce</li><li><strong>大小调整</strong>：因此，在一个调整大小的操作之后，NCCL 看到的世界大小发生了变化，恢复后由新的会和处理</li></ul></li></ul><h3 id=内存共享的副本拼接>内存共享的副本拼接</h3><p>副本拼接使上下文切换更加便宜 <strong>&ndash;>5.2.1</strong></p><h4 id=基于checksum的动态数据去重>基于checksum的动态数据去重</h4><ul><li><p>一项训练工作所消耗的 GPU 内存分为四类:</p><ul><li><strong>参数(P)</strong>。模型的每一层的权重/参数; 正向和反向传递在这些张量上运行。</li><li><strong>优化器状态(O)</strong>。由优化器跟踪的状态，以计算每次迭代应用于参数的增量。跟踪历史状态(例如，第一和第二阶段的梯度)</li><li>**梯度(G)。**每个副本都有与其迷你批处理相对应的渐变副本。在向后传递之后，对所有副本的梯度取平均值，然后使用这个平均值一致地更新权重</li><li><strong>激活(A)</strong>。每一层的正向通道的中间输出; 在反向通道中用于计算相对于输入的梯度以进行反向传播。</li></ul></li><li><p>副本拼接利用的洞见</p><ul><li>在数据并行副本中，P和O在小批处理结束时由所有副本一致地更新，所有rank具有相同的平均梯度</li><li>在mini-batch结束后， 因为后向传播已经结束， A会被框架释放掉</li></ul></li><li><p>由于设备代理控制内存分配器，它对框架分配的每个缓冲区都具有可见性。</p><ul><li>在上下文切换期间，设备代理为每个活动缓冲区计算内容校验和。</li><li>在<strong>换出</strong>过程中，它首先查看主机是否已经包含一个具有相同内容校验和的缓冲区，如果是，它避免换出，并简单地将 GPU 缓冲区标记为未使用</li><li>在<strong>换入</strong>过程中， 它检查设备是否已经有一个带校验和的缓冲区; 如果有，它就避免了来自主机的换入。请注意，虽然内容匹配，在新的rank该缓冲区可能被映射到一个不同的设备地址 。在这种情况下，设备代理执行<strong>设备到设备</strong>的移动，将缓冲区移到所需的地址</li></ul></li><li><p>一个例子：</p><ul><li>通过上述优化，如果4个rank共享一个 GPU，在上下文切换期间P和O缓冲区的交换只需要在第一个rank完成; 其他人会发现校验和已经存在于主机内存中，并忽略掉交换。</li><li>然而，对于每个rank来说换入仍然必须进行： 当一个rank开始其时间片时，其本地状态包含来自前一个mini-batch的P和O，而前一个rank的P和O副本被更新到当前的mini-batch。</li><li>如果我们有空间存储两个额外的 P 和 O 版本在 GPU，我们就可以避免这个换入，这带来了两个挑战:<ul><li>大模型一般没有额外的空间容纳额外两组P和O <strong>&ndash;> 5.2.3</strong></li><li>我们仍然需要执行<strong>设备到设备</strong>的 P 和 O 副本在上下文切换，<strong>因为每个rank可能分配了在不同的地址分配了相同的缓冲区</strong>，D2D 复制开销仍然很大。<strong>&ndash;> 5.2.2</strong></li></ul></li></ul></li></ul><h4 id=为持久分配使用领域知识>为持久分配使用领域知识</h4><ul><li>使用<strong>深度学习训练的领域知识</strong>来使地址保持一致<ul><li>在数据并行副本中，根据定义，<strong>稳定缓冲区</strong>（如 P 和 O 在小批处理中保留的分配序列）的大小、顺序必须在所有副本中相同，因为它们具有相同的参数集。</li><li>然而，可能存在跨副本<strong>大小可变的其他分配</strong>(例如，大小取决于输入数据大小的激活，这种激活可能在不同的小批处理中有所不同)。由于这种可变大小的分配，内存分配器的状态在不同的副本之间发生差异，甚至导致稳定的缓冲区分配得到错误对齐的地址。</li></ul></li><li>为了处理这个问题，Singularity中的设备代理使用一个<strong>双向内存分配器</strong>。<ul><li>稳定缓冲区(如 P 和 O)在地址空间的<strong>高端</strong>分配，而其他缓冲区在<strong>低端</strong>分配。这确保了瞬态分配(例如激活)中的不稳定性不会影响高区域中的内存分配器元数据，从而确保稳定的缓冲区(例如 P 和 O)跨副本获得相同的地址。</li><li>为了识别稳定的缓冲区，比如 P 和 O，我们在分配器中添加了一个预先识别的堆栈跟踪列表(Python 和 C + +) ，这个列表与参数和优化器状态分配有关。</li><li>在分配时，最多有两个版本的 P 和 O 是活跃的-当前的小批量和以前的小批量，并且第三个副本需要作为草稿空间，以便当前的rank不会覆盖以前的小批量的原始版本的 P 和 O。</li></ul></li></ul><h4 id=压缩选定的操作>压缩选定的操作</h4><ul><li><p>使用了<strong>特定领域的洞察</strong>避免处理 P 和 O 的多个副本。</p><ul><li>根据定义，所有数据并行副本将在完成小批处理之后使用一致的P和O缓冲区。</li><li>我们还知道，P和O缓冲区只有在所有副本的梯度allreduce的之后才会更新。</li><li>因此，如果我们能够<strong>识别更新参数和优化器状态的操作</strong>，我们就可以只在共享设备的其中一个rank中执行这些操作，并简单地在其他rank中“<strong>压缩</strong>”这些操作，因为<ul><li>它们无论如何都会导致相同的最终状态，</li><li>缓冲区在队列中有相同的对应地址，所以随后的小批量计算将看到正确的数据。</li></ul></li><li>为了压缩一个操作，设备代理只是省略了为这些操作向 GPU 发出 CudaLaunchKernel。通过这种压缩，我们避免了在前一个mini-batch的P和O的换入，因为它们不再由其他rank更新。</li></ul></li><li><p>为了确保<strong>健壮性</strong>，我们遵循<strong>保守验证</strong>的方法</p><ul><li><strong>对照组</strong>：我们总是运行第一个mini-batch，同时禁用了压缩(因此产生了交换进/交换出成本) ; 这保证了正确的执行。</li><li><strong>实验组</strong>：在验证mini-batch中，断言假设，验证使用缓冲区内容校验和来推断事后操作效果的方法：在验证mini-batch中，我们验证模型是否符合以下<strong>不变量</strong>:<ul><li>在压缩窗口期间的所有缓冲区更改必须在共享 GPU 的所有rank之间是相同的。</li><li>在压缩窗口期间执行的设备到主机的副本必须在共享 GPU 的所有rank之间完全复制相同的数据。</li></ul></li><li>如果上述验证失败，我们将模型视为压缩的不安全模型，并退回到<strong>基于交换</strong>的机制(如果必要，将作业“回滚”到验证成功的最后一个checkpoint)。</li><li>我们监视由于时分造成的开销，如果它超过一个阈值，我们将<strong>禁用该模型的时分</strong>。这将是一个罕见的场景，但仍然需要优雅地处理以获得健壮性。</li></ul></li></ul><h3 id=处理模型并行工作>处理模型并行工作</h3><ul><li><p>张量并联、流水线并联等模型并联作业的处理带来了新的挑战。</p><ul><li>张量并行job中的每个矩阵乘法执行allreduce。如果我们为这样的 allreduce 进行上下文切换，那么副本拼接将无法工作，因为激活张量A仍然是活跃的。</li><li>pipeline并行job对每个mini-batch执行 GPU/节点之间的端到端地发送与接收激活A和梯度G; 在mini-batch期间进行时分会由于活跃的A和G导致过多的交换。</li></ul></li><li><p>为了应对这些挑战，Singularity使用了两种关键技术:</p><ul><li><strong>拼接感知的放置</strong>。通过拼接感知的放置，我们确保只有同一个的模型并行分区的数据并行副本在同一个 GPU 上进行时分。<ul><li>请注意，这要求 Singularity了解rank分配逻辑。对于使用具有不同rank分配策略的自定义启动程序的作业，Singularity为该作业提供了一个 API，用于传递所有rank的rank到拓扑的映射(例如，Rank 4是 DP0、 MP0、 PP1等)</li></ul></li><li><strong>推断集体调用的意图</strong>。设备代理推断集体通信的意图，并仅在数据并行维度上集体调用时触发时分。其他的集体调用只是简单地通过而没有上下文切换。推断方法：<ul><li>Singularity利用集体通信的初始化路径(例如，ncclCommInitRank)来实现这一点。它强制在每个ncclCommInitRank 之后进行上下文切换，并且设备代理计数每个通信者。</li><li>在完成一轮上下文切换之后，如果通信器的本地计数大于1，则设备代理将推断该通信器处于数据并行维度。因为<strong>拼接感知的放置</strong>。</li><li>在集体调用期间，它只需要在通信器上查找一个map，就可以了解它是否是数据并行的。</li></ul></li></ul></li></ul><h3 id=处理zero-冗余优化器>处理ZeRO-冗余优化器</h3><ul><li>ZeRO切分数据并行状态，这样数据并行的Worker之间就没有冗余。这样的分区违反了压缩验证的不变量(5.2.3)。</li><li>为了解决这个问题，Singularity为 ZeRO 引入了部分分片的概念，它将<strong>分片因子</strong>(在 GPU 中拟合模型所需的最小值)与<strong>数据并行度</strong>(并行度)分离开来。<ul><li>如果两者是相等的，那么根据定义，这个模型不能缩小到更少的 GPU，因为它不适合。</li><li>如果数据并行性因子更高，比如说，4倍于分片因子) ，那么我们可以支持多达4路的时分/缩小。在这个场景中，部分分片因子只是变成了模型的另一个维度——并行性，并且只有相同的 ZERO 分片的副本是时间分片的。</li></ul></li><li>在 DeepSpeed 中引入部分分片非常简单</li></ul><h2 id=实现>实现</h2><ul><li>实现方面的挑战<ul><li><strong>序列化不透明参数</strong>。在我们的基于拦截的设备代理中，CudaLaunchKernel 的 $D_{Int}$ 是具有挑战性的，因为它的签名是不透明的，使得序列化变得困难(签名是由 NVIDIA 的1 nvcc 在内部生成的，拦截器不可见)。为了处理这个问题，我们有一个自定义的服务器 $SA_{Int}$ ，它使用 cuObjecDump，CUDA 工具包中的一个二进制实用程序，解析生成的内核库并提取参数信息。为了避免高成本，我们缓存此信息，并仅在缓存丢失时运行 cuObjecdump。对于 JIT 内核，我们拦截 nvrtcCompileProgram 并通过解析生成的 PTX 提取参数签名。</li><li><strong>隐藏调度延迟</strong>。设备代理中的跨地址空间调用发生在诸如 cudaLaunchKernel 和 cudaGetLastError 等操作的关键路径上，这会影响性能。我们对最频繁的调用使用特定于域的优化。对于 cudaGetLastError，我们在每次启动内核时都会在服务器上发布它，并将它与响应一起附加，这样当 PyTorch 发布它时，设备代理客户端就可以从缓存中返回它。对于 cudaLaunchKernel，我们执行延迟错误通知，调用在客户端返回，而不等待来自设备代理服务器的响应; 在向服务器发出下一个调用之前，对响应进行延迟读取，因此允许客户端 PyTorch 处理和服务器引起的延迟之间重叠; 因为当遇到这种(罕见的)错误时，PyTorch (和其他框架)崩溃，这不会影响作业语义。</li><li><strong>隐藏上下文切换开销</strong>。在时分过程中从一个rank切换到另一个rank涉及到计算所有活动设备张量的校验和，并将它们与另一个rank的副本进行比较，如果需要，执行缓冲区移动(几毫秒的 CPU 活动)。此外，开关逻辑依赖于校验和计算的输出，校验和计算依次等待所有以前的 GPU 操作完成，隐含地强制设备同步。为了避免在关键路径中产生这种代价，Singularity执行下一级的急切分派。设备代理开始并行地服务于下一级(CPU 逻辑、设备操作分派)的有用工作和交换延迟。通过仔细使用诸如 cudaStreamWaitEvent 之类的异步排序原语，我们确保只有在切换完成之后，才能在 GPU 上执行对新排序的操作。</li></ul></li></ul><h2 id=评估>评估</h2><h2 id=相关工作>相关工作</h2><h2 id=总结>总结</h2></section><footer class=article-footer><section class=article-copyright><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg><span>Licensed under CC BY-NC-SA 4.0</span></section></footer><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.css integrity=sha384-RZU/ijkSsFbcmivfdRBQDtwuwVqK7GMOw6IMvKyeWL2K5UAlyp6WonmB8m7Jd0Hn crossorigin=anonymous><script src=https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.js integrity=sha384-pK1WpvzWVBQiP0/GjnvRxV4mOb0oxFuyRxJlk6vVw146n3egcN5C925NCP7a7BY8 crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/contrib/auto-render.min.js integrity=sha384-vZTG03m+2yp6N6BNi5iM4rW4oIwk5DfcNdFfxkk9ZWpDriOkXX8voJBFrAO7MpVl crossorigin=anonymous defer></script><script>window.addEventListener("DOMContentLoaded",()=>{renderMathInElement(document.querySelector(`.article-content`),{delimiters:[{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false},{left:"\\(",right:"\\)",display:false},{left:"\\[",right:"\\]",display:true}]});})</script></article><aside class=related-contents--wrapper></aside><script src=https://giscus.app/client.js data-repo=Tweakzx/Tweakzx.github.io data-repo-id="MDEwOlJlcG9zaXRvcnkzMjY5MTY1NTE=" data-category=Announcements data-category-id=DIC_kwDOE3xZx84CTfL- data-mapping=title data-reactions-enabled=1 data-emit-metadata=0 data-theme=light_tritanopia crossorigin=anonymous async></script><script>function setGiscusTheme(theme){let giscus=document.querySelector('iframe.giscus-frame');if(giscus){giscus.contentWindow.postMessage({giscus:{setConfig:{theme:theme}}},"https://giscus.app");};};(function(){addEventListener('message',(e)=>{if(event.origin!=='https://giscus.app')return;handler()});window.addEventListener('onColorSchemeChange',handler);function handler(){if(document.documentElement.dataset.scheme==="light"){setGiscusTheme('light_tritanopia');}else{setGiscusTheme('dark_tritanopia');};};}());</script><footer class=site-footer><section class=copyright>&copy;
-2020 -
-2023 Tweakzx</section><section class=powerby>Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a><br>Theme <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.5.0>Stack</a></b> designed by <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a></section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
-<button class="pswp__button pswp__button--share" title=Share></button>
-<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
-<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
-<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css integrity="sha256-c0uckgykQ9v5k+IqViZOZKc47Jn7KQil4/MP3ySA3F8=" crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE=" crossorigin=anonymous></main><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">Table of contents</h2><div class=widget--toc><nav id=TableOfContents><ol><li><a href=#introduction>Introduction</a><ol><li><a href=#设计目标>设计目标</a></li><li><a href=#关键机制>关键机制</a></li><li><a href=#贡献>贡献</a></li></ol></li><li><a href=#核心调度机制总览>核心调度机制总览</a><ol><li><a href=#用户透明>用户透明</a></li><li><a href=#工作保存>工作保存</a></li><li><a href=#解耦执行>解耦执行</a></li><li><a href=#用户利好>用户利好</a></li><li><a href=#训练效率吞吐的sla>训练效率吞吐的SLA</a></li></ol></li><li><a href=#特定领域拦截的方法>特定领域拦截的方法</a><ol><li><a href=#限制d_int的拦截面积>限制$D_{Int}$的拦截面积</a></li><li><a href=#sa_int-的硬件抽象>$SA_{Int}$ 的硬件抽象</a></li><li><a href=#宿主机特定功能的sa_int>宿主机特定功能的$SA_{Int}$</a></li></ol></li><li><a href=#透明迁移的设计>透明迁移的设计</a><ol><li><a href=#checkpoint程序状态cpu>Checkpoint程序状态（CPU）</a></li><li><a href=#checkpoint设备状态>Checkpoint设备状态</a></li><li><a href=#通信状态>通信状态</a></li><li><a href=#文件系统状态>文件系统状态</a></li><li><a href=#checkpointrestore工作流>Checkpoint/Restore工作流</a></li><li><a href=#压缩checkpoints>压缩Checkpoints</a></li></ol></li><li><a href=#透明弹性的设计>透明弹性的设计</a><ol><li><a href=#语义感知的时分>语义感知的时分</a></li><li><a href=#内存共享的副本拼接>内存共享的副本拼接</a><ol><li><a href=#基于checksum的动态数据去重>基于checksum的动态数据去重</a></li><li><a href=#为持久分配使用领域知识>为持久分配使用领域知识</a></li><li><a href=#压缩选定的操作>压缩选定的操作</a></li></ol></li><li><a href=#处理模型并行工作>处理模型并行工作</a></li><li><a href=#处理zero-冗余优化器>处理ZeRO-冗余优化器</a></li></ol></li><li><a href=#实现>实现</a></li><li><a href=#评估>评估</a></li><li><a href=#相关工作>相关工作</a></li><li><a href=#总结>总结</a></li></ol></nav></div></section></aside></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g=" crossorigin=anonymous defer></script><script type=text/javascript src=/ts/main.js defer></script><script>(function(){const customFont=document.createElement('link');customFont.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";customFont.type="text/css";customFont.rel="stylesheet";document.head.appendChild(customFont);}());</script></body></html>
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='Singularity: Planet-Scale, Preemptive and Elastic Scheduling of AI Workloads Abstract Singularity 微软的全球分布式调度服务，高效和可靠地执行深度学习训练和推理工作负载 核心：是一个新颖的、工作负载感知的调度器，它可以透'><title>【论文笔记】Singularity论文笔记</title>
+
+<link rel='canonical' href='https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0singularity%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/'>
+
+<link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='【论文笔记】Singularity论文笔记'>
+<meta property='og:description' content='Singularity: Planet-Scale, Preemptive and Elastic Scheduling of AI Workloads Abstract Singularity 微软的全球分布式调度服务，高效和可靠地执行深度学习训练和推理工作负载 核心：是一个新颖的、工作负载感知的调度器，它可以透'>
+<meta property='og:url' content='https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0singularity%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/'>
+<meta property='og:site_name' content='Tweakzx'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2023-03-17T11:37:06&#43;08:00'/><meta property='article:modified_time' content='2023-03-17T11:37:06&#43;08:00'/><meta property='og:image' content='https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202303171218307.png' />
+<meta name="twitter:title" content="【论文笔记】Singularity论文笔记">
+<meta name="twitter:description" content="Singularity: Planet-Scale, Preemptive and Elastic Scheduling of AI Workloads Abstract Singularity 微软的全球分布式调度服务，高效和可靠地执行深度学习训练和推理工作负载 核心：是一个新颖的、工作负载感知的调度器，它可以透"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202303171218307.png' />
+    </head>
+    <body class="
+    article-page has-toc
+">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex 
+    
+        extended
+    
+">
+    
+        <div id="article-toolbar">
+            <a href="/" class="back-home">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="15 6 9 12 15 18" />
+</svg>
+
+
+
+                <span>Back</span>
+            </a>
+        </div>
+    
+<main class="main full-width">
+    <article class="has-image main-article">
+    <header class="article-header">
+        <div class="article-image">
+            <a href="/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0singularity%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/">
+                
+                    <img src="https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202303171218307.png" loading="lazy" alt="Featured image of post 【论文笔记】Singularity论文笔记" />
+                
+            </a>
+        </div>
+    
+
+    <div class="article-details">
+    
+
+    <h2 class="article-title">
+        <a href="/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0singularity%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/">【论文笔记】Singularity论文笔记</a>
+    </h2>
+
+    
+
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Mar 17, 2023</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    29 minute read
+                </time>
+            </div>
+        
+    </footer>
+    
+</div>
+
+    
+
+</header>
+
+    <section class="article-content">
+    <h1 id="singularity-planet-scale-preemptive-and-elastic-scheduling-of-ai-workloads">Singularity: Planet-Scale, Preemptive and Elastic Scheduling of AI Workloads</h1>
+<p><strong>Abstract</strong></p>
+<ul>
+<li>Singularity
+<ul>
+<li>微软的全球分布式调度服务，高效和可靠地执行深度学习训练和推理工作负载</li>
+<li>核心：是一个新颖的、<strong>工作负载感知的调度器</strong>，它可以透明地抢占和弹性地扩展深度学习工作负载
+<ul>
+<li>以提高利用率</li>
+<li>而且不会影响它们在全球 AI 加速器(GPU/FPGA)中的正确性或性能</li>
+</ul>
+</li>
+<li>所有作业都是<strong>可抢占的</strong>、<strong>可迁移的</strong>，并且在默认可以动态调整大小(<strong>弹性)</strong> : 一个活动的作业可以被动态和透明地
+<ul>
+<li>被抢占和被迁移到不同的节点集、集群、数据中心或者区域，并且可以从执行被抢占的地方精确地恢复</li>
+<li>在给定类型的一组不同的加速器上调整大小</li>
+</ul>
+</li>
+<li>机制透明：不要求用户对代码进行任何更改，也不要求使用任何可能限制灵活性的自定义库。</li>
+<li>可靠：利用Singularity可以获得效率和可靠性增益，而对稳态性能的影响可以忽略不计。</li>
+<li>我们的设计方法是对DNN 网络架构不感知的，并且可以处理各种并行策略(数据/流水线/模型并行)</li>
+</ul>
+</li>
+</ul>
+<h2 id="introduction">Introduction</h2>
+<p>Singularity的建立有一个关键目标: <strong>通过在全球规模的加速器的固定容量池中最大化总有用吞吐量来降低人工智能的成本，同时为多个定价层次提供严格的 SLA</strong>。图1显示了 Singularity的高级体系结构，包括其分层调度系统，该系统由在全球、区域和工作负载范围内调度微服务组成。</p>
+<p><figure 
+	>
+	<a href="https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202303171304329.png" >
+		<img src="https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202303171304329.png"
+			
+			
+			
+			loading="lazy"
+			alt="image-20230317130437261">
+	</a>
+	
+	<figcaption>image-20230317130437261</figcaption>
+	
+</figure></p>
+<h3 id="设计目标">设计目标</h3>
+<ul>
+<li>
+<p><strong>不闲置资源</strong>:</p>
+<ul>
+<li>Singularity将所有加速器（<strong>舰队</strong>）视为一个单一逻辑的共享的集群，并避免任何资源碎片化或静态容量保留。</li>
+<li>机会性地使用空闲容量</li>
+</ul>
+</li>
+<li>
+<p><strong>提供job级别的 SLA</strong>: Singularity通过尊重作业级别的 SLA 来提供<strong>隔离</strong>。</p>
+<blockquote>
+<p>例如，Singularity适合于增加推理作业的负载，通过弹性缩小或抢占训练作业来释放容量。</p>
+</blockquote>
+</li>
+<li>
+<p><strong>失败恢复</strong>: 作业从它们被抢占的地方恢复，从而最小化浪费</p>
+</li>
+</ul>
+<h3 id="关键机制">关键机制</h3>
+<ul>
+<li>
+<p>两个关键的核心调度原语:</p>
+<ul>
+<li><strong>抢占和迁移</strong>: Singularity可以<strong>透明地checkpoint、抢占和迁移</strong>所有跨节点甚至跨集群和区域的 DNN 作业。checkpoint是通过使用一个<strong>有效的同步屏障</strong>来实现对分布式作业的所有Worker的分布式状态的一致切割。</li>
+<li><strong>调整大小/弹性</strong>: Singularity使所有作业都能够以透明的方式动态和弹性地调整大小，以便使用可变数量的 AI 加速器。</li>
+</ul>
+</li>
+<li>
+<p>机制特点</p>
+<ul>
+<li>透明
+<ul>
+<li>含义：1）不需要修改用户脚本，2）不依赖于框架/库</li>
+<li>好处：为任意的深度学习工作负载提供一致的 SLA ，而不依赖于用户的任何合作来维护 SLA</li>
+<li>因此：checkpoint、迁移和弹性在默认情况下对所有作业都是启用的</li>
+</ul>
+</li>
+<li>保存工作
+<ul>
+<li>迁移或调整大小的作业在程序执行的同一点恢复，其状态(例如，程序计数器、堆栈等)与被抢占或调整大小时完全相同。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>Singularity中透明抢占、迁移和弹性的<strong>核心</strong>：<strong>自动将作业与加速器资源分离（解耦）</strong></p>
+<ul>
+<li>
+<p>Singularity中的Worker和加速器设备之间的<strong>动态绑定</strong>的，并且在工作的生命周期中不断变化。要扩展或缩小作业，我们只需更改Worker映射到的设备数量。</p>
+<blockquote>
+<p>这对用户来说是完全透明的，因为不管运行作业的物理设备的数量如何，作业的Worker的总数保持不变。</p>
+</blockquote>
+</li>
+<li>
+<p>Singularity使用了一种称为<strong>副本拼接</strong>的新技术：在同一个设备上对多个Worker进行时分，开销可以忽略不计，同时允许每个Worker使用整个设备内存。</p>
+<ul>
+<li>副本拼接依赖领域知识去利用分布式训练job的Worker之间在程序执行的特定点上的内存内容相似性</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>解耦的实现：<strong>设备代理</strong></p>
+<ul>
+<li>设备代理在自己的地址空间中运行，并且有一个到物理加速器设备的双射。当作业Worker初始化设备 API 时，它们被<strong>拦截并通过共享内存发送到设备代理进程</strong>，该进程的生命周期与作业Worker进程的生命周期解耦。</li>
+<li>这种分离实现了两个关键的好处:
+<ul>
+<li>主机地址空间可以保持Clean：不会有设备特定的映射和其他由 GPU 库(如 CUDA)创建带来的副作用 &ndash;&gt; 从而可以使用<strong>CRIU</strong>来checkpoint和迁移主机进程</li>
+<li>它允许动态的，透明的，时分的多个Worker在同一个设备上工作，多路复用和Worker间调度交由代理设备执行</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="贡献">贡献</h3>
+<ul>
+<li><strong>checkpoint机制</strong>：一种透明和健壮的机制来checkpoint那些不支持checkpoint的通用 DNN 作业，从而使所有作业可以自动checkpoint，抢占和可迁移。</li>
+<li><strong>分布式屏障</strong>：基于新颖的，语义感知的技术，以完全透明的方式实现了一个DNN job的所有Worker之间的分布式屏障。这是实现 DNN 训练 job (包括程序计数器、堆栈、 CPU 和 GPU 内存等)跨多台机器的分布式状态的一致性削减的关键，这样就可以精准地从被抢占时的点重新启动</li>
+<li><strong>副本拼接</strong>：该技术允许在同一 GPU 上透明地对 DNN 作业的多个Worker进行时分，开销可以忽略不计(2-3%) ，并且使用超轻量级上下文切换以一种健壮和通用的方式。</li>
+<li>我们评估我们的核心机制的功效和端到端的效率，通过使用不同类型的并行性(数据，流水线，或张量并行性)的模型进行详细的实验
+<ul>
+<li><strong>性能开销</strong>：对于大范围的工作负载，GPU 调用的<strong>动态拦截</strong>、<strong>透明分布式屏障</strong>算法和透明时分的稳态性能开销可以忽略不计，均在3% 以内</li>
+<li><strong>稳健性</strong>：尽管 PyTorch 和 CUDA 的版本发生了迅速变化，但这种方法仍然是健壮的和实用的。</li>
+<li><strong>延迟</strong>： Singularity中的迁移和弹性延迟是合理的(几十秒) ，没有重复计算，</li>
+<li><strong>checkpoint大小</strong>：checkpoint大小与用户级checkpoint相当。</li>
+</ul>
+</li>
+</ul>
+<h2 id="核心调度机制总览">核心调度机制总览</h2>
+<p>为了提高利用率和可靠性，Singularity所有作业在默认情况下都可以抢占和调整大小。</p>
+<p>分布在多个节点上的使用各种并行方式的作业都可以进行checkpoint，使用透明时分在一个潜在的不同的区域，不同数量的设备上在稍后恢复</p>
+<ul>
+<li>在本节中，我们首先描述这些机制的三个关键方面:
+<ul>
+<li><strong>透明性</strong>：对用户代码没有更改或约束</li>
+<li><strong>工作保存</strong>：作业从先前被抢占的同一个程序执行点恢复</li>
+<li><strong>解耦执行</strong></li>
+</ul>
+</li>
+</ul>
+<h3 id="用户透明">用户透明</h3>
+<ul>
+<li>
+<p>现有的checkpoint和弹性方法</p>
+<ul>
+<li>
+<p>依赖于<strong>用户直接编写代码</strong>来实现这些机制</p>
+<ul>
+<li>
+<p>让用户负担了保存/恢复 python 程序状态的复杂性</p>
+<blockquote>
+<p>例如，循环变量、控制流、学习速率调度器、数据加载器状态、指令指针等</p>
+</blockquote>
+</li>
+<li>
+<p>需要确保程序在正确的点恢复</p>
+</li>
+<li>
+<p>当作业向上或向下扩展时，需要改变超参数</p>
+</li>
+</ul>
+</li>
+<li>
+<p>或者使用处理checkpoint和弹性的<strong>特定库</strong>(Pytorch Elasstic/Deepspeed)</p>
+<ul>
+<li>用户失去了灵活性，因为这些库控制了训练循环以保持checkpoint易于处理。这限制了用户的可定制性; 因此这种库的采用率很低。今天大多数 DNN 的训练工作量是不可checkpoint或可调整的。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>Singularity的核心机制（checkpoint/迁移/弹性）不需要用户的任何合作，默认情况下是自动的。</p>
+<ul>
+<li>它使得调度程序能够依赖这些机制作为所有作业的<a class="link" href="https://stackoverflow.com/questions/646794/what-is-a-first-class-programming-construct"  target="_blank" rel="noopener"
+    >first-class constructs</a>，以提供严格的 SLA</li>
+<li>它完全隐藏了checkpoint的复杂性和弹性，使得用户可以专注于编写具有完全灵活性的代码</li>
+</ul>
+</li>
+</ul>
+<h3 id="工作保存">工作保存</h3>
+<ul>
+<li>Singularity使用的checkpoint是由作业的各个Worker的一致<strong>地址空间快照</strong>组成。
+<ul>
+<li>当这些快照捕获完整的程序状态(如指令指针、堆栈、堆等)时，作业从被抢占的位置准确地恢复，没有丢失任何工作。</li>
+<li>相比之下，现存的checkpoint和弹性机制迫使程序从以前的模型checkpoint重新启动，从而重新执行初始化工作和自上一个checkpoint以来执行的工作</li>
+</ul>
+</li>
+</ul>
+<h3 id="解耦执行">解耦执行</h3>
+<ul>
+<li>提高<strong>作业的可靠性</strong>和<strong>船队的效率/利用率</strong>的目标是高度协同的
+<ul>
+<li>Singularity调度程序通过<strong>解耦作业与底层资源之间的映射</strong>来处理这些目标。Singularity调度器透明地虚拟世界大小和rank分配。</li>
+<li>这种解耦是至关重要的：对于透明的checkpoint和抢占作业以及随后在不同的节点、集群、数据中心恢复它们来说，这些节点、集群、数据中心与之前的checkpoint状态具有相同或不同的 GPU 数量。</li>
+<li>在作业的稳定状态执行期间，Singularity调度器还透明地将作业工作进程的训练逻辑与其与 GPU 的交互解耦。</li>
+</ul>
+</li>
+</ul>
+<h3 id="用户利好">用户利好</h3>
+<ul>
+<li>透明和节省工作量的checkpoint、迁移和灵活性从根本上增强了调度器的能力:
+<ul>
+<li><strong>提高了容错性</strong>。任何作业(不管用户是否已经编写了checkpoint逻辑)都可以在发生硬件故障(GPU/节点/网络)时从系统自动获取的最新checkpoint精确地恢复，而不是从头开始。这显著提高了有用的舰队范围吞吐量。</li>
+<li><strong>机会性使用容量</strong>。透明的抢占和迁移允许作业在任何地方使用空闲资源，而不管集群/区域边界如何。此外，它使得具有较低 SLA 的作业可以机会性地使用空闲容量，并且当具有较高 SLA 的作业到达时，可以迅速抢占(而不会丢失作业)。透明弹性使就业机会能够扩大使用闲置产能，并在产能变得稀缺时收缩。</li>
+<li><strong>针对本地的后台碎片整理</strong>。用于容错(例如机架)、设备与设备互连、数据本地等的局部或拓扑域在作业进入和离开系统时会变得支离破碎，这使得用局部约束调度大型作业变得困难。小作业的迁移使调度程序能够对局部域进行碎片整理，以放置更大的作业。</li>
+<li><strong>在线升级</strong>。可以在不杀死作业的情况下进行全舰队范围的实时升级，因为在这些机器上运行的作业可以廉价且透明地迁移到不同的集群。</li>
+</ul>
+</li>
+</ul>
+<h3 id="训练效率吞吐的sla">训练效率吞吐的SLA</h3>
+<ul>
+<li>
+<p>传统的 SLA（延迟，5个9的可用性)，适用于推理工作量，他们不适合 DNN 训练。</p>
+</li>
+<li>
+<p>Singularity引入了 <strong>GPU fraction</strong>度量：在抢占和灵活性面前量化吞吐量。</p>
+<ul>
+<li>
+<p><figure 
+	>
+	<a href="https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202303171734416.png" >
+		<img src="https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202303171734416.png"
+			
+			
+			
+			loading="lazy"
+			alt="image-20230317173405341">
+	</a>
+	
+	<figcaption>image-20230317173405341</figcaption>
+	
+</figure></p>
+</li>
+<li>
+<p>表1描述了 Singularity提供的多层 SLA。</p>
+<blockquote>
+<p>一个需要 N 个 GPU (基于软配额)的任务可能获得多于 N 个或少于 N 个 GPU，这取决于竞争集群负载。用户只需支付实际使用的费用，而不需要支付配额;</p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li>
+<p>符号定义</p>
+<ul>
+<li>$T_{ideal}$ 是某一个job在 N 个专用 GPU 上非抢占式运行所需的现实世界完成时间</li>
+<li>$T_{real}$ 是在Singularity 中的实际完成时间</li>
+</ul>
+</li>
+<li>
+<p><strong>GPU time fraction of a job</strong> =  $T_{ideal}$ / $T_{real}$。</p>
+<ul>
+<li>$T_{real}$ &gt; = $T_{ideal}$，在允许资源超额订阅的情况下，因为作业在执行过程中可能被 Singularity抢占或缩小。</li>
+<li>在Singularity中运行会相对慢一些，如果工作在一个专用容量设置中需要 H 小时
+<ul>
+<li>高级 SLA 工作：最多需要 H/0.95小时</li>
+<li>标准 SLA : 最多需要 H/0.7小时</li>
+</ul>
+</li>
+<li>GPU 分数 SLA 以小时粒度强制执行。Singularity中的调度策略旨在最大化舰队范围的吞吐量，同时最小化违反这些 SLA 的情况。</li>
+</ul>
+</li>
+</ul>
+<h2 id="特定领域拦截的方法">特定领域拦截的方法</h2>
+<ul>
+<li>
+<p><strong>设备代理的定义与组成</strong></p>
+<ul>
+<li>任何与加速器的交互都必须经过特定的库(例如，用于 NVIDIA GPU 的 CUDA、用于 AMD GPU 的 ROCm) 。 Singularity通过 <strong>LD_PRELOAD</strong> 机制动态拦截它。大多数此功能驻留在设备代理中。</li>
+<li>设备代理可以被视为<strong>加速器设备</strong>的<strong>硬件抽象层服务</strong>
+<ul>
+<li>组成：
+<ul>
+<li>服务器组件：每个设备有一个</li>
+<li>客户端组件：嵌入在与设备交互的每个进程中</li>
+</ul>
+</li>
+<li>主机调用的所有加速器特定的 API 都会被<strong>拦截</strong>并发送到设备代理服务器，该服务器在一个独立的地址 $space^1$中运行。</li>
+<li>在单独的地址空间中运行设备 API 有两个好处:
+<ul>
+<li>它保持主机地址空间<strong>没有设备映射</strong>和<strong>其他类似的依赖关系</strong>，避免影响checkpoint实用程序，如CRIU</li>
+<li>它允许<strong>设备代理</strong>在弹性时分期间有效地跨多个工作进程<strong>共享</strong></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>设备代理的通信与体系结构</strong></p>
+<ul>
+<li>
+<p>主机进程和设备-代理之间的通信处于分派到设备的关键路径上，因此我们使用<strong>无锁共享内存通道</strong>，使得每次调用没有上下文切换开销，从而降低了延迟。</p>
+</li>
+<li>
+<p><figure 
+	>
+	<a href="https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202303172258100.png" >
+		<img src="https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202303172258100.png"
+			
+			
+			
+			loading="lazy"
+			alt="image-20230317225820981">
+	</a>
+	
+	<figcaption>image-20230317225820981</figcaption>
+	
+</figure></p>
+</li>
+<li>
+<p>设备-代理中有两种类型的拦截器:</p>
+<ul>
+<li>
+<p>分派拦截器($D_{Int}$ )</p>
+<ul>
+<li>$D_{Int}$  是语义无关的，它只处理将 API 跨地址空间发送到设备代理服务器，处理参数/响应的序列化/反序列化</li>
+</ul>
+</li>
+<li>
+<p>语义感知拦截器($SA_{Int}$)。</p>
+<ul>
+<li>$SA_{Int}$ 在客户端或服务器端(分别称为**客户端 $SA_{Int}$**  和**服务器 $SA_{Int}$** )合并自定义逻辑，以实现诸如屏障、时间分片、内存管理等功能</li>
+</ul>
+</li>
+<li>
+<p>请注意，$D_{Int}$ 和 $SA_{Int}$  并不相互排斥;</p>
+<blockquote>
+<p>例如，同一个 API 可能同时具有客户端 $SA_{Int}$ 、跨地址空间 $D_{Int}$  和服务器 $SA_{Int}$ 。</p>
+</blockquote>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="限制d_int的拦截面积">限制$D_{Int}$的拦截面积</h3>
+<ul>
+<li>
+<p>目标：为了在生产系统中实用和可维护</p>
+<ul>
+<li>拦截层必须是完整的(作业调用的<strong>所有设备调用</strong>必须被拦截并发送到设备-代理服务器)</li>
+<li>并且<strong>可伸缩</strong>(低工程成本)</li>
+</ul>
+</li>
+<li>
+<p>背景：鉴于直接发布内核的新库(如 Apex、 Thust、 Deepspeed、 OpenAI Triton)的发展速度很快，拦截所有这些与设备交互的 API 的幼稚方法是不切实际的。</p>
+</li>
+<li>
+<p>Singularity通过在<strong>低层拦截</strong>来限制 $D_{Int}$ 的表面积</p>
+<ul>
+<li>低层：用于启动内核的驱动程序 API (例如，用于 NVIDIA GPU 的 cudaLaunchKernel)</li>
+<li>好处：
+<ul>
+<li>这确保了良好的覆盖范围，</li>
+<li>同时具有可伸缩性，因为其他定义客制化内核的库，最终都要通过launch  API。</li>
+</ul>
+</li>
+<li>Singularity有一个自动的代码生成器，可以生成所有 $D_{Int}$  的存根; 它只需要一个特定加速器库(CUDA)的头文件列表，以及一些注释来指示状态变化调用</li>
+</ul>
+</li>
+</ul>
+<h3 id="sa_int-的硬件抽象">$SA_{Int}$ 的硬件抽象</h3>
+<ul>
+<li>
+<p>虽然 $D_{Int}$  的是自动生成的，但是大部分的自定义功能(例如，分布式屏障，用于时分的上下文切换)都驻留在 $SA_{Int}$ 中。</p>
+</li>
+<li>
+<p>$SA_{Int}$ 中的大多数逻辑都是与设备无关的，并且使用一个映射到设备特定 API 的硬件抽象层(例如 nccl_allreduce)。</p>
+<blockquote>
+<p>加速器的硬件抽象层(HAL)封装了加速器通用的关键功能。虽然当前的实现是特定于 NVIDIA GPU 的，但是要处理一种新的设备类型，只需要实现该设备的硬件抽象层，将该设备的特定 API 与 HAL 中的等效 API 映射在一起。</p>
+</blockquote>
+</li>
+<li>
+<p>有三种与设备无关的功能需要使用$SA_{Int}$: 内存分配、通信和设备同步。</p>
+<ul>
+<li><strong>内存分配</strong>。 内存分配API (例如 cudaMalloc、 cudaFree)需要一个 $SA_{Int}$ ，因为设备代理接管了内存分配。这使得设备代理对 GPU 内存中实际使用的区域具有完全的可见性，这有助于减少checkpoint大小。它还允许设备代理使用自定义内存分配机制，以帮助在同一 GPU 上对多个Worker进行透明的时分，从而获得弹性。</li>
+<li><strong>通信</strong>。多数加速器都有集体通信库(例如，NVIDIA 图形处理器的 NCCL，AMD 图形处理器的 RCCL)。在这些 API 上使用 $SA_{Int}$ 可以实现分布式屏障的算法，以便在分布式作业的多个Worker之间进行同步，从而获得一致的checkpoint。Singularity通过搭载相同的通信 API来提供了一个通用的障碍实现。这些 API 上的 $SA_{Int}$  还有助于在弹性时分期间管理集合调用。</li>
+<li><strong>设备同步</strong>。设备同步 API 需要 $SA_{Int}$来处理透明弹性。Singularity中的时分是语义感知的，因为必须正确处理跨时间分片级别的通信。正确处理同步 API (例如 CUDA 中的 cudaStreamWaitEvent)对于时分的正确性和活性至关重要。</li>
+</ul>
+</li>
+</ul>
+<h3 id="宿主机特定功能的sa_int">宿主机特定功能的$SA_{Int}$</h3>
+<ul>
+<li>Singularity还使用 $SA_{Int}$ 来选择 CPU 库
+<ul>
+<li>特别是 libc 的 I/O 库(例如，open、 read、 write 等)会被拦截来跟踪/记录作业对本地文件系统的更新，这样变异的文件就可以随着进程checkpoint一起迁移。</li>
+<li>与设备库 API 的 $SA_{Int}$  不同，主机 $SA_{Int}$  没有相应的 $D_{Int}$ ，而是在主机地址空间中运行。</li>
+</ul>
+</li>
+</ul>
+<h2 id="透明迁移的设计">透明迁移的设计</h2>
+<ul>
+<li>
+<p>在Singularity中，运行 DNN 作业的抢占、恢复和调整涉及到一致的checkpoint和恢复<strong>四大状态</strong></p>
+<ul>
+<li>CPU 中的<strong>程序状态</strong>(例如堆栈、堆、指令指针等)</li>
+<li>GPU 中的<strong>模型训练状态</strong>(例如模型参数、优化器状态等)</li>
+<li>处理 CPU 和 GPU 之间交互的<strong>控制状态</strong>(活动流、同步事件)</li>
+<li>处理不同类型并行性(数据/管道/张量并行等)的 GPU 间和节点间<strong>通信状态</strong></li>
+</ul>
+</li>
+<li>
+<p>对于调度迁移，以及从计划外的故障中恢复，Singularity的透明checkpoint逻辑在两种模式下执行</p>
+<ul>
+<li>当调度程序决定需要<strong>抢占</strong>作业时，基于扩展命令的随需应变</li>
+<li>基于用户指定的<strong>间隔</strong>(时代级或基于时间)。</li>
+</ul>
+</li>
+<li>
+<p>实现通用 DNN 作业的透明checkpoint是具有挑战性的，原因有</p>
+<ul>
+<li>首先，在检查一个给定作业的时候，Singularity必须确保跨越多个主机和 GPU 的分布式状态的一致性; 一个分布式作业的所有Worker必须在集体通信方面处于一个安全和一致的状态(例如，allreduce)。</li>
+<li>其次，CPU 和 GPU 之间的运行状态(例如，活动句柄，存储在主机内存中的设备地址)必须始终如一地恢复，尽管状态管理是由专有的闭源库(如 CUDA)完成的。</li>
+<li>第三，checkpoint的空间开销必须保持在较低的水平，以适应有数百个Worker的大型分布式作业。</li>
+</ul>
+</li>
+</ul>
+<h3 id="checkpoint程序状态cpu">Checkpoint程序状态（CPU）</h3>
+<ul>
+<li>有多种系统提供地址空间迁移，其中 <strong>CRIU</strong> 是使用最广泛的。
+<ul>
+<li>然而，CRIU 的一个关键限制是它<strong>不处理使用 GPU 的进程</strong>的设备映射。</li>
+<li>要使用 CRIU，主机地址空间必须与特定于设备的库隔离。</li>
+<li>幸运的是，设备代理为我们提供了这种隔离。设备代理服务器大部分是无状态的，因此没有checkpoint; 它只是在目的地重新启动。</li>
+</ul>
+</li>
+</ul>
+<h3 id="checkpoint设备状态">Checkpoint设备状态</h3>
+<ul>
+<li>
+<p><strong>保存方式</strong>：模型状态(例如，参数)由<strong>设备代理进程</strong>通过<strong>device to host</strong>的 <strong>memcpy</strong> 进行checkpoint。</p>
+</li>
+<li>
+<p><strong>特点</strong>：由于 Singularity中的内存分配 $SA_{Int}$，设备代理知道 GPU 内存的哪些区域实际上正在使用，因此显著减少了checkpoint大小。</p>
+</li>
+<li>
+<p><strong>挑战</strong>：在目的地恢复时，设备内存可能被<strong>映射到</strong>新设备-代理服务器地址空间中的<strong>不同地址</strong>，从而使主机进程中的<strong>指针失效</strong>。</p>
+</li>
+<li>
+<p><strong>内存地址映射</strong>：</p>
+<ul>
+<li>为了避免这种情况，设备代理在启动时<strong>占用了整个 GPU 内存</strong>(被设备库跟踪的状态有些松弛)</li>
+<li>有一个 服务器$SA_{Int}$ ，服务于设备分配器(cudaMalloc)所执行的**mmap**， 保证始终映射到相同的 CPU 地址。</li>
+</ul>
+</li>
+<li>
+<p><strong>设备句柄映射</strong>：保证CPU中设备句柄的一致性</p>
+<ul>
+<li>
+<p>与内存指针类似，主机地址空间还保留指向设备状态的其他句柄。</p>
+<blockquote>
+<p>例如，cudaStreamCreate 返回一个不透明的句柄，主机可以在后续的 GPU 调用中将其用作引用。但是，由于设备代理服务器在迁移后重新启动，句柄将无效。</p>
+</blockquote>
+</li>
+<li>
+<p><strong>句柄虚拟化</strong>：为了在迁移过程中保持这些句柄的保真度，我们对这些句柄进行虚拟化。设备代理不返回设备返回的实际句柄，而是返回一个虚拟句柄，并将此映射作为客户端状态的一部分进行记忆。</p>
+</li>
+<li>
+<p><strong>效果</strong>：恢复和重播后，物理句柄可能会更改，但虚拟句柄保持稳定。所有有状态的 API 调用(例如，创建上下文、流、事件等)都有注释，这些调用的 $D_{Int}$ 会自动记录它们，以便在恢复时重播。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="通信状态">通信状态</h3>
+<ul>
+<li>
+<p><strong>静默</strong>：DNN Worker之间的大多数通信都是通过集体通信库(例如 NCCL)进行的，我们无法处理飞行中的通信。因此，在checkpoint时，我们<strong>静默</strong>所有job，以确保没有飞行中的集体通信调用。</p>
+</li>
+<li>
+<p><strong>死锁产生</strong>：</p>
+<ul>
+<li>要完成一个集体调用(例如 allreduce) ，需要所有参与的Worker都完成该调用</li>
+<li>如果一个Worker在第 n 次 allreduce 调用已经返回后进行了checkpoint，而另一个Worker可能已经发出了第 n+1次调用，这个调用永远不会完成，从而导致<strong>死锁</strong>。</li>
+<li>因此，在checkpoint之前，所有Worker必须完成同一个集体调用。Singularity使用了一种新的<strong>分布式屏障算法</strong>，以完全透明的方式实现这一特性。</li>
+</ul>
+</li>
+<li>
+<p><strong>分布式Barrier</strong></p>
+<ul>
+<li><strong>meta-allreduces</strong>：为了避免引入新的故障路径，Singularity中的障碍算法依赖于作业用于集体通信的同一个通信库，通过引入附加的<strong>meta-allreduces</strong>来交换障碍协议状态。需要确保附加的meta-allreduces相对于常规的allreduces的排序在所有节点间是一致的，以满足避免死锁的程序顺序要求。</li>
+<li><strong>算法</strong>：为了保证程序顺序一致性，在每一个数据allreduce操作执行之前， 我们的算法会发射一个异步串联meta-allreduce。
+<ul>
+<li>
+<p>Worker包含两个阶段</p>
+<ul>
+<li>第1阶段是稳定状态</li>
+<li>第2阶段是接收到障碍请求。</li>
+</ul>
+</li>
+<li>
+<p>串联 meta-allreduce 是有效载荷上的一个 <strong>SUM allreduce</strong>，由两个整数组成:</p>
+<ul>
+<li>$Need_ {bar}$: 如果一个 worker 已经接收到了一个屏障命令，那么它会发送一个“1”，否则发送“0”。如果 SUM (need) &gt; 0，则Worker知道有人已经启动了屏障协议，并切换到第2阶段。</li>
+<li>$Ack_{block}$: 如果Worker已经切换到第二阶段，它将发送一个“1”，也就是说，它承认它已经直接或间接地看到了一个障碍请求，否则发送“0”。如果 SUM (ack) = = world _ size (即rank的总数) ，则Worker知道每个人都已经认可，并且可以安全地获得障碍。</li>
+</ul>
+</li>
+<li>
+<p>一旦Worker进入阶段2，它就进入了<strong>同步模式</strong>: 该Worker执行的每个集体调用都是同步的; 这确保了屏障协议的及时终止。</p>
+</li>
+</ul>
+</li>
+<li><strong>开销</strong>：开销很小障碍算法保证在<strong>最多两个小批内完成</strong>，并保证在屏障时没有飞行中的集体调用。它在阶段1的开销非常小，因为meta-allreduce只需要2字节，而且是异步的</li>
+<li><strong>局限性</strong>：适用于数据并行作业</li>
+</ul>
+</li>
+<li>
+<p>关于tensor并行和pipline并行</p>
+<ul>
+<li>张量并行和管道并行作业还有额外的复杂性，这些作业可以在不同的节点组之间执行多个 allreduce，此外还有对等调用，如 send/recv (用于流水线)。</li>
+<li><strong>解决方案</strong>：
+<ul>
+<li>我们可以扩展上述算法，来推断出流水线和数据通信的相对顺序</li>
+<li>为了尽可能简单和减少checkpoint的大小，我们通过使用领域知识，确定一个小批的结束，在这一时间点上没有飞行中的通信，无论是tensor并行和pipline并行。</li>
+<li>我们使用与上面相同的串联 meta-allreduce 协议，但是在小批处理结束时只使用一次来实现障碍</li>
+</ul>
+</li>
+<li><strong>tradeoff</strong>：将障碍延迟到mini-batch结束(对于大型模型来说只需要几秒钟) ，带来了时间延迟，但是与在mini-batch执行中进行屏障相比，减小了checkpoint大小</li>
+</ul>
+</li>
+</ul>
+<h3 id="文件系统状态">文件系统状态</h3>
+<ul>
+<li>背景：Worker有时安装本地软件包，更新本地文件。迁移到新节点后需要保留这些内容。</li>
+<li>挑战：执行容器维度的文件系统状态diff操作的代价太高。</li>
+<li>解决方案：
+<ul>
+<li>使用Libc 文件系统 API 上的host $SA_{Int}$</li>
+<li>每当以可写模式打开本地文件时，我们将文件名附加到日志中，并在checkpoint期间复制这些文件。</li>
+<li>通过使用内容checksum，在远程存储的数据副本实现跨Worker去重。</li>
+</ul>
+</li>
+</ul>
+<h3 id="checkpointrestore工作流">Checkpoint/Restore工作流</h3>
+<ul>
+<li>工作流
+<ul>
+<li>在成功获得一个屏障之后，每个Worker使用CRIU执行checkpoint。</li>
+<li>CRIU镜像和GPU状态镜像，随后被移动到远程存储。</li>
+<li><strong>CPU</strong>：在新的目的地上，使用CRIU的restore，程序从它被checkpoint的状态重新开始</li>
+<li><strong>GPU</strong>：
+<ul>
+<li>设备代理客户端执行的第一个操作是重新生成一个新的设备代理服务器，然后重播状态，使 GPU 恢复到checkpoint之前的状态。</li>
+<li>设备代理服务器还将 GPU 张量复制回checkpoint之前的相同地址的 GPU RAM。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>设备-代理最终执行一个新的会合，worker可以发现彼此的新位置，并重新建立通信环。</li>
+<li><strong>checkpoint执行时机</strong>：除了由调度程序启动的随需checkpoint之外，Singularity中的每个作业都以用户指定的频率(例如，每30分钟)接受checkpoint，以处理计划外的故障。</li>
+</ul>
+<h3 id="压缩checkpoints">压缩Checkpoints</h3>
+<p>Singularity采用多种技术来减小checkpoint的大小。</p>
+<ul>
+<li>GPU镜像大小：
+<ul>
+<li>Singularity执行每个缓冲区的<strong>内容校验求和</strong>，以便在Worker之间进行去重。</li>
+<li>只有在没有其他Worker上传相同的缓冲区时才上传缓冲区</li>
+<li>通过这种方式，Singularity中 GPU镜像的大小与用户级checkpoint的大小相似。</li>
+</ul>
+</li>
+<li>CRIU镜像的CPU 地址空间是在空间和时间两方面进行去重的
+<ul>
+<li><strong>空间</strong>：在主训练过程和数据加载过程之间存在高度的内容重叠; 我们拦截 CRIU 发出的写调用来执行基于内容散列的页面分解</li>
+<li><strong>时间</strong>：在不同时间点采取的同一进程的checkpoint之间存在高度的重叠(因为地址空间变化很小) ; 时间维度上的去重使得之后的增量checkpoint比第一个 CRIU checkpoint小得多。</li>
+</ul>
+</li>
+</ul>
+<h2 id="透明弹性的设计">透明弹性的设计</h2>
+<ul>
+<li>
+<p>Singularity的弹性实现是不改变世界大小的， 改变的是worker和device之间的映射。</p>
+</li>
+<li>
+<p><figure 
+	>
+	<a href="https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202303192323539.png" >
+		<img src="https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202303192323539.png"
+			
+			
+			
+			loading="lazy"
+			>
+	</a>
+	
+</figure></p>
+</li>
+<li>
+<p>透明弹性建立在Singularity中的<strong>透明迁移支持</strong>的基础之上。</p>
+</li>
+<li>
+<p>技术挑战：</p>
+<ul>
+<li><strong>时分复用</strong>：一个训练工作的多个Worker在同一个 GPU 上进行时分共享时，Worker之间的细粒度通信必须像在不同的 GPU 上一样</li>
+<li><strong>空分复用</strong>：对于大模型来说，每个Worker几乎可以利用 GPU 上的整个RAM; 在同一个 GPU 上运行多个Worker，需要将 GPU 状态在设备和内存之间来回交换， 代价昂贵。</li>
+<li><strong>调度死锁</strong>：为了支持使用数据并行、流水线并行和张量并行相结合的作业，需要在 GPU 上仔细安排Worker，以便数据并行副本和相同的模型并行碎片在同一GPU上进行时分，并防止通信调度中出现死锁。</li>
+</ul>
+</li>
+</ul>
+<h3 id="语义感知的时分">语义感知的时分</h3>
+<ul>
+<li>
+<p>原因：</p>
+<ul>
+<li>一个独立的Worker占有独立的内存是不可取的， 因为大模型的每个Worker往往需要整个GPU RAM， 这样的运行方式会耗尽内存</li>
+<li>所以，时分需要语义感知</li>
+</ul>
+</li>
+<li>
+<p>Singularity中的设备代理使得这样的时分成为可能。</p>
+<ul>
+<li>因为设备代理与主机进程解耦，所以我们在多个主机进程(即多个rank)之间共享相同的设备代理。</li>
+<li>当所有与 GPU 的交互都通过设备-代理进行时，它智能地安排多个rank，在给定的时间只允许一个rank在 GPU 上执行，然后选择特定的点来切换到另一个rank。</li>
+<li>从概念上讲，在上下文切换的时候，设备代理将原始rank使用的 GPU 内存<strong>换出</strong>，然后<strong>换入</strong>新rank的GPU 内存，从而使每个Worker能够使用几乎整个 GPU 内存。</li>
+</ul>
+</li>
+<li>
+<p>为了保持低开销，我们必须在绝对必要的情况下切换上下文。</p>
+<ul>
+<li>在后向传播之后，数据-并行rank参与集体通信以交换梯度，这需要所有rank参与(并贡献其各自的梯度) ，必须进行上下文切换。</li>
+<li>请注意，在单个小批处理中，为了重叠使计算与通信开销，框架可能会发出多个异步 allreduce 调用， 然后在某个点进行同步。在这个同步点，设备代理切换到共享 GPU 的下一个rank，独占地运行，直到达到同步点，然后上下文切换到下一个rank，以此类推。</li>
+</ul>
+</li>
+<li>
+<p>集体通信通过专有库进行。</p>
+<ul>
+<li><strong>通信器</strong>：NCCL 有一个通信器的概念，它被初始化为一个特定的参与rank环，随后的操作只是引用通信器。</li>
+<li><strong>解耦：</strong> 为了保持 NCCL 通信器与用户级时分的交互可控，我们将作业的逻辑数据并行世界大小与 NCCL 看到的世界大小解耦; 在我们的方法中，NCCL 只看到每个 GPU 一个rank。</li>
+<li><strong>梯度累计</strong>：在时分过程中，设备-代理透明地在抓取缓冲区中进行本地累积，并且只有共享 GPU 的最后一个rank使用本地累计梯度执行实际的nccl_allreduce</li>
+<li><strong>大小调整</strong>：因此，在一个调整大小的操作之后，NCCL 看到的世界大小发生了变化，恢复后由新的会和处理</li>
+</ul>
+</li>
+</ul>
+<h3 id="内存共享的副本拼接">内存共享的副本拼接</h3>
+<p>副本拼接使上下文切换更加便宜 <strong>&ndash;&gt;5.2.1</strong></p>
+<h4 id="基于checksum的动态数据去重">基于checksum的动态数据去重</h4>
+<ul>
+<li>
+<p>一项训练工作所消耗的 GPU 内存分为四类:</p>
+<ul>
+<li><strong>参数(P)</strong>。模型的每一层的权重/参数; 正向和反向传递在这些张量上运行。</li>
+<li><strong>优化器状态(O)</strong>。由优化器跟踪的状态，以计算每次迭代应用于参数的增量。跟踪历史状态(例如，第一和第二阶段的梯度)</li>
+<li>**梯度(G)。**每个副本都有与其迷你批处理相对应的渐变副本。在向后传递之后，对所有副本的梯度取平均值，然后使用这个平均值一致地更新权重</li>
+<li><strong>激活(A)</strong>。每一层的正向通道的中间输出; 在反向通道中用于计算相对于输入的梯度以进行反向传播。</li>
+</ul>
+</li>
+<li>
+<p>副本拼接利用的洞见</p>
+<ul>
+<li>在数据并行副本中，P和O在小批处理结束时由所有副本一致地更新，所有rank具有相同的平均梯度</li>
+<li>在mini-batch结束后， 因为后向传播已经结束， A会被框架释放掉</li>
+</ul>
+</li>
+<li>
+<p>由于设备代理控制内存分配器，它对框架分配的每个缓冲区都具有可见性。</p>
+<ul>
+<li>在上下文切换期间，设备代理为每个活动缓冲区计算内容校验和。</li>
+<li>在<strong>换出</strong>过程中，它首先查看主机是否已经包含一个具有相同内容校验和的缓冲区，如果是，它避免换出，并简单地将 GPU 缓冲区标记为未使用</li>
+<li>在<strong>换入</strong>过程中， 它检查设备是否已经有一个带校验和的缓冲区; 如果有，它就避免了来自主机的换入。请注意，虽然内容匹配，在新的rank该缓冲区可能被映射到一个不同的设备地址 。在这种情况下，设备代理执行<strong>设备到设备</strong>的移动，将缓冲区移到所需的地址</li>
+</ul>
+</li>
+<li>
+<p>一个例子：</p>
+<ul>
+<li>通过上述优化，如果4个rank共享一个 GPU，在上下文切换期间P和O缓冲区的交换只需要在第一个rank完成; 其他人会发现校验和已经存在于主机内存中，并忽略掉交换。</li>
+<li>然而，对于每个rank来说换入仍然必须进行： 当一个rank开始其时间片时，其本地状态包含来自前一个mini-batch的P和O，而前一个rank的P和O副本被更新到当前的mini-batch。</li>
+<li>如果我们有空间存储两个额外的 P 和 O 版本在 GPU，我们就可以避免这个换入，这带来了两个挑战:
+<ul>
+<li>大模型一般没有额外的空间容纳额外两组P和O <strong>&ndash;&gt; 5.2.3</strong></li>
+<li>我们仍然需要执行<strong>设备到设备</strong>的 P 和 O 副本在上下文切换，<strong>因为每个rank可能分配了在不同的地址分配了相同的缓冲区</strong>，D2D 复制开销仍然很大。<strong>&ndash;&gt; 5.2.2</strong></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="为持久分配使用领域知识">为持久分配使用领域知识</h4>
+<ul>
+<li>使用<strong>深度学习训练的领域知识</strong>来使地址保持一致
+<ul>
+<li>在数据并行副本中，根据定义，<strong>稳定缓冲区</strong>（如 P 和 O 在小批处理中保留的分配序列）的大小、顺序必须在所有副本中相同，因为它们具有相同的参数集。</li>
+<li>然而，可能存在跨副本<strong>大小可变的其他分配</strong>(例如，大小取决于输入数据大小的激活，这种激活可能在不同的小批处理中有所不同)。由于这种可变大小的分配，内存分配器的状态在不同的副本之间发生差异，甚至导致稳定的缓冲区分配得到错误对齐的地址。</li>
+</ul>
+</li>
+<li>为了处理这个问题，Singularity中的设备代理使用一个<strong>双向内存分配器</strong>。
+<ul>
+<li>稳定缓冲区(如 P 和 O)在地址空间的<strong>高端</strong>分配，而其他缓冲区在<strong>低端</strong>分配。这确保了瞬态分配(例如激活)中的不稳定性不会影响高区域中的内存分配器元数据，从而确保稳定的缓冲区(例如 P 和 O)跨副本获得相同的地址。</li>
+<li>为了识别稳定的缓冲区，比如 P 和 O，我们在分配器中添加了一个预先识别的堆栈跟踪列表(Python 和 C + +) ，这个列表与参数和优化器状态分配有关。</li>
+<li>在分配时，最多有两个版本的 P 和 O 是活跃的-当前的小批量和以前的小批量，并且第三个副本需要作为草稿空间，以便当前的rank不会覆盖以前的小批量的原始版本的 P 和 O。</li>
+</ul>
+</li>
+</ul>
+<h4 id="压缩选定的操作">压缩选定的操作</h4>
+<ul>
+<li>
+<p>使用了<strong>特定领域的洞察</strong>避免处理 P 和 O 的多个副本。</p>
+<ul>
+<li>根据定义，所有数据并行副本将在完成小批处理之后使用一致的P和O缓冲区。</li>
+<li>我们还知道，P和O缓冲区只有在所有副本的梯度allreduce的之后才会更新。</li>
+<li>因此，如果我们能够<strong>识别更新参数和优化器状态的操作</strong>，我们就可以只在共享设备的其中一个rank中执行这些操作，并简单地在其他rank中“<strong>压缩</strong>”这些操作，因为
+<ul>
+<li>它们无论如何都会导致相同的最终状态，</li>
+<li>缓冲区在队列中有相同的对应地址，所以随后的小批量计算将看到正确的数据。</li>
+</ul>
+</li>
+<li>为了压缩一个操作，设备代理只是省略了为这些操作向 GPU 发出 CudaLaunchKernel。通过这种压缩，我们避免了在前一个mini-batch的P和O的换入，因为它们不再由其他rank更新。</li>
+</ul>
+</li>
+<li>
+<p>为了确保<strong>健壮性</strong>，我们遵循<strong>保守验证</strong>的方法</p>
+<ul>
+<li><strong>对照组</strong>：我们总是运行第一个mini-batch，同时禁用了压缩(因此产生了交换进/交换出成本) ; 这保证了正确的执行。</li>
+<li><strong>实验组</strong>：在验证mini-batch中，断言假设，验证使用缓冲区内容校验和来推断事后操作效果的方法：在验证mini-batch中，我们验证模型是否符合以下<strong>不变量</strong>:
+<ul>
+<li>在压缩窗口期间的所有缓冲区更改必须在共享 GPU 的所有rank之间是相同的。</li>
+<li>在压缩窗口期间执行的设备到主机的副本必须在共享 GPU 的所有rank之间完全复制相同的数据。</li>
+</ul>
+</li>
+<li>如果上述验证失败，我们将模型视为压缩的不安全模型，并退回到<strong>基于交换</strong>的机制(如果必要，将作业“回滚”到验证成功的最后一个checkpoint)。</li>
+<li>我们监视由于时分造成的开销，如果它超过一个阈值，我们将<strong>禁用该模型的时分</strong>。这将是一个罕见的场景，但仍然需要优雅地处理以获得健壮性。</li>
+</ul>
+</li>
+</ul>
+<h3 id="处理模型并行工作">处理模型并行工作</h3>
+<ul>
+<li>
+<p>张量并联、流水线并联等模型并联作业的处理带来了新的挑战。</p>
+<ul>
+<li>张量并行job中的每个矩阵乘法执行allreduce。如果我们为这样的 allreduce 进行上下文切换，那么副本拼接将无法工作，因为激活张量A仍然是活跃的。</li>
+<li>pipeline并行job对每个mini-batch执行 GPU/节点之间的端到端地发送与接收激活A和梯度G; 在mini-batch期间进行时分会由于活跃的A和G导致过多的交换。</li>
+</ul>
+</li>
+<li>
+<p>为了应对这些挑战，Singularity使用了两种关键技术:</p>
+<ul>
+<li><strong>拼接感知的放置</strong>。通过拼接感知的放置，我们确保只有同一个的模型并行分区的数据并行副本在同一个 GPU 上进行时分。
+<ul>
+<li>请注意，这要求 Singularity了解rank分配逻辑。对于使用具有不同rank分配策略的自定义启动程序的作业，Singularity为该作业提供了一个 API，用于传递所有rank的rank到拓扑的映射(例如，Rank 4是 DP0、 MP0、 PP1等)</li>
+</ul>
+</li>
+<li><strong>推断集体调用的意图</strong>。设备代理推断集体通信的意图，并仅在数据并行维度上集体调用时触发时分。其他的集体调用只是简单地通过而没有上下文切换。推断方法：
+<ul>
+<li>Singularity利用集体通信的初始化路径(例如，ncclCommInitRank)来实现这一点。它强制在每个ncclCommInitRank 之后进行上下文切换，并且设备代理计数每个通信者。</li>
+<li>在完成一轮上下文切换之后，如果通信器的本地计数大于1，则设备代理将推断该通信器处于数据并行维度。因为<strong>拼接感知的放置</strong>。</li>
+<li>在集体调用期间，它只需要在通信器上查找一个map，就可以了解它是否是数据并行的。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="处理zero-冗余优化器">处理ZeRO-冗余优化器</h3>
+<ul>
+<li>ZeRO切分数据并行状态，这样数据并行的Worker之间就没有冗余。这样的分区违反了压缩验证的不变量(5.2.3)。</li>
+<li>为了解决这个问题，Singularity为 ZeRO 引入了部分分片的概念，它将<strong>分片因子</strong>(在 GPU 中拟合模型所需的最小值)与<strong>数据并行度</strong>(并行度)分离开来。
+<ul>
+<li>如果两者是相等的，那么根据定义，这个模型不能缩小到更少的 GPU，因为它不适合。</li>
+<li>如果数据并行性因子更高，比如说，4倍于分片因子) ，那么我们可以支持多达4路的时分/缩小。在这个场景中，部分分片因子只是变成了模型的另一个维度——并行性，并且只有相同的 ZERO 分片的副本是时间分片的。</li>
+</ul>
+</li>
+<li>在 DeepSpeed 中引入部分分片非常简单</li>
+</ul>
+<h2 id="实现">实现</h2>
+<ul>
+<li>实现方面的挑战
+<ul>
+<li><strong>序列化不透明参数</strong>。在我们的基于拦截的设备代理中，CudaLaunchKernel 的 $D_{Int}$  是具有挑战性的，因为它的签名是不透明的，使得序列化变得困难(签名是由 NVIDIA 的1 nvcc 在内部生成的，拦截器不可见)。为了处理这个问题，我们有一个自定义的服务器 $SA_{Int}$ ，它使用 cuObjecDump，CUDA 工具包中的一个二进制实用程序，解析生成的内核库并提取参数信息。为了避免高成本，我们缓存此信息，并仅在缓存丢失时运行 cuObjecdump。对于 JIT 内核，我们拦截 nvrtcCompileProgram 并通过解析生成的 PTX 提取参数签名。</li>
+<li><strong>隐藏调度延迟</strong>。设备代理中的跨地址空间调用发生在诸如 cudaLaunchKernel 和 cudaGetLastError 等操作的关键路径上，这会影响性能。我们对最频繁的调用使用特定于域的优化。对于 cudaGetLastError，我们在每次启动内核时都会在服务器上发布它，并将它与响应一起附加，这样当 PyTorch 发布它时，设备代理客户端就可以从缓存中返回它。对于 cudaLaunchKernel，我们执行延迟错误通知，调用在客户端返回，而不等待来自设备代理服务器的响应; 在向服务器发出下一个调用之前，对响应进行延迟读取，因此允许客户端 PyTorch 处理和服务器引起的延迟之间重叠; 因为当遇到这种(罕见的)错误时，PyTorch (和其他框架)崩溃，这不会影响作业语义。</li>
+<li><strong>隐藏上下文切换开销</strong>。在时分过程中从一个rank切换到另一个rank涉及到计算所有活动设备张量的校验和，并将它们与另一个rank的副本进行比较，如果需要，执行缓冲区移动(几毫秒的 CPU 活动)。此外，开关逻辑依赖于校验和计算的输出，校验和计算依次等待所有以前的 GPU 操作完成，隐含地强制设备同步。为了避免在关键路径中产生这种代价，Singularity执行下一级的急切分派。设备代理开始并行地服务于下一级(CPU 逻辑、设备操作分派)的有用工作和交换延迟。通过仔细使用诸如 cudaStreamWaitEvent 之类的异步排序原语，我们确保只有在切换完成之后，才能在 GPU 上执行对新排序的操作。</li>
+</ul>
+</li>
+</ul>
+<h2 id="评估">评估</h2>
+<h2 id="相关工作">相关工作</h2>
+<h2 id="总结">总结</h2>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+        <link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.css"integrity="sha384-RZU/ijkSsFbcmivfdRBQDtwuwVqK7GMOw6IMvKyeWL2K5UAlyp6WonmB8m7Jd0Hn"crossorigin="anonymous"
+            ><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.js"integrity="sha384-pK1WpvzWVBQiP0/GjnvRxV4mOb0oxFuyRxJlk6vVw146n3egcN5C925NCP7a7BY8"crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/contrib/auto-render.min.js"integrity="sha384-vZTG03m&#43;2yp6N6BNi5iM4rW4oIwk5DfcNdFfxkk9ZWpDriOkXX8voJBFrAO7MpVl"crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        renderMathInElement(document.querySelector(`.article-content`), {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ]
+        });})
+</script>
+    
+</article>
+
+    <aside class="related-contents--wrapper">
+    
+    
+</aside>
+
+     
+    
+        
+    <script
+    src="https://giscus.app/client.js"
+    data-repo="Tweakzx/Tweakzx.github.io"
+    data-repo-id="MDEwOlJlcG9zaXRvcnkzMjY5MTY1NTE="
+    data-category="Announcements"
+    data-category-id="DIC_kwDOE3xZx84CTfL-"
+    data-mapping="title"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-theme="light_tritanopia"
+    crossorigin="anonymous"
+    async
+></script>
+<script>
+    function setGiscusTheme(theme) {
+        let giscus = document.querySelector('iframe.giscus-frame');
+        if (giscus) {
+            giscus.contentWindow.postMessage(
+                { 
+                    giscus: {
+                        setConfig: { 
+                            theme: theme 
+                        }
+                    }
+                },
+                "https://giscus.app"
+            );
+        };
+    };
+
+    (function(){
+        addEventListener('message', (e) => {
+            if (event.origin !== 'https://giscus.app') return;
+            handler()
+        });
+        window.addEventListener('onColorSchemeChange', handler);
+
+        function handler() {
+            if (document.documentElement.dataset.scheme === "light") {
+                setGiscusTheme('light_tritanopia');
+            } else {
+                setGiscusTheme('dark_tritanopia');
+            };
+        };
+    }());
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2023 Tweakzx
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.5.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
+            >
+
+            </main>
+    
+        <aside class="sidebar right-sidebar sticky">
+            <section class="widget archives">
+                <div class="widget-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+                </div>
+                <h2 class="widget-title section-title">Table of contents</h2>
+                
+                <div class="widget--toc">
+                    <nav id="TableOfContents">
+  <ol>
+    <li><a href="#introduction">Introduction</a>
+      <ol>
+        <li><a href="#设计目标">设计目标</a></li>
+        <li><a href="#关键机制">关键机制</a></li>
+        <li><a href="#贡献">贡献</a></li>
+      </ol>
+    </li>
+    <li><a href="#核心调度机制总览">核心调度机制总览</a>
+      <ol>
+        <li><a href="#用户透明">用户透明</a></li>
+        <li><a href="#工作保存">工作保存</a></li>
+        <li><a href="#解耦执行">解耦执行</a></li>
+        <li><a href="#用户利好">用户利好</a></li>
+        <li><a href="#训练效率吞吐的sla">训练效率吞吐的SLA</a></li>
+      </ol>
+    </li>
+    <li><a href="#特定领域拦截的方法">特定领域拦截的方法</a>
+      <ol>
+        <li><a href="#限制d_int的拦截面积">限制$D_{Int}$的拦截面积</a></li>
+        <li><a href="#sa_int-的硬件抽象">$SA_{Int}$ 的硬件抽象</a></li>
+        <li><a href="#宿主机特定功能的sa_int">宿主机特定功能的$SA_{Int}$</a></li>
+      </ol>
+    </li>
+    <li><a href="#透明迁移的设计">透明迁移的设计</a>
+      <ol>
+        <li><a href="#checkpoint程序状态cpu">Checkpoint程序状态（CPU）</a></li>
+        <li><a href="#checkpoint设备状态">Checkpoint设备状态</a></li>
+        <li><a href="#通信状态">通信状态</a></li>
+        <li><a href="#文件系统状态">文件系统状态</a></li>
+        <li><a href="#checkpointrestore工作流">Checkpoint/Restore工作流</a></li>
+        <li><a href="#压缩checkpoints">压缩Checkpoints</a></li>
+      </ol>
+    </li>
+    <li><a href="#透明弹性的设计">透明弹性的设计</a>
+      <ol>
+        <li><a href="#语义感知的时分">语义感知的时分</a></li>
+        <li><a href="#内存共享的副本拼接">内存共享的副本拼接</a>
+          <ol>
+            <li><a href="#基于checksum的动态数据去重">基于checksum的动态数据去重</a></li>
+            <li><a href="#为持久分配使用领域知识">为持久分配使用领域知识</a></li>
+            <li><a href="#压缩选定的操作">压缩选定的操作</a></li>
+          </ol>
+        </li>
+        <li><a href="#处理模型并行工作">处理模型并行工作</a></li>
+        <li><a href="#处理zero-冗余优化器">处理ZeRO-冗余优化器</a></li>
+      </ol>
+    </li>
+    <li><a href="#实现">实现</a></li>
+    <li><a href="#评估">评估</a></li>
+    <li><a href="#相关工作">相关工作</a></li>
+    <li><a href="#总结">总结</a></li>
+  </ol>
+</nav>
+                </div>
+            </section>
+        </aside>
+    
+
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
+                defer="false"
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

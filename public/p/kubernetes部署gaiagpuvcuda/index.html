@@ -1,486 +1,955 @@
-<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="部署GaiaGPU 前置工作 配置好GPU环境 配置好k8s集群环境 gpu-admission 部署deployment 创建文件gpu-quota-admission.ya"><title>【Kubernetes】部署gaiaGPU（vCUDA）</title><link rel=canonical href=https://tweakzx.github.io/p/kubernetes%E9%83%A8%E7%BD%B2gaiagpuvcuda/><link rel=stylesheet href=/scss/style.min.css><meta property="og:title" content="【Kubernetes】部署gaiaGPU（vCUDA）"><meta property="og:description" content="部署GaiaGPU 前置工作 配置好GPU环境 配置好k8s集群环境 gpu-admission 部署deployment 创建文件gpu-quota-admission.ya"><meta property="og:url" content="https://tweakzx.github.io/p/kubernetes%E9%83%A8%E7%BD%B2gaiagpuvcuda/"><meta property="og:site_name" content="Tweakzx"><meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="容器"><meta property="article:tag" content="k8s"><meta property="article:tag" content="gaiagpu"><meta property="article:published_time" content="2023-06-27T14:57:42+08:00"><meta property="article:modified_time" content="2023-06-27T14:57:42+08:00"><meta name=twitter:title content="【Kubernetes】部署gaiaGPU（vCUDA）"><meta name=twitter:description content="部署GaiaGPU 前置工作 配置好GPU环境 配置好k8s集群环境 gpu-admission 部署deployment 创建文件gpu-quota-admission.ya"></head><body class="article-page has-toc"><script>(function(){const colorSchemeKey='StackColorScheme';if(!localStorage.getItem(colorSchemeKey)){localStorage.setItem(colorSchemeKey,"auto");}})();</script><script>(function(){const colorSchemeKey='StackColorScheme';const colorSchemeItem=localStorage.getItem(colorSchemeKey);const supportDarkMode=window.matchMedia('(prefers-color-scheme: dark)').matches===true;if(colorSchemeItem=='dark'||colorSchemeItem==='auto'&&supportDarkMode){document.documentElement.dataset.scheme='dark';}else{document.documentElement.dataset.scheme='light';}})();</script><div class="container main-container flex
-extended"><div id=article-toolbar><a href=/ class=back-home><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="15 6 9 12 15 18"/></svg><span>Back</span></a></div><main class="main full-width"><article class=main-article><header class=article-header><div class=article-details><header class=article-category><a href=/categories/kubernetes/>kubernetes</a></header><h2 class=article-title><a href=/p/kubernetes%E9%83%A8%E7%BD%B2gaiagpuvcuda/>【Kubernetes】部署gaiaGPU（vCUDA）</a></h2><footer class=article-time><div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg><time class=article-time--published>Jun 27, 2023</time></div><div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg><time class=article-time--reading>6 minute read</time></div></footer></div></header><section class=article-content><h1 id=部署gaiagpu>部署GaiaGPU</h1><h2 id=前置工作>前置工作</h2><ul><li>配置好GPU环境</li><li>配置好k8s集群环境</li></ul><h2 id=gpu-admission>gpu-admission</h2><h3 id=部署deployment>部署deployment</h3><p>创建文件<code>gpu-quota-admission.yaml</code></p><div class=highlight><pre class=chroma><code class=language-yaml data-lang=yaml><span class=nn>---</span><span class=w>
-</span><span class=w></span><span class=nt>apiVersion</span><span class=p>:</span><span class=w> 
-</span><span class=w></span><span class=nt>apiVersion</span><span class=p>:</span><span class=w> </span><span class=l>v1</span><span class=w>
-</span><span class=w></span><span class=nt>kind</span><span class=p>:</span><span class=w> </span><span class=l>ServiceAccount</span><span class=w>
-</span><span class=w></span><span class=nt>metadata</span><span class=p>:</span><span class=w>
-</span><span class=w>  </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>gpu-admission</span><span class=w>
-</span><span class=w>  </span><span class=nt>namespace</span><span class=p>:</span><span class=w> </span><span class=l>kube-system</span><span class=w>
-</span><span class=w>
-</span><span class=w></span><span class=nn>---</span><span class=w>
-</span><span class=w></span><span class=nt>apiVersion</span><span class=p>:</span><span class=w> </span><span class=l>rbac.authorization.k8s.io/v1</span><span class=w>
-</span><span class=w></span><span class=nt>kind</span><span class=p>:</span><span class=w> </span><span class=l>ClusterRoleBinding</span><span class=w>
-</span><span class=w></span><span class=nt>metadata</span><span class=p>:</span><span class=w>
-</span><span class=w>  </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>gpu-admission-as-kube-scheduler</span><span class=w>
-</span><span class=w></span><span class=nt>subjects</span><span class=p>:</span><span class=w>
-</span><span class=w></span>- <span class=nt>kind</span><span class=p>:</span><span class=w> </span><span class=l>ServiceAccount</span><span class=w>
-</span><span class=w>  </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>gpu-admission</span><span class=w>
-</span><span class=w>  </span><span class=nt>namespace</span><span class=p>:</span><span class=w> </span><span class=l>kube-system</span><span class=w>
-</span><span class=w></span><span class=nt>roleRef</span><span class=p>:</span><span class=w>
-</span><span class=w>  </span><span class=nt>kind</span><span class=p>:</span><span class=w> </span><span class=l>ClusterRole</span><span class=w>
-</span><span class=w>  </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>system:kube-scheduler</span><span class=w>
-</span><span class=w>  </span><span class=nt>apiGroup</span><span class=p>:</span><span class=w> </span><span class=l>rbac.authorization.k8s.io</span><span class=w>
-</span><span class=w>  
-</span><span class=w></span><span class=nn>---</span><span class=w>
-</span><span class=w></span><span class=nt>apiVersion</span><span class=p>:</span><span class=w> </span><span class=l>rbac.authorization.k8s.io/v1</span><span class=w>
-</span><span class=w></span><span class=nt>kind</span><span class=p>:</span><span class=w> </span><span class=l>ClusterRoleBinding</span><span class=w>
-</span><span class=w></span><span class=nt>metadata</span><span class=p>:</span><span class=w>
-</span><span class=w>  </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>gpu-admission-as-volume-scheduler</span><span class=w>
-</span><span class=w></span><span class=nt>subjects</span><span class=p>:</span><span class=w>
-</span><span class=w></span>- <span class=nt>kind</span><span class=p>:</span><span class=w> </span><span class=l>ServiceAccount</span><span class=w>
-</span><span class=w>  </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>gpu-admission</span><span class=w>
-</span><span class=w>  </span><span class=nt>namespace</span><span class=p>:</span><span class=w> </span><span class=l>kube-system</span><span class=w>
-</span><span class=w></span><span class=nt>roleRef</span><span class=p>:</span><span class=w>
-</span><span class=w>  </span><span class=nt>kind</span><span class=p>:</span><span class=w> </span><span class=l>ClusterRole</span><span class=w>
-</span><span class=w>  </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>system:volume-scheduler</span><span class=w>
-</span><span class=w>  </span><span class=nt>apiGroup</span><span class=p>:</span><span class=w> </span><span class=l>rbac.authorization.k8s.io</span><span class=w>
-</span><span class=w>  
-</span><span class=w></span><span class=nn>---</span><span class=w>
-</span><span class=w></span><span class=nt>apiVersion</span><span class=p>:</span><span class=w> </span><span class=l>rbac.authorization.k8s.io/v1</span><span class=w>
-</span><span class=w></span><span class=nt>kind</span><span class=p>:</span><span class=w> </span><span class=l>ClusterRoleBinding</span><span class=w>
-</span><span class=w></span><span class=nt>metadata</span><span class=p>:</span><span class=w>
-</span><span class=w>  </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>gpu-admission-as-daemon-set-controller</span><span class=w>
-</span><span class=w></span><span class=nt>subjects</span><span class=p>:</span><span class=w>
-</span><span class=w></span>- <span class=nt>kind</span><span class=p>:</span><span class=w> </span><span class=l>ServiceAccount</span><span class=w>
-</span><span class=w>  </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>gpu-admission</span><span class=w>
-</span><span class=w>  </span><span class=nt>namespace</span><span class=p>:</span><span class=w> </span><span class=l>kube-system</span><span class=w>
-</span><span class=w></span><span class=nt>roleRef</span><span class=p>:</span><span class=w>
-</span><span class=w>  </span><span class=nt>kind</span><span class=p>:</span><span class=w> </span><span class=l>ClusterRole</span><span class=w>
-</span><span class=w>  </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>system:controller:daemon-set-controller</span><span class=w>
-</span><span class=w>  </span><span class=nt>apiGroup</span><span class=p>:</span><span class=w> </span><span class=l>rbac.authorization.k8s.io</span><span class=w>
-</span><span class=w>
-</span><span class=w></span><span class=nn>---</span><span class=w>
-</span><span class=w></span><span class=c># 创建控制器</span><span class=w>
-</span><span class=w></span><span class=nt>apiVersion</span><span class=p>:</span><span class=w> </span><span class=l>apps/v1</span><span class=w>
-</span><span class=w></span><span class=nt>kind</span><span class=p>:</span><span class=w> </span><span class=l>Deployment</span><span class=w>
-</span><span class=w></span><span class=nt>metadata</span><span class=p>:</span><span class=w>
-</span><span class=w>  </span><span class=nt>labels</span><span class=p>:</span><span class=w>
-</span><span class=w>    </span><span class=nt>k8s-app</span><span class=p>:</span><span class=w> </span><span class=l>gpu-quota-admission</span><span class=w>
-</span><span class=w>  </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>gpu-quota-admission</span><span class=w>
-</span><span class=w>  </span><span class=nt>namespace</span><span class=p>:</span><span class=w> </span><span class=l>kube-system</span><span class=w>
-</span><span class=w></span><span class=nt>spec</span><span class=p>:</span><span class=w>
-</span><span class=w>  </span><span class=nt>replicas</span><span class=p>:</span><span class=w> </span><span class=m>1</span><span class=w>
-</span><span class=w>  </span><span class=nt>selector</span><span class=p>:</span><span class=w>
-</span><span class=w>    </span><span class=nt>matchLabels</span><span class=p>:</span><span class=w>
-</span><span class=w>      </span><span class=nt>k8s-app</span><span class=p>:</span><span class=w> </span><span class=l>gpu-quota-admission</span><span class=w>
-</span><span class=w>  </span><span class=nt>template</span><span class=p>:</span><span class=w>
-</span><span class=w>    </span><span class=nt>metadata</span><span class=p>:</span><span class=w>
-</span><span class=w>      </span><span class=nt>labels</span><span class=p>:</span><span class=w>
-</span><span class=w>        </span><span class=nt>k8s-app</span><span class=p>:</span><span class=w> </span><span class=l>gpu-quota-admission</span><span class=w>
-</span><span class=w>      </span><span class=nt>namespace</span><span class=p>:</span><span class=w> </span><span class=l>kube-system</span><span class=w>
-</span><span class=w>    </span><span class=nt>spec</span><span class=p>:</span><span class=w>
-</span><span class=w>      </span><span class=nt>affinity</span><span class=p>:</span><span class=w>
-</span><span class=w>        </span><span class=nt>nodeAffinity</span><span class=p>:</span><span class=w>
-</span><span class=w>          </span><span class=nt>preferredDuringSchedulingIgnoredDuringExecution</span><span class=p>:</span><span class=w>
-</span><span class=w>          </span>- <span class=nt>preference</span><span class=p>:</span><span class=w>
-</span><span class=w>              </span><span class=nt>matchExpressions</span><span class=p>:</span><span class=w>
-</span><span class=w>              </span>- <span class=nt>key</span><span class=p>:</span><span class=w> </span><span class=l>node-role.kubernetes.io/master</span><span class=w>
-</span><span class=w>                </span><span class=nt>operator</span><span class=p>:</span><span class=w> </span><span class=l>Exists</span><span class=w>
-</span><span class=w>            </span><span class=nt>weight</span><span class=p>:</span><span class=w> </span><span class=m>1</span><span class=w>
-</span><span class=w>      </span><span class=nt>containers</span><span class=p>:</span><span class=w>
-</span><span class=w>      </span>- <span class=nt>env</span><span class=p>:</span><span class=w>
-</span><span class=w>        </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>LOG_LEVEL</span><span class=w>
-</span><span class=w>          </span><span class=nt>value</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;4&#34;</span><span class=w>
-</span><span class=w>        </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>EXTRA_FLAGS</span><span class=w>
-</span><span class=w>          </span><span class=nt>value</span><span class=p>:</span><span class=w> </span>--<span class=l>incluster-mode=true</span><span class=w>
-</span><span class=w>        </span><span class=nt>image</span><span class=p>:</span><span class=w> </span><span class=l>ccr.ccs.tencentyun.com/tkeimages/gpu-quota-admission:latest</span><span class=w>
-</span><span class=w>        </span><span class=nt>imagePullPolicy</span><span class=p>:</span><span class=w> </span><span class=l>IfNotPresent</span><span class=w>
-</span><span class=w>        </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>gpu-quota-admission</span><span class=w>
-</span><span class=w>        </span><span class=nt>ports</span><span class=p>:</span><span class=w>
-</span><span class=w>        </span>- <span class=nt>containerPort</span><span class=p>:</span><span class=w> </span><span class=m>3456</span><span class=w>
-</span><span class=w>          </span><span class=nt>protocol</span><span class=p>:</span><span class=w> </span><span class=l>TCP</span><span class=w>
-</span><span class=w>        </span><span class=nt>resources</span><span class=p>:</span><span class=w>
-</span><span class=w>          </span><span class=nt>limits</span><span class=p>:</span><span class=w>
-</span><span class=w>            </span><span class=nt>cpu</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;2&#34;</span><span class=w>
-</span><span class=w>            </span><span class=nt>memory</span><span class=p>:</span><span class=w> </span><span class=l>2Gi</span><span class=w>
-</span><span class=w>          </span><span class=nt>requests</span><span class=p>:</span><span class=w>
-</span><span class=w>            </span><span class=nt>cpu</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;1&#34;</span><span class=w>
-</span><span class=w>            </span><span class=nt>memory</span><span class=p>:</span><span class=w> </span><span class=l>1Gi</span><span class=w>
-</span><span class=w>        </span><span class=nt>volumeMounts</span><span class=p>:</span><span class=w>
-</span><span class=w>        </span>- <span class=nt>mountPath</span><span class=p>:</span><span class=w> </span><span class=l>/root/gpu-quota-admission/</span><span class=w>
-</span><span class=w>          </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>config</span><span class=w>
-</span><span class=w>      </span><span class=nt>dnsPolicy</span><span class=p>:</span><span class=w> </span><span class=l>ClusterFirstWithHostNet</span><span class=w>
-</span><span class=w>      </span><span class=nt>initContainers</span><span class=p>:</span><span class=w>
-</span><span class=w>      </span>- <span class=nt>command</span><span class=p>:</span><span class=w>
-</span><span class=w>        </span>- <span class=l>sh</span><span class=w>
-</span><span class=w>        </span>- -<span class=l>c</span><span class=w>
-</span><span class=w>        </span>- <span class=s1>&#39; mkdir -p /etc/kubernetes/ &amp;&amp; cp /root/gpu-quota-admission/gpu-quota-admission.config
-</span><span class=s1>          /etc/kubernetes/&#39;</span><span class=w>
-</span><span class=w>        </span><span class=nt>image</span><span class=p>:</span><span class=w> </span><span class=l>busybox</span><span class=w>
-</span><span class=w>        </span><span class=nt>imagePullPolicy</span><span class=p>:</span><span class=w> </span><span class=l>Always</span><span class=w>
-</span><span class=w>        </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>init-kube-config</span><span class=w>
-</span><span class=w>        </span><span class=nt>securityContext</span><span class=p>:</span><span class=w>
-</span><span class=w>          </span><span class=nt>privileged</span><span class=p>:</span><span class=w> </span><span class=kc>true</span><span class=w>
-</span><span class=w>        </span><span class=nt>volumeMounts</span><span class=p>:</span><span class=w>
-</span><span class=w>        </span>- <span class=nt>mountPath</span><span class=p>:</span><span class=w> </span><span class=l>/root/gpu-quota-admission/</span><span class=w>
-</span><span class=w>          </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>config</span><span class=w>
-</span><span class=w>      </span><span class=nt>priority</span><span class=p>:</span><span class=w> </span><span class=m>2000000000</span><span class=w>
-</span><span class=w>      </span><span class=nt>priorityClassName</span><span class=p>:</span><span class=w> </span><span class=l>system-cluster-critical</span><span class=w>
-</span><span class=w>      </span><span class=nt>restartPolicy</span><span class=p>:</span><span class=w> </span><span class=l>Always</span><span class=w>
-</span><span class=w>      </span><span class=nt>serviceAccount</span><span class=p>:</span><span class=w> </span><span class=l>gpu-admission</span><span class=w>
-</span><span class=w>      </span><span class=nt>terminationGracePeriodSeconds</span><span class=p>:</span><span class=w> </span><span class=m>30</span><span class=w>
-</span><span class=w>      </span><span class=nt>tolerations</span><span class=p>:</span><span class=w>
-</span><span class=w>      </span>- <span class=nt>effect</span><span class=p>:</span><span class=w> </span><span class=l>NoSchedule</span><span class=w>
-</span><span class=w>        </span><span class=nt>key</span><span class=p>:</span><span class=w> </span><span class=l>node-role.kubernetes.io/master</span><span class=w>
-</span><span class=w>      </span><span class=nt>volumes</span><span class=p>:</span><span class=w>
-</span><span class=w>      </span>- <span class=nt>configMap</span><span class=p>:</span><span class=w>
-</span><span class=w>          </span><span class=nt>defaultMode</span><span class=p>:</span><span class=w> </span><span class=m>420</span><span class=w>
-</span><span class=w>          </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>gpu-quota-admission</span><span class=w>
-</span><span class=w>        </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>config</span><span class=w>
-</span><span class=w>
-</span><span class=w></span><span class=nn>---</span><span class=w>
-</span><span class=w></span><span class=c># 创建configMap</span><span class=w>
-</span><span class=w></span><span class=nt>apiVersion</span><span class=p>:</span><span class=w> </span><span class=l>v1</span><span class=w>
-</span><span class=w></span><span class=nt>kind</span><span class=p>:</span><span class=w> </span><span class=l>ConfigMap</span><span class=w>
-</span><span class=w></span><span class=nt>metadata</span><span class=p>:</span><span class=w>
-</span><span class=w>  </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>gpu-quota-admission</span><span class=w>
-</span><span class=w>  </span><span class=nt>namespace</span><span class=p>:</span><span class=w> </span><span class=l>kube-system</span><span class=w>
-</span><span class=w></span><span class=nt>data</span><span class=p>:</span><span class=w>
-</span><span class=w>  </span><span class=nt>gpu-quota-admission.config</span><span class=p>:</span><span class=w> </span><span class=p>|</span><span class=sd>
-</span><span class=sd>    {
-</span><span class=sd>         &#34;QuotaConfigMapName&#34;: &#34;gpuquota&#34;,
-</span><span class=sd>         &#34;QuotaConfigMapNamespace&#34;: &#34;kube-system&#34;,
-</span><span class=sd>         &#34;GPUModelLabel&#34;: &#34;gaia.tencent.com/gpu-model&#34;,
-</span><span class=sd>         &#34;GPUPoolLabel&#34;: &#34;gaia.tencent.com/gpu-pool&#34;
-</span><span class=sd>     }</span><span class=w>    
-</span><span class=w>
-</span><span class=w></span><span class=nn>---</span><span class=w>
-</span><span class=w></span><span class=c># 创建service</span><span class=w>
-</span><span class=w></span><span class=nt>apiVersion</span><span class=p>:</span><span class=w> </span><span class=l>v1</span><span class=w>
-</span><span class=w></span><span class=nt>kind</span><span class=p>:</span><span class=w> </span><span class=l>Service</span><span class=w>
-</span><span class=w></span><span class=nt>metadata</span><span class=p>:</span><span class=w>
-</span><span class=w>  </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>gpu-quota-admission</span><span class=w>
-</span><span class=w>  </span><span class=nt>namespace</span><span class=p>:</span><span class=w> </span><span class=l>kube-system</span><span class=w>
-</span><span class=w></span><span class=nt>spec</span><span class=p>:</span><span class=w>
-</span><span class=w>  </span><span class=nt>ports</span><span class=p>:</span><span class=w>
-</span><span class=w>  </span>- <span class=nt>port</span><span class=p>:</span><span class=w> </span><span class=m>3456</span><span class=w>
-</span><span class=w>    </span><span class=nt>protocol</span><span class=p>:</span><span class=w> </span><span class=l>TCP</span><span class=w>
-</span><span class=w>    </span><span class=nt>targetPort</span><span class=p>:</span><span class=w> </span><span class=m>3456</span><span class=w>
-</span><span class=w>  </span><span class=nt>selector</span><span class=p>:</span><span class=w>
-</span><span class=w>    </span><span class=nt>k8s-app</span><span class=p>:</span><span class=w> </span><span class=l>gpu-quota-admission</span><span class=w>
-</span><span class=w>  </span><span class=nt>type</span><span class=p>:</span><span class=w> </span><span class=l>ClusterIP</span><span class=w>
-</span></code></pre></div><div class=highlight><pre class=chroma><code class=language-shell data-lang=shell>kubectl apply -f gpu-quota-admission.yaml
-</code></pre></div><h3 id=创建自定义调度文件>创建自定义调度文件</h3><p>创建文件<code>/etc/kubernetes/scheduler-policy-config.json</code></p><div class=highlight><pre class=chroma><code class=language-yaml data-lang=yaml>{<span class=w>
-</span><span class=w>  </span><span class=nt>&#34;kind&#34;: </span><span class=s2>&#34;Policy&#34;</span><span class=p>,</span><span class=w>
-</span><span class=w>  </span><span class=nt>&#34;apiVersion&#34;: </span><span class=s2>&#34;v1&#34;</span><span class=p>,</span><span class=w>
-</span><span class=w>  </span><span class=nt>&#34;predicates&#34;: </span><span class=p>[</span><span class=w>
-</span><span class=w>    </span>{<span class=w>
-</span><span class=w>      </span><span class=nt>&#34;name&#34;: </span><span class=s2>&#34;PodFitsHostPorts&#34;</span><span class=w>
-</span><span class=w>    </span>}<span class=p>,</span><span class=w>
-</span><span class=w>    </span>{<span class=w>
-</span><span class=w>      </span><span class=nt>&#34;name&#34;: </span><span class=s2>&#34;PodFitsResources&#34;</span><span class=w>
-</span><span class=w>    </span>}<span class=p>,</span><span class=w>
-</span><span class=w>    </span>{<span class=w>
-</span><span class=w>      </span><span class=nt>&#34;name&#34;: </span><span class=s2>&#34;NoDiskConflict&#34;</span><span class=w>
-</span><span class=w>    </span>}<span class=p>,</span><span class=w>
-</span><span class=w>    </span>{<span class=w>
-</span><span class=w>      </span><span class=nt>&#34;name&#34;: </span><span class=s2>&#34;MatchNodeSelector&#34;</span><span class=w>
-</span><span class=w>    </span>}<span class=p>,</span><span class=w>
-</span><span class=w>    </span>{<span class=w>
-</span><span class=w>      </span><span class=nt>&#34;name&#34;: </span><span class=s2>&#34;HostName&#34;</span><span class=w>
-</span><span class=w>    </span>}<span class=w>
-</span><span class=w>  </span><span class=p>],</span><span class=w>
-</span><span class=w>  </span><span class=nt>&#34;extenders&#34;: </span><span class=p>[</span><span class=w>
-</span><span class=w>    </span>{<span class=w>
-</span><span class=w>      </span><span class=nt>&#34;urlPrefix&#34;: </span><span class=s2>&#34;http://gpu-quota-admission.kube-system:3456/scheduler&#34;</span><span class=p>,</span><span class=w>
-</span><span class=w>      </span><span class=nt>&#34;apiVersion&#34;: </span><span class=s2>&#34;v1beta1&#34;</span><span class=p>,</span><span class=w>
-</span><span class=w>      </span><span class=nt>&#34;filterVerb&#34;: </span><span class=s2>&#34;predicates&#34;</span><span class=p>,</span><span class=w>
-</span><span class=w>      </span><span class=nt>&#34;enableHttps&#34;: </span><span class=kc>false</span><span class=p>,</span><span class=w>
-</span><span class=w>      </span><span class=nt>&#34;nodeCacheCapable&#34;: </span><span class=kc>false</span><span class=p>,</span><span class=w>
-</span><span class=w>      </span><span class=nt>&#34;managedResources&#34;: </span><span class=p>[</span><span class=w>
-</span><span class=w>       </span>{<span class=w>
-</span><span class=w>         </span><span class=nt>&#34;name&#34;: </span><span class=s2>&#34;tencent.com/vcuda-memory&#34;</span><span class=p>,</span><span class=w>
-</span><span class=w>         </span><span class=nt>&#34;ignoredByScheduler&#34;: </span><span class=kc>false</span><span class=w>
-</span><span class=w>       </span>}<span class=p>,</span><span class=w>
-</span><span class=w>       </span>{<span class=w>
-</span><span class=w>         </span><span class=nt>&#34;name&#34;: </span><span class=s2>&#34;tencent.com/vcuda-core&#34;</span><span class=p>,</span><span class=w>
-</span><span class=w>         </span><span class=nt>&#34;ignoredByScheduler&#34;: </span><span class=kc>false</span><span class=w>
-</span><span class=w>       </span>}<span class=w>
-</span><span class=w>      </span><span class=p>]</span><span class=w>
-</span><span class=w>    </span>}<span class=w>
-</span><span class=w>  </span><span class=p>],</span><span class=w>
-</span><span class=w>  </span><span class=nt>&#34;hardPodAffinitySymmetricWeight&#34;: </span><span class=m>10</span><span class=p>,</span><span class=w>
-</span><span class=w>  </span><span class=nt>&#34;alwaysCheckAllPredicates&#34;: </span><span class=kc>false</span><span class=w>
-</span><span class=w></span>}<span class=w>
-</span></code></pre></div><h3 id=修改默认调度器>修改默认调度器</h3><p><code>/etc/kubernetes/manifests/kube-scheduler.yaml</code></p><div class=highlight><pre class=chroma><code class=language-yaml data-lang=yaml><span class=nt>apiVersion</span><span class=p>:</span><span class=w> </span><span class=l>v1</span><span class=w>
-</span><span class=w></span><span class=nt>kind</span><span class=p>:</span><span class=w> </span><span class=l>Pod</span><span class=w>
-</span><span class=w></span><span class=nt>metadata</span><span class=p>:</span><span class=w>
-</span><span class=w>  </span><span class=nt>creationTimestamp</span><span class=p>:</span><span class=w> </span><span class=kc>null</span><span class=w>
-</span><span class=w>  </span><span class=nt>labels</span><span class=p>:</span><span class=w>
-</span><span class=w>    </span><span class=nt>component</span><span class=p>:</span><span class=w> </span><span class=l>kube-scheduler</span><span class=w>
-</span><span class=w>    </span><span class=nt>tier</span><span class=p>:</span><span class=w> </span><span class=l>control-plane</span><span class=w>
-</span><span class=w>  </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>kube-scheduler</span><span class=w>
-</span><span class=w>  </span><span class=nt>namespace</span><span class=p>:</span><span class=w> </span><span class=l>kube-system</span><span class=w>
-</span><span class=w></span><span class=nt>spec</span><span class=p>:</span><span class=w>
-</span><span class=w>  </span><span class=nt>containers</span><span class=p>:</span><span class=w>
-</span><span class=w>  </span>- <span class=nt>command</span><span class=p>:</span><span class=w>
-</span><span class=w>    </span>- <span class=l>kube-scheduler</span><span class=w>
-</span><span class=w>    </span>- --<span class=l>authentication-kubeconfig=/etc/kubernetes/scheduler.conf</span><span class=w>
-</span><span class=w>    </span>- --<span class=l>authorization-kubeconfig=/etc/kubernetes/scheduler.conf</span><span class=w>
-</span><span class=w>    </span>- --<span class=l>bind-address=127.0.0.1</span><span class=w>
-</span><span class=w>    </span>- --<span class=l>kubeconfig=/etc/kubernetes/scheduler.conf</span><span class=w>
-</span><span class=w>    </span>- --<span class=l>leader-elect=true</span><span class=w>
-</span><span class=w>    </span>- --<span class=l>policy-config-file=/etc/kubernetes/scheduler-policy-config.json</span><span class=w> </span><span class=c>#增加项</span><span class=w>
-</span><span class=w>    </span>- --<span class=l>use-legacy-policy-config=true 								   </span><span class=w> </span><span class=c>#增加项</span><span class=w>
-</span><span class=w>    </span><span class=nt>image</span><span class=p>:</span><span class=w> </span><span class=l>registry.aliyuncs.com/google_containers/kube-scheduler:v1.23.17</span><span class=w>
-</span><span class=w>    </span><span class=nt>imagePullPolicy</span><span class=p>:</span><span class=w> </span><span class=l>IfNotPresent</span><span class=w>
-</span><span class=w>    </span><span class=nt>livenessProbe</span><span class=p>:</span><span class=w>
-</span><span class=w>      </span><span class=nt>failureThreshold</span><span class=p>:</span><span class=w> </span><span class=m>8</span><span class=w>
-</span><span class=w>      </span><span class=nt>httpGet</span><span class=p>:</span><span class=w>
-</span><span class=w>        </span><span class=nt>host</span><span class=p>:</span><span class=w> </span><span class=m>127.0.0.1</span><span class=w>
-</span><span class=w>        </span><span class=nt>path</span><span class=p>:</span><span class=w> </span><span class=l>/healthz</span><span class=w>
-</span><span class=w>        </span><span class=nt>port</span><span class=p>:</span><span class=w> </span><span class=m>10259</span><span class=w>
-</span><span class=w>        </span><span class=nt>scheme</span><span class=p>:</span><span class=w> </span><span class=l>HTTPS</span><span class=w>
-</span><span class=w>      </span><span class=nt>initialDelaySeconds</span><span class=p>:</span><span class=w> </span><span class=m>10</span><span class=w>
-</span><span class=w>      </span><span class=nt>periodSeconds</span><span class=p>:</span><span class=w> </span><span class=m>10</span><span class=w>
-</span><span class=w>      </span><span class=nt>timeoutSeconds</span><span class=p>:</span><span class=w> </span><span class=m>15</span><span class=w>
-</span><span class=w>    </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>kube-scheduler</span><span class=w>
-</span><span class=w>    </span><span class=nt>resources</span><span class=p>:</span><span class=w>
-</span><span class=w>      </span><span class=nt>requests</span><span class=p>:</span><span class=w>
-</span><span class=w>        </span><span class=nt>cpu</span><span class=p>:</span><span class=w> </span><span class=l>100m</span><span class=w>
-</span><span class=w>    </span><span class=nt>startupProbe</span><span class=p>:</span><span class=w>
-</span><span class=w>      </span><span class=nt>failureThreshold</span><span class=p>:</span><span class=w> </span><span class=m>24</span><span class=w>
-</span><span class=w>      </span><span class=nt>httpGet</span><span class=p>:</span><span class=w>
-</span><span class=w>        </span><span class=nt>host</span><span class=p>:</span><span class=w> </span><span class=m>127.0.0.1</span><span class=w>
-</span><span class=w>        </span><span class=nt>path</span><span class=p>:</span><span class=w> </span><span class=l>/healthz</span><span class=w>
-</span><span class=w>        </span><span class=nt>port</span><span class=p>:</span><span class=w> </span><span class=m>10259</span><span class=w>
-</span><span class=w>        </span><span class=nt>scheme</span><span class=p>:</span><span class=w> </span><span class=l>HTTPS</span><span class=w>
-</span><span class=w>      </span><span class=nt>initialDelaySeconds</span><span class=p>:</span><span class=w> </span><span class=m>10</span><span class=w>
-</span><span class=w>      </span><span class=nt>periodSeconds</span><span class=p>:</span><span class=w> </span><span class=m>10</span><span class=w>
-</span><span class=w>      </span><span class=nt>timeoutSeconds</span><span class=p>:</span><span class=w> </span><span class=m>15</span><span class=w>
-</span><span class=w>    </span><span class=nt>volumeMounts</span><span class=p>:</span><span class=w>
-</span><span class=w>    </span>- <span class=nt>mountPath</span><span class=p>:</span><span class=w> </span><span class=l>/etc/kubernetes/scheduler.conf</span><span class=w>
-</span><span class=w>      </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>kubeconfig</span><span class=w>
-</span><span class=w>      </span><span class=nt>readOnly</span><span class=p>:</span><span class=w> </span><span class=kc>true</span><span class=w>
-</span><span class=w>    </span>- <span class=nt>mountPath</span><span class=p>:</span><span class=w> </span><span class=l>/etc/kubernetes/scheduler-policy-config.json</span><span class=w> </span><span class=c>#将文件挂载</span><span class=w>
-</span><span class=w>      </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>policyconfig</span><span class=w>
-</span><span class=w>      </span><span class=nt>readOnly</span><span class=p>:</span><span class=w> </span><span class=kc>true</span><span class=w>
-</span><span class=w>  </span><span class=nt>hostNetwork</span><span class=p>:</span><span class=w> </span><span class=kc>true</span><span class=w>
-</span><span class=w>  </span><span class=nt>dnsPolicy</span><span class=p>:</span><span class=w> </span><span class=l>ClusterFirstWithHostNet                       </span><span class=w> </span><span class=c># 修改dns策略</span><span class=w>
-</span><span class=w>  </span><span class=nt>priorityClassName</span><span class=p>:</span><span class=w> </span><span class=l>system-node-critical</span><span class=w>
-</span><span class=w>  </span><span class=nt>securityContext</span><span class=p>:</span><span class=w>
-</span><span class=w>    </span><span class=nt>seccompProfile</span><span class=p>:</span><span class=w>
-</span><span class=w>      </span><span class=nt>type</span><span class=p>:</span><span class=w> </span><span class=l>RuntimeDefault</span><span class=w>
-</span><span class=w>  </span><span class=nt>volumes</span><span class=p>:</span><span class=w>
-</span><span class=w>  </span>- <span class=nt>hostPath</span><span class=p>:</span><span class=w>
-</span><span class=w>      </span><span class=nt>path</span><span class=p>:</span><span class=w> </span><span class=l>/etc/kubernetes/scheduler.conf</span><span class=w>
-</span><span class=w>      </span><span class=nt>type</span><span class=p>:</span><span class=w> </span><span class=l>FileOrCreate</span><span class=w>
-</span><span class=w>    </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>kubeconfig</span><span class=w>
-</span><span class=w>  </span>- <span class=nt>hostPath</span><span class=p>:</span><span class=w>                                             </span><span class=c>#挂载到该 Pod 中的容器内</span><span class=w>
-</span><span class=w>      </span><span class=nt>path</span><span class=p>:</span><span class=w> </span><span class=l>/etc/kubernetes/scheduler-policy-config.json</span><span class=w>
-</span><span class=w>      </span><span class=nt>type</span><span class=p>:</span><span class=w> </span><span class=l>FileOrCreate</span><span class=w>
-</span><span class=w>    </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>policyconfig</span><span class=w>
-</span><span class=w></span><span class=nt>status</span><span class=p>:</span><span class=w> </span>{}<span class=w>
-</span></code></pre></div><p>修改后wq保存， 保存后自动生效</p><h2 id=gpu-manager>gpu-manager</h2><h3 id=给gpu节点打标签>给gpu节点打标签</h3><div class=highlight><pre class=chroma><code class=language-shell data-lang=shell>kubectl label node &lt;your node&gt; nvidia-device-enable<span class=o>=</span><span class=nb>enable</span>
-</code></pre></div><h3 id=部署deamonset>部署deamonset</h3><p>创建文件<code>gpu-manager.yaml</code></p><div class=highlight><pre class=chroma><code class=language-yaml data-lang=yaml><span class=nn>---</span><span class=w>
-</span><span class=w></span><span class=c># 创建ServiceAccount</span><span class=w>
-</span><span class=w></span><span class=nt>apiVersion</span><span class=p>:</span><span class=w> </span><span class=l>v1</span><span class=w>
-</span><span class=w></span><span class=nt>kind</span><span class=p>:</span><span class=w> </span><span class=l>ServiceAccount</span><span class=w>
-</span><span class=w></span><span class=nt>metadata</span><span class=p>:</span><span class=w>
-</span><span class=w>  </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>gpu-manager</span><span class=w>
-</span><span class=w>  </span><span class=nt>namespace</span><span class=p>:</span><span class=w> </span><span class=l>kube-system</span><span class=w>
-</span><span class=w>
-</span><span class=w></span><span class=nn>---</span><span class=w>
-</span><span class=w></span><span class=c># 创建ClusterRoleBinding</span><span class=w>
-</span><span class=w></span><span class=nt>apiVersion</span><span class=p>:</span><span class=w> </span><span class=l>rbac.authorization.k8s.io/v1</span><span class=w>
-</span><span class=w></span><span class=nt>kind</span><span class=p>:</span><span class=w> </span><span class=l>ClusterRoleBinding</span><span class=w>
-</span><span class=w></span><span class=nt>metadata</span><span class=p>:</span><span class=w>
-</span><span class=w>  </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>gpu-manager</span><span class=w>
-</span><span class=w></span><span class=nt>roleRef</span><span class=p>:</span><span class=w>
-</span><span class=w>  </span><span class=nt>apiGroup</span><span class=p>:</span><span class=w> </span><span class=l>rbac.authorization.k8s.io</span><span class=w>
-</span><span class=w>  </span><span class=nt>kind</span><span class=p>:</span><span class=w> </span><span class=l>ClusterRole</span><span class=w>
-</span><span class=w>  </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>cluster-admin</span><span class=w>
-</span><span class=w></span><span class=nt>subjects</span><span class=p>:</span><span class=w>
-</span><span class=w></span>- <span class=nt>kind</span><span class=p>:</span><span class=w> </span><span class=l>ServiceAccount</span><span class=w>
-</span><span class=w>  </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>gpu-manager</span><span class=w>
-</span><span class=w>  </span><span class=nt>namespace</span><span class=p>:</span><span class=w> </span><span class=l>kube-system</span><span class=w>
-</span><span class=w>    
-</span><span class=w></span><span class=nn>---</span><span class=w>
-</span><span class=w></span><span class=c>#创建DaemonSet</span><span class=w>
-</span><span class=w></span><span class=nt>apiVersion</span><span class=p>:</span><span class=w> </span><span class=l>apps/v1</span><span class=w>
-</span><span class=w></span><span class=nt>kind</span><span class=p>:</span><span class=w> </span><span class=l>DaemonSet</span><span class=w>
-</span><span class=w></span><span class=nt>metadata</span><span class=p>:</span><span class=w>
-</span><span class=w>  </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>gpu-manager-daemonset</span><span class=w>
-</span><span class=w>  </span><span class=nt>namespace</span><span class=p>:</span><span class=w> </span><span class=l>kube-system</span><span class=w>
-</span><span class=w></span><span class=nt>spec</span><span class=p>:</span><span class=w>
-</span><span class=w>  </span><span class=nt>updateStrategy</span><span class=p>:</span><span class=w>
-</span><span class=w>    </span><span class=nt>type</span><span class=p>:</span><span class=w> </span><span class=l>RollingUpdate</span><span class=w>
-</span><span class=w>  </span><span class=nt>selector</span><span class=p>:</span><span class=w>
-</span><span class=w>    </span><span class=nt>matchLabels</span><span class=p>:</span><span class=w>
-</span><span class=w>      </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>gpu-manager-ds</span><span class=w>
-</span><span class=w>  </span><span class=nt>template</span><span class=p>:</span><span class=w>
-</span><span class=w>    </span><span class=nt>metadata</span><span class=p>:</span><span class=w>
-</span><span class=w>      </span><span class=c># This annotation is deprecated. Kept here for backward compatibility</span><span class=w>
-</span><span class=w>      </span><span class=c># See https://kubernetes.io/docs/tasks/administer-cluster/guaranteed-scheduling-critical-addon-pods/</span><span class=w>
-</span><span class=w>      </span><span class=nt>annotations</span><span class=p>:</span><span class=w>
-</span><span class=w>        </span><span class=nt>scheduler.alpha.kubernetes.io/critical-pod</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;&#34;</span><span class=w>
-</span><span class=w>      </span><span class=nt>labels</span><span class=p>:</span><span class=w>
-</span><span class=w>        </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>gpu-manager-ds</span><span class=w>
-</span><span class=w>    </span><span class=nt>spec</span><span class=p>:</span><span class=w>
-</span><span class=w>      </span><span class=nt>serviceAccount</span><span class=p>:</span><span class=w> </span><span class=l>gpu-manager</span><span class=w>
-</span><span class=w>      </span><span class=nt>tolerations</span><span class=p>:</span><span class=w>
-</span><span class=w>        </span><span class=c># This toleration is deprecated. Kept here for backward compatibility</span><span class=w>
-</span><span class=w>        </span><span class=c># See https://kubernetes.io/docs/tasks/administer-cluster/guaranteed-scheduling-critical-addon-pods/</span><span class=w>
-</span><span class=w>        </span>- <span class=nt>key</span><span class=p>:</span><span class=w> </span><span class=l>CriticalAddonsOnly</span><span class=w>
-</span><span class=w>          </span><span class=nt>operator</span><span class=p>:</span><span class=w> </span><span class=l>Exists</span><span class=w>
-</span><span class=w>        </span>- <span class=nt>key</span><span class=p>:</span><span class=w> </span><span class=l>tencent.com/vcuda-core</span><span class=w>
-</span><span class=w>          </span><span class=nt>operator</span><span class=p>:</span><span class=w> </span><span class=l>Exists</span><span class=w>
-</span><span class=w>          </span><span class=nt>effect</span><span class=p>:</span><span class=w> </span><span class=l>NoSchedule</span><span class=w>
-</span><span class=w>      	</span>- <span class=nt>key</span><span class=p>:</span><span class=w> </span><span class=l>node-role.kubernetes.io/master</span><span class=w> </span><span class=c>##增加容忍策略</span><span class=w>
-</span><span class=w>          </span><span class=nt>effect</span><span class=p>:</span><span class=w> </span><span class=l>NoSchedule</span><span class=w>
-</span><span class=w>      </span><span class=c># Mark this pod as a critical add-on; when enabled, the critical add-on</span><span class=w>
-</span><span class=w>      </span><span class=c># scheduler reserves resources for critical add-on pods so that they can</span><span class=w>
-</span><span class=w>      </span><span class=c># be rescheduled after a failure.</span><span class=w>
-</span><span class=w>      </span><span class=c># See https://kubernetes.io/docs/tasks/administer-cluster/guaranteed-scheduling-critical-addon-pods/</span><span class=w>
-</span><span class=w>      </span><span class=nt>priorityClassName</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;system-node-critical&#34;</span><span class=w>
-</span><span class=w>      </span><span class=c># only run node has gpu device</span><span class=w>
-</span><span class=w>      </span><span class=nt>nodeSelector</span><span class=p>:</span><span class=w>
-</span><span class=w>        </span><span class=nt>nvidia-device-enable</span><span class=p>:</span><span class=w> </span><span class=l>enable</span><span class=w>
-</span><span class=w>      </span><span class=nt>hostPID</span><span class=p>:</span><span class=w> </span><span class=kc>true</span><span class=w>
-</span><span class=w>      </span><span class=nt>containers</span><span class=p>:</span><span class=w>
-</span><span class=w>        </span>- <span class=nt>image</span><span class=p>:</span><span class=w> </span><span class=l>tkestack/gpu-manager:v1.1.5 </span><span class=w> </span><span class=c>#指定镜像版本</span><span class=w>
-</span><span class=w>          </span><span class=nt>imagePullPolicy</span><span class=p>:</span><span class=w> </span><span class=l>IfNotPresent      </span><span class=w> </span><span class=c>#使用本地镜像</span><span class=w>
-</span><span class=w>          </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>gpu-manager</span><span class=w>
-</span><span class=w>          </span><span class=nt>securityContext</span><span class=p>:</span><span class=w>
-</span><span class=w>            </span><span class=nt>privileged</span><span class=p>:</span><span class=w> </span><span class=kc>true</span><span class=w>
-</span><span class=w>          </span><span class=nt>ports</span><span class=p>:</span><span class=w>
-</span><span class=w>            </span>- <span class=nt>containerPort</span><span class=p>:</span><span class=w> </span><span class=m>5678</span><span class=w>
-</span><span class=w>          </span><span class=nt>volumeMounts</span><span class=p>:</span><span class=w>
-</span><span class=w>            </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>device-plugin</span><span class=w>
-</span><span class=w>              </span><span class=nt>mountPath</span><span class=p>:</span><span class=w> </span><span class=l>/var/lib/kubelet/device-plugins</span><span class=w>
-</span><span class=w>            </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>vdriver</span><span class=w>
-</span><span class=w>              </span><span class=nt>mountPath</span><span class=p>:</span><span class=w> </span><span class=l>/etc/gpu-manager/vdriver</span><span class=w>
-</span><span class=w>            </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>vmdata</span><span class=w>
-</span><span class=w>              </span><span class=nt>mountPath</span><span class=p>:</span><span class=w> </span><span class=l>/etc/gpu-manager/vm</span><span class=w>
-</span><span class=w>            </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>log</span><span class=w>
-</span><span class=w>              </span><span class=nt>mountPath</span><span class=p>:</span><span class=w> </span><span class=l>/var/log/gpu-manager</span><span class=w>
-</span><span class=w>            </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>checkpoint</span><span class=w>
-</span><span class=w>              </span><span class=nt>mountPath</span><span class=p>:</span><span class=w> </span><span class=l>/etc/gpu-manager/checkpoint</span><span class=w>
-</span><span class=w>            </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>run-dir</span><span class=w>
-</span><span class=w>              </span><span class=nt>mountPath</span><span class=p>:</span><span class=w> </span><span class=l>/var/run</span><span class=w>
-</span><span class=w>            </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>cgroup</span><span class=w>
-</span><span class=w>              </span><span class=nt>mountPath</span><span class=p>:</span><span class=w> </span><span class=l>/sys/fs/cgroup</span><span class=w>
-</span><span class=w>              </span><span class=nt>readOnly</span><span class=p>:</span><span class=w> </span><span class=kc>true</span><span class=w>
-</span><span class=w>            </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>usr-directory</span><span class=w>
-</span><span class=w>              </span><span class=nt>mountPath</span><span class=p>:</span><span class=w> </span><span class=l>/usr/local/host</span><span class=w>
-</span><span class=w>              </span><span class=nt>readOnly</span><span class=p>:</span><span class=w> </span><span class=kc>true</span><span class=w>
-</span><span class=w>          </span><span class=nt>env</span><span class=p>:</span><span class=w>
-</span><span class=w>            </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>LOG_LEVEL</span><span class=w>
-</span><span class=w>              </span><span class=nt>value</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;4&#34;</span><span class=w>
-</span><span class=w>            </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>EXTRA_FLAGS       </span><span class=w> </span><span class=c>#增加启动参数⬇</span><span class=w>
-</span><span class=w>              </span><span class=nt>value</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;--logtostderr=false --cgroup-driver=systemd&#34;</span><span class=w>  
-</span><span class=w>            </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>NODE_NAME</span><span class=w>
-</span><span class=w>              </span><span class=nt>valueFrom</span><span class=p>:</span><span class=w>
-</span><span class=w>                </span><span class=nt>fieldRef</span><span class=p>:</span><span class=w>
-</span><span class=w>                  </span><span class=nt>fieldPath</span><span class=p>:</span><span class=w> </span><span class=l>spec.nodeName</span><span class=w>
-</span><span class=w>      </span><span class=nt>volumes</span><span class=p>:</span><span class=w>
-</span><span class=w>        </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>device-plugin</span><span class=w>
-</span><span class=w>          </span><span class=nt>hostPath</span><span class=p>:</span><span class=w>
-</span><span class=w>            </span><span class=nt>type</span><span class=p>:</span><span class=w> </span><span class=l>Directory</span><span class=w>
-</span><span class=w>            </span><span class=nt>path</span><span class=p>:</span><span class=w> </span><span class=l>/var/lib/kubelet/device-plugins</span><span class=w>
-</span><span class=w>        </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>vmdata</span><span class=w>
-</span><span class=w>          </span><span class=nt>hostPath</span><span class=p>:</span><span class=w>
-</span><span class=w>            </span><span class=nt>type</span><span class=p>:</span><span class=w> </span><span class=l>DirectoryOrCreate</span><span class=w>
-</span><span class=w>            </span><span class=nt>path</span><span class=p>:</span><span class=w> </span><span class=l>/etc/gpu-manager/vm</span><span class=w>
-</span><span class=w>        </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>vdriver</span><span class=w>
-</span><span class=w>          </span><span class=nt>hostPath</span><span class=p>:</span><span class=w>
-</span><span class=w>            </span><span class=nt>type</span><span class=p>:</span><span class=w> </span><span class=l>DirectoryOrCreate</span><span class=w>
-</span><span class=w>            </span><span class=nt>path</span><span class=p>:</span><span class=w> </span><span class=l>/etc/gpu-manager/vdriver</span><span class=w>
-</span><span class=w>        </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>log</span><span class=w>
-</span><span class=w>          </span><span class=nt>hostPath</span><span class=p>:</span><span class=w>
-</span><span class=w>            </span><span class=nt>type</span><span class=p>:</span><span class=w> </span><span class=l>DirectoryOrCreate</span><span class=w>
-</span><span class=w>            </span><span class=nt>path</span><span class=p>:</span><span class=w> </span><span class=l>/etc/gpu-manager/log</span><span class=w>
-</span><span class=w>        </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>checkpoint</span><span class=w>
-</span><span class=w>          </span><span class=nt>hostPath</span><span class=p>:</span><span class=w>
-</span><span class=w>            </span><span class=nt>type</span><span class=p>:</span><span class=w> </span><span class=l>DirectoryOrCreate</span><span class=w>
-</span><span class=w>            </span><span class=nt>path</span><span class=p>:</span><span class=w> </span><span class=l>/etc/gpu-manager/checkpoint</span><span class=w>
-</span><span class=w>        </span><span class=c># We have to mount the whole /var/run directory into container, because of bind mount docker.sock</span><span class=w>
-</span><span class=w>        </span><span class=c># inode change after host docker is restarted</span><span class=w>
-</span><span class=w>        </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>run-dir</span><span class=w>
-</span><span class=w>          </span><span class=nt>hostPath</span><span class=p>:</span><span class=w>
-</span><span class=w>            </span><span class=nt>type</span><span class=p>:</span><span class=w> </span><span class=l>Directory</span><span class=w>
-</span><span class=w>            </span><span class=nt>path</span><span class=p>:</span><span class=w> </span><span class=l>/var/run</span><span class=w>
-</span><span class=w>        </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>cgroup</span><span class=w>
-</span><span class=w>          </span><span class=nt>hostPath</span><span class=p>:</span><span class=w>
-</span><span class=w>            </span><span class=nt>type</span><span class=p>:</span><span class=w> </span><span class=l>Directory</span><span class=w>
-</span><span class=w>            </span><span class=nt>path</span><span class=p>:</span><span class=w> </span><span class=l>/sys/fs/cgroup</span><span class=w>
-</span><span class=w>        </span><span class=c># We have to mount /usr directory instead of specified library path, because of non-existing</span><span class=w>
-</span><span class=w>        </span><span class=c># problem for different distro</span><span class=w>
-</span><span class=w>        </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>usr-directory</span><span class=w>
-</span><span class=w>          </span><span class=nt>hostPath</span><span class=p>:</span><span class=w>
-</span><span class=w>            </span><span class=nt>type</span><span class=p>:</span><span class=w> </span><span class=l>Directory</span><span class=w>
-</span><span class=w>            </span><span class=nt>path</span><span class=p>:</span><span class=w> </span><span class=l>/usr</span><span class=w>
-</span><span class=w>    
-</span><span class=w></span><span class=nn>---</span><span class=w>
-</span><span class=w></span><span class=c># 创建service</span><span class=w>
-</span><span class=w></span><span class=nt>apiVersion</span><span class=p>:</span><span class=w> </span><span class=l>v1</span><span class=w>
-</span><span class=w></span><span class=nt>kind</span><span class=p>:</span><span class=w> </span><span class=l>Service</span><span class=w>
-</span><span class=w></span><span class=nt>metadata</span><span class=p>:</span><span class=w>
-</span><span class=w>  </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>gpu-manager-metric</span><span class=w>
-</span><span class=w>  </span><span class=nt>namespace</span><span class=p>:</span><span class=w> </span><span class=l>kube-system</span><span class=w>
-</span><span class=w>  </span><span class=nt>annotations</span><span class=p>:</span><span class=w>
-</span><span class=w>    </span><span class=nt>prometheus.io/scrape</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;true&#34;</span><span class=w>
-</span><span class=w>  </span><span class=nt>labels</span><span class=p>:</span><span class=w>
-</span><span class=w>    </span><span class=nt>kubernetes.io/cluster-service</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;true&#34;</span><span class=w>
-</span><span class=w></span><span class=nt>spec</span><span class=p>:</span><span class=w>
-</span><span class=w>  </span><span class=nt>clusterIP</span><span class=p>:</span><span class=w> </span><span class=l>None</span><span class=w>
-</span><span class=w>  </span><span class=nt>ports</span><span class=p>:</span><span class=w>
-</span><span class=w>    </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>metrics</span><span class=w>
-</span><span class=w>      </span><span class=nt>port</span><span class=p>:</span><span class=w> </span><span class=m>5678</span><span class=w>
-</span><span class=w>      </span><span class=nt>protocol</span><span class=p>:</span><span class=w> </span><span class=l>TCP</span><span class=w>
-</span><span class=w>      </span><span class=nt>targetPort</span><span class=p>:</span><span class=w> </span><span class=m>5678</span><span class=w>
-</span><span class=w>  </span><span class=nt>selector</span><span class=p>:</span><span class=w>
-</span><span class=w>    </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>gpu-manager-ds</span><span class=w>
-</span></code></pre></div><h2 id=测试>测试</h2><h3 id=创建测试文件>创建测试文件</h3><p>创建文件<code>tensorflow-mnist.yaml</code></p><div class=highlight><pre class=chroma><code class=language-yaml data-lang=yaml><span class=nt>apiVersion</span><span class=p>:</span><span class=w> </span><span class=l>apps/v1</span><span class=w>
-</span><span class=w></span><span class=nt>kind</span><span class=p>:</span><span class=w> </span><span class=l>Deployment</span><span class=w>
-</span><span class=w></span><span class=nt>metadata</span><span class=p>:</span><span class=w>
-</span><span class=w>  </span><span class=nt>labels</span><span class=p>:</span><span class=w>
-</span><span class=w>    </span><span class=nt>k8s-app</span><span class=p>:</span><span class=w> </span><span class=l>vcuda-test</span><span class=w>
-</span><span class=w>    </span><span class=nt>qcloud-app</span><span class=p>:</span><span class=w> </span><span class=l>vcuda-test</span><span class=w>
-</span><span class=w>  </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>vcuda-test</span><span class=w>
-</span><span class=w>  </span><span class=nt>namespace</span><span class=p>:</span><span class=w> </span><span class=l>default</span><span class=w>
-</span><span class=w></span><span class=nt>spec</span><span class=p>:</span><span class=w>
-</span><span class=w>  </span><span class=nt>replicas</span><span class=p>:</span><span class=w> </span><span class=m>1</span><span class=w>
-</span><span class=w>  </span><span class=nt>selector</span><span class=p>:</span><span class=w>
-</span><span class=w>    </span><span class=nt>matchLabels</span><span class=p>:</span><span class=w>
-</span><span class=w>      </span><span class=nt>k8s-app</span><span class=p>:</span><span class=w> </span><span class=l>vcuda-test</span><span class=w>
-</span><span class=w>  </span><span class=nt>template</span><span class=p>:</span><span class=w>
-</span><span class=w>    </span><span class=nt>metadata</span><span class=p>:</span><span class=w>
-</span><span class=w>      </span><span class=nt>labels</span><span class=p>:</span><span class=w>
-</span><span class=w>        </span><span class=nt>k8s-app</span><span class=p>:</span><span class=w> </span><span class=l>vcuda-test</span><span class=w>
-</span><span class=w>        </span><span class=nt>qcloud-app</span><span class=p>:</span><span class=w> </span><span class=l>vcuda-test</span><span class=w>
-</span><span class=w>    </span><span class=nt>spec</span><span class=p>:</span><span class=w>
-</span><span class=w>			</span><span class=nt>tolerations</span><span class=p>:</span><span class=w>
-</span><span class=w>      	</span>- <span class=nt>key</span><span class=p>:</span><span class=w> </span><span class=l>node-role.kubernetes.io/master </span><span class=w> </span><span class=c>##容忍策略</span><span class=w>
-</span><span class=w>        	</span><span class=nt>effect</span><span class=p>:</span><span class=w> </span><span class=l>NoSchedule</span><span class=w>
-</span><span class=w>      </span><span class=nt>containers</span><span class=p>:</span><span class=w>
-</span><span class=w>      </span>- <span class=nt>command</span><span class=p>:</span><span class=w>
-</span><span class=w>        </span>- <span class=l>sleep</span><span class=w>
-</span><span class=w>        </span>- <span class=l>360000s</span><span class=w>
-</span><span class=w>        </span><span class=nt>env</span><span class=p>:</span><span class=w>
-</span><span class=w>        </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>PATH</span><span class=w>
-</span><span class=w>          </span><span class=nt>value</span><span class=p>:</span><span class=w> </span><span class=l>/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin</span><span class=w>
-</span><span class=w>        </span><span class=nt>image</span><span class=p>:</span><span class=w> </span><span class=l>ccr.ccs.tencentyun.com/menghe/tensorflow-gputest:0.2</span><span class=w>
-</span><span class=w>        </span><span class=nt>imagePullPolicy</span><span class=p>:</span><span class=w> </span><span class=l>IfNotPresent</span><span class=w>
-</span><span class=w>        </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>tensorflow-test</span><span class=w>
-</span><span class=w>        </span><span class=nt>resources</span><span class=p>:</span><span class=w>
-</span><span class=w>          </span><span class=nt>limits</span><span class=p>:</span><span class=w>
-</span><span class=w>            </span><span class=nt>cpu</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;4&#34;</span><span class=w>
-</span><span class=w>            </span><span class=nt>memory</span><span class=p>:</span><span class=w> </span><span class=l>8Gi</span><span class=w>
-</span><span class=w>            </span><span class=nt>tencent.com/vcuda-core</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;50&#34;</span><span class=w>
-</span><span class=w>            </span><span class=nt>tencent.com/vcuda-memory</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;35&#34;</span><span class=w>
-</span><span class=w>          </span><span class=nt>requests</span><span class=p>:</span><span class=w>
-</span><span class=w>            </span><span class=nt>cpu</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;4&#34;</span><span class=w>
-</span><span class=w>            </span><span class=nt>memory</span><span class=p>:</span><span class=w> </span><span class=l>8Gi</span><span class=w>
-</span><span class=w>            </span><span class=nt>tencent.com/vcuda-core</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;50&#34;</span><span class=w>
-</span><span class=w>            </span><span class=nt>tencent.com/vcuda-memory</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;35&#34;</span><span class=w>
-</span></code></pre></div><div class=highlight><pre class=chroma><code class=language-shell data-lang=shell>kubectl apply -f tensorflow-mnist.yaml
-</code></pre></div></section><footer class=article-footer><section class=article-tags><a href=/tags/%E5%AE%B9%E5%99%A8/>容器</a>
-<a href=/tags/k8s/>k8s</a>
-<a href=/tags/gaiagpu/>gaiagpu</a></section><section class=article-copyright><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg><span>Licensed under CC BY-NC-SA 4.0</span></section></footer><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.css integrity=sha384-RZU/ijkSsFbcmivfdRBQDtwuwVqK7GMOw6IMvKyeWL2K5UAlyp6WonmB8m7Jd0Hn crossorigin=anonymous><script src=https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.js integrity=sha384-pK1WpvzWVBQiP0/GjnvRxV4mOb0oxFuyRxJlk6vVw146n3egcN5C925NCP7a7BY8 crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/contrib/auto-render.min.js integrity=sha384-vZTG03m+2yp6N6BNi5iM4rW4oIwk5DfcNdFfxkk9ZWpDriOkXX8voJBFrAO7MpVl crossorigin=anonymous defer></script><script>window.addEventListener("DOMContentLoaded",()=>{renderMathInElement(document.querySelector(`.article-content`),{delimiters:[{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false},{left:"\\(",right:"\\)",display:false},{left:"\\[",right:"\\]",display:true}]});})</script></article><aside class=related-contents--wrapper><h2 class=section-title>Related contents</h2><div class=related-contents><div class="flex article-list--tile"><article class=has-image><a href=/p/kubernetesubuntu%E5%AE%89%E8%A3%85k8s%E9%9B%86%E7%BE%A4/><div class=article-image><img src=https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/20220823230439.png loading=lazy data-key data-hash=https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/20220823230439.png></div><div class=article-details><h2 class=article-title>【Kubernetes】ubuntu安装k8s集群</h2></div></a></article><article><a href=/p/kubernetes%E5%9C%A8k8s%E9%9B%86%E7%BE%A4%E4%B8%AD%E6%8C%82%E8%BD%BD%E5%9F%BA%E4%BA%8Enfs%E7%9A%84storageclass/><div class=article-details><h2 class=article-title>【Kubernetes】在k8s集群中挂载基于NFS的StorageClass</h2></div></a></article><article><a href=/p/kubernetes%E5%9C%A8k8s%E9%9B%86%E7%BE%A4%E5%AE%89%E8%A3%85%E6%B5%8B%E8%AF%95adaptdl/><div class=article-details><h2 class=article-title>【Kubernetes】在k8s集群安装测试adaptdl</h2></div></a></article><article><a href=/p/kubernetes%E5%A6%82%E4%BD%95%E8%AE%A9kubernetes%E9%9B%86%E7%BE%A4%E4%BD%BF%E7%94%A8gpu/><div class=article-details><h2 class=article-title>【Kubernetes】如何让kubernetes集群使用GPU</h2></div></a></article></div></div></aside><script src=https://giscus.app/client.js data-repo=Tweakzx/Tweakzx.github.io data-repo-id="MDEwOlJlcG9zaXRvcnkzMjY5MTY1NTE=" data-category=Announcements data-category-id=DIC_kwDOE3xZx84CTfL- data-mapping=title data-reactions-enabled=1 data-emit-metadata=0 data-theme=light_tritanopia crossorigin=anonymous async></script><script>function setGiscusTheme(theme){let giscus=document.querySelector('iframe.giscus-frame');if(giscus){giscus.contentWindow.postMessage({giscus:{setConfig:{theme:theme}}},"https://giscus.app");};};(function(){addEventListener('message',(e)=>{if(event.origin!=='https://giscus.app')return;handler()});window.addEventListener('onColorSchemeChange',handler);function handler(){if(document.documentElement.dataset.scheme==="light"){setGiscusTheme('light_tritanopia');}else{setGiscusTheme('dark_tritanopia');};};}());</script><footer class=site-footer><section class=copyright>&copy;
-2020 -
-2023 Tweakzx</section><section class=powerby>Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a><br>Theme <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.5.0>Stack</a></b> designed by <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a></section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
-<button class="pswp__button pswp__button--share" title=Share></button>
-<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
-<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
-<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css integrity="sha256-c0uckgykQ9v5k+IqViZOZKc47Jn7KQil4/MP3ySA3F8=" crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE=" crossorigin=anonymous></main><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">Table of contents</h2><div class=widget--toc><nav id=TableOfContents><ol><li><a href=#前置工作>前置工作</a></li><li><a href=#gpu-admission>gpu-admission</a><ol><li><a href=#部署deployment>部署deployment</a></li><li><a href=#创建自定义调度文件>创建自定义调度文件</a></li><li><a href=#修改默认调度器>修改默认调度器</a></li></ol></li><li><a href=#gpu-manager>gpu-manager</a><ol><li><a href=#给gpu节点打标签>给gpu节点打标签</a></li><li><a href=#部署deamonset>部署deamonset</a></li></ol></li><li><a href=#测试>测试</a><ol><li><a href=#创建测试文件>创建测试文件</a></li></ol></li></ol></nav></div></section></aside></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g=" crossorigin=anonymous defer></script><script type=text/javascript src=/ts/main.js defer></script><script>(function(){const customFont=document.createElement('link');customFont.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";customFont.type="text/css";customFont.rel="stylesheet";document.head.appendChild(customFont);}());</script></body></html>
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='部署GaiaGPU 前置工作 配置好GPU环境 配置好k8s集群环境 gpu-admission 部署deployment 创建文件gpu-quota-admission.ya'><title>【Kubernetes】部署gaiaGPU（vCUDA）</title>
+
+<link rel='canonical' href='https://tweakzx.github.io/p/kubernetes%E9%83%A8%E7%BD%B2gaiagpuvcuda/'>
+
+<link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='【Kubernetes】部署gaiaGPU（vCUDA）'>
+<meta property='og:description' content='部署GaiaGPU 前置工作 配置好GPU环境 配置好k8s集群环境 gpu-admission 部署deployment 创建文件gpu-quota-admission.ya'>
+<meta property='og:url' content='https://tweakzx.github.io/p/kubernetes%E9%83%A8%E7%BD%B2gaiagpuvcuda/'>
+<meta property='og:site_name' content='Tweakzx'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='容器' /><meta property='article:tag' content='k8s' /><meta property='article:tag' content='gaiagpu' /><meta property='article:published_time' content='2023-06-27T14:57:42&#43;08:00'/><meta property='article:modified_time' content='2023-06-27T14:57:42&#43;08:00'/>
+<meta name="twitter:title" content="【Kubernetes】部署gaiaGPU（vCUDA）">
+<meta name="twitter:description" content="部署GaiaGPU 前置工作 配置好GPU环境 配置好k8s集群环境 gpu-admission 部署deployment 创建文件gpu-quota-admission.ya">
+    </head>
+    <body class="
+    article-page has-toc
+">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex 
+    
+        extended
+    
+">
+    
+        <div id="article-toolbar">
+            <a href="/" class="back-home">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="15 6 9 12 15 18" />
+</svg>
+
+
+
+                <span>Back</span>
+            </a>
+        </div>
+    
+<main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/kubernetes/" >
+                kubernetes
+            </a>
+        
+    </header>
+    
+
+    <h2 class="article-title">
+        <a href="/p/kubernetes%E9%83%A8%E7%BD%B2gaiagpuvcuda/">【Kubernetes】部署gaiaGPU（vCUDA）</a>
+    </h2>
+
+    
+
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Jun 27, 2023</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    6 minute read
+                </time>
+            </div>
+        
+    </footer>
+    
+</div>
+
+    
+
+</header>
+
+    <section class="article-content">
+    <h1 id="部署gaiagpu">部署GaiaGPU</h1>
+<h2 id="前置工作">前置工作</h2>
+<ul>
+<li>配置好GPU环境</li>
+<li>配置好k8s集群环境</li>
+</ul>
+<h2 id="gpu-admission">gpu-admission</h2>
+<h3 id="部署deployment">部署deployment</h3>
+<p>创建文件<code>gpu-quota-admission.yaml</code></p>
+<div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nn">---</span><span class="w">
+</span><span class="w"></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> 
+</span><span class="w"></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
+</span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">ServiceAccount</span><span class="w">
+</span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">gpu-admission</span><span class="w">
+</span><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l">kube-system</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="nn">---</span><span class="w">
+</span><span class="w"></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">rbac.authorization.k8s.io/v1</span><span class="w">
+</span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">ClusterRoleBinding</span><span class="w">
+</span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">gpu-admission-as-kube-scheduler</span><span class="w">
+</span><span class="w"></span><span class="nt">subjects</span><span class="p">:</span><span class="w">
+</span><span class="w"></span>- <span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">ServiceAccount</span><span class="w">
+</span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">gpu-admission</span><span class="w">
+</span><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l">kube-system</span><span class="w">
+</span><span class="w"></span><span class="nt">roleRef</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">ClusterRole</span><span class="w">
+</span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">system:kube-scheduler</span><span class="w">
+</span><span class="w">  </span><span class="nt">apiGroup</span><span class="p">:</span><span class="w"> </span><span class="l">rbac.authorization.k8s.io</span><span class="w">
+</span><span class="w">  
+</span><span class="w"></span><span class="nn">---</span><span class="w">
+</span><span class="w"></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">rbac.authorization.k8s.io/v1</span><span class="w">
+</span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">ClusterRoleBinding</span><span class="w">
+</span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">gpu-admission-as-volume-scheduler</span><span class="w">
+</span><span class="w"></span><span class="nt">subjects</span><span class="p">:</span><span class="w">
+</span><span class="w"></span>- <span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">ServiceAccount</span><span class="w">
+</span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">gpu-admission</span><span class="w">
+</span><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l">kube-system</span><span class="w">
+</span><span class="w"></span><span class="nt">roleRef</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">ClusterRole</span><span class="w">
+</span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">system:volume-scheduler</span><span class="w">
+</span><span class="w">  </span><span class="nt">apiGroup</span><span class="p">:</span><span class="w"> </span><span class="l">rbac.authorization.k8s.io</span><span class="w">
+</span><span class="w">  
+</span><span class="w"></span><span class="nn">---</span><span class="w">
+</span><span class="w"></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">rbac.authorization.k8s.io/v1</span><span class="w">
+</span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">ClusterRoleBinding</span><span class="w">
+</span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">gpu-admission-as-daemon-set-controller</span><span class="w">
+</span><span class="w"></span><span class="nt">subjects</span><span class="p">:</span><span class="w">
+</span><span class="w"></span>- <span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">ServiceAccount</span><span class="w">
+</span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">gpu-admission</span><span class="w">
+</span><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l">kube-system</span><span class="w">
+</span><span class="w"></span><span class="nt">roleRef</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">ClusterRole</span><span class="w">
+</span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">system:controller:daemon-set-controller</span><span class="w">
+</span><span class="w">  </span><span class="nt">apiGroup</span><span class="p">:</span><span class="w"> </span><span class="l">rbac.authorization.k8s.io</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="nn">---</span><span class="w">
+</span><span class="w"></span><span class="c"># 创建控制器</span><span class="w">
+</span><span class="w"></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">apps/v1</span><span class="w">
+</span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Deployment</span><span class="w">
+</span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">labels</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">k8s-app</span><span class="p">:</span><span class="w"> </span><span class="l">gpu-quota-admission</span><span class="w">
+</span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">gpu-quota-admission</span><span class="w">
+</span><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l">kube-system</span><span class="w">
+</span><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">replicas</span><span class="p">:</span><span class="w"> </span><span class="m">1</span><span class="w">
+</span><span class="w">  </span><span class="nt">selector</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">matchLabels</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="nt">k8s-app</span><span class="p">:</span><span class="w"> </span><span class="l">gpu-quota-admission</span><span class="w">
+</span><span class="w">  </span><span class="nt">template</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="nt">labels</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span><span class="nt">k8s-app</span><span class="p">:</span><span class="w"> </span><span class="l">gpu-quota-admission</span><span class="w">
+</span><span class="w">      </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l">kube-system</span><span class="w">
+</span><span class="w">    </span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="nt">affinity</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span><span class="nt">nodeAffinity</span><span class="p">:</span><span class="w">
+</span><span class="w">          </span><span class="nt">preferredDuringSchedulingIgnoredDuringExecution</span><span class="p">:</span><span class="w">
+</span><span class="w">          </span>- <span class="nt">preference</span><span class="p">:</span><span class="w">
+</span><span class="w">              </span><span class="nt">matchExpressions</span><span class="p">:</span><span class="w">
+</span><span class="w">              </span>- <span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l">node-role.kubernetes.io/master</span><span class="w">
+</span><span class="w">                </span><span class="nt">operator</span><span class="p">:</span><span class="w"> </span><span class="l">Exists</span><span class="w">
+</span><span class="w">            </span><span class="nt">weight</span><span class="p">:</span><span class="w"> </span><span class="m">1</span><span class="w">
+</span><span class="w">      </span><span class="nt">containers</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span>- <span class="nt">env</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">LOG_LEVEL</span><span class="w">
+</span><span class="w">          </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;4&#34;</span><span class="w">
+</span><span class="w">        </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">EXTRA_FLAGS</span><span class="w">
+</span><span class="w">          </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span>--<span class="l">incluster-mode=true</span><span class="w">
+</span><span class="w">        </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">ccr.ccs.tencentyun.com/tkeimages/gpu-quota-admission:latest</span><span class="w">
+</span><span class="w">        </span><span class="nt">imagePullPolicy</span><span class="p">:</span><span class="w"> </span><span class="l">IfNotPresent</span><span class="w">
+</span><span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">gpu-quota-admission</span><span class="w">
+</span><span class="w">        </span><span class="nt">ports</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span>- <span class="nt">containerPort</span><span class="p">:</span><span class="w"> </span><span class="m">3456</span><span class="w">
+</span><span class="w">          </span><span class="nt">protocol</span><span class="p">:</span><span class="w"> </span><span class="l">TCP</span><span class="w">
+</span><span class="w">        </span><span class="nt">resources</span><span class="p">:</span><span class="w">
+</span><span class="w">          </span><span class="nt">limits</span><span class="p">:</span><span class="w">
+</span><span class="w">            </span><span class="nt">cpu</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;2&#34;</span><span class="w">
+</span><span class="w">            </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="l">2Gi</span><span class="w">
+</span><span class="w">          </span><span class="nt">requests</span><span class="p">:</span><span class="w">
+</span><span class="w">            </span><span class="nt">cpu</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;1&#34;</span><span class="w">
+</span><span class="w">            </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="l">1Gi</span><span class="w">
+</span><span class="w">        </span><span class="nt">volumeMounts</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span>- <span class="nt">mountPath</span><span class="p">:</span><span class="w"> </span><span class="l">/root/gpu-quota-admission/</span><span class="w">
+</span><span class="w">          </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">config</span><span class="w">
+</span><span class="w">      </span><span class="nt">dnsPolicy</span><span class="p">:</span><span class="w"> </span><span class="l">ClusterFirstWithHostNet</span><span class="w">
+</span><span class="w">      </span><span class="nt">initContainers</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span>- <span class="nt">command</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span>- <span class="l">sh</span><span class="w">
+</span><span class="w">        </span>- -<span class="l">c</span><span class="w">
+</span><span class="w">        </span>- <span class="s1">&#39; mkdir -p /etc/kubernetes/ &amp;&amp; cp /root/gpu-quota-admission/gpu-quota-admission.config
+</span><span class="s1">          /etc/kubernetes/&#39;</span><span class="w">
+</span><span class="w">        </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">busybox</span><span class="w">
+</span><span class="w">        </span><span class="nt">imagePullPolicy</span><span class="p">:</span><span class="w"> </span><span class="l">Always</span><span class="w">
+</span><span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">init-kube-config</span><span class="w">
+</span><span class="w">        </span><span class="nt">securityContext</span><span class="p">:</span><span class="w">
+</span><span class="w">          </span><span class="nt">privileged</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span><span class="w">        </span><span class="nt">volumeMounts</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span>- <span class="nt">mountPath</span><span class="p">:</span><span class="w"> </span><span class="l">/root/gpu-quota-admission/</span><span class="w">
+</span><span class="w">          </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">config</span><span class="w">
+</span><span class="w">      </span><span class="nt">priority</span><span class="p">:</span><span class="w"> </span><span class="m">2000000000</span><span class="w">
+</span><span class="w">      </span><span class="nt">priorityClassName</span><span class="p">:</span><span class="w"> </span><span class="l">system-cluster-critical</span><span class="w">
+</span><span class="w">      </span><span class="nt">restartPolicy</span><span class="p">:</span><span class="w"> </span><span class="l">Always</span><span class="w">
+</span><span class="w">      </span><span class="nt">serviceAccount</span><span class="p">:</span><span class="w"> </span><span class="l">gpu-admission</span><span class="w">
+</span><span class="w">      </span><span class="nt">terminationGracePeriodSeconds</span><span class="p">:</span><span class="w"> </span><span class="m">30</span><span class="w">
+</span><span class="w">      </span><span class="nt">tolerations</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span>- <span class="nt">effect</span><span class="p">:</span><span class="w"> </span><span class="l">NoSchedule</span><span class="w">
+</span><span class="w">        </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l">node-role.kubernetes.io/master</span><span class="w">
+</span><span class="w">      </span><span class="nt">volumes</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span>- <span class="nt">configMap</span><span class="p">:</span><span class="w">
+</span><span class="w">          </span><span class="nt">defaultMode</span><span class="p">:</span><span class="w"> </span><span class="m">420</span><span class="w">
+</span><span class="w">          </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">gpu-quota-admission</span><span class="w">
+</span><span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">config</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="nn">---</span><span class="w">
+</span><span class="w"></span><span class="c"># 创建configMap</span><span class="w">
+</span><span class="w"></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
+</span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">ConfigMap</span><span class="w">
+</span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">gpu-quota-admission</span><span class="w">
+</span><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l">kube-system</span><span class="w">
+</span><span class="w"></span><span class="nt">data</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">gpu-quota-admission.config</span><span class="p">:</span><span class="w"> </span><span class="p">|</span><span class="sd">
+</span><span class="sd">    {
+</span><span class="sd">         &#34;QuotaConfigMapName&#34;: &#34;gpuquota&#34;,
+</span><span class="sd">         &#34;QuotaConfigMapNamespace&#34;: &#34;kube-system&#34;,
+</span><span class="sd">         &#34;GPUModelLabel&#34;: &#34;gaia.tencent.com/gpu-model&#34;,
+</span><span class="sd">         &#34;GPUPoolLabel&#34;: &#34;gaia.tencent.com/gpu-pool&#34;
+</span><span class="sd">     }</span><span class="w">    
+</span><span class="w">
+</span><span class="w"></span><span class="nn">---</span><span class="w">
+</span><span class="w"></span><span class="c"># 创建service</span><span class="w">
+</span><span class="w"></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
+</span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Service</span><span class="w">
+</span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">gpu-quota-admission</span><span class="w">
+</span><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l">kube-system</span><span class="w">
+</span><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">ports</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span>- <span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="m">3456</span><span class="w">
+</span><span class="w">    </span><span class="nt">protocol</span><span class="p">:</span><span class="w"> </span><span class="l">TCP</span><span class="w">
+</span><span class="w">    </span><span class="nt">targetPort</span><span class="p">:</span><span class="w"> </span><span class="m">3456</span><span class="w">
+</span><span class="w">  </span><span class="nt">selector</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">k8s-app</span><span class="p">:</span><span class="w"> </span><span class="l">gpu-quota-admission</span><span class="w">
+</span><span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l">ClusterIP</span><span class="w">
+</span></code></pre></div><div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">kubectl apply -f gpu-quota-admission.yaml
+</code></pre></div><h3 id="创建自定义调度文件">创建自定义调度文件</h3>
+<p>创建文件<code>/etc/kubernetes/scheduler-policy-config.json</code></p>
+<div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml">{<span class="w">
+</span><span class="w">  </span><span class="nt">&#34;kind&#34;: </span><span class="s2">&#34;Policy&#34;</span><span class="p">,</span><span class="w">
+</span><span class="w">  </span><span class="nt">&#34;apiVersion&#34;: </span><span class="s2">&#34;v1&#34;</span><span class="p">,</span><span class="w">
+</span><span class="w">  </span><span class="nt">&#34;predicates&#34;: </span><span class="p">[</span><span class="w">
+</span><span class="w">    </span>{<span class="w">
+</span><span class="w">      </span><span class="nt">&#34;name&#34;: </span><span class="s2">&#34;PodFitsHostPorts&#34;</span><span class="w">
+</span><span class="w">    </span>}<span class="p">,</span><span class="w">
+</span><span class="w">    </span>{<span class="w">
+</span><span class="w">      </span><span class="nt">&#34;name&#34;: </span><span class="s2">&#34;PodFitsResources&#34;</span><span class="w">
+</span><span class="w">    </span>}<span class="p">,</span><span class="w">
+</span><span class="w">    </span>{<span class="w">
+</span><span class="w">      </span><span class="nt">&#34;name&#34;: </span><span class="s2">&#34;NoDiskConflict&#34;</span><span class="w">
+</span><span class="w">    </span>}<span class="p">,</span><span class="w">
+</span><span class="w">    </span>{<span class="w">
+</span><span class="w">      </span><span class="nt">&#34;name&#34;: </span><span class="s2">&#34;MatchNodeSelector&#34;</span><span class="w">
+</span><span class="w">    </span>}<span class="p">,</span><span class="w">
+</span><span class="w">    </span>{<span class="w">
+</span><span class="w">      </span><span class="nt">&#34;name&#34;: </span><span class="s2">&#34;HostName&#34;</span><span class="w">
+</span><span class="w">    </span>}<span class="w">
+</span><span class="w">  </span><span class="p">],</span><span class="w">
+</span><span class="w">  </span><span class="nt">&#34;extenders&#34;: </span><span class="p">[</span><span class="w">
+</span><span class="w">    </span>{<span class="w">
+</span><span class="w">      </span><span class="nt">&#34;urlPrefix&#34;: </span><span class="s2">&#34;http://gpu-quota-admission.kube-system:3456/scheduler&#34;</span><span class="p">,</span><span class="w">
+</span><span class="w">      </span><span class="nt">&#34;apiVersion&#34;: </span><span class="s2">&#34;v1beta1&#34;</span><span class="p">,</span><span class="w">
+</span><span class="w">      </span><span class="nt">&#34;filterVerb&#34;: </span><span class="s2">&#34;predicates&#34;</span><span class="p">,</span><span class="w">
+</span><span class="w">      </span><span class="nt">&#34;enableHttps&#34;: </span><span class="kc">false</span><span class="p">,</span><span class="w">
+</span><span class="w">      </span><span class="nt">&#34;nodeCacheCapable&#34;: </span><span class="kc">false</span><span class="p">,</span><span class="w">
+</span><span class="w">      </span><span class="nt">&#34;managedResources&#34;: </span><span class="p">[</span><span class="w">
+</span><span class="w">       </span>{<span class="w">
+</span><span class="w">         </span><span class="nt">&#34;name&#34;: </span><span class="s2">&#34;tencent.com/vcuda-memory&#34;</span><span class="p">,</span><span class="w">
+</span><span class="w">         </span><span class="nt">&#34;ignoredByScheduler&#34;: </span><span class="kc">false</span><span class="w">
+</span><span class="w">       </span>}<span class="p">,</span><span class="w">
+</span><span class="w">       </span>{<span class="w">
+</span><span class="w">         </span><span class="nt">&#34;name&#34;: </span><span class="s2">&#34;tencent.com/vcuda-core&#34;</span><span class="p">,</span><span class="w">
+</span><span class="w">         </span><span class="nt">&#34;ignoredByScheduler&#34;: </span><span class="kc">false</span><span class="w">
+</span><span class="w">       </span>}<span class="w">
+</span><span class="w">      </span><span class="p">]</span><span class="w">
+</span><span class="w">    </span>}<span class="w">
+</span><span class="w">  </span><span class="p">],</span><span class="w">
+</span><span class="w">  </span><span class="nt">&#34;hardPodAffinitySymmetricWeight&#34;: </span><span class="m">10</span><span class="p">,</span><span class="w">
+</span><span class="w">  </span><span class="nt">&#34;alwaysCheckAllPredicates&#34;: </span><span class="kc">false</span><span class="w">
+</span><span class="w"></span>}<span class="w">
+</span></code></pre></div><h3 id="修改默认调度器">修改默认调度器</h3>
+<p><code>/etc/kubernetes/manifests/kube-scheduler.yaml</code></p>
+<div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
+</span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Pod</span><span class="w">
+</span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">creationTimestamp</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+</span><span class="w">  </span><span class="nt">labels</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">component</span><span class="p">:</span><span class="w"> </span><span class="l">kube-scheduler</span><span class="w">
+</span><span class="w">    </span><span class="nt">tier</span><span class="p">:</span><span class="w"> </span><span class="l">control-plane</span><span class="w">
+</span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">kube-scheduler</span><span class="w">
+</span><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l">kube-system</span><span class="w">
+</span><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">containers</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span>- <span class="nt">command</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span>- <span class="l">kube-scheduler</span><span class="w">
+</span><span class="w">    </span>- --<span class="l">authentication-kubeconfig=/etc/kubernetes/scheduler.conf</span><span class="w">
+</span><span class="w">    </span>- --<span class="l">authorization-kubeconfig=/etc/kubernetes/scheduler.conf</span><span class="w">
+</span><span class="w">    </span>- --<span class="l">bind-address=127.0.0.1</span><span class="w">
+</span><span class="w">    </span>- --<span class="l">kubeconfig=/etc/kubernetes/scheduler.conf</span><span class="w">
+</span><span class="w">    </span>- --<span class="l">leader-elect=true</span><span class="w">
+</span><span class="w">    </span>- --<span class="l">policy-config-file=/etc/kubernetes/scheduler-policy-config.json</span><span class="w"> </span><span class="c">#增加项</span><span class="w">
+</span><span class="w">    </span>- --<span class="l">use-legacy-policy-config=true 								   </span><span class="w"> </span><span class="c">#增加项</span><span class="w">
+</span><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">registry.aliyuncs.com/google_containers/kube-scheduler:v1.23.17</span><span class="w">
+</span><span class="w">    </span><span class="nt">imagePullPolicy</span><span class="p">:</span><span class="w"> </span><span class="l">IfNotPresent</span><span class="w">
+</span><span class="w">    </span><span class="nt">livenessProbe</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="nt">failureThreshold</span><span class="p">:</span><span class="w"> </span><span class="m">8</span><span class="w">
+</span><span class="w">      </span><span class="nt">httpGet</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="m">127.0.0.1</span><span class="w">
+</span><span class="w">        </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l">/healthz</span><span class="w">
+</span><span class="w">        </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="m">10259</span><span class="w">
+</span><span class="w">        </span><span class="nt">scheme</span><span class="p">:</span><span class="w"> </span><span class="l">HTTPS</span><span class="w">
+</span><span class="w">      </span><span class="nt">initialDelaySeconds</span><span class="p">:</span><span class="w"> </span><span class="m">10</span><span class="w">
+</span><span class="w">      </span><span class="nt">periodSeconds</span><span class="p">:</span><span class="w"> </span><span class="m">10</span><span class="w">
+</span><span class="w">      </span><span class="nt">timeoutSeconds</span><span class="p">:</span><span class="w"> </span><span class="m">15</span><span class="w">
+</span><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">kube-scheduler</span><span class="w">
+</span><span class="w">    </span><span class="nt">resources</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="nt">requests</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span><span class="nt">cpu</span><span class="p">:</span><span class="w"> </span><span class="l">100m</span><span class="w">
+</span><span class="w">    </span><span class="nt">startupProbe</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="nt">failureThreshold</span><span class="p">:</span><span class="w"> </span><span class="m">24</span><span class="w">
+</span><span class="w">      </span><span class="nt">httpGet</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="m">127.0.0.1</span><span class="w">
+</span><span class="w">        </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l">/healthz</span><span class="w">
+</span><span class="w">        </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="m">10259</span><span class="w">
+</span><span class="w">        </span><span class="nt">scheme</span><span class="p">:</span><span class="w"> </span><span class="l">HTTPS</span><span class="w">
+</span><span class="w">      </span><span class="nt">initialDelaySeconds</span><span class="p">:</span><span class="w"> </span><span class="m">10</span><span class="w">
+</span><span class="w">      </span><span class="nt">periodSeconds</span><span class="p">:</span><span class="w"> </span><span class="m">10</span><span class="w">
+</span><span class="w">      </span><span class="nt">timeoutSeconds</span><span class="p">:</span><span class="w"> </span><span class="m">15</span><span class="w">
+</span><span class="w">    </span><span class="nt">volumeMounts</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span>- <span class="nt">mountPath</span><span class="p">:</span><span class="w"> </span><span class="l">/etc/kubernetes/scheduler.conf</span><span class="w">
+</span><span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">kubeconfig</span><span class="w">
+</span><span class="w">      </span><span class="nt">readOnly</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span><span class="w">    </span>- <span class="nt">mountPath</span><span class="p">:</span><span class="w"> </span><span class="l">/etc/kubernetes/scheduler-policy-config.json</span><span class="w"> </span><span class="c">#将文件挂载</span><span class="w">
+</span><span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">policyconfig</span><span class="w">
+</span><span class="w">      </span><span class="nt">readOnly</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span><span class="w">  </span><span class="nt">hostNetwork</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span><span class="w">  </span><span class="nt">dnsPolicy</span><span class="p">:</span><span class="w"> </span><span class="l">ClusterFirstWithHostNet                       </span><span class="w"> </span><span class="c"># 修改dns策略</span><span class="w">
+</span><span class="w">  </span><span class="nt">priorityClassName</span><span class="p">:</span><span class="w"> </span><span class="l">system-node-critical</span><span class="w">
+</span><span class="w">  </span><span class="nt">securityContext</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">seccompProfile</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l">RuntimeDefault</span><span class="w">
+</span><span class="w">  </span><span class="nt">volumes</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span>- <span class="nt">hostPath</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l">/etc/kubernetes/scheduler.conf</span><span class="w">
+</span><span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l">FileOrCreate</span><span class="w">
+</span><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">kubeconfig</span><span class="w">
+</span><span class="w">  </span>- <span class="nt">hostPath</span><span class="p">:</span><span class="w">                                             </span><span class="c">#挂载到该 Pod 中的容器内</span><span class="w">
+</span><span class="w">      </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l">/etc/kubernetes/scheduler-policy-config.json</span><span class="w">
+</span><span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l">FileOrCreate</span><span class="w">
+</span><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">policyconfig</span><span class="w">
+</span><span class="w"></span><span class="nt">status</span><span class="p">:</span><span class="w"> </span>{}<span class="w">
+</span></code></pre></div><p>修改后wq保存， 保存后自动生效</p>
+<h2 id="gpu-manager">gpu-manager</h2>
+<h3 id="给gpu节点打标签">给gpu节点打标签</h3>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">kubectl label node &lt;your node&gt; nvidia-device-enable<span class="o">=</span><span class="nb">enable</span>
+</code></pre></div><h3 id="部署deamonset">部署deamonset</h3>
+<p>创建文件<code>gpu-manager.yaml</code></p>
+<div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nn">---</span><span class="w">
+</span><span class="w"></span><span class="c"># 创建ServiceAccount</span><span class="w">
+</span><span class="w"></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
+</span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">ServiceAccount</span><span class="w">
+</span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">gpu-manager</span><span class="w">
+</span><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l">kube-system</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="nn">---</span><span class="w">
+</span><span class="w"></span><span class="c"># 创建ClusterRoleBinding</span><span class="w">
+</span><span class="w"></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">rbac.authorization.k8s.io/v1</span><span class="w">
+</span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">ClusterRoleBinding</span><span class="w">
+</span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">gpu-manager</span><span class="w">
+</span><span class="w"></span><span class="nt">roleRef</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">apiGroup</span><span class="p">:</span><span class="w"> </span><span class="l">rbac.authorization.k8s.io</span><span class="w">
+</span><span class="w">  </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">ClusterRole</span><span class="w">
+</span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">cluster-admin</span><span class="w">
+</span><span class="w"></span><span class="nt">subjects</span><span class="p">:</span><span class="w">
+</span><span class="w"></span>- <span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">ServiceAccount</span><span class="w">
+</span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">gpu-manager</span><span class="w">
+</span><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l">kube-system</span><span class="w">
+</span><span class="w">    
+</span><span class="w"></span><span class="nn">---</span><span class="w">
+</span><span class="w"></span><span class="c">#创建DaemonSet</span><span class="w">
+</span><span class="w"></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">apps/v1</span><span class="w">
+</span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">DaemonSet</span><span class="w">
+</span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">gpu-manager-daemonset</span><span class="w">
+</span><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l">kube-system</span><span class="w">
+</span><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">updateStrategy</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l">RollingUpdate</span><span class="w">
+</span><span class="w">  </span><span class="nt">selector</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">matchLabels</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">gpu-manager-ds</span><span class="w">
+</span><span class="w">  </span><span class="nt">template</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="c"># This annotation is deprecated. Kept here for backward compatibility</span><span class="w">
+</span><span class="w">      </span><span class="c"># See https://kubernetes.io/docs/tasks/administer-cluster/guaranteed-scheduling-critical-addon-pods/</span><span class="w">
+</span><span class="w">      </span><span class="nt">annotations</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span><span class="nt">scheduler.alpha.kubernetes.io/critical-pod</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;&#34;</span><span class="w">
+</span><span class="w">      </span><span class="nt">labels</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">gpu-manager-ds</span><span class="w">
+</span><span class="w">    </span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="nt">serviceAccount</span><span class="p">:</span><span class="w"> </span><span class="l">gpu-manager</span><span class="w">
+</span><span class="w">      </span><span class="nt">tolerations</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span><span class="c"># This toleration is deprecated. Kept here for backward compatibility</span><span class="w">
+</span><span class="w">        </span><span class="c"># See https://kubernetes.io/docs/tasks/administer-cluster/guaranteed-scheduling-critical-addon-pods/</span><span class="w">
+</span><span class="w">        </span>- <span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l">CriticalAddonsOnly</span><span class="w">
+</span><span class="w">          </span><span class="nt">operator</span><span class="p">:</span><span class="w"> </span><span class="l">Exists</span><span class="w">
+</span><span class="w">        </span>- <span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l">tencent.com/vcuda-core</span><span class="w">
+</span><span class="w">          </span><span class="nt">operator</span><span class="p">:</span><span class="w"> </span><span class="l">Exists</span><span class="w">
+</span><span class="w">          </span><span class="nt">effect</span><span class="p">:</span><span class="w"> </span><span class="l">NoSchedule</span><span class="w">
+</span><span class="w">      	</span>- <span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l">node-role.kubernetes.io/master</span><span class="w"> </span><span class="c">##增加容忍策略</span><span class="w">
+</span><span class="w">          </span><span class="nt">effect</span><span class="p">:</span><span class="w"> </span><span class="l">NoSchedule</span><span class="w">
+</span><span class="w">      </span><span class="c"># Mark this pod as a critical add-on; when enabled, the critical add-on</span><span class="w">
+</span><span class="w">      </span><span class="c"># scheduler reserves resources for critical add-on pods so that they can</span><span class="w">
+</span><span class="w">      </span><span class="c"># be rescheduled after a failure.</span><span class="w">
+</span><span class="w">      </span><span class="c"># See https://kubernetes.io/docs/tasks/administer-cluster/guaranteed-scheduling-critical-addon-pods/</span><span class="w">
+</span><span class="w">      </span><span class="nt">priorityClassName</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;system-node-critical&#34;</span><span class="w">
+</span><span class="w">      </span><span class="c"># only run node has gpu device</span><span class="w">
+</span><span class="w">      </span><span class="nt">nodeSelector</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span><span class="nt">nvidia-device-enable</span><span class="p">:</span><span class="w"> </span><span class="l">enable</span><span class="w">
+</span><span class="w">      </span><span class="nt">hostPID</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span><span class="w">      </span><span class="nt">containers</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span>- <span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">tkestack/gpu-manager:v1.1.5 </span><span class="w"> </span><span class="c">#指定镜像版本</span><span class="w">
+</span><span class="w">          </span><span class="nt">imagePullPolicy</span><span class="p">:</span><span class="w"> </span><span class="l">IfNotPresent      </span><span class="w"> </span><span class="c">#使用本地镜像</span><span class="w">
+</span><span class="w">          </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">gpu-manager</span><span class="w">
+</span><span class="w">          </span><span class="nt">securityContext</span><span class="p">:</span><span class="w">
+</span><span class="w">            </span><span class="nt">privileged</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span><span class="w">          </span><span class="nt">ports</span><span class="p">:</span><span class="w">
+</span><span class="w">            </span>- <span class="nt">containerPort</span><span class="p">:</span><span class="w"> </span><span class="m">5678</span><span class="w">
+</span><span class="w">          </span><span class="nt">volumeMounts</span><span class="p">:</span><span class="w">
+</span><span class="w">            </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">device-plugin</span><span class="w">
+</span><span class="w">              </span><span class="nt">mountPath</span><span class="p">:</span><span class="w"> </span><span class="l">/var/lib/kubelet/device-plugins</span><span class="w">
+</span><span class="w">            </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">vdriver</span><span class="w">
+</span><span class="w">              </span><span class="nt">mountPath</span><span class="p">:</span><span class="w"> </span><span class="l">/etc/gpu-manager/vdriver</span><span class="w">
+</span><span class="w">            </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">vmdata</span><span class="w">
+</span><span class="w">              </span><span class="nt">mountPath</span><span class="p">:</span><span class="w"> </span><span class="l">/etc/gpu-manager/vm</span><span class="w">
+</span><span class="w">            </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">log</span><span class="w">
+</span><span class="w">              </span><span class="nt">mountPath</span><span class="p">:</span><span class="w"> </span><span class="l">/var/log/gpu-manager</span><span class="w">
+</span><span class="w">            </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">checkpoint</span><span class="w">
+</span><span class="w">              </span><span class="nt">mountPath</span><span class="p">:</span><span class="w"> </span><span class="l">/etc/gpu-manager/checkpoint</span><span class="w">
+</span><span class="w">            </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">run-dir</span><span class="w">
+</span><span class="w">              </span><span class="nt">mountPath</span><span class="p">:</span><span class="w"> </span><span class="l">/var/run</span><span class="w">
+</span><span class="w">            </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">cgroup</span><span class="w">
+</span><span class="w">              </span><span class="nt">mountPath</span><span class="p">:</span><span class="w"> </span><span class="l">/sys/fs/cgroup</span><span class="w">
+</span><span class="w">              </span><span class="nt">readOnly</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span><span class="w">            </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">usr-directory</span><span class="w">
+</span><span class="w">              </span><span class="nt">mountPath</span><span class="p">:</span><span class="w"> </span><span class="l">/usr/local/host</span><span class="w">
+</span><span class="w">              </span><span class="nt">readOnly</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span><span class="w">          </span><span class="nt">env</span><span class="p">:</span><span class="w">
+</span><span class="w">            </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">LOG_LEVEL</span><span class="w">
+</span><span class="w">              </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;4&#34;</span><span class="w">
+</span><span class="w">            </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">EXTRA_FLAGS       </span><span class="w"> </span><span class="c">#增加启动参数⬇</span><span class="w">
+</span><span class="w">              </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;--logtostderr=false --cgroup-driver=systemd&#34;</span><span class="w">  
+</span><span class="w">            </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">NODE_NAME</span><span class="w">
+</span><span class="w">              </span><span class="nt">valueFrom</span><span class="p">:</span><span class="w">
+</span><span class="w">                </span><span class="nt">fieldRef</span><span class="p">:</span><span class="w">
+</span><span class="w">                  </span><span class="nt">fieldPath</span><span class="p">:</span><span class="w"> </span><span class="l">spec.nodeName</span><span class="w">
+</span><span class="w">      </span><span class="nt">volumes</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">device-plugin</span><span class="w">
+</span><span class="w">          </span><span class="nt">hostPath</span><span class="p">:</span><span class="w">
+</span><span class="w">            </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l">Directory</span><span class="w">
+</span><span class="w">            </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l">/var/lib/kubelet/device-plugins</span><span class="w">
+</span><span class="w">        </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">vmdata</span><span class="w">
+</span><span class="w">          </span><span class="nt">hostPath</span><span class="p">:</span><span class="w">
+</span><span class="w">            </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l">DirectoryOrCreate</span><span class="w">
+</span><span class="w">            </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l">/etc/gpu-manager/vm</span><span class="w">
+</span><span class="w">        </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">vdriver</span><span class="w">
+</span><span class="w">          </span><span class="nt">hostPath</span><span class="p">:</span><span class="w">
+</span><span class="w">            </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l">DirectoryOrCreate</span><span class="w">
+</span><span class="w">            </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l">/etc/gpu-manager/vdriver</span><span class="w">
+</span><span class="w">        </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">log</span><span class="w">
+</span><span class="w">          </span><span class="nt">hostPath</span><span class="p">:</span><span class="w">
+</span><span class="w">            </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l">DirectoryOrCreate</span><span class="w">
+</span><span class="w">            </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l">/etc/gpu-manager/log</span><span class="w">
+</span><span class="w">        </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">checkpoint</span><span class="w">
+</span><span class="w">          </span><span class="nt">hostPath</span><span class="p">:</span><span class="w">
+</span><span class="w">            </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l">DirectoryOrCreate</span><span class="w">
+</span><span class="w">            </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l">/etc/gpu-manager/checkpoint</span><span class="w">
+</span><span class="w">        </span><span class="c"># We have to mount the whole /var/run directory into container, because of bind mount docker.sock</span><span class="w">
+</span><span class="w">        </span><span class="c"># inode change after host docker is restarted</span><span class="w">
+</span><span class="w">        </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">run-dir</span><span class="w">
+</span><span class="w">          </span><span class="nt">hostPath</span><span class="p">:</span><span class="w">
+</span><span class="w">            </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l">Directory</span><span class="w">
+</span><span class="w">            </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l">/var/run</span><span class="w">
+</span><span class="w">        </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">cgroup</span><span class="w">
+</span><span class="w">          </span><span class="nt">hostPath</span><span class="p">:</span><span class="w">
+</span><span class="w">            </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l">Directory</span><span class="w">
+</span><span class="w">            </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l">/sys/fs/cgroup</span><span class="w">
+</span><span class="w">        </span><span class="c"># We have to mount /usr directory instead of specified library path, because of non-existing</span><span class="w">
+</span><span class="w">        </span><span class="c"># problem for different distro</span><span class="w">
+</span><span class="w">        </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">usr-directory</span><span class="w">
+</span><span class="w">          </span><span class="nt">hostPath</span><span class="p">:</span><span class="w">
+</span><span class="w">            </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l">Directory</span><span class="w">
+</span><span class="w">            </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l">/usr</span><span class="w">
+</span><span class="w">    
+</span><span class="w"></span><span class="nn">---</span><span class="w">
+</span><span class="w"></span><span class="c"># 创建service</span><span class="w">
+</span><span class="w"></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
+</span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Service</span><span class="w">
+</span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">gpu-manager-metric</span><span class="w">
+</span><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l">kube-system</span><span class="w">
+</span><span class="w">  </span><span class="nt">annotations</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">prometheus.io/scrape</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;true&#34;</span><span class="w">
+</span><span class="w">  </span><span class="nt">labels</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">kubernetes.io/cluster-service</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;true&#34;</span><span class="w">
+</span><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">clusterIP</span><span class="p">:</span><span class="w"> </span><span class="l">None</span><span class="w">
+</span><span class="w">  </span><span class="nt">ports</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">metrics</span><span class="w">
+</span><span class="w">      </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="m">5678</span><span class="w">
+</span><span class="w">      </span><span class="nt">protocol</span><span class="p">:</span><span class="w"> </span><span class="l">TCP</span><span class="w">
+</span><span class="w">      </span><span class="nt">targetPort</span><span class="p">:</span><span class="w"> </span><span class="m">5678</span><span class="w">
+</span><span class="w">  </span><span class="nt">selector</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">gpu-manager-ds</span><span class="w">
+</span></code></pre></div><h2 id="测试">测试</h2>
+<h3 id="创建测试文件">创建测试文件</h3>
+<p>创建文件<code>tensorflow-mnist.yaml</code></p>
+<div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">apps/v1</span><span class="w">
+</span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Deployment</span><span class="w">
+</span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">labels</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">k8s-app</span><span class="p">:</span><span class="w"> </span><span class="l">vcuda-test</span><span class="w">
+</span><span class="w">    </span><span class="nt">qcloud-app</span><span class="p">:</span><span class="w"> </span><span class="l">vcuda-test</span><span class="w">
+</span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">vcuda-test</span><span class="w">
+</span><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l">default</span><span class="w">
+</span><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="nt">replicas</span><span class="p">:</span><span class="w"> </span><span class="m">1</span><span class="w">
+</span><span class="w">  </span><span class="nt">selector</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">matchLabels</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="nt">k8s-app</span><span class="p">:</span><span class="w"> </span><span class="l">vcuda-test</span><span class="w">
+</span><span class="w">  </span><span class="nt">template</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="nt">labels</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span><span class="nt">k8s-app</span><span class="p">:</span><span class="w"> </span><span class="l">vcuda-test</span><span class="w">
+</span><span class="w">        </span><span class="nt">qcloud-app</span><span class="p">:</span><span class="w"> </span><span class="l">vcuda-test</span><span class="w">
+</span><span class="w">    </span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span><span class="w">			</span><span class="nt">tolerations</span><span class="p">:</span><span class="w">
+</span><span class="w">      	</span>- <span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l">node-role.kubernetes.io/master </span><span class="w"> </span><span class="c">##容忍策略</span><span class="w">
+</span><span class="w">        	</span><span class="nt">effect</span><span class="p">:</span><span class="w"> </span><span class="l">NoSchedule</span><span class="w">
+</span><span class="w">      </span><span class="nt">containers</span><span class="p">:</span><span class="w">
+</span><span class="w">      </span>- <span class="nt">command</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span>- <span class="l">sleep</span><span class="w">
+</span><span class="w">        </span>- <span class="l">360000s</span><span class="w">
+</span><span class="w">        </span><span class="nt">env</span><span class="p">:</span><span class="w">
+</span><span class="w">        </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">PATH</span><span class="w">
+</span><span class="w">          </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l">/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin</span><span class="w">
+</span><span class="w">        </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">ccr.ccs.tencentyun.com/menghe/tensorflow-gputest:0.2</span><span class="w">
+</span><span class="w">        </span><span class="nt">imagePullPolicy</span><span class="p">:</span><span class="w"> </span><span class="l">IfNotPresent</span><span class="w">
+</span><span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">tensorflow-test</span><span class="w">
+</span><span class="w">        </span><span class="nt">resources</span><span class="p">:</span><span class="w">
+</span><span class="w">          </span><span class="nt">limits</span><span class="p">:</span><span class="w">
+</span><span class="w">            </span><span class="nt">cpu</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;4&#34;</span><span class="w">
+</span><span class="w">            </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="l">8Gi</span><span class="w">
+</span><span class="w">            </span><span class="nt">tencent.com/vcuda-core</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;50&#34;</span><span class="w">
+</span><span class="w">            </span><span class="nt">tencent.com/vcuda-memory</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;35&#34;</span><span class="w">
+</span><span class="w">          </span><span class="nt">requests</span><span class="p">:</span><span class="w">
+</span><span class="w">            </span><span class="nt">cpu</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;4&#34;</span><span class="w">
+</span><span class="w">            </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="l">8Gi</span><span class="w">
+</span><span class="w">            </span><span class="nt">tencent.com/vcuda-core</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;50&#34;</span><span class="w">
+</span><span class="w">            </span><span class="nt">tencent.com/vcuda-memory</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;35&#34;</span><span class="w">
+</span></code></pre></div><div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">kubectl apply -f tensorflow-mnist.yaml
+</code></pre></div>
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/%E5%AE%B9%E5%99%A8/">容器</a>
+        
+            <a href="/tags/k8s/">k8s</a>
+        
+            <a href="/tags/gaiagpu/">gaiagpu</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+        <link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.css"integrity="sha384-RZU/ijkSsFbcmivfdRBQDtwuwVqK7GMOw6IMvKyeWL2K5UAlyp6WonmB8m7Jd0Hn"crossorigin="anonymous"
+            ><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.js"integrity="sha384-pK1WpvzWVBQiP0/GjnvRxV4mOb0oxFuyRxJlk6vVw146n3egcN5C925NCP7a7BY8"crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/contrib/auto-render.min.js"integrity="sha384-vZTG03m&#43;2yp6N6BNi5iM4rW4oIwk5DfcNdFfxkk9ZWpDriOkXX8voJBFrAO7MpVl"crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        renderMathInElement(document.querySelector(`.article-content`), {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ]
+        });})
+</script>
+    
+</article>
+
+    <aside class="related-contents--wrapper">
+    
+    
+        <h2 class="section-title">Related contents</h2>
+        <div class="related-contents">
+            <div class="flex article-list--tile">
+                
+                    
+<article class="has-image">
+    <a href="/p/kubernetesubuntu%E5%AE%89%E8%A3%85k8s%E9%9B%86%E7%BE%A4/">
+        
+        
+            <div class="article-image">
+                
+                    <img src="https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/20220823230439.png" loading="lazy" data-key="" data-hash="https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/20220823230439.png"/>
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">【Kubernetes】ubuntu安装k8s集群</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/kubernetes%E5%9C%A8k8s%E9%9B%86%E7%BE%A4%E4%B8%AD%E6%8C%82%E8%BD%BD%E5%9F%BA%E4%BA%8Enfs%E7%9A%84storageclass/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">【Kubernetes】在k8s集群中挂载基于NFS的StorageClass</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/kubernetes%E5%9C%A8k8s%E9%9B%86%E7%BE%A4%E5%AE%89%E8%A3%85%E6%B5%8B%E8%AF%95adaptdl/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">【Kubernetes】在k8s集群安装测试adaptdl</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/kubernetes%E5%A6%82%E4%BD%95%E8%AE%A9kubernetes%E9%9B%86%E7%BE%A4%E4%BD%BF%E7%94%A8gpu/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">【Kubernetes】如何让kubernetes集群使用GPU</h2>
+        </div>
+    </a>
+</article>
+                
+            </div>
+        </div>
+    
+</aside>
+
+     
+    
+        
+    <script
+    src="https://giscus.app/client.js"
+    data-repo="Tweakzx/Tweakzx.github.io"
+    data-repo-id="MDEwOlJlcG9zaXRvcnkzMjY5MTY1NTE="
+    data-category="Announcements"
+    data-category-id="DIC_kwDOE3xZx84CTfL-"
+    data-mapping="title"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-theme="light_tritanopia"
+    crossorigin="anonymous"
+    async
+></script>
+<script>
+    function setGiscusTheme(theme) {
+        let giscus = document.querySelector('iframe.giscus-frame');
+        if (giscus) {
+            giscus.contentWindow.postMessage(
+                { 
+                    giscus: {
+                        setConfig: { 
+                            theme: theme 
+                        }
+                    }
+                },
+                "https://giscus.app"
+            );
+        };
+    };
+
+    (function(){
+        addEventListener('message', (e) => {
+            if (event.origin !== 'https://giscus.app') return;
+            handler()
+        });
+        window.addEventListener('onColorSchemeChange', handler);
+
+        function handler() {
+            if (document.documentElement.dataset.scheme === "light") {
+                setGiscusTheme('light_tritanopia');
+            } else {
+                setGiscusTheme('dark_tritanopia');
+            };
+        };
+    }());
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2023 Tweakzx
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.5.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
+            >
+
+            </main>
+    
+        <aside class="sidebar right-sidebar sticky">
+            <section class="widget archives">
+                <div class="widget-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+                </div>
+                <h2 class="widget-title section-title">Table of contents</h2>
+                
+                <div class="widget--toc">
+                    <nav id="TableOfContents">
+  <ol>
+    <li><a href="#前置工作">前置工作</a></li>
+    <li><a href="#gpu-admission">gpu-admission</a>
+      <ol>
+        <li><a href="#部署deployment">部署deployment</a></li>
+        <li><a href="#创建自定义调度文件">创建自定义调度文件</a></li>
+        <li><a href="#修改默认调度器">修改默认调度器</a></li>
+      </ol>
+    </li>
+    <li><a href="#gpu-manager">gpu-manager</a>
+      <ol>
+        <li><a href="#给gpu节点打标签">给gpu节点打标签</a></li>
+        <li><a href="#部署deamonset">部署deamonset</a></li>
+      </ol>
+    </li>
+    <li><a href="#测试">测试</a>
+      <ol>
+        <li><a href="#创建测试文件">创建测试文件</a></li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+                </div>
+            </section>
+        </aside>
+    
+
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
+                defer="false"
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

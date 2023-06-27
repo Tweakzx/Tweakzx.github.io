@@ -1,54 +1,200 @@
-<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="在Kubernetes集群中使用GPU资源 在前文中， 我们搭建了k8s集群， 但是k8s原生不支持GPU资源， 需要使用各大GPU厂商开发的插件才"><title>【Kubernetes】如何让kubernetes集群使用GPU</title><link rel=canonical href=https://tweakzx.github.io/p/kubernetes%E5%A6%82%E4%BD%95%E8%AE%A9kubernetes%E9%9B%86%E7%BE%A4%E4%BD%BF%E7%94%A8gpu/><link rel=stylesheet href=/scss/style.min.css><meta property="og:title" content="【Kubernetes】如何让kubernetes集群使用GPU"><meta property="og:description" content="在Kubernetes集群中使用GPU资源 在前文中， 我们搭建了k8s集群， 但是k8s原生不支持GPU资源， 需要使用各大GPU厂商开发的插件才"><meta property="og:url" content="https://tweakzx.github.io/p/kubernetes%E5%A6%82%E4%BD%95%E8%AE%A9kubernetes%E9%9B%86%E7%BE%A4%E4%BD%BF%E7%94%A8gpu/"><meta property="og:site_name" content="Tweakzx"><meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="GPU"><meta property="article:tag" content="GPU 集群"><meta property="article:published_time" content="2023-01-09T20:06:52+08:00"><meta property="article:modified_time" content="2023-01-09T20:06:52+08:00"><meta name=twitter:title content="【Kubernetes】如何让kubernetes集群使用GPU"><meta name=twitter:description content="在Kubernetes集群中使用GPU资源 在前文中， 我们搭建了k8s集群， 但是k8s原生不支持GPU资源， 需要使用各大GPU厂商开发的插件才"></head><body class="article-page has-toc"><script>(function(){const colorSchemeKey='StackColorScheme';if(!localStorage.getItem(colorSchemeKey)){localStorage.setItem(colorSchemeKey,"auto");}})();</script><script>(function(){const colorSchemeKey='StackColorScheme';const colorSchemeItem=localStorage.getItem(colorSchemeKey);const supportDarkMode=window.matchMedia('(prefers-color-scheme: dark)').matches===true;if(colorSchemeItem=='dark'||colorSchemeItem==='auto'&&supportDarkMode){document.documentElement.dataset.scheme='dark';}else{document.documentElement.dataset.scheme='light';}})();</script><div class="container main-container flex
-extended"><div id=article-toolbar><a href=/ class=back-home><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="15 6 9 12 15 18"/></svg><span>Back</span></a></div><main class="main full-width"><article class=main-article><header class=article-header><div class=article-details><header class=article-category><a href=/categories/kubernetes/>kubernetes</a></header><h2 class=article-title><a href=/p/kubernetes%E5%A6%82%E4%BD%95%E8%AE%A9kubernetes%E9%9B%86%E7%BE%A4%E4%BD%BF%E7%94%A8gpu/>【Kubernetes】如何让kubernetes集群使用GPU</a></h2><footer class=article-time><div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg><time class=article-time--published>Jan 09, 2023</time></div><div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg><time class=article-time--reading>4 minute read</time></div></footer></div></header><section class=article-content><h2 id=在kubernetes集群中使用gpu资源>在Kubernetes集群中使用GPU资源</h2><p>在前文中， 我们搭建了k8s集群， 但是k8s原生不支持GPU资源， 需要使用各大GPU厂商开发的插件才能使用。</p><p>这一部分大家可以参考<a class=link href=https://github.com/NVIDIA/k8s-device-plugin#quick-start target=_blank rel=noopener>NVIDIA/k8s-device-plugin: NVIDIA device plugin for Kubernetes (github.com)</a></p><p>本文就记录我在k8s集群中配置插件的过程。</p><h2 id=安装前的环境配置>安装前的环境配置</h2><ul><li>Centos Linux realease 7.9.2009</li><li>内核：3.10.0-1062.18.1.el7.x86_64</li><li>Docker-ce：18.09.7</li><li>Kubernetes：1.16.15</li><li>Nvidia Driver： 460.32.03两台，510.47.03一台</li></ul><h2 id=安装nvidia-docker2>安装<code>nvidia-docker2</code></h2><blockquote><p>如果你使用的是新版本的docker (>=19.03)，则推荐使用nvidia-container-toolkit包来代替nvidia-docker2包：</p></blockquote><p>由于我的docker版本是18.09.7， 所以我需要安装nvidia-docker2</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash><span class=c1>##设置仓库</span>
-<span class=nv>distribution</span><span class=o>=</span><span class=k>$(</span>. /etc/os-release<span class=p>;</span><span class=nb>echo</span> <span class=nv>$ID$VERSION_ID</span><span class=k>)</span>
-curl -s -L https://nvidia.github.io/nvidia-docker/<span class=nv>$distribution</span>/nvidia-docker.repo <span class=p>|</span> <span class=se>\
-</span><span class=se></span>sudo tee /etc/yum.repos.d/nvidia-docker.repo
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='在Kubernetes集群中使用GPU资源 在前文中， 我们搭建了k8s集群， 但是k8s原生不支持GPU资源， 需要使用各大GPU厂商开发的插件才'><title>【Kubernetes】如何让kubernetes集群使用GPU</title>
 
-<span class=c1>##更新仓库中的key</span>
-<span class=nv>DIST</span><span class=o>=</span><span class=k>$(</span>sed -n <span class=s1>&#39;s/releasever=//p&#39;</span> /etc/yum.conf<span class=k>)</span>
-<span class=nv>DIST</span><span class=o>=</span><span class=si>${</span><span class=nv>DIST</span><span class=k>:-$(</span>. /etc/os-release<span class=p>;</span> <span class=nb>echo</span> <span class=nv>$VERSION_ID</span><span class=k>)</span><span class=si>}</span>
+<link rel='canonical' href='https://tweakzx.github.io/p/kubernetes%E5%A6%82%E4%BD%95%E8%AE%A9kubernetes%E9%9B%86%E7%BE%A4%E4%BD%BF%E7%94%A8gpu/'>
+
+<link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='【Kubernetes】如何让kubernetes集群使用GPU'>
+<meta property='og:description' content='在Kubernetes集群中使用GPU资源 在前文中， 我们搭建了k8s集群， 但是k8s原生不支持GPU资源， 需要使用各大GPU厂商开发的插件才'>
+<meta property='og:url' content='https://tweakzx.github.io/p/kubernetes%E5%A6%82%E4%BD%95%E8%AE%A9kubernetes%E9%9B%86%E7%BE%A4%E4%BD%BF%E7%94%A8gpu/'>
+<meta property='og:site_name' content='Tweakzx'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='GPU' /><meta property='article:tag' content='GPU 集群' /><meta property='article:published_time' content='2023-01-09T20:06:52&#43;08:00'/><meta property='article:modified_time' content='2023-01-09T20:06:52&#43;08:00'/>
+<meta name="twitter:title" content="【Kubernetes】如何让kubernetes集群使用GPU">
+<meta name="twitter:description" content="在Kubernetes集群中使用GPU资源 在前文中， 我们搭建了k8s集群， 但是k8s原生不支持GPU资源， 需要使用各大GPU厂商开发的插件才">
+    </head>
+    <body class="
+    article-page has-toc
+">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex 
+    
+        extended
+    
+">
+    
+        <div id="article-toolbar">
+            <a href="/" class="back-home">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="15 6 9 12 15 18" />
+</svg>
+
+
+
+                <span>Back</span>
+            </a>
+        </div>
+    
+<main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/kubernetes/" >
+                kubernetes
+            </a>
+        
+    </header>
+    
+
+    <h2 class="article-title">
+        <a href="/p/kubernetes%E5%A6%82%E4%BD%95%E8%AE%A9kubernetes%E9%9B%86%E7%BE%A4%E4%BD%BF%E7%94%A8gpu/">【Kubernetes】如何让kubernetes集群使用GPU</a>
+    </h2>
+
+    
+
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Jan 09, 2023</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    4 minute read
+                </time>
+            </div>
+        
+    </footer>
+    
+</div>
+
+    
+
+</header>
+
+    <section class="article-content">
+    <h2 id="在kubernetes集群中使用gpu资源">在Kubernetes集群中使用GPU资源</h2>
+<p>在前文中， 我们搭建了k8s集群， 但是k8s原生不支持GPU资源， 需要使用各大GPU厂商开发的插件才能使用。</p>
+<p>这一部分大家可以参考<a class="link" href="https://github.com/NVIDIA/k8s-device-plugin#quick-start"  target="_blank" rel="noopener"
+    >NVIDIA/k8s-device-plugin: NVIDIA device plugin for Kubernetes (github.com)</a></p>
+<p>本文就记录我在k8s集群中配置插件的过程。</p>
+<h2 id="安装前的环境配置">安装前的环境配置</h2>
+<ul>
+<li>Centos Linux realease 7.9.2009</li>
+<li>内核：3.10.0-1062.18.1.el7.x86_64</li>
+<li>Docker-ce：18.09.7</li>
+<li>Kubernetes：1.16.15</li>
+<li>Nvidia Driver： 460.32.03两台，510.47.03一台</li>
+</ul>
+<h2 id="安装nvidia-docker2">安装<code>nvidia-docker2</code></h2>
+<blockquote>
+<p>如果你使用的是新版本的docker (&gt;=19.03)，则推荐使用nvidia-container-toolkit包来代替nvidia-docker2包：</p>
+</blockquote>
+<p>由于我的docker版本是18.09.7， 所以我需要安装nvidia-docker2</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="c1">##设置仓库</span>
+<span class="nv">distribution</span><span class="o">=</span><span class="k">$(</span>. /etc/os-release<span class="p">;</span><span class="nb">echo</span> <span class="nv">$ID$VERSION_ID</span><span class="k">)</span>
+curl -s -L https://nvidia.github.io/nvidia-docker/<span class="nv">$distribution</span>/nvidia-docker.repo <span class="p">|</span> <span class="se">\
+</span><span class="se"></span>sudo tee /etc/yum.repos.d/nvidia-docker.repo
+
+<span class="c1">##更新仓库中的key</span>
+<span class="nv">DIST</span><span class="o">=</span><span class="k">$(</span>sed -n <span class="s1">&#39;s/releasever=//p&#39;</span> /etc/yum.conf<span class="k">)</span>
+<span class="nv">DIST</span><span class="o">=</span><span class="si">${</span><span class="nv">DIST</span><span class="k">:-$(</span>. /etc/os-release<span class="p">;</span> <span class="nb">echo</span> <span class="nv">$VERSION_ID</span><span class="k">)</span><span class="si">}</span>
 sudo yum makecache
 
-<span class=c1>##安装nvidia-docker2</span>
+<span class="c1">##安装nvidia-docker2</span>
 sudo yum install nvidia-docker2
-</code></pre></div><p>这时候， 查看/etc/docker/daemon.json，你会发现内容已经改了， 内容如下</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash><span class=o>{</span>
-  <span class=s2>&#34;runtimes&#34;</span>: <span class=o>{</span>
-     <span class=s2>&#34;nvidia&#34;</span>: <span class=o>{</span>
-         <span class=s2>&#34;path&#34;</span>: <span class=s2>&#34;nvidia-container-runtime&#34;</span>,
-         <span class=s2>&#34;runtimeArgs&#34;</span>: <span class=o>[]</span>
-      <span class=o>}</span>
-   <span class=o>}</span>
-<span class=o>}</span>
-</code></pre></div><p>但是， 我还有一些其他的设置， 例如cgroupdriver， 镜像等等也需要设置， 所以我的修改了daemon.json，内容如下</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash><span class=o>{</span>
-  <span class=s2>&#34;default-runtime&#34;</span>: <span class=s2>&#34;nvidia&#34;</span>,
-  <span class=s2>&#34;registry-mirrors&#34;</span>: <span class=o>[</span><span class=s2>&#34;https://n73pm3wf.mirror.aliyuncs.com&#34;</span><span class=o>]</span>,
-  <span class=s2>&#34;exec-opts&#34;</span>: <span class=o>[</span><span class=s2>&#34;native.cgroupdriver=systemd&#34;</span><span class=o>]</span>,
-  <span class=s2>&#34;log-driver&#34;</span>: <span class=s2>&#34;json-file&#34;</span>,
-  <span class=s2>&#34;log-opts&#34;</span>: <span class=o>{</span>
-    <span class=s2>&#34;max-size&#34;</span>: <span class=s2>&#34;100m&#34;</span>
-  <span class=o>}</span>,
-  <span class=s2>&#34;storage-driver&#34;</span>: <span class=s2>&#34;overlay2&#34;</span>,
-  <span class=s2>&#34;storage-opts&#34;</span>: <span class=o>[</span>
-    <span class=s2>&#34;overlay2.override_kernel_check=true&#34;</span>
-  <span class=o>]</span>,
-  <span class=s2>&#34;runtimes&#34;</span>: <span class=o>{</span>
-     <span class=s2>&#34;nvidia&#34;</span>: <span class=o>{</span>
-         <span class=s2>&#34;path&#34;</span>: <span class=s2>&#34;nvidia-container-runtime&#34;</span>,
-         <span class=s2>&#34;runtimeArgs&#34;</span>: <span class=o>[]</span>
-      <span class=o>}</span>
-   <span class=o>}</span>
-<span class=o>}</span>
-</code></pre></div><p>修改完之后，记得重启docker</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash><span class=c1>##重启docker</span>
+</code></pre></div><p>这时候， 查看/etc/docker/daemon.json，你会发现内容已经改了， 内容如下</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="o">{</span>
+  <span class="s2">&#34;runtimes&#34;</span>: <span class="o">{</span>
+     <span class="s2">&#34;nvidia&#34;</span>: <span class="o">{</span>
+         <span class="s2">&#34;path&#34;</span>: <span class="s2">&#34;nvidia-container-runtime&#34;</span>,
+         <span class="s2">&#34;runtimeArgs&#34;</span>: <span class="o">[]</span>
+      <span class="o">}</span>
+   <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div><p>但是， 我还有一些其他的设置， 例如cgroupdriver， 镜像等等也需要设置， 所以我的修改了daemon.json，内容如下</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="o">{</span>
+  <span class="s2">&#34;default-runtime&#34;</span>: <span class="s2">&#34;nvidia&#34;</span>,
+  <span class="s2">&#34;registry-mirrors&#34;</span>: <span class="o">[</span><span class="s2">&#34;https://n73pm3wf.mirror.aliyuncs.com&#34;</span><span class="o">]</span>,
+  <span class="s2">&#34;exec-opts&#34;</span>: <span class="o">[</span><span class="s2">&#34;native.cgroupdriver=systemd&#34;</span><span class="o">]</span>,
+  <span class="s2">&#34;log-driver&#34;</span>: <span class="s2">&#34;json-file&#34;</span>,
+  <span class="s2">&#34;log-opts&#34;</span>: <span class="o">{</span>
+    <span class="s2">&#34;max-size&#34;</span>: <span class="s2">&#34;100m&#34;</span>
+  <span class="o">}</span>,
+  <span class="s2">&#34;storage-driver&#34;</span>: <span class="s2">&#34;overlay2&#34;</span>,
+  <span class="s2">&#34;storage-opts&#34;</span>: <span class="o">[</span>
+    <span class="s2">&#34;overlay2.override_kernel_check=true&#34;</span>
+  <span class="o">]</span>,
+  <span class="s2">&#34;runtimes&#34;</span>: <span class="o">{</span>
+     <span class="s2">&#34;nvidia&#34;</span>: <span class="o">{</span>
+         <span class="s2">&#34;path&#34;</span>: <span class="s2">&#34;nvidia-container-runtime&#34;</span>,
+         <span class="s2">&#34;runtimeArgs&#34;</span>: <span class="o">[]</span>
+      <span class="o">}</span>
+   <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div><p>修改完之后，记得重启docker</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="c1">##重启docker</span>
 systemctl restart docker
-</code></pre></div><p>特别注意一个字段<code>"default-runtime": "nvidia",</code> 这个default-runtime需要加上才可以在k8s中找到设备。</p><p>加了之后重启docker， 使用</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash>docker run --security-opt<span class=o>=</span>no-new-privileges --cap-drop<span class=o>=</span>ALL --network<span class=o>=</span>none -it -v /var/lib/kubelet/device-plugins:/var/lib/kubelet/device-plugins nvidia/k8s-device-plugin:1.11
-</code></pre></div><p>如果成功的话会出现</p><pre><code>2023/01/09 12:56:36 Loading NVML
+</code></pre></div><p>特别注意一个字段<code>&quot;default-runtime&quot;: &quot;nvidia&quot;,</code> 这个default-runtime需要加上才可以在k8s中找到设备。</p>
+<p>加了之后重启docker， 使用</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">docker run --security-opt<span class="o">=</span>no-new-privileges --cap-drop<span class="o">=</span>ALL --network<span class="o">=</span>none -it -v /var/lib/kubelet/device-plugins:/var/lib/kubelet/device-plugins nvidia/k8s-device-plugin:1.11
+</code></pre></div><p>如果成功的话会出现</p>
+<pre><code>2023/01/09 12:56:36 Loading NVML
 2023/01/09 12:56:36 Fetching devices.
 2023/01/09 12:56:37 Starting FS watcher.
 2023/01/09 12:56:37 Starting OS watcher.
 2023/01/09 12:56:37 Starting to serve on /var/lib/kubelet/device-plugins/nvidia.sock
 2023/01/09 12:56:37 Registered device plugin with Kubelet
-</code></pre><p>如果不加的话，使用如下命令也可以验证docker是否可以使用GPU</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash>docker run --runtime<span class=o>=</span>nvidia --rm nvidia/cuda nvidia-smi
-</code></pre></div><p>等待几秒，下载完成后出现会以下结果</p><pre><code># docker run --runtime=nvidia --rm nvidia/cuda nvidia-smi
+</code></pre><p>如果不加的话，使用如下命令也可以验证docker是否可以使用GPU</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">docker run --runtime<span class="o">=</span>nvidia --rm nvidia/cuda nvidia-smi
+</code></pre></div><p>等待几秒，下载完成后出现会以下结果</p>
+<pre><code># docker run --runtime=nvidia --rm nvidia/cuda nvidia-smi
 Mon Jan  9 12:33:59 2023       
 +-----------------------------------------------------------------------------+
 | NVIDIA-SMI 510.47.03    Driver Version: 510.47.03    CUDA Version: 11.6     |
@@ -81,13 +227,19 @@ Mon Jan  9 12:33:59 2023
 |=============================================================================|
 |  No running processes found                                                 |
 +-----------------------------------------------------------------------------+
-</code></pre><h2 id=在k8s上启动nvidia-device-plugin>在k8s上启动nvidia-device-plugin</h2><p>在Master节点上运行</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash>kubectl create -f https://raw.githubusercontent.com/NVIDIA/k8s-device-plugin/v1.11/nvidia-device-plugin.yml
-</code></pre></div><p>然后使用以下命令查看</p><div class=highlight><pre class=chroma><code class=language-bash data-lang=bash>kubectl get pods -A -owide
-</code></pre></div><p>可以发现， 相关的pod已经起来了，对应每个修改了docker运行时的GPU节点都有一个pod</p><pre><code>kube-system   nvidia-device-plugin-daemonset-2bhzz  1/1     Running     0          59m
+</code></pre><h2 id="在k8s上启动nvidia-device-plugin">在k8s上启动nvidia-device-plugin</h2>
+<p>在Master节点上运行</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">kubectl create -f https://raw.githubusercontent.com/NVIDIA/k8s-device-plugin/v1.11/nvidia-device-plugin.yml
+</code></pre></div><p>然后使用以下命令查看</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">kubectl get pods -A -owide
+</code></pre></div><p>可以发现， 相关的pod已经起来了，对应每个修改了docker运行时的GPU节点都有一个pod</p>
+<pre><code>kube-system   nvidia-device-plugin-daemonset-2bhzz  1/1     Running     0          59m
 kube-system   nvidia-device-plugin-daemonset-l5djd  1/1     Running     0          59m
 kube-system   nvidia-device-plugin-daemonset-lt756  1/1     Running     0          60m
-</code></pre><p>使用</p><pre><code>kubectl describe nodes
-</code></pre><p>可以发现可分配资源里出现了nvidia.com/gpu的字段</p><pre><code>Capacity:
+</code></pre><p>使用</p>
+<pre><code>kubectl describe nodes
+</code></pre><p>可以发现可分配资源里出现了nvidia.com/gpu的字段</p>
+<pre><code>Capacity:
  cpu:                56
  ephemeral-storage:  2148327Mi
  hugepages-1Gi:      0
@@ -104,7 +256,9 @@ Allocatable:
  nvidia.com/gpu:     4
  pods:               110
 System Info:
-</code></pre><h2 id=测试>测试</h2><p>我们使用官方文档里的测试方法</p><pre><code>$ cat &lt;&lt;EOF | kubectl apply -f -
+</code></pre><h2 id="测试">测试</h2>
+<p>我们使用官方文档里的测试方法</p>
+<pre><code>$ cat &lt;&lt;EOF | kubectl apply -f -
 apiVersion: v1
 kind: Pod
 metadata:
@@ -122,18 +276,26 @@ spec:
     operator: Exists
     effect: NoSchedule
 EOF
-</code></pre><p>可以得到</p><pre><code># kubectl logs gpu-pod 
+</code></pre><p>可以得到</p>
+<pre><code># kubectl logs gpu-pod 
 [Vector addition of 50000 elements]
 Copy input data from the host memory to the CUDA device
 CUDA kernel launch with 196 blocks of 256 threads
 Copy output data from the CUDA device to the host memory
 Test PASSED
 Done
-</code></pre><h2 id=遇到的问题>遇到的问题</h2><blockquote><p>Failed to initialize NVML: could not load NVML library.If this is a GPU node, did you set the docker default runtime to <code>nvidia</code>?</p></blockquote><p>你可能没有设置`&ldquo;default-runtime&rdquo;: &ldquo;nvidia"字段， 设置之后重启docker， 将pod全部删除重启，一定要注意操作顺序， 安装docker， 配置/etc/docker/daemon.json， 重启docker， 启动k8s-device-plugin, 进行测试。</p><pre><code>kubectl delete -n kube-system &lt;POD NAME&gt;
-</code></pre><h2 id=如果需要给不同型号gpu打label>如果需要给不同型号GPU打Label</h2><pre><code># Label your nodes with the accelerator type they have.
+</code></pre><h2 id="遇到的问题">遇到的问题</h2>
+<blockquote>
+<p>Failed to initialize NVML: could not load NVML library.If this is a GPU node, did you set the docker default runtime to <code>nvidia</code>?</p>
+</blockquote>
+<p>你可能没有设置`&ldquo;default-runtime&rdquo;: &ldquo;nvidia&quot;字段， 设置之后重启docker， 将pod全部删除重启，一定要注意操作顺序， 安装docker， 配置/etc/docker/daemon.json， 重启docker， 启动k8s-device-plugin, 进行测试。</p>
+<pre><code>kubectl delete -n kube-system &lt;POD NAME&gt;
+</code></pre><h2 id="如果需要给不同型号gpu打label">如果需要给不同型号GPU打Label</h2>
+<pre><code># Label your nodes with the accelerator type they have.
 kubectl label nodes &lt;node-with-k80&gt; accelerator=nvidia-tesla-k80
 kubectl label nodes &lt;node-with-p100&gt; accelerator=nvidia-tesla-p100
-</code></pre><p>调用的时候， 指定nodeSelector条件</p><pre><code>apiVersion: v1
+</code></pre><p>调用的时候， 指定nodeSelector条件</p>
+<pre><code>apiVersion: v1
 kind: Pod
 metadata:
   name: cuda-vector-add
@@ -148,11 +310,326 @@ spec:
           nvidia.com/gpu: 1
   nodeSelector:
     accelerator: nvidia-tesla-p100 # or nvidia-tesla-k80 etc.
-</code></pre></section><footer class=article-footer><section class=article-tags><a href=/tags/gpu/>GPU</a>
-<a href=/tags/gpu-%E9%9B%86%E7%BE%A4/>GPU 集群</a></section><section class=article-copyright><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg><span>Licensed under CC BY-NC-SA 4.0</span></section></footer><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.css integrity=sha384-RZU/ijkSsFbcmivfdRBQDtwuwVqK7GMOw6IMvKyeWL2K5UAlyp6WonmB8m7Jd0Hn crossorigin=anonymous><script src=https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.js integrity=sha384-pK1WpvzWVBQiP0/GjnvRxV4mOb0oxFuyRxJlk6vVw146n3egcN5C925NCP7a7BY8 crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/contrib/auto-render.min.js integrity=sha384-vZTG03m+2yp6N6BNi5iM4rW4oIwk5DfcNdFfxkk9ZWpDriOkXX8voJBFrAO7MpVl crossorigin=anonymous defer></script><script>window.addEventListener("DOMContentLoaded",()=>{renderMathInElement(document.querySelector(`.article-content`),{delimiters:[{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false},{left:"\\(",right:"\\)",display:false},{left:"\\[",right:"\\]",display:true}]});})</script></article><aside class=related-contents--wrapper><h2 class=section-title>Related contents</h2><div class=related-contents><div class="flex article-list--tile"><article><a href=/p/kubernetes%E9%83%A8%E7%BD%B2gaiagpuvcuda/><div class=article-details><h2 class=article-title>【Kubernetes】部署gaiaGPU（vCUDA）</h2></div></a></article><article><a href=/p/kubernetes%E5%9C%A8k8s%E9%9B%86%E7%BE%A4%E4%B8%AD%E6%8C%82%E8%BD%BD%E5%9F%BA%E4%BA%8Enfs%E7%9A%84storageclass/><div class=article-details><h2 class=article-title>【Kubernetes】在k8s集群中挂载基于NFS的StorageClass</h2></div></a></article><article><a href=/p/kubernetes%E5%9C%A8k8s%E9%9B%86%E7%BE%A4%E5%AE%89%E8%A3%85%E6%B5%8B%E8%AF%95adaptdl/><div class=article-details><h2 class=article-title>【Kubernetes】在k8s集群安装测试adaptdl</h2></div></a></article><article class=has-image><a href=/p/kubernetesubuntu%E5%AE%89%E8%A3%85k8s%E9%9B%86%E7%BE%A4/><div class=article-image><img src=https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/20220823230439.png loading=lazy data-key data-hash=https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/20220823230439.png></div><div class=article-details><h2 class=article-title>【Kubernetes】ubuntu安装k8s集群</h2></div></a></article></div></div></aside><script src=https://giscus.app/client.js data-repo=Tweakzx/Tweakzx.github.io data-repo-id="MDEwOlJlcG9zaXRvcnkzMjY5MTY1NTE=" data-category=Announcements data-category-id=DIC_kwDOE3xZx84CTfL- data-mapping=title data-reactions-enabled=1 data-emit-metadata=0 data-theme=light_tritanopia crossorigin=anonymous async></script><script>function setGiscusTheme(theme){let giscus=document.querySelector('iframe.giscus-frame');if(giscus){giscus.contentWindow.postMessage({giscus:{setConfig:{theme:theme}}},"https://giscus.app");};};(function(){addEventListener('message',(e)=>{if(event.origin!=='https://giscus.app')return;handler()});window.addEventListener('onColorSchemeChange',handler);function handler(){if(document.documentElement.dataset.scheme==="light"){setGiscusTheme('light_tritanopia');}else{setGiscusTheme('dark_tritanopia');};};}());</script><footer class=site-footer><section class=copyright>&copy;
-2020 -
-2023 Tweakzx</section><section class=powerby>Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a><br>Theme <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.5.0>Stack</a></b> designed by <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a></section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
-<button class="pswp__button pswp__button--share" title=Share></button>
-<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
-<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
-<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css integrity="sha256-c0uckgykQ9v5k+IqViZOZKc47Jn7KQil4/MP3ySA3F8=" crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE=" crossorigin=anonymous></main><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">Table of contents</h2><div class=widget--toc><nav id=TableOfContents><ol><li><a href=#在kubernetes集群中使用gpu资源>在Kubernetes集群中使用GPU资源</a></li><li><a href=#安装前的环境配置>安装前的环境配置</a></li><li><a href=#安装nvidia-docker2>安装<code>nvidia-docker2</code></a></li><li><a href=#在k8s上启动nvidia-device-plugin>在k8s上启动nvidia-device-plugin</a></li><li><a href=#测试>测试</a></li><li><a href=#遇到的问题>遇到的问题</a></li><li><a href=#如果需要给不同型号gpu打label>如果需要给不同型号GPU打Label</a></li></ol></nav></div></section></aside></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g=" crossorigin=anonymous defer></script><script type=text/javascript src=/ts/main.js defer></script><script>(function(){const customFont=document.createElement('link');customFont.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";customFont.type="text/css";customFont.rel="stylesheet";document.head.appendChild(customFont);}());</script></body></html>
+</code></pre>
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/gpu/">GPU</a>
+        
+            <a href="/tags/gpu-%E9%9B%86%E7%BE%A4/">GPU 集群</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+        <link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.css"integrity="sha384-RZU/ijkSsFbcmivfdRBQDtwuwVqK7GMOw6IMvKyeWL2K5UAlyp6WonmB8m7Jd0Hn"crossorigin="anonymous"
+            ><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.js"integrity="sha384-pK1WpvzWVBQiP0/GjnvRxV4mOb0oxFuyRxJlk6vVw146n3egcN5C925NCP7a7BY8"crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/contrib/auto-render.min.js"integrity="sha384-vZTG03m&#43;2yp6N6BNi5iM4rW4oIwk5DfcNdFfxkk9ZWpDriOkXX8voJBFrAO7MpVl"crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        renderMathInElement(document.querySelector(`.article-content`), {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ]
+        });})
+</script>
+    
+</article>
+
+    <aside class="related-contents--wrapper">
+    
+    
+        <h2 class="section-title">Related contents</h2>
+        <div class="related-contents">
+            <div class="flex article-list--tile">
+                
+                    
+<article class="">
+    <a href="/p/kubernetes%E9%83%A8%E7%BD%B2gaiagpuvcuda/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">【Kubernetes】部署gaiaGPU（vCUDA）</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/kubernetes%E5%9C%A8k8s%E9%9B%86%E7%BE%A4%E4%B8%AD%E6%8C%82%E8%BD%BD%E5%9F%BA%E4%BA%8Enfs%E7%9A%84storageclass/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">【Kubernetes】在k8s集群中挂载基于NFS的StorageClass</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/kubernetes%E5%9C%A8k8s%E9%9B%86%E7%BE%A4%E5%AE%89%E8%A3%85%E6%B5%8B%E8%AF%95adaptdl/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">【Kubernetes】在k8s集群安装测试adaptdl</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="has-image">
+    <a href="/p/kubernetesubuntu%E5%AE%89%E8%A3%85k8s%E9%9B%86%E7%BE%A4/">
+        
+        
+            <div class="article-image">
+                
+                    <img src="https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/20220823230439.png" loading="lazy" data-key="" data-hash="https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/20220823230439.png"/>
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">【Kubernetes】ubuntu安装k8s集群</h2>
+        </div>
+    </a>
+</article>
+                
+            </div>
+        </div>
+    
+</aside>
+
+     
+    
+        
+    <script
+    src="https://giscus.app/client.js"
+    data-repo="Tweakzx/Tweakzx.github.io"
+    data-repo-id="MDEwOlJlcG9zaXRvcnkzMjY5MTY1NTE="
+    data-category="Announcements"
+    data-category-id="DIC_kwDOE3xZx84CTfL-"
+    data-mapping="title"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-theme="light_tritanopia"
+    crossorigin="anonymous"
+    async
+></script>
+<script>
+    function setGiscusTheme(theme) {
+        let giscus = document.querySelector('iframe.giscus-frame');
+        if (giscus) {
+            giscus.contentWindow.postMessage(
+                { 
+                    giscus: {
+                        setConfig: { 
+                            theme: theme 
+                        }
+                    }
+                },
+                "https://giscus.app"
+            );
+        };
+    };
+
+    (function(){
+        addEventListener('message', (e) => {
+            if (event.origin !== 'https://giscus.app') return;
+            handler()
+        });
+        window.addEventListener('onColorSchemeChange', handler);
+
+        function handler() {
+            if (document.documentElement.dataset.scheme === "light") {
+                setGiscusTheme('light_tritanopia');
+            } else {
+                setGiscusTheme('dark_tritanopia');
+            };
+        };
+    }());
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2023 Tweakzx
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.5.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
+            >
+
+            </main>
+    
+        <aside class="sidebar right-sidebar sticky">
+            <section class="widget archives">
+                <div class="widget-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+                </div>
+                <h2 class="widget-title section-title">Table of contents</h2>
+                
+                <div class="widget--toc">
+                    <nav id="TableOfContents">
+  <ol>
+    <li><a href="#在kubernetes集群中使用gpu资源">在Kubernetes集群中使用GPU资源</a></li>
+    <li><a href="#安装前的环境配置">安装前的环境配置</a></li>
+    <li><a href="#安装nvidia-docker2">安装<code>nvidia-docker2</code></a></li>
+    <li><a href="#在k8s上启动nvidia-device-plugin">在k8s上启动nvidia-device-plugin</a></li>
+    <li><a href="#测试">测试</a></li>
+    <li><a href="#遇到的问题">遇到的问题</a></li>
+    <li><a href="#如果需要给不同型号gpu打label">如果需要给不同型号GPU打Label</a></li>
+  </ol>
+</nav>
+                </div>
+            </section>
+        </aside>
+    
+
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
+                defer="false"
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

@@ -1,8 +1,497 @@
-<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="Memory Harvesting in Multi-GPU Systems with Hierarchical Unified Virtual Memory 摘要 随着对 GPU 需求的不断增长，大多数组织允许用户共享多 GPU 服务器。 然而，我们观察到，当合并显示高度不同的资源需求的各种工作负"><title>【论文笔记】HUVM论文阅读笔记</title><link rel=canonical href=https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0huvm%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/><link rel=stylesheet href=/scss/style.min.css><meta property="og:title" content="【论文笔记】HUVM论文阅读笔记"><meta property="og:description" content="Memory Harvesting in Multi-GPU Systems with Hierarchical Unified Virtual Memory 摘要 随着对 GPU 需求的不断增长，大多数组织允许用户共享多 GPU 服务器。 然而，我们观察到，当合并显示高度不同的资源需求的各种工作负"><meta property="og:url" content="https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0huvm%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/"><meta property="og:site_name" content="Tweakzx"><meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:published_time" content="2023-06-25T16:38:08+08:00"><meta property="article:modified_time" content="2023-06-25T16:38:08+08:00"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202306261236383.png"><meta name=twitter:title content="【论文笔记】HUVM论文阅读笔记"><meta name=twitter:description content="Memory Harvesting in Multi-GPU Systems with Hierarchical Unified Virtual Memory 摘要 随着对 GPU 需求的不断增长，大多数组织允许用户共享多 GPU 服务器。 然而，我们观察到，当合并显示高度不同的资源需求的各种工作负"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202306261236383.png"></head><body class="article-page has-toc"><script>(function(){const colorSchemeKey='StackColorScheme';if(!localStorage.getItem(colorSchemeKey)){localStorage.setItem(colorSchemeKey,"auto");}})();</script><script>(function(){const colorSchemeKey='StackColorScheme';const colorSchemeItem=localStorage.getItem(colorSchemeKey);const supportDarkMode=window.matchMedia('(prefers-color-scheme: dark)').matches===true;if(colorSchemeItem=='dark'||colorSchemeItem==='auto'&&supportDarkMode){document.documentElement.dataset.scheme='dark';}else{document.documentElement.dataset.scheme='light';}})();</script><div class="container main-container flex
-extended"><div id=article-toolbar><a href=/ class=back-home><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="15 6 9 12 15 18"/></svg><span>Back</span></a></div><main class="main full-width"><article class="has-image main-article"><header class=article-header><div class=article-image><a href=/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0huvm%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/><img src=https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202306261236383.png loading=lazy alt="Featured image of post 【论文笔记】HUVM论文阅读笔记"></a></div><div class=article-details><h2 class=article-title><a href=/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0huvm%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/>【论文笔记】HUVM论文阅读笔记</a></h2><footer class=article-time><div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg><time class=article-time--published>Jun 25, 2023</time></div><div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg><time class=article-time--reading>5 minute read</time></div></footer></div></header><section class=article-content><h1 id=memory-harvesting-in-multi-gpu-systems-with-hierarchical-unified-virtual-memory>Memory Harvesting in Multi-GPU Systems with Hierarchical Unified Virtual Memory</h1><p><strong>摘要</strong></p><ul><li><p>随着对 GPU 需求的不断增长，大多数组织允许用户共享多 GPU 服务器。</p><ul><li>然而，我们观察到，当合并显示高度不同的资源需求的各种工作负载时，跨 GPU 的内存空间没有得到充分有效的利用。</li><li>这是因为当前的内存管理技术仅仅是为单个 GPU 设计的，而不是为共享多 GPU 环境设计的。</li></ul></li><li><p>本研究提出一种新颖的方法，通过结合相邻 GPU 的暂时空闲内存，为 GPU 提供一种虚拟内存空间的错觉，称为分层统一虚拟内存(HUVM)。</p><ul><li>由于现代的 GPU 通过快速互连相互连接，与通过 PCIe 的主机内存相比，它提供了较低的访问相邻 GPU 内存的延迟。</li><li>在 HUVM 之上，我们设计了一个新的内存管理器，称为 memHarvester，以有效和高效地获取临时可用的邻居 GPU 的内存。</li><li>对于不同的整合情景与 DNN 训练和图分析工作负载，我们的实验结果显示，高达2.71倍的性能改善相比，以前的方法在多 GPU 环境中。</li></ul></li></ul><h2 id=引言>引言</h2><ul><li><p>随着对 GPU 需求的爆炸式增长，在学术界和工业界，在一台服务器上安装多个 GPU 并使其可共享已经成为一种常见的做法。</p><ul><li>业内许多企业已经建立了由一组多 GPU 服务器组成的大型 GPU 集群，以满足从深度学习[1,13,18,26,36]到图形应用[6,10,19,31]的各种工作负载的需求，同时通过共享节省基础设施成本。</li><li>在这样的多 GPU 服务器中实现高 GPU 资源效率仍然是一个挑战。</li><li>图1表明，当前的内存管理技术对于共享多 GPU 来说不够有效多个作业在 GPU 之间独立运行的环境。虽然在一个或几个 GPU 中，从几百 MB 到几 GB 的少量内存仍然处于空闲状态，但是在内存压力较大的情况下，其他 GPU 依赖主机内存作为交换设备，这比同一服务器中的远程 GPU 要慢得多。</li><li><figure><a href=https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202306260942806.png><img src=https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202306260942806.png loading=lazy alt=image-20230626093958673></a><figcaption>image-20230626093958673</figcaption></figure></li></ul></li><li><p>GPU 供应商也面临着扩展单个 GPU 内存容量的挑战。</p><ul><li>为了克服 GPU 的有限容量，以前的一系列研究旨在利用主机内存给任务提供了一种无限内存的错觉[11,14,17,25,28]。</li><li>然而，在商品化的多 GPU 系统中，这些工作都没有利用相邻 GPU 的空闲内存。</li><li>由于现代 GPU 服务器通常配备8 ~ 16个 GPU，通过 NVLink 等高速互连连接，访问相邻 GPU 的空闲内存要比访问主机的空闲内存快得多。<ul><li>例如，NVIDIA DGX-2有16个 GPU，通过 NVLink 3.0进行点对点连接，在600GB/s 的双向带宽下产生512GB 的 GPU 内存池[23]。</li><li>另一方面，通过最新的 PCIe 4.0将 GPU 内存交换到主机 DRAM 可以只利用32GB/s 的带宽。</li></ul></li></ul></li><li><p>在本研究中，我们介绍一种新的方法，为 GPU 提供虚拟内存空间的假象，称为分层统一虚拟内存(HUVM)</p><ul><li>它由本地 GPU、相邻 GPU 的空闲内存和主机内存组成</li><li>HUVM 通过以最小的性能开销增加有效的内存空间，为内存虚拟化开辟了一个新的机会。<ul><li>当本地 GPU 内存没有空闲空间时，HUVM 利用相邻 GPU 中的空余内存作为 GPU 和主机之间的受害者缓存，而不是直接将数据交换到主机内存。</li></ul></li></ul></li><li><p>然而，由于空闲内存的数量是高度可变的，并且是先验未知的，因此要有效和高效地获取相邻 GPU 内存中的零星可用的一小部分是具有挑战性的。</p><ul><li>从单一 GPU 的角度出发，重新设计了现代多 GPU 服务器的内存管理方案。</li><li>HUVM 系统必须找到最好的利用内存的一小部分，同时尽量减少对相邻 GPU 中运行的工作负载的性能影响。</li></ul></li><li><p>为此，我们提出了一个 HUVM 的内存管理器，称为 memHarvester，在 GPU 驱动层实现。MemHarvester 在 HUVM 中作为数据路径的集中协调器。</p><ul><li>作为 memHarvester 的一个重要组成部分，我们提出了一种新的多路并行预取器，它利用了 HUVM 的路径分集，包括 PCIe 和 NVLink。<ul><li>与以前的许多方法[11,14,17,25,28]不同，memHarvester 首先通过 NVLink 从空闲内存预取数据到本地 GPU。</li><li>同时，如果连接到邻居 GPU 的 PCIe 通道不竞争，memHarvester 允许通过 PCIe 通道并行地从主机内存预取数据到邻居 GPU 的空闲内存。</li><li>因此，我们可以有效地将从主机存储器获取数据的延迟转换为空闲存储器的延迟。</li></ul></li><li>MemHarvester 管理收获内存的空间。<ul><li>由于空闲内存空间有限，memHarvester 无法将所有被驱逐的数据保留在收获内存中，最终导致主机内存交换。</li><li>为了减少从 GPU 到主机的数据清除的性能开销，memHarvester 支持在主机内存中清除2MB 大的页面，而不是4KB 的基本页面</li></ul></li></ul></li><li><p>当 HUVM 和 memHarvester 承载多个工作负载时, 它可以提高内存利用率和整体服务器效率。</p><ul><li>然而，不利的一面是，memHarvester 可能会对运行在 GPU 上的应用程序造成性能干扰，从而产生空闲内存。<ul><li>因此，memHarvester 立即回收空闲内存，以最小的延迟将其返回到原始物理内存空间，只要在产生 GPU 上运行的应用程序需要额外内存，从而最小化性能干扰。</li></ul></li></ul></li><li><p>我们在 NVIDIA 的统一虚拟内存(UVM)驱动程序版本460.67的基础上实现了我们的原型系统，该版本是可公开访问的[29]。</p><ul><li>MemHarvester 不需要对应用程序或机器学习平台进行任何修改<ul><li>就可以透明地检测备用内存的可用性，并动态地构建一个新的内存阶层</li></ul></li><li>我们使用 HUVM 量化 memHarvester 在 AWS p3.8 xlarge 实例上的不同整合场景的有效性。<ul><li>该服务器有四个通过 NVLink 连接的 NVIDIA V100(16GB)图形处理器。</li></ul></li><li>我们的实验结果表明，memHarvester 可以实现显著的吞吐量改善的大型图形分析工作负载。<ul><li>对于 DNN 训练和图形分析工作负载的不同整合场景，我们的实验结果显示，与多 GPU 环境下的先前方法相比，在同一服务器上运行的其他工作负载的干扰最小的情况下，性能提高了2.71倍。</li></ul></li></ul></li></ul><h2 id=动机和背景>动机和背景</h2><h2 id=huvm-结构化的内存分配>HUVM 结构化的内存分配</h2></section><footer class=article-footer><section class=article-copyright><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg><span>Licensed under CC BY-NC-SA 4.0</span></section></footer><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.css integrity=sha384-RZU/ijkSsFbcmivfdRBQDtwuwVqK7GMOw6IMvKyeWL2K5UAlyp6WonmB8m7Jd0Hn crossorigin=anonymous><script src=https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.js integrity=sha384-pK1WpvzWVBQiP0/GjnvRxV4mOb0oxFuyRxJlk6vVw146n3egcN5C925NCP7a7BY8 crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/contrib/auto-render.min.js integrity=sha384-vZTG03m+2yp6N6BNi5iM4rW4oIwk5DfcNdFfxkk9ZWpDriOkXX8voJBFrAO7MpVl crossorigin=anonymous defer></script><script>window.addEventListener("DOMContentLoaded",()=>{renderMathInElement(document.querySelector(`.article-content`),{delimiters:[{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false},{left:"\\(",right:"\\)",display:false},{left:"\\[",right:"\\]",display:true}]});})</script></article><aside class=related-contents--wrapper></aside><script src=https://giscus.app/client.js data-repo=Tweakzx/Tweakzx.github.io data-repo-id="MDEwOlJlcG9zaXRvcnkzMjY5MTY1NTE=" data-category=Announcements data-category-id=DIC_kwDOE3xZx84CTfL- data-mapping=title data-reactions-enabled=1 data-emit-metadata=0 data-theme=light_tritanopia crossorigin=anonymous async></script><script>function setGiscusTheme(theme){let giscus=document.querySelector('iframe.giscus-frame');if(giscus){giscus.contentWindow.postMessage({giscus:{setConfig:{theme:theme}}},"https://giscus.app");};};(function(){addEventListener('message',(e)=>{if(event.origin!=='https://giscus.app')return;handler()});window.addEventListener('onColorSchemeChange',handler);function handler(){if(document.documentElement.dataset.scheme==="light"){setGiscusTheme('light_tritanopia');}else{setGiscusTheme('dark_tritanopia');};};}());</script><footer class=site-footer><section class=copyright>&copy;
-2020 -
-2023 Tweakzx</section><section class=powerby>Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a><br>Theme <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.5.0>Stack</a></b> designed by <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a></section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
-<button class="pswp__button pswp__button--share" title=Share></button>
-<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
-<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
-<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css integrity="sha256-c0uckgykQ9v5k+IqViZOZKc47Jn7KQil4/MP3ySA3F8=" crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE=" crossorigin=anonymous></main><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">Table of contents</h2><div class=widget--toc><nav id=TableOfContents><ol><li><a href=#引言>引言</a></li><li><a href=#动机和背景>动机和背景</a></li><li><a href=#huvm-结构化的内存分配>HUVM 结构化的内存分配</a></li></ol></nav></div></section></aside></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g=" crossorigin=anonymous defer></script><script type=text/javascript src=/ts/main.js defer></script><script>(function(){const customFont=document.createElement('link');customFont.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";customFont.type="text/css";customFont.rel="stylesheet";document.head.appendChild(customFont);}());</script></body></html>
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='Memory Harvesting in Multi-GPU Systems with Hierarchical Unified Virtual Memory 摘要 随着对 GPU 需求的不断增长，大多数组织允许用户共享多 GPU 服务器。 然而，我们观察到，当合并显示高度不同的资源需求的各种工作负'><title>【论文笔记】HUVM论文阅读笔记</title>
+
+<link rel='canonical' href='https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0huvm%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/'>
+
+<link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='【论文笔记】HUVM论文阅读笔记'>
+<meta property='og:description' content='Memory Harvesting in Multi-GPU Systems with Hierarchical Unified Virtual Memory 摘要 随着对 GPU 需求的不断增长，大多数组织允许用户共享多 GPU 服务器。 然而，我们观察到，当合并显示高度不同的资源需求的各种工作负'>
+<meta property='og:url' content='https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0huvm%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/'>
+<meta property='og:site_name' content='Tweakzx'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2023-06-25T16:38:08&#43;08:00'/><meta property='article:modified_time' content='2023-06-25T16:38:08&#43;08:00'/><meta property='og:image' content='https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202306261236383.png' />
+<meta name="twitter:title" content="【论文笔记】HUVM论文阅读笔记">
+<meta name="twitter:description" content="Memory Harvesting in Multi-GPU Systems with Hierarchical Unified Virtual Memory 摘要 随着对 GPU 需求的不断增长，大多数组织允许用户共享多 GPU 服务器。 然而，我们观察到，当合并显示高度不同的资源需求的各种工作负"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202306261236383.png' />
+    </head>
+    <body class="
+    article-page has-toc
+">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex 
+    
+        extended
+    
+">
+    
+        <div id="article-toolbar">
+            <a href="/" class="back-home">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="15 6 9 12 15 18" />
+</svg>
+
+
+
+                <span>Back</span>
+            </a>
+        </div>
+    
+<main class="main full-width">
+    <article class="has-image main-article">
+    <header class="article-header">
+        <div class="article-image">
+            <a href="/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0huvm%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/">
+                
+                    <img src="https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202306261236383.png" loading="lazy" alt="Featured image of post 【论文笔记】HUVM论文阅读笔记" />
+                
+            </a>
+        </div>
+    
+
+    <div class="article-details">
+    
+
+    <h2 class="article-title">
+        <a href="/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0huvm%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/">【论文笔记】HUVM论文阅读笔记</a>
+    </h2>
+
+    
+
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Jun 25, 2023</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    5 minute read
+                </time>
+            </div>
+        
+    </footer>
+    
+</div>
+
+    
+
+</header>
+
+    <section class="article-content">
+    <h1 id="memory-harvesting-in-multi-gpu-systems-with-hierarchical-unified-virtual-memory">Memory Harvesting in Multi-GPU Systems with Hierarchical Unified Virtual Memory</h1>
+<p><strong>摘要</strong></p>
+<ul>
+<li>
+<p>随着对 GPU 需求的不断增长，大多数组织允许用户共享多 GPU 服务器。</p>
+<ul>
+<li>然而，我们观察到，当合并显示高度不同的资源需求的各种工作负载时，跨 GPU 的内存空间没有得到充分有效的利用。</li>
+<li>这是因为当前的内存管理技术仅仅是为单个 GPU 设计的，而不是为共享多 GPU 环境设计的。</li>
+</ul>
+</li>
+<li>
+<p>本研究提出一种新颖的方法，通过结合相邻 GPU 的暂时空闲内存，为 GPU 提供一种虚拟内存空间的错觉，称为分层统一虚拟内存(HUVM)。</p>
+<ul>
+<li>由于现代的 GPU 通过快速互连相互连接，与通过 PCIe 的主机内存相比，它提供了较低的访问相邻 GPU 内存的延迟。</li>
+<li>在 HUVM 之上，我们设计了一个新的内存管理器，称为 memHarvester，以有效和高效地获取临时可用的邻居 GPU 的内存。</li>
+<li>对于不同的整合情景与 DNN 训练和图分析工作负载，我们的实验结果显示，高达2.71倍的性能改善相比，以前的方法在多 GPU 环境中。</li>
+</ul>
+</li>
+</ul>
+<h2 id="引言">引言</h2>
+<ul>
+<li>
+<p>随着对 GPU 需求的爆炸式增长，在学术界和工业界，在一台服务器上安装多个 GPU 并使其可共享已经成为一种常见的做法。</p>
+<ul>
+<li>业内许多企业已经建立了由一组多 GPU 服务器组成的大型 GPU 集群，以满足从深度学习[1,13,18,26,36]到图形应用[6,10,19,31]的各种工作负载的需求，同时通过共享节省基础设施成本。</li>
+<li>在这样的多 GPU 服务器中实现高 GPU 资源效率仍然是一个挑战。</li>
+<li>图1表明，当前的内存管理技术对于共享多 GPU 来说不够有效多个作业在 GPU 之间独立运行的环境。虽然在一个或几个 GPU 中，从几百 MB 到几 GB 的少量内存仍然处于空闲状态，但是在内存压力较大的情况下，其他 GPU 依赖主机内存作为交换设备，这比同一服务器中的远程 GPU 要慢得多。</li>
+<li><figure 
+	>
+	<a href="https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202306260942806.png" >
+		<img src="https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202306260942806.png"
+			
+			
+			
+			loading="lazy"
+			alt="image-20230626093958673">
+	</a>
+	
+	<figcaption>image-20230626093958673</figcaption>
+	
+</figure></li>
+</ul>
+</li>
+<li>
+<p>GPU 供应商也面临着扩展单个 GPU 内存容量的挑战。</p>
+<ul>
+<li>为了克服 GPU 的有限容量，以前的一系列研究旨在利用主机内存给任务提供了一种无限内存的错觉[11,14,17,25,28]。</li>
+<li>然而，在商品化的多 GPU 系统中，这些工作都没有利用相邻 GPU 的空闲内存。</li>
+<li>由于现代 GPU 服务器通常配备8 ~ 16个 GPU，通过 NVLink 等高速互连连接，访问相邻 GPU 的空闲内存要比访问主机的空闲内存快得多。
+<ul>
+<li>例如，NVIDIA DGX-2有16个 GPU，通过 NVLink 3.0进行点对点连接，在600GB/s 的双向带宽下产生512GB 的 GPU 内存池[23]。</li>
+<li>另一方面，通过最新的 PCIe 4.0将 GPU 内存交换到主机 DRAM 可以只利用32GB/s 的带宽。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>在本研究中，我们介绍一种新的方法，为 GPU 提供虚拟内存空间的假象，称为分层统一虚拟内存(HUVM)</p>
+<ul>
+<li>它由本地 GPU、相邻 GPU 的空闲内存和主机内存组成</li>
+<li>HUVM 通过以最小的性能开销增加有效的内存空间，为内存虚拟化开辟了一个新的机会。
+<ul>
+<li>当本地 GPU 内存没有空闲空间时，HUVM 利用相邻 GPU 中的空余内存作为 GPU 和主机之间的受害者缓存，而不是直接将数据交换到主机内存。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>然而，由于空闲内存的数量是高度可变的，并且是先验未知的，因此要有效和高效地获取相邻 GPU 内存中的零星可用的一小部分是具有挑战性的。</p>
+<ul>
+<li>从单一 GPU 的角度出发，重新设计了现代多 GPU 服务器的内存管理方案。</li>
+<li>HUVM 系统必须找到最好的利用内存的一小部分，同时尽量减少对相邻 GPU 中运行的工作负载的性能影响。</li>
+</ul>
+</li>
+<li>
+<p>为此，我们提出了一个 HUVM 的内存管理器，称为 memHarvester，在 GPU 驱动层实现。MemHarvester 在 HUVM 中作为数据路径的集中协调器。</p>
+<ul>
+<li>作为 memHarvester 的一个重要组成部分，我们提出了一种新的多路并行预取器，它利用了 HUVM 的路径分集，包括 PCIe 和 NVLink。
+<ul>
+<li>与以前的许多方法[11,14,17,25,28]不同，memHarvester 首先通过 NVLink 从空闲内存预取数据到本地 GPU。</li>
+<li>同时，如果连接到邻居 GPU 的 PCIe 通道不竞争，memHarvester 允许通过 PCIe 通道并行地从主机内存预取数据到邻居 GPU 的空闲内存。</li>
+<li>因此，我们可以有效地将从主机存储器获取数据的延迟转换为空闲存储器的延迟。</li>
+</ul>
+</li>
+<li>MemHarvester 管理收获内存的空间。
+<ul>
+<li>由于空闲内存空间有限，memHarvester 无法将所有被驱逐的数据保留在收获内存中，最终导致主机内存交换。</li>
+<li>为了减少从 GPU 到主机的数据清除的性能开销，memHarvester 支持在主机内存中清除2MB 大的页面，而不是4KB 的基本页面</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>当 HUVM 和 memHarvester 承载多个工作负载时, 它可以提高内存利用率和整体服务器效率。</p>
+<ul>
+<li>然而，不利的一面是，memHarvester 可能会对运行在 GPU 上的应用程序造成性能干扰，从而产生空闲内存。
+<ul>
+<li>因此，memHarvester 立即回收空闲内存，以最小的延迟将其返回到原始物理内存空间，只要在产生 GPU 上运行的应用程序需要额外内存，从而最小化性能干扰。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>我们在 NVIDIA 的统一虚拟内存(UVM)驱动程序版本460.67的基础上实现了我们的原型系统，该版本是可公开访问的[29]。</p>
+<ul>
+<li>MemHarvester 不需要对应用程序或机器学习平台进行任何修改
+<ul>
+<li>就可以透明地检测备用内存的可用性，并动态地构建一个新的内存阶层</li>
+</ul>
+</li>
+<li>我们使用 HUVM 量化 memHarvester 在 AWS p3.8 xlarge 实例上的不同整合场景的有效性。
+<ul>
+<li>该服务器有四个通过 NVLink 连接的 NVIDIA V100(16GB)图形处理器。</li>
+</ul>
+</li>
+<li>我们的实验结果表明，memHarvester 可以实现显著的吞吐量改善的大型图形分析工作负载。
+<ul>
+<li>对于 DNN 训练和图形分析工作负载的不同整合场景，我们的实验结果显示，与多 GPU 环境下的先前方法相比，在同一服务器上运行的其他工作负载的干扰最小的情况下，性能提高了2.71倍。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="动机和背景">动机和背景</h2>
+<h2 id="huvm-结构化的内存分配">HUVM 结构化的内存分配</h2>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+        <link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.css"integrity="sha384-RZU/ijkSsFbcmivfdRBQDtwuwVqK7GMOw6IMvKyeWL2K5UAlyp6WonmB8m7Jd0Hn"crossorigin="anonymous"
+            ><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.js"integrity="sha384-pK1WpvzWVBQiP0/GjnvRxV4mOb0oxFuyRxJlk6vVw146n3egcN5C925NCP7a7BY8"crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/contrib/auto-render.min.js"integrity="sha384-vZTG03m&#43;2yp6N6BNi5iM4rW4oIwk5DfcNdFfxkk9ZWpDriOkXX8voJBFrAO7MpVl"crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        renderMathInElement(document.querySelector(`.article-content`), {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ]
+        });})
+</script>
+    
+</article>
+
+    <aside class="related-contents--wrapper">
+    
+    
+</aside>
+
+     
+    
+        
+    <script
+    src="https://giscus.app/client.js"
+    data-repo="Tweakzx/Tweakzx.github.io"
+    data-repo-id="MDEwOlJlcG9zaXRvcnkzMjY5MTY1NTE="
+    data-category="Announcements"
+    data-category-id="DIC_kwDOE3xZx84CTfL-"
+    data-mapping="title"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-theme="light_tritanopia"
+    crossorigin="anonymous"
+    async
+></script>
+<script>
+    function setGiscusTheme(theme) {
+        let giscus = document.querySelector('iframe.giscus-frame');
+        if (giscus) {
+            giscus.contentWindow.postMessage(
+                { 
+                    giscus: {
+                        setConfig: { 
+                            theme: theme 
+                        }
+                    }
+                },
+                "https://giscus.app"
+            );
+        };
+    };
+
+    (function(){
+        addEventListener('message', (e) => {
+            if (event.origin !== 'https://giscus.app') return;
+            handler()
+        });
+        window.addEventListener('onColorSchemeChange', handler);
+
+        function handler() {
+            if (document.documentElement.dataset.scheme === "light") {
+                setGiscusTheme('light_tritanopia');
+            } else {
+                setGiscusTheme('dark_tritanopia');
+            };
+        };
+    }());
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2023 Tweakzx
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.5.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
+            >
+
+            </main>
+    
+        <aside class="sidebar right-sidebar sticky">
+            <section class="widget archives">
+                <div class="widget-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+                </div>
+                <h2 class="widget-title section-title">Table of contents</h2>
+                
+                <div class="widget--toc">
+                    <nav id="TableOfContents">
+  <ol>
+    <li><a href="#引言">引言</a></li>
+    <li><a href="#动机和背景">动机和背景</a></li>
+    <li><a href="#huvm-结构化的内存分配">HUVM 结构化的内存分配</a></li>
+  </ol>
+</nav>
+                </div>
+            </section>
+        </aside>
+    
+
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
+                defer="false"
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

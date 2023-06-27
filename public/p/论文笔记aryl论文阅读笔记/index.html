@@ -1,8 +1,532 @@
-<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="Aryl: An Elastic Cluster Scheduler for Deep Learning 摘要 训练和推理中的问题: 当流量负载较低时，推理集群的 GPU 利用率较低 由于缺乏资源，训练作业往往需要较长的排队时间 我们引入了 Ary"><title>【论文笔记】Aryl论文阅读笔记</title><link rel=canonical href=https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0aryl%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/><link rel=stylesheet href=/scss/style.min.css><meta property="og:title" content="【论文笔记】Aryl论文阅读笔记"><meta property="og:description" content="Aryl: An Elastic Cluster Scheduler for Deep Learning 摘要 训练和推理中的问题: 当流量负载较低时，推理集群的 GPU 利用率较低 由于缺乏资源，训练作业往往需要较长的排队时间 我们引入了 Ary"><meta property="og:url" content="https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0aryl%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/"><meta property="og:site_name" content="Tweakzx"><meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:published_time" content="2023-04-24T09:48:20+08:00"><meta property="article:modified_time" content="2023-04-24T09:48:20+08:00"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202304240955302.png"><meta name=twitter:title content="【论文笔记】Aryl论文阅读笔记"><meta name=twitter:description content="Aryl: An Elastic Cluster Scheduler for Deep Learning 摘要 训练和推理中的问题: 当流量负载较低时，推理集群的 GPU 利用率较低 由于缺乏资源，训练作业往往需要较长的排队时间 我们引入了 Ary"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202304240955302.png"></head><body class="article-page has-toc"><script>(function(){const colorSchemeKey='StackColorScheme';if(!localStorage.getItem(colorSchemeKey)){localStorage.setItem(colorSchemeKey,"auto");}})();</script><script>(function(){const colorSchemeKey='StackColorScheme';const colorSchemeItem=localStorage.getItem(colorSchemeKey);const supportDarkMode=window.matchMedia('(prefers-color-scheme: dark)').matches===true;if(colorSchemeItem=='dark'||colorSchemeItem==='auto'&&supportDarkMode){document.documentElement.dataset.scheme='dark';}else{document.documentElement.dataset.scheme='light';}})();</script><div class="container main-container flex
-extended"><div id=article-toolbar><a href=/ class=back-home><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="15 6 9 12 15 18"/></svg><span>Back</span></a></div><main class="main full-width"><article class="has-image main-article"><header class=article-header><div class=article-image><a href=/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0aryl%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/><img src=https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202304240955302.png loading=lazy alt="Featured image of post 【论文笔记】Aryl论文阅读笔记"></a></div><div class=article-details><h2 class=article-title><a href=/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0aryl%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/>【论文笔记】Aryl论文阅读笔记</a></h2><footer class=article-time><div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg><time class=article-time--published>Apr 24, 2023</time></div><div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg><time class=article-time--reading>5 minute read</time></div></footer></div></header><section class=article-content><h1 id=aryl-an-elastic-cluster-scheduler-for-deep-learning>Aryl: An Elastic Cluster Scheduler for Deep Learning</h1><h2 id=摘要>摘要</h2><ul><li>训练和推理中的问题:<ul><li>当流量负载较低时，推理集群的 GPU 利用率较低</li><li>由于缺乏资源，训练作业往往需要较长的排队时间</li></ul></li><li>我们引入了 Aryl，一个新的集群调度器来解决这些问题。<ul><li>Aryl 引入了容量贷款，将空闲推理 GPU 服务器贷款给训练工作。它进一步利用弹性扩展来扩展培训作业的 GPU 分配，以更好地利用借出的资源。</li><li>容量借贷和弹性扩展为集群管理带来了新的挑战。<ul><li>当需要返回借出的服务器时，我们需要最小化作业抢占的数量</li><li>当更多的 GPU 可用时，我们需要将它们分配到弹性作业，并最小化作业完成时间(JCT)</li></ul></li><li>Aryl使用基于原则的启发式方法来解决这些组合问题。<ul><li>它引入了服务器抢占成本的概念，并在服务器回收期间使用贪婪的方法降低这一成本。</li><li>它进一步依赖于为弹性工作的每个额外工人定义的 JCT 缩减值，以多选择背包问题解决调度问题。</li></ul></li><li>在64-GPU 测试平台上的原型实现和超过50,000个生产作业的15天跟踪的大规模模拟表明<ul><li>Aryl 在平均排队时间和 JCT 方面带来了1.53 x 和1.50 x 的减少</li><li>集群调度器提高了高达26.9% 的集群使用率</li></ul></li></ul></li></ul><h2 id=引言>引言</h2><ul><li><p>现在的通常做法</p><ul><li><p>分别构建和管理两种类型的 GPU 集群</p><ul><li>一种用于培训</li><li>一种用于推理</li></ul></li><li><p>这是因为，对于相同的模型</p><ul><li>推理比训练需要更少的计算和 GPU 内存，并且不太可能利用训练 GPU 的众多核心[11,35,39]。</li><li>推理集群通常使用较弱的 GPU，比如 Nvidia T4</li><li>训练集群使用 Nvidia V100和 A100</li></ul></li><li><p>这种分离给双方都造成了问题， 尤其是对训练工作。</p><ul><li>具体来说，由于白天的流量模式，推断集群的<strong>利用率通常很低</strong>(&lt; 40%)。</li><li>与此同时，培训工作在开始之前经历了漫长的<strong>排队</strong>过程<ul><li>从超过50,000个工作的15天的跟踪中可以看出，平均排队次数超过3,000次，95% 的排队次数接近10,000次。</li><li>排队时间长是由于高集群利用率和 GPU 资源碎片造成的。</li></ul></li></ul></li></ul></li><li><p>为了解决上述问题，我们提出了容量贷款</p><ul><li>以允许推理集群在低流量时期贷款空闲的 GPU 服务器来运行培训作业，并在推理工作负载再次增加时收回它们。<ul><li>容量贷款缓解了推理的利用率问题和训练的排队问题。对 GPU 类型要求不严格的训练工作是可行的。</li><li>对于借用服务器，我们需要确保它们在可用时被培训作业迅速利用。</li></ul></li><li>我们从弹性伸缩中获得灵感，用于培训工作以更好地使用借用服务器。<ul><li>弹性伸缩允许正在运行的作业向外伸缩或向内伸缩，以更好地利用动态变化的资源池。</li><li>它还有助于减少排队延迟，因为弹性作业可以首先从少量工作线程开始，并在有更多资源可用时增加其工作线程。</li></ul></li></ul></li><li><p>容量加载和弹性伸缩为集群调度创造了新的自由度。随着我们在新的设计领域中的不断探索，我们遇到了一些新的挑战，这些挑战必须在我们获得收益之前加以解决。</p><ul><li><p>首先，虽然贷款决策可以完全由推理集群调度程序来确保推理工作负载不受影响，但是<strong>回收更加复杂</strong>。</p><ul><li>当推断集群需要回收一些租借的服务器时，训练调度程序必须抢占这些服务器上所有正在运行的作业。考虑到与抢占相关的高开销和长时间运行时间，调度程序必须仔细选择服务器，以最小化总的抢占。</li></ul></li><li><p>其次，作业调度问题在具有弹性伸缩性的情况下会更加复杂。</p><ul><li>资源配置必须考虑需求固定的非弹性工作和需求可变的弹性工作的组合。</li><li>我们发现经典的调度策略，如最短作业优先在弹性情况下不在有用，并在只有两个作业的情况下找到 JCT的最优解是困难的</li><li>给定分配结果，调度程序仍然需要确定worker-server的位置，以最小化碎片，由于容量借用导致服务器是GPU异构的。</li></ul></li></ul></li><li><p>我们解决这些挑战的关键直觉</p><ul><li>优先考虑<strong>每个工作所需的最小资源而不是弹性需求</strong></li><li>优先考虑<strong>专用训练服务器而不是借用推理服务器</strong></li><li>这是有意义的，因为弹性工作的最小需求等同于非弹性工作，不分配资源是有害的，但弹性部分可以在以后实现，而不拖延工作。</li></ul></li><li><p>因此，我们的解决方案遵循上述直觉，呈现出两阶段结构。</p><ul><li>对于回收<ul><li>我们首先杀死在租借服务器上运行的弹性工作线程，因为停止它们不会导致任何作业级别的抢占。</li><li>当抢占成为不可避免的，我们将问题描述为一个具有依赖项值的背包问题[32] ，并开发一种有效的启发式方法来解决它</li></ul></li><li>对于资源配置<ul><li>我们首先分配非弹性工作和弹性工作的基本需求，目的是创造尽可能多的工作。<ul><li>第一阶段可以使用 SJF 来减少排队时间</li></ul></li><li>然后，如果资源允许，我们扩展调度的弹性作业。<ul><li>第二阶段则是一个多项选择的背包问题 ，以最小化运行时间</li><li>这在实践中通常可以使用动态规划来解决：<ul><li>我们通过将非弹性作业放置到训练服务器</li><li>并尽可能将弹性作业放置到租借服务器</li><li>作业根据最佳拟合递减策略进行排序，以解决装箱和最小化碎片。</li></ul></li></ul></li></ul></li></ul></li><li><p>Aryl，这是一个新的集群调度器，可以实现弹性扩展的容量借贷。</p><ul><li>Aryl 有一个协调器，通过执行来自推断调度器的关于何时以及如何贷款或回收的指令，以及通过决定返回哪些借出的服务器以回收，来管理容量贷款。</li><li>然后作业调度器周期性地确定分配和放置，并根据资源和作业动态对新的和现有的弹性作业进行扩展。</li><li>为了实用起见，Aryl 只考虑大型 DNN 的弹性伸缩</li></ul></li><li><p>我们将我们的贡献总结如下。</p><ul><li>我们报告了培训和推理分组单独管理的问题，即推理分组的利用率低，培训分组的排队时间长，这些问题是从生产性的图形处理单元分组来衡量的。</li><li>我们提出集群级容量借贷和作业级弹性调度两个新的集群调度控制旋钮，以解决上述问题。</li><li>我们研究由此产生的集群调度问题，发展一种关键的直觉，优先考虑每项工作所需的最低资源，以解决弹性问题，并使用一种有原则的方法来描述和解决每个问题。</li><li>我们设计并实现了集成了我们的解决方案的新型集群调度器 Aryl。Aryl 与现有资源管理框架协同工作，可以部署。通过试验台试验和大规模仿真验证了其优越性能。</li></ul></li></ul></section><footer class=article-footer><section class=article-copyright><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg><span>Licensed under CC BY-NC-SA 4.0</span></section></footer><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.css integrity=sha384-RZU/ijkSsFbcmivfdRBQDtwuwVqK7GMOw6IMvKyeWL2K5UAlyp6WonmB8m7Jd0Hn crossorigin=anonymous><script src=https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.js integrity=sha384-pK1WpvzWVBQiP0/GjnvRxV4mOb0oxFuyRxJlk6vVw146n3egcN5C925NCP7a7BY8 crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/contrib/auto-render.min.js integrity=sha384-vZTG03m+2yp6N6BNi5iM4rW4oIwk5DfcNdFfxkk9ZWpDriOkXX8voJBFrAO7MpVl crossorigin=anonymous defer></script><script>window.addEventListener("DOMContentLoaded",()=>{renderMathInElement(document.querySelector(`.article-content`),{delimiters:[{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false},{left:"\\(",right:"\\)",display:false},{left:"\\[",right:"\\]",display:true}]});})</script></article><aside class=related-contents--wrapper></aside><script src=https://giscus.app/client.js data-repo=Tweakzx/Tweakzx.github.io data-repo-id="MDEwOlJlcG9zaXRvcnkzMjY5MTY1NTE=" data-category=Announcements data-category-id=DIC_kwDOE3xZx84CTfL- data-mapping=title data-reactions-enabled=1 data-emit-metadata=0 data-theme=light_tritanopia crossorigin=anonymous async></script><script>function setGiscusTheme(theme){let giscus=document.querySelector('iframe.giscus-frame');if(giscus){giscus.contentWindow.postMessage({giscus:{setConfig:{theme:theme}}},"https://giscus.app");};};(function(){addEventListener('message',(e)=>{if(event.origin!=='https://giscus.app')return;handler()});window.addEventListener('onColorSchemeChange',handler);function handler(){if(document.documentElement.dataset.scheme==="light"){setGiscusTheme('light_tritanopia');}else{setGiscusTheme('dark_tritanopia');};};}());</script><footer class=site-footer><section class=copyright>&copy;
-2020 -
-2023 Tweakzx</section><section class=powerby>Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a><br>Theme <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.5.0>Stack</a></b> designed by <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a></section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
-<button class="pswp__button pswp__button--share" title=Share></button>
-<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
-<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
-<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css integrity="sha256-c0uckgykQ9v5k+IqViZOZKc47Jn7KQil4/MP3ySA3F8=" crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE=" crossorigin=anonymous></main><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">Table of contents</h2><div class=widget--toc><nav id=TableOfContents><ol><li><a href=#摘要>摘要</a></li><li><a href=#引言>引言</a></li></ol></nav></div></section></aside></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g=" crossorigin=anonymous defer></script><script type=text/javascript src=/ts/main.js defer></script><script>(function(){const customFont=document.createElement('link');customFont.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";customFont.type="text/css";customFont.rel="stylesheet";document.head.appendChild(customFont);}());</script></body></html>
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='Aryl: An Elastic Cluster Scheduler for Deep Learning 摘要 训练和推理中的问题: 当流量负载较低时，推理集群的 GPU 利用率较低 由于缺乏资源，训练作业往往需要较长的排队时间 我们引入了 Ary'><title>【论文笔记】Aryl论文阅读笔记</title>
+
+<link rel='canonical' href='https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0aryl%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/'>
+
+<link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='【论文笔记】Aryl论文阅读笔记'>
+<meta property='og:description' content='Aryl: An Elastic Cluster Scheduler for Deep Learning 摘要 训练和推理中的问题: 当流量负载较低时，推理集群的 GPU 利用率较低 由于缺乏资源，训练作业往往需要较长的排队时间 我们引入了 Ary'>
+<meta property='og:url' content='https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0aryl%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/'>
+<meta property='og:site_name' content='Tweakzx'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2023-04-24T09:48:20&#43;08:00'/><meta property='article:modified_time' content='2023-04-24T09:48:20&#43;08:00'/><meta property='og:image' content='https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202304240955302.png' />
+<meta name="twitter:title" content="【论文笔记】Aryl论文阅读笔记">
+<meta name="twitter:description" content="Aryl: An Elastic Cluster Scheduler for Deep Learning 摘要 训练和推理中的问题: 当流量负载较低时，推理集群的 GPU 利用率较低 由于缺乏资源，训练作业往往需要较长的排队时间 我们引入了 Ary"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202304240955302.png' />
+    </head>
+    <body class="
+    article-page has-toc
+">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex 
+    
+        extended
+    
+">
+    
+        <div id="article-toolbar">
+            <a href="/" class="back-home">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="15 6 9 12 15 18" />
+</svg>
+
+
+
+                <span>Back</span>
+            </a>
+        </div>
+    
+<main class="main full-width">
+    <article class="has-image main-article">
+    <header class="article-header">
+        <div class="article-image">
+            <a href="/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0aryl%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/">
+                
+                    <img src="https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202304240955302.png" loading="lazy" alt="Featured image of post 【论文笔记】Aryl论文阅读笔记" />
+                
+            </a>
+        </div>
+    
+
+    <div class="article-details">
+    
+
+    <h2 class="article-title">
+        <a href="/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0aryl%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/">【论文笔记】Aryl论文阅读笔记</a>
+    </h2>
+
+    
+
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Apr 24, 2023</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    5 minute read
+                </time>
+            </div>
+        
+    </footer>
+    
+</div>
+
+    
+
+</header>
+
+    <section class="article-content">
+    <h1 id="aryl-an-elastic-cluster-scheduler-for-deep-learning">Aryl: An Elastic Cluster Scheduler for Deep Learning</h1>
+<h2 id="摘要">摘要</h2>
+<ul>
+<li>训练和推理中的问题:
+<ul>
+<li>当流量负载较低时，推理集群的 GPU 利用率较低</li>
+<li>由于缺乏资源，训练作业往往需要较长的排队时间</li>
+</ul>
+</li>
+<li>我们引入了 Aryl，一个新的集群调度器来解决这些问题。
+<ul>
+<li>Aryl 引入了容量贷款，将空闲推理 GPU 服务器贷款给训练工作。它进一步利用弹性扩展来扩展培训作业的 GPU 分配，以更好地利用借出的资源。</li>
+<li>容量借贷和弹性扩展为集群管理带来了新的挑战。
+<ul>
+<li>当需要返回借出的服务器时，我们需要最小化作业抢占的数量</li>
+<li>当更多的 GPU 可用时，我们需要将它们分配到弹性作业，并最小化作业完成时间(JCT)</li>
+</ul>
+</li>
+<li>Aryl使用基于原则的启发式方法来解决这些组合问题。
+<ul>
+<li>它引入了服务器抢占成本的概念，并在服务器回收期间使用贪婪的方法降低这一成本。</li>
+<li>它进一步依赖于为弹性工作的每个额外工人定义的 JCT 缩减值，以多选择背包问题解决调度问题。</li>
+</ul>
+</li>
+<li>在64-GPU 测试平台上的原型实现和超过50,000个生产作业的15天跟踪的大规模模拟表明
+<ul>
+<li>Aryl 在平均排队时间和 JCT 方面带来了1.53 x 和1.50 x 的减少</li>
+<li>集群调度器提高了高达26.9% 的集群使用率</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="引言">引言</h2>
+<ul>
+<li>
+<p>现在的通常做法</p>
+<ul>
+<li>
+<p>分别构建和管理两种类型的 GPU 集群</p>
+<ul>
+<li>一种用于培训</li>
+<li>一种用于推理</li>
+</ul>
+</li>
+<li>
+<p>这是因为，对于相同的模型</p>
+<ul>
+<li>推理比训练需要更少的计算和 GPU 内存，并且不太可能利用训练 GPU 的众多核心[11,35,39]。</li>
+<li>推理集群通常使用较弱的 GPU，比如 Nvidia T4</li>
+<li>训练集群使用 Nvidia V100和 A100</li>
+</ul>
+</li>
+<li>
+<p>这种分离给双方都造成了问题， 尤其是对训练工作。</p>
+<ul>
+<li>具体来说，由于白天的流量模式，推断集群的<strong>利用率通常很低</strong>(&lt; 40%)。</li>
+<li>与此同时，培训工作在开始之前经历了漫长的<strong>排队</strong>过程
+<ul>
+<li>从超过50,000个工作的15天的跟踪中可以看出，平均排队次数超过3,000次，95% 的排队次数接近10,000次。</li>
+<li>排队时间长是由于高集群利用率和 GPU 资源碎片造成的。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>为了解决上述问题，我们提出了容量贷款</p>
+<ul>
+<li>以允许推理集群在低流量时期贷款空闲的 GPU 服务器来运行培训作业，并在推理工作负载再次增加时收回它们。
+<ul>
+<li>容量贷款缓解了推理的利用率问题和训练的排队问题。对 GPU 类型要求不严格的训练工作是可行的。</li>
+<li>对于借用服务器，我们需要确保它们在可用时被培训作业迅速利用。</li>
+</ul>
+</li>
+<li>我们从弹性伸缩中获得灵感，用于培训工作以更好地使用借用服务器。
+<ul>
+<li>弹性伸缩允许正在运行的作业向外伸缩或向内伸缩，以更好地利用动态变化的资源池。</li>
+<li>它还有助于减少排队延迟，因为弹性作业可以首先从少量工作线程开始，并在有更多资源可用时增加其工作线程。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>容量加载和弹性伸缩为集群调度创造了新的自由度。随着我们在新的设计领域中的不断探索，我们遇到了一些新的挑战，这些挑战必须在我们获得收益之前加以解决。</p>
+<ul>
+<li>
+<p>首先，虽然贷款决策可以完全由推理集群调度程序来确保推理工作负载不受影响，但是<strong>回收更加复杂</strong>。</p>
+<ul>
+<li>当推断集群需要回收一些租借的服务器时，训练调度程序必须抢占这些服务器上所有正在运行的作业。考虑到与抢占相关的高开销和长时间运行时间，调度程序必须仔细选择服务器，以最小化总的抢占。</li>
+</ul>
+</li>
+<li>
+<p>其次，作业调度问题在具有弹性伸缩性的情况下会更加复杂。</p>
+<ul>
+<li>资源配置必须考虑需求固定的非弹性工作和需求可变的弹性工作的组合。</li>
+<li>我们发现经典的调度策略，如最短作业优先在弹性情况下不在有用，并在只有两个作业的情况下找到 JCT的最优解是困难的</li>
+<li>给定分配结果，调度程序仍然需要确定worker-server的位置，以最小化碎片，由于容量借用导致服务器是GPU异构的。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>我们解决这些挑战的关键直觉</p>
+<ul>
+<li>优先考虑<strong>每个工作所需的最小资源而不是弹性需求</strong></li>
+<li>优先考虑<strong>专用训练服务器而不是借用推理服务器</strong></li>
+<li>这是有意义的，因为弹性工作的最小需求等同于非弹性工作，不分配资源是有害的，但弹性部分可以在以后实现，而不拖延工作。</li>
+</ul>
+</li>
+<li>
+<p>因此，我们的解决方案遵循上述直觉，呈现出两阶段结构。</p>
+<ul>
+<li>对于回收
+<ul>
+<li>我们首先杀死在租借服务器上运行的弹性工作线程，因为停止它们不会导致任何作业级别的抢占。</li>
+<li>当抢占成为不可避免的，我们将问题描述为一个具有依赖项值的背包问题[32] ，并开发一种有效的启发式方法来解决它</li>
+</ul>
+</li>
+<li>对于资源配置
+<ul>
+<li>我们首先分配非弹性工作和弹性工作的基本需求，目的是创造尽可能多的工作。
+<ul>
+<li>第一阶段可以使用 SJF 来减少排队时间</li>
+</ul>
+</li>
+<li>然后，如果资源允许，我们扩展调度的弹性作业。
+<ul>
+<li>第二阶段则是一个多项选择的背包问题 ，以最小化运行时间</li>
+<li>这在实践中通常可以使用动态规划来解决：
+<ul>
+<li>我们通过将非弹性作业放置到训练服务器</li>
+<li>并尽可能将弹性作业放置到租借服务器</li>
+<li>作业根据最佳拟合递减策略进行排序，以解决装箱和最小化碎片。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>Aryl，这是一个新的集群调度器，可以实现弹性扩展的容量借贷。</p>
+<ul>
+<li>Aryl 有一个协调器，通过执行来自推断调度器的关于何时以及如何贷款或回收的指令，以及通过决定返回哪些借出的服务器以回收，来管理容量贷款。</li>
+<li>然后作业调度器周期性地确定分配和放置，并根据资源和作业动态对新的和现有的弹性作业进行扩展。</li>
+<li>为了实用起见，Aryl 只考虑大型 DNN 的弹性伸缩</li>
+</ul>
+</li>
+<li>
+<p>我们将我们的贡献总结如下。</p>
+<ul>
+<li>我们报告了培训和推理分组单独管理的问题，即推理分组的利用率低，培训分组的排队时间长，这些问题是从生产性的图形处理单元分组来衡量的。</li>
+<li>我们提出集群级容量借贷和作业级弹性调度两个新的集群调度控制旋钮，以解决上述问题。</li>
+<li>我们研究由此产生的集群调度问题，发展一种关键的直觉，优先考虑每项工作所需的最低资源，以解决弹性问题，并使用一种有原则的方法来描述和解决每个问题。</li>
+<li>我们设计并实现了集成了我们的解决方案的新型集群调度器 Aryl。Aryl 与现有资源管理框架协同工作，可以部署。通过试验台试验和大规模仿真验证了其优越性能。</li>
+</ul>
+</li>
+</ul>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+        <link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.css"integrity="sha384-RZU/ijkSsFbcmivfdRBQDtwuwVqK7GMOw6IMvKyeWL2K5UAlyp6WonmB8m7Jd0Hn"crossorigin="anonymous"
+            ><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.js"integrity="sha384-pK1WpvzWVBQiP0/GjnvRxV4mOb0oxFuyRxJlk6vVw146n3egcN5C925NCP7a7BY8"crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/contrib/auto-render.min.js"integrity="sha384-vZTG03m&#43;2yp6N6BNi5iM4rW4oIwk5DfcNdFfxkk9ZWpDriOkXX8voJBFrAO7MpVl"crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        renderMathInElement(document.querySelector(`.article-content`), {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ]
+        });})
+</script>
+    
+</article>
+
+    <aside class="related-contents--wrapper">
+    
+    
+</aside>
+
+     
+    
+        
+    <script
+    src="https://giscus.app/client.js"
+    data-repo="Tweakzx/Tweakzx.github.io"
+    data-repo-id="MDEwOlJlcG9zaXRvcnkzMjY5MTY1NTE="
+    data-category="Announcements"
+    data-category-id="DIC_kwDOE3xZx84CTfL-"
+    data-mapping="title"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-theme="light_tritanopia"
+    crossorigin="anonymous"
+    async
+></script>
+<script>
+    function setGiscusTheme(theme) {
+        let giscus = document.querySelector('iframe.giscus-frame');
+        if (giscus) {
+            giscus.contentWindow.postMessage(
+                { 
+                    giscus: {
+                        setConfig: { 
+                            theme: theme 
+                        }
+                    }
+                },
+                "https://giscus.app"
+            );
+        };
+    };
+
+    (function(){
+        addEventListener('message', (e) => {
+            if (event.origin !== 'https://giscus.app') return;
+            handler()
+        });
+        window.addEventListener('onColorSchemeChange', handler);
+
+        function handler() {
+            if (document.documentElement.dataset.scheme === "light") {
+                setGiscusTheme('light_tritanopia');
+            } else {
+                setGiscusTheme('dark_tritanopia');
+            };
+        };
+    }());
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2023 Tweakzx
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.5.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
+            >
+
+            </main>
+    
+        <aside class="sidebar right-sidebar sticky">
+            <section class="widget archives">
+                <div class="widget-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+                </div>
+                <h2 class="widget-title section-title">Table of contents</h2>
+                
+                <div class="widget--toc">
+                    <nav id="TableOfContents">
+  <ol>
+    <li><a href="#摘要">摘要</a></li>
+    <li><a href="#引言">引言</a></li>
+  </ol>
+</nav>
+                </div>
+            </section>
+        </aside>
+    
+
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
+                defer="false"
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

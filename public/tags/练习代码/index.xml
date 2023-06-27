@@ -1,1 +1,29 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>练习代码 on Tweakzx</title><link>https://tweakzx.github.io/tags/%E7%BB%83%E4%B9%A0%E4%BB%A3%E7%A0%81/</link><description>Recent content in 练习代码 on Tweakzx</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Sat, 12 Mar 2022 16:59:39 +0800</lastBuildDate><atom:link href="https://tweakzx.github.io/tags/%E7%BB%83%E4%B9%A0%E4%BB%A3%E7%A0%81/index.xml" rel="self" type="application/rss+xml"/><item><title>【Golang】自动机的实现</title><link>https://tweakzx.github.io/p/golang%E8%87%AA%E5%8A%A8%E6%9C%BA%E7%9A%84%E5%AE%9E%E7%8E%B0/</link><pubDate>Sat, 12 Mar 2022 16:59:39 +0800</pubDate><guid>https://tweakzx.github.io/p/golang%E8%87%AA%E5%8A%A8%E6%9C%BA%E7%9A%84%E5%AE%9E%E7%8E%B0/</guid><description>题目描述 请你来实现一个 myAtoi(string s) 函数，使其能将字符串转换成一个 32 位有符号整数（类似 C/C++ 中的 atoi 函数）。 函数 myAtoi(string s) 的算法如下： 读入字符串并丢弃无用的前导空</description></item><item><title>【Golang】Go语言之旅</title><link>https://tweakzx.github.io/p/golanggo%E8%AF%AD%E8%A8%80%E4%B9%8B%E6%97%85/</link><pubDate>Tue, 22 Feb 2022 17:20:32 +0800</pubDate><guid>https://tweakzx.github.io/p/golanggo%E8%AF%AD%E8%A8%80%E4%B9%8B%E6%97%85/</guid><description>旅行起点 Go 语言之旅 (go-zh.org) 上方链接是一个Go语言学习的Playground，快点击它，开启一场Go语言之旅吧 旅行开始 练习：循环与函数 为了练习函数与</description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>练习代码 on Tweakzx</title>
+    <link>https://tweakzx.github.io/tags/%E7%BB%83%E4%B9%A0%E4%BB%A3%E7%A0%81/</link>
+    <description>Recent content in 练习代码 on Tweakzx</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Sat, 12 Mar 2022 16:59:39 +0800</lastBuildDate><atom:link href="https://tweakzx.github.io/tags/%E7%BB%83%E4%B9%A0%E4%BB%A3%E7%A0%81/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>【Golang】自动机的实现</title>
+      <link>https://tweakzx.github.io/p/golang%E8%87%AA%E5%8A%A8%E6%9C%BA%E7%9A%84%E5%AE%9E%E7%8E%B0/</link>
+      <pubDate>Sat, 12 Mar 2022 16:59:39 +0800</pubDate>
+      
+      <guid>https://tweakzx.github.io/p/golang%E8%87%AA%E5%8A%A8%E6%9C%BA%E7%9A%84%E5%AE%9E%E7%8E%B0/</guid>
+      <description>题目描述 请你来实现一个 myAtoi(string s) 函数，使其能将字符串转换成一个 32 位有符号整数（类似 C/C++ 中的 atoi 函数）。 函数 myAtoi(string s) 的算法如下： 读入字符串并丢弃无用的前导空</description>
+    </item>
+    
+    <item>
+      <title>【Golang】Go语言之旅</title>
+      <link>https://tweakzx.github.io/p/golanggo%E8%AF%AD%E8%A8%80%E4%B9%8B%E6%97%85/</link>
+      <pubDate>Tue, 22 Feb 2022 17:20:32 +0800</pubDate>
+      
+      <guid>https://tweakzx.github.io/p/golanggo%E8%AF%AD%E8%A8%80%E4%B9%8B%E6%97%85/</guid>
+      <description>旅行起点 Go 语言之旅 (go-zh.org) 上方链接是一个Go语言学习的Playground，快点击它，开启一场Go语言之旅吧 旅行开始 练习：循环与函数 为了练习函数与</description>
+    </item>
+    
+  </channel>
+</rss>

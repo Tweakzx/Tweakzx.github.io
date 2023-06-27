@@ -1,162 +1,665 @@
-<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="记录自己的字节面试失败过程"><title>【实习面试】字节面试凉经</title><link rel=canonical href=https://tweakzx.github.io/p/%E5%AE%9E%E4%B9%A0%E9%9D%A2%E8%AF%95%E5%AD%97%E8%8A%82%E9%9D%A2%E8%AF%95%E5%87%89%E7%BB%8F/><link rel=stylesheet href=/scss/style.min.css><meta property="og:title" content="【实习面试】字节面试凉经"><meta property="og:description" content="记录自己的字节面试失败过程"><meta property="og:url" content="https://tweakzx.github.io/p/%E5%AE%9E%E4%B9%A0%E9%9D%A2%E8%AF%95%E5%AD%97%E8%8A%82%E9%9D%A2%E8%AF%95%E5%87%89%E7%BB%8F/"><meta property="og:site_name" content="Tweakzx"><meta property="og:type" content="article"><meta property="article:section" content="Post"><meta property="article:tag" content="面试"><meta property="article:tag" content="字节跳动"><meta property="article:published_time" content="2021-11-29T16:52:26+08:00"><meta property="article:modified_time" content="2021-11-29T16:52:26+08:00"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/bytedance.jpg"><meta name=twitter:title content="【实习面试】字节面试凉经"><meta name=twitter:description content="记录自己的字节面试失败过程"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/bytedance.jpg"></head><body class="article-page has-toc"><script>(function(){const colorSchemeKey='StackColorScheme';if(!localStorage.getItem(colorSchemeKey)){localStorage.setItem(colorSchemeKey,"auto");}})();</script><script>(function(){const colorSchemeKey='StackColorScheme';const colorSchemeItem=localStorage.getItem(colorSchemeKey);const supportDarkMode=window.matchMedia('(prefers-color-scheme: dark)').matches===true;if(colorSchemeItem=='dark'||colorSchemeItem==='auto'&&supportDarkMode){document.documentElement.dataset.scheme='dark';}else{document.documentElement.dataset.scheme='light';}})();</script><div class="container main-container flex
-extended"><div id=article-toolbar><a href=/ class=back-home><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="15 6 9 12 15 18"/></svg><span>Back</span></a></div><main class="main full-width"><article class="has-image main-article"><header class=article-header><div class=article-image><a href=/p/%E5%AE%9E%E4%B9%A0%E9%9D%A2%E8%AF%95%E5%AD%97%E8%8A%82%E9%9D%A2%E8%AF%95%E5%87%89%E7%BB%8F/><img src=https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/bytedance.jpg loading=lazy alt="Featured image of post 【实习面试】字节面试凉经"></a></div><div class=article-details><header class=article-category><a href=/categories/%E9%9D%A2%E8%AF%95/>面试</a></header><h2 class=article-title><a href=/p/%E5%AE%9E%E4%B9%A0%E9%9D%A2%E8%AF%95%E5%AD%97%E8%8A%82%E9%9D%A2%E8%AF%95%E5%87%89%E7%BB%8F/>【实习面试】字节面试凉经</a></h2><h3 class=article-subtitle>记录自己的字节面试失败过程</h3><footer class=article-time><div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg><time class=article-time--published>Nov 29, 2021</time></div><div><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg><time class=article-time--reading>4 minute read</time></div></footer></div></header><section class=article-content><blockquote><p>时间：2021-11-29下午三点</p><p>方式：飞书视频面试</p><p>岗位：后端开发实习生-业务中台职位</p></blockquote><h2 id=为什么会投递字节实习>为什么会投递字节实习</h2><p>​ 因为中科院的研究所大多不让实习，研二想去实习是一定不行的。但是研一在雁栖湖，课题组在海淀，我研一基本不参与科研，所以想要趁没人管的时候出去实习。因为将来大概率是做软开，所以想找一份后端开发的工作。在校友群里问了一下，有学长给了一个内推的机会，所以就有了这次一面。</p><h2 id=面试过程>面试过程</h2><p>​ 面试官上来让我做了自我介绍之后就让我写代码做题。</p><blockquote><p>题目一：链表1->2->3->4->5->6 转变成 链表1->6->2->5->3->4</p><p>大概意思就是将链表平分成两部分，前一部分顺序不变，后一部分反转后插空插入前一部分链表。</p></blockquote><p>​ 说实话，自己的代码能力确实有点差，原本打算使用c++来写后来改成了Java，因为我想起Java里有LinkedList这个数据结构。理由有点荒诞哈，其实是我没有意识到要自己定义节点来实现链表，所以在想要写指针的时候就卡住了，完全不知道怎么给LinkedList的链表写指针。然后就尬住了，面试官无奈说那就换一道吧。</p><blockquote><p>题目二：判断一个二叉树是否是平衡树</p></blockquote><p>​ 题目不是很难，但是自己太久不写代码有些生疏了，写出来的程序不知道为什么没有编译通过。说实话，面试官让我自己实现一个单例来测试程序，其中爆出的各种错误，无一不揭示了我完全没有什么开发经验的事实，例如内部类放错了位置，static的编译问题，还有一个空指针异常。无疑是再次尬死了。</p><p>​ 之后面试官让我讲一讲自己的项目经历，主要问了一下大三在华为的实习。可惜自己虽然实习了，但实际的工作很少，含金量也不高，面试官兴趣不大。</p><p>​ 之后就是问我有没有什么想问他的，我已经不想说话了，就没问。</p><p>​ 草草结束。</p><h2 id=总结>总结</h2><h3 id=首先还是把这两道题的代码写写吧>首先还是把这两道题的代码写写吧</h3><h4 id=题目一>题目一</h4><div class=highlight><pre class=chroma><code class=language-java data-lang=java><span class=cm>/**
-</span><span class=cm> * @author lizhixuan
-</span><span class=cm> * @version 1.0
-</span><span class=cm> * @date 2021/12/1 15:50
-</span><span class=cm> */</span>
-<span class=kd>public</span> <span class=kd>class</span> <span class=nc>ReverseList2</span> <span class=o>{</span>
-    <span class=kd>public</span> <span class=kd>static</span> <span class=kd>class</span> <span class=nc>ListNode</span> <span class=o>{</span>
-        <span class=kt>int</span> <span class=n>val</span><span class=o>;</span>
-        <span class=n>ListNode</span> <span class=n>next</span><span class=o>;</span>
-        <span class=n>ListNode</span><span class=o>()</span> <span class=o>{}</span>
-        <span class=n>ListNode</span><span class=o>(</span><span class=kt>int</span> <span class=n>val</span><span class=o>)</span> <span class=o>{</span> <span class=k>this</span><span class=o>.</span><span class=na>val</span> <span class=o>=</span> <span class=n>val</span><span class=o>;</span> <span class=o>}</span>
-        <span class=n>ListNode</span><span class=o>(</span><span class=kt>int</span> <span class=n>val</span><span class=o>,</span> <span class=n>ListNode</span> <span class=n>next</span><span class=o>)</span> <span class=o>{</span> <span class=k>this</span><span class=o>.</span><span class=na>val</span> <span class=o>=</span> <span class=n>val</span><span class=o>;</span> <span class=k>this</span><span class=o>.</span><span class=na>next</span> <span class=o>=</span> <span class=n>next</span><span class=o>;</span> <span class=o>}</span>
-    <span class=o>}</span>
-    <span class=kd>public</span> <span class=kd>static</span> <span class=n>ListNode</span> <span class=nf>createInstance</span><span class=o>(</span><span class=kt>int</span> <span class=n>n</span><span class=o>){</span>
-        <span class=n>ListNode</span> <span class=n>head</span> <span class=o>=</span> <span class=k>new</span> <span class=n>ListNode</span><span class=o>(</span><span class=n>1</span><span class=o>);</span>
-        <span class=n>ListNode</span> <span class=n>current</span> <span class=o>=</span> <span class=n>head</span><span class=o>;</span>
-        <span class=k>for</span> <span class=o>(</span><span class=kt>int</span> <span class=n>i</span> <span class=o>=</span> <span class=n>2</span><span class=o>;</span> <span class=n>i</span> <span class=o>&lt;=</span> <span class=n>n</span><span class=o>;</span> <span class=n>i</span><span class=o>++)</span> <span class=o>{</span>
-            <span class=n>current</span><span class=o>.</span><span class=na>next</span> <span class=o>=</span> <span class=k>new</span> <span class=n>ListNode</span><span class=o>(</span><span class=n>i</span><span class=o>);</span>
-            <span class=n>current</span> <span class=o>=</span> <span class=n>current</span><span class=o>.</span><span class=na>next</span><span class=o>;</span>
-        <span class=o>}</span>
-        <span class=k>return</span> <span class=n>head</span><span class=o>;</span>
-    <span class=o>}</span>
-    <span class=kd>public</span> <span class=kd>static</span> <span class=kt>void</span> <span class=nf>printList</span><span class=o>(</span><span class=n>ListNode</span> <span class=n>head</span><span class=o>){</span>
-        <span class=n>ListNode</span> <span class=n>current</span> <span class=o>=</span> <span class=n>head</span><span class=o>;</span>
-        <span class=k>while</span><span class=o>(</span><span class=n>current</span><span class=o>.</span><span class=na>next</span><span class=o>!=</span><span class=kc>null</span><span class=o>){</span>
-            <span class=n>System</span><span class=o>.</span><span class=na>out</span><span class=o>.</span><span class=na>print</span><span class=o>(</span><span class=n>current</span><span class=o>.</span><span class=na>val</span><span class=o>);</span>
-            <span class=n>System</span><span class=o>.</span><span class=na>out</span><span class=o>.</span><span class=na>print</span><span class=o>(</span><span class=s>&#34;-&gt;&#34;</span><span class=o>);</span>
-            <span class=n>current</span> <span class=o>=</span> <span class=n>current</span><span class=o>.</span><span class=na>next</span><span class=o>;</span>
-        <span class=o>}</span>
-        <span class=n>System</span><span class=o>.</span><span class=na>out</span><span class=o>.</span><span class=na>println</span><span class=o>(</span><span class=n>current</span><span class=o>.</span><span class=na>val</span><span class=o>);</span>
-    <span class=o>}</span>
-    <span class=kd>public</span> <span class=kd>static</span> <span class=n>ListNode</span> <span class=nf>reverse</span><span class=o>(</span><span class=n>ListNode</span> <span class=n>head</span><span class=o>){</span>
-        <span class=n>ListNode</span> <span class=n>pre</span> <span class=o>=</span> <span class=kc>null</span><span class=o>;</span>
-        <span class=n>ListNode</span> <span class=n>current</span> <span class=o>=</span> <span class=n>head</span><span class=o>;</span>
-        <span class=n>ListNode</span> <span class=n>next</span><span class=o>;</span>
-        <span class=k>while</span><span class=o>(</span><span class=n>current</span><span class=o>!=</span><span class=kc>null</span><span class=o>){</span>
-            <span class=n>next</span> <span class=o>=</span> <span class=n>current</span><span class=o>.</span><span class=na>next</span><span class=o>;</span>
-            <span class=n>current</span><span class=o>.</span><span class=na>next</span> <span class=o>=</span> <span class=n>pre</span><span class=o>;</span>
-            <span class=n>pre</span> <span class=o>=</span> <span class=n>current</span><span class=o>;</span>
-            <span class=n>current</span> <span class=o>=</span> <span class=n>next</span><span class=o>;</span>
-        <span class=o>}</span>
-       <span class=k>return</span> <span class=n>pre</span><span class=o>;</span>
-    <span class=o>}</span>
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='记录自己的字节面试失败过程'><title>【实习面试】字节面试凉经</title>
 
-    <span class=kd>public</span> <span class=kd>static</span> <span class=n>ListNode</span> <span class=nf>mergeList</span><span class=o>(</span><span class=n>ListNode</span> <span class=n>l1</span><span class=o>,</span><span class=n>ListNode</span> <span class=n>l2</span><span class=o>){</span>
-        <span class=n>ListNode</span> <span class=n>head</span> <span class=o>=</span> <span class=n>l1</span><span class=o>;</span>
-        <span class=n>ListNode</span> <span class=n>l1Next</span><span class=o>;</span>
-        <span class=n>ListNode</span> <span class=n>l2Next</span><span class=o>;</span>
-        <span class=k>while</span><span class=o>(</span><span class=n>l1</span><span class=o>!=</span><span class=kc>null</span><span class=o>&amp;&amp;</span><span class=n>l2</span><span class=o>!=</span><span class=kc>null</span><span class=o>){</span>
-            <span class=n>l1Next</span> <span class=o>=</span> <span class=n>l1</span><span class=o>.</span><span class=na>next</span><span class=o>;</span>
-            <span class=n>l2Next</span> <span class=o>=</span> <span class=n>l2</span><span class=o>.</span><span class=na>next</span><span class=o>;</span>
+<link rel='canonical' href='https://tweakzx.github.io/p/%E5%AE%9E%E4%B9%A0%E9%9D%A2%E8%AF%95%E5%AD%97%E8%8A%82%E9%9D%A2%E8%AF%95%E5%87%89%E7%BB%8F/'>
 
-            <span class=n>l1</span><span class=o>.</span><span class=na>next</span> <span class=o>=</span> <span class=n>l2</span><span class=o>;</span>
-            <span class=n>l2</span><span class=o>.</span><span class=na>next</span> <span class=o>=</span> <span class=n>l1Next</span><span class=o>;</span>
+<link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='【实习面试】字节面试凉经'>
+<meta property='og:description' content='记录自己的字节面试失败过程'>
+<meta property='og:url' content='https://tweakzx.github.io/p/%E5%AE%9E%E4%B9%A0%E9%9D%A2%E8%AF%95%E5%AD%97%E8%8A%82%E9%9D%A2%E8%AF%95%E5%87%89%E7%BB%8F/'>
+<meta property='og:site_name' content='Tweakzx'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='面试' /><meta property='article:tag' content='字节跳动' /><meta property='article:published_time' content='2021-11-29T16:52:26&#43;08:00'/><meta property='article:modified_time' content='2021-11-29T16:52:26&#43;08:00'/><meta property='og:image' content='https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/bytedance.jpg' />
+<meta name="twitter:title" content="【实习面试】字节面试凉经">
+<meta name="twitter:description" content="记录自己的字节面试失败过程"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/bytedance.jpg' />
+    </head>
+    <body class="
+    article-page has-toc
+">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
 
-            <span class=n>l1</span> <span class=o>=</span> <span class=n>l1Next</span><span class=o>;</span>
-            <span class=n>l2</span> <span class=o>=</span> <span class=n>l2Next</span><span class=o>;</span>
-        <span class=o>}</span>
-        <span class=k>return</span> <span class=n>head</span><span class=o>;</span>
-    <span class=o>}</span>
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
 
-    <span class=kd>public</span> <span class=kd>static</span> <span class=n>ListNode</span> <span class=nf>reverseHalf</span><span class=o>(</span><span class=n>ListNode</span> <span class=n>head</span><span class=o>){</span>
-        <span class=n>ListNode</span> <span class=n>fast</span> <span class=o>=</span> <span class=n>head</span><span class=o>;</span>
-        <span class=n>ListNode</span> <span class=n>slow</span> <span class=o>=</span> <span class=n>head</span><span class=o>;</span>
-        <span class=k>while</span><span class=o>(</span><span class=n>fast</span> <span class=o>!=</span> <span class=kc>null</span><span class=o>){</span>
-            <span class=k>if</span><span class=o>(</span><span class=n>fast</span><span class=o>.</span><span class=na>next</span> <span class=o>==</span> <span class=kc>null</span><span class=o>){</span>
-                <span class=k>break</span><span class=o>;</span>
-            <span class=o>}</span>
-            <span class=k>if</span><span class=o>(</span><span class=n>fast</span><span class=o>.</span><span class=na>next</span><span class=o>.</span><span class=na>next</span> <span class=o>==</span> <span class=kc>null</span><span class=o>){</span>
-                <span class=k>break</span><span class=o>;</span>
-            <span class=o>}</span>
-            <span class=n>fast</span> <span class=o>=</span> <span class=n>fast</span><span class=o>.</span><span class=na>next</span><span class=o>.</span><span class=na>next</span><span class=o>;</span>
-            <span class=n>slow</span> <span class=o>=</span> <span class=n>slow</span><span class=o>.</span><span class=na>next</span><span class=o>;</span>
-        <span class=o>}</span>
-        <span class=n>ListNode</span> <span class=n>half</span> <span class=o>=</span> <span class=n>reverse</span><span class=o>(</span><span class=n>slow</span><span class=o>.</span><span class=na>next</span><span class=o>);</span>
-        <span class=n>slow</span><span class=o>.</span><span class=na>next</span> <span class=o>=</span> <span class=kc>null</span><span class=o>;</span>
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex 
+    
+        extended
+    
+">
+    
+        <div id="article-toolbar">
+            <a href="/" class="back-home">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="15 6 9 12 15 18" />
+</svg>
 
-        <span class=k>return</span> <span class=n>mergeList</span><span class=o>(</span><span class=n>head</span><span class=o>,</span><span class=n>half</span><span class=o>);</span>
-    <span class=o>}</span>
 
-    <span class=kd>public</span> <span class=kd>static</span> <span class=kt>void</span> <span class=nf>main</span><span class=o>(</span><span class=n>String</span><span class=o>[]</span> <span class=n>args</span><span class=o>)</span> <span class=o>{</span>
-        <span class=n>ListNode</span> <span class=n>head</span> <span class=o>=</span> <span class=n>createInstance</span><span class=o>(</span><span class=n>7</span><span class=o>);</span>
-        <span class=n>printList</span><span class=o>(</span><span class=n>head</span><span class=o>);</span>
-        <span class=n>head</span> <span class=o>=</span> <span class=n>reverseHalf</span><span class=o>(</span><span class=n>head</span><span class=o>);</span>
-        <span class=n>printList</span><span class=o>(</span><span class=n>head</span><span class=o>);</span>
-    <span class=o>}</span>
-<span class=o>}</span>
-</code></pre></div><h4 id=题目二>题目二</h4><div class=highlight><pre class=chroma><code class=language-java data-lang=java><span class=kn>import</span> <span class=nn>java.util.LinkedList</span><span class=o>;</span>
-<span class=kn>import</span> <span class=nn>java.util.Queue</span><span class=o>;</span>
 
-<span class=cm>/**
-</span><span class=cm> * @author lizhixuan
-</span><span class=cm> * @version 1.0
-</span><span class=cm> * @date 2021/12/1 17:24
-</span><span class=cm> */</span>
-<span class=kd>public</span> <span class=kd>class</span> <span class=nc>BalanceCheck</span> <span class=o>{</span>
-    <span class=kd>public</span> <span class=kd>static</span> <span class=kd>class</span> <span class=nc>TreeNode</span><span class=o>{</span>
-        <span class=kt>int</span> <span class=n>val</span><span class=o>;</span>
-        <span class=n>TreeNode</span> <span class=n>left</span><span class=o>;</span>
-        <span class=n>TreeNode</span> <span class=n>right</span><span class=o>;</span>
-        <span class=n>TreeNode</span><span class=o>(</span><span class=kt>int</span> <span class=n>val</span><span class=o>){</span><span class=k>this</span><span class=o>.</span><span class=na>val</span> <span class=o>=</span> <span class=n>val</span><span class=o>;}</span>
-    <span class=o>}</span>
-    <span class=kd>public</span> <span class=kd>static</span> <span class=n>TreeNode</span> <span class=nf>listToTree</span><span class=o>(</span><span class=n>String</span> <span class=n>src</span><span class=o>){</span>
-        <span class=n>src</span> <span class=o>=</span> <span class=n>src</span><span class=o>.</span><span class=na>substring</span><span class=o>(</span><span class=n>1</span><span class=o>,</span><span class=n>src</span><span class=o>.</span><span class=na>length</span><span class=o>()-</span><span class=n>1</span><span class=o>);</span>
-        <span class=n>String</span><span class=o>[]</span> <span class=n>strList</span> <span class=o>=</span> <span class=n>src</span><span class=o>.</span><span class=na>split</span><span class=o>(</span><span class=s>&#34;,&#34;</span><span class=o>);</span>
+                <span>Back</span>
+            </a>
+        </div>
+    
+<main class="main full-width">
+    <article class="has-image main-article">
+    <header class="article-header">
+        <div class="article-image">
+            <a href="/p/%E5%AE%9E%E4%B9%A0%E9%9D%A2%E8%AF%95%E5%AD%97%E8%8A%82%E9%9D%A2%E8%AF%95%E5%87%89%E7%BB%8F/">
+                
+                    <img src="https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/bytedance.jpg" loading="lazy" alt="Featured image of post 【实习面试】字节面试凉经" />
+                
+            </a>
+        </div>
+    
 
-        <span class=n>TreeNode</span> <span class=n>root</span>  <span class=o>;</span>
-        <span class=n>TreeNode</span> <span class=n>result</span> <span class=o>=</span> <span class=kc>null</span><span class=o>;</span>
-        <span class=n>Queue</span><span class=o>&lt;</span><span class=n>TreeNode</span><span class=o>&gt;</span> <span class=n>queue</span> <span class=o>=</span> <span class=k>new</span> <span class=n>LinkedList</span><span class=o>&lt;&gt;();</span>
-        <span class=k>for</span> <span class=o>(</span><span class=kt>int</span> <span class=n>i</span> <span class=o>=</span><span class=n>0</span> <span class=o>;</span> <span class=n>i</span><span class=o>&lt;</span> <span class=n>strList</span><span class=o>.</span><span class=na>length</span> <span class=o>;</span> <span class=n>i</span><span class=o>++){</span>
-            <span class=k>if</span> <span class=o>(</span><span class=n>i</span> <span class=o>==</span> <span class=n>0</span><span class=o>){</span>
-                <span class=n>root</span> <span class=o>=</span> <span class=k>new</span> <span class=n>TreeNode</span><span class=o>(</span><span class=n>Integer</span><span class=o>.</span><span class=na>parseInt</span><span class=o>(</span><span class=n>strList</span><span class=o>[</span><span class=n>i</span><span class=o>]));</span>
-                <span class=n>result</span> <span class=o>=</span> <span class=n>root</span><span class=o>;</span>
-                <span class=n>queue</span><span class=o>.</span><span class=na>add</span><span class=o>(</span><span class=n>root</span><span class=o>);</span>
-            <span class=o>}</span>
-            <span class=k>if</span> <span class=o>(!</span><span class=n>queue</span><span class=o>.</span><span class=na>isEmpty</span><span class=o>()){</span>
-                <span class=n>root</span> <span class=o>=</span> <span class=n>queue</span><span class=o>.</span><span class=na>poll</span><span class=o>();</span>
-            <span class=o>}</span><span class=k>else</span> <span class=o>{</span>
-                <span class=k>break</span><span class=o>;</span>
-            <span class=o>}</span>
-            <span class=k>if</span> <span class=o>(</span> <span class=n>i</span><span class=o>+</span><span class=n>1</span> <span class=o>&lt;</span> <span class=n>strList</span><span class=o>.</span><span class=na>length</span>  <span class=o>&amp;&amp;</span> <span class=o>!</span><span class=n>strList</span><span class=o>[</span><span class=n>i</span><span class=o>+</span><span class=n>1</span><span class=o>].</span><span class=na>equals</span><span class=o>(</span> <span class=s>&#34;null&#34;</span><span class=o>)){</span>
-                <span class=n>root</span><span class=o>.</span><span class=na>left</span> <span class=o>=</span> <span class=k>new</span> <span class=n>TreeNode</span><span class=o>(</span><span class=n>Integer</span><span class=o>.</span><span class=na>parseInt</span><span class=o>(</span><span class=n>strList</span><span class=o>[</span><span class=n>i</span> <span class=o>+</span><span class=n>1</span><span class=o>]));</span>
-                <span class=n>queue</span><span class=o>.</span><span class=na>add</span><span class=o>(</span><span class=n>root</span><span class=o>.</span><span class=na>left</span><span class=o>);</span>
-            <span class=o>}</span>
-            <span class=k>if</span> <span class=o>(</span> <span class=n>i</span> <span class=o>+</span> <span class=n>2</span> <span class=o>&lt;</span> <span class=n>strList</span><span class=o>.</span><span class=na>length</span> <span class=o>&amp;&amp;</span> <span class=o>!</span><span class=n>strList</span><span class=o>[</span><span class=n>i</span><span class=o>+</span><span class=n>2</span><span class=o>].</span><span class=na>equals</span><span class=o>(</span> <span class=s>&#34;null&#34;</span><span class=o>)){</span>
-                <span class=n>root</span><span class=o>.</span><span class=na>right</span> <span class=o>=</span> <span class=k>new</span> <span class=n>TreeNode</span><span class=o>(</span><span class=n>Integer</span><span class=o>.</span><span class=na>parseInt</span><span class=o>(</span><span class=n>strList</span><span class=o>[</span><span class=n>i</span> <span class=o>+</span><span class=n>2</span><span class=o>]));</span>
-                <span class=n>queue</span><span class=o>.</span><span class=na>add</span><span class=o>(</span><span class=n>root</span><span class=o>.</span><span class=na>right</span><span class=o>);</span>
-            <span class=o>}</span>
-            <span class=n>i</span> <span class=o>=</span> <span class=n>i</span> <span class=o>+</span><span class=n>1</span><span class=o>;</span>
-        <span class=o>}</span>
-        <span class=k>return</span> <span class=n>result</span><span class=o>;</span>
-    <span class=o>}</span>
-    <span class=kd>public</span> <span class=kd>static</span> <span class=kt>int</span> <span class=nf>getHeight</span><span class=o>(</span><span class=n>TreeNode</span> <span class=n>root</span><span class=o>){</span>
-        <span class=k>if</span><span class=o>(</span><span class=n>root</span><span class=o>==</span><span class=kc>null</span><span class=o>){</span>
-            <span class=k>return</span> <span class=n>0</span><span class=o>;</span>
-        <span class=o>}</span>
-        <span class=k>return</span> <span class=n>Math</span><span class=o>.</span><span class=na>max</span><span class=o>(</span><span class=n>getHeight</span><span class=o>(</span><span class=n>root</span><span class=o>.</span><span class=na>left</span><span class=o>),</span><span class=n>getHeight</span><span class=o>(</span><span class=n>root</span><span class=o>.</span><span class=na>right</span><span class=o>))+</span><span class=n>1</span><span class=o>;</span>
-    <span class=o>}</span>
-    <span class=kd>public</span> <span class=kd>static</span> <span class=kt>boolean</span> <span class=nf>isBalanced</span><span class=o>(</span><span class=n>TreeNode</span> <span class=n>root</span><span class=o>){</span>
-        <span class=k>if</span><span class=o>(</span><span class=n>root</span><span class=o>==</span><span class=kc>null</span><span class=o>){</span>
-            <span class=k>return</span> <span class=kc>true</span><span class=o>;</span>
-        <span class=o>}</span>
-        <span class=kt>int</span> <span class=n>leftHeight</span> <span class=o>=</span> <span class=n>getHeight</span><span class=o>(</span><span class=n>root</span><span class=o>.</span><span class=na>left</span><span class=o>);</span>
-        <span class=kt>int</span> <span class=n>rightHeight</span> <span class=o>=</span> <span class=n>getHeight</span><span class=o>(</span><span class=n>root</span><span class=o>.</span><span class=na>right</span><span class=o>);</span>
-        <span class=k>return</span> <span class=n>Math</span><span class=o>.</span><span class=na>abs</span><span class=o>(</span><span class=n>leftHeight</span><span class=o>-</span><span class=n>rightHeight</span><span class=o>)&lt;=</span><span class=n>1</span> <span class=o>&amp;&amp;</span> <span class=n>isBalanced</span><span class=o>(</span><span class=n>root</span><span class=o>.</span><span class=na>left</span><span class=o>)</span> <span class=o>&amp;&amp;</span> <span class=n>isBalanced</span><span class=o>(</span><span class=n>root</span><span class=o>.</span><span class=na>right</span><span class=o>);</span>
-    <span class=o>}</span>
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/%E9%9D%A2%E8%AF%95/" >
+                面试
+            </a>
+        
+    </header>
+    
 
-    <span class=kd>public</span> <span class=kd>static</span> <span class=kt>void</span> <span class=nf>main</span><span class=o>(</span><span class=n>String</span><span class=o>[]</span> <span class=n>args</span><span class=o>)</span> <span class=o>{</span>
-        <span class=n>String</span> <span class=n>tree</span> <span class=o>=</span> <span class=s>&#34;[3,9,20,null,null,15,7]&#34;</span><span class=o>;</span>
-        <span class=n>TreeNode</span> <span class=n>root</span> <span class=o>=</span> <span class=n>listToTree</span><span class=o>(</span><span class=n>tree</span><span class=o>);</span>
-        <span class=n>System</span><span class=o>.</span><span class=na>out</span><span class=o>.</span><span class=na>println</span><span class=o>(</span><span class=n>isBalanced</span><span class=o>(</span><span class=n>root</span><span class=o>));</span>
-    <span class=o>}</span>
-<span class=o>}</span>
-</code></pre></div><h3 id=一些知识点>一些知识点</h3><ul><li><p>java内部类：</p><ul><li>成员内部类中不能存在任何static的变量和方法</li><li>成员内部类是依附于外围类的，所以只有先创建了外围类才能够创建内部类</li></ul></li><li><p>java的static关键字</p><ul><li>static变量也称作静态变量，静态变量被所有的对象所共享，在内存中只有一个副本，它当且仅当在类初次加载时会被初始化。</li><li>为什么说static块可以用来优化程序性能，是因为它的特性:只会在类加载的时候执行一次。</li><li>在C/C++中static是可以作用域局部变量的，但是在Java中切记：static是不允许用来修饰局部变量。</li></ul></li></ul><h3 id=反思>反思</h3><ul><li>自己还是缺乏代码经验，代码写不出来，面试官明显十分失望，失去耐心之后多次叹气捂脸，说实话压力还是挺大的，毕竟确实挺丢脸的。以后也要多写一点代码。</li><li>打算把自己的学习总结下来，于是也有了这篇博客，希望自己可以坚持写博客，说实话，面试完压力挺大，感觉自己就是一个无敌铁废物，写博客写出来感觉好一些了。</li></ul></section><footer class=article-footer><section class=article-tags><a href=/tags/%E9%9D%A2%E8%AF%95/>面试</a>
-<a href=/tags/%E5%AD%97%E8%8A%82%E8%B7%B3%E5%8A%A8/>字节跳动</a></section><section class=article-copyright><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg><span>Licensed under CC BY-NC-SA 4.0</span></section></footer><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.css integrity=sha384-RZU/ijkSsFbcmivfdRBQDtwuwVqK7GMOw6IMvKyeWL2K5UAlyp6WonmB8m7Jd0Hn crossorigin=anonymous><script src=https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.js integrity=sha384-pK1WpvzWVBQiP0/GjnvRxV4mOb0oxFuyRxJlk6vVw146n3egcN5C925NCP7a7BY8 crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/contrib/auto-render.min.js integrity=sha384-vZTG03m+2yp6N6BNi5iM4rW4oIwk5DfcNdFfxkk9ZWpDriOkXX8voJBFrAO7MpVl crossorigin=anonymous defer></script><script>window.addEventListener("DOMContentLoaded",()=>{renderMathInElement(document.querySelector(`.article-content`),{delimiters:[{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false},{left:"\\(",right:"\\)",display:false},{left:"\\[",right:"\\]",display:true}]});})</script></article><aside class=related-contents--wrapper><h2 class=section-title>Related contents</h2><div class=related-contents><div class="flex article-list--tile"><article class=has-image><a href=/p/%E5%AE%9E%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%98%BF%E9%87%8C%E5%AE%9E%E4%B9%A0%E4%BA%8C%E9%9D%A2/><div class=article-image><img src=https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202305061520436.png loading=lazy data-key data-hash=https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202305061520436.png></div><div class=article-details><h2 class=article-title>【实习面试】阿里实习二面</h2></div></a></article><article class=has-image><a href=/p/%E5%AE%9E%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%98%BF%E9%87%8C%E5%AE%9E%E4%B9%A0%E7%94%9F%E9%9D%A2%E8%AF%95/><div class=article-image><img src=https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202305061520436.png loading=lazy data-key data-hash=https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202305061520436.png></div><div class=article-details><h2 class=article-title>【实习面试】阿里实习生面试</h2></div></a></article><article class=has-image><a href=/p/%E5%AE%9E%E4%B9%A0%E9%9D%A2%E8%AF%95%E8%93%9D%E6%B9%96%E9%9D%A2%E8%AF%95%E5%87%89%E7%BB%8F/><div class=article-image><img src=https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/image-20211201214555354.png loading=lazy data-key data-hash=https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/image-20211201214555354.png></div><div class=article-details><h2 class=article-title>【实习面试】蓝湖面试凉经</h2></div></a></article></div></div></aside><script src=https://giscus.app/client.js data-repo=Tweakzx/Tweakzx.github.io data-repo-id="MDEwOlJlcG9zaXRvcnkzMjY5MTY1NTE=" data-category=Announcements data-category-id=DIC_kwDOE3xZx84CTfL- data-mapping=title data-reactions-enabled=1 data-emit-metadata=0 data-theme=light_tritanopia crossorigin=anonymous async></script><script>function setGiscusTheme(theme){let giscus=document.querySelector('iframe.giscus-frame');if(giscus){giscus.contentWindow.postMessage({giscus:{setConfig:{theme:theme}}},"https://giscus.app");};};(function(){addEventListener('message',(e)=>{if(event.origin!=='https://giscus.app')return;handler()});window.addEventListener('onColorSchemeChange',handler);function handler(){if(document.documentElement.dataset.scheme==="light"){setGiscusTheme('light_tritanopia');}else{setGiscusTheme('dark_tritanopia');};};}());</script><footer class=site-footer><section class=copyright>&copy;
-2020 -
-2023 Tweakzx</section><section class=powerby>Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a><br>Theme <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.5.0>Stack</a></b> designed by <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a></section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
-<button class="pswp__button pswp__button--share" title=Share></button>
-<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
-<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
-<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css integrity="sha256-c0uckgykQ9v5k+IqViZOZKc47Jn7KQil4/MP3ySA3F8=" crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE=" crossorigin=anonymous></main><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">Table of contents</h2><div class=widget--toc><nav id=TableOfContents><ol><li><a href=#为什么会投递字节实习>为什么会投递字节实习</a></li><li><a href=#面试过程>面试过程</a></li><li><a href=#总结>总结</a><ol><li><a href=#首先还是把这两道题的代码写写吧>首先还是把这两道题的代码写写吧</a><ol><li><a href=#题目一>题目一</a></li><li><a href=#题目二>题目二</a></li></ol></li><li><a href=#一些知识点>一些知识点</a></li><li><a href=#反思>反思</a></li></ol></li></ol></nav></div></section></aside></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g=" crossorigin=anonymous defer></script><script type=text/javascript src=/ts/main.js defer></script><script>(function(){const customFont=document.createElement('link');customFont.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";customFont.type="text/css";customFont.rel="stylesheet";document.head.appendChild(customFont);}());</script></body></html>
+    <h2 class="article-title">
+        <a href="/p/%E5%AE%9E%E4%B9%A0%E9%9D%A2%E8%AF%95%E5%AD%97%E8%8A%82%E9%9D%A2%E8%AF%95%E5%87%89%E7%BB%8F/">【实习面试】字节面试凉经</a>
+    </h2>
+
+    
+    <h3 class="article-subtitle">
+        记录自己的字节面试失败过程
+    </h3>
+    
+
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Nov 29, 2021</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    4 minute read
+                </time>
+            </div>
+        
+    </footer>
+    
+</div>
+
+    
+
+</header>
+
+    <section class="article-content">
+    <blockquote>
+<p>时间：2021-11-29下午三点</p>
+<p>方式：飞书视频面试</p>
+<p>岗位：后端开发实习生-业务中台职位</p>
+</blockquote>
+<h2 id="为什么会投递字节实习">为什么会投递字节实习</h2>
+<p>​		因为中科院的研究所大多不让实习，研二想去实习是一定不行的。但是研一在雁栖湖，课题组在海淀，我研一基本不参与科研，所以想要趁没人管的时候出去实习。因为将来大概率是做软开，所以想找一份后端开发的工作。在校友群里问了一下，有学长给了一个内推的机会，所以就有了这次一面。</p>
+<h2 id="面试过程">面试过程</h2>
+<p>​		面试官上来让我做了自我介绍之后就让我写代码做题。</p>
+<blockquote>
+<p>题目一：链表1-&gt;2-&gt;3-&gt;4-&gt;5-&gt;6 转变成 链表1-&gt;6-&gt;2-&gt;5-&gt;3-&gt;4</p>
+<p>大概意思就是将链表平分成两部分，前一部分顺序不变，后一部分反转后插空插入前一部分链表。</p>
+</blockquote>
+<p>​		说实话，自己的代码能力确实有点差，原本打算使用c++来写后来改成了Java，因为我想起Java里有LinkedList这个数据结构。理由有点荒诞哈，其实是我没有意识到要自己定义节点来实现链表，所以在想要写指针的时候就卡住了，完全不知道怎么给LinkedList的链表写指针。然后就尬住了，面试官无奈说那就换一道吧。</p>
+<blockquote>
+<p>题目二：判断一个二叉树是否是平衡树</p>
+</blockquote>
+<p>​		题目不是很难，但是自己太久不写代码有些生疏了，写出来的程序不知道为什么没有编译通过。说实话，面试官让我自己实现一个单例来测试程序，其中爆出的各种错误，无一不揭示了我完全没有什么开发经验的事实，例如内部类放错了位置，static的编译问题，还有一个空指针异常。无疑是再次尬死了。</p>
+<p>​		之后面试官让我讲一讲自己的项目经历，主要问了一下大三在华为的实习。可惜自己虽然实习了，但实际的工作很少，含金量也不高，面试官兴趣不大。</p>
+<p>​		之后就是问我有没有什么想问他的，我已经不想说话了，就没问。</p>
+<p>​		草草结束。</p>
+<h2 id="总结">总结</h2>
+<h3 id="首先还是把这两道题的代码写写吧">首先还是把这两道题的代码写写吧</h3>
+<h4 id="题目一">题目一</h4>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="cm">/**
+</span><span class="cm"> * @author lizhixuan
+</span><span class="cm"> * @version 1.0
+</span><span class="cm"> * @date 2021/12/1 15:50
+</span><span class="cm"> */</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ReverseList2</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">ListNode</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">val</span><span class="o">;</span>
+        <span class="n">ListNode</span> <span class="n">next</span><span class="o">;</span>
+        <span class="n">ListNode</span><span class="o">()</span> <span class="o">{}</span>
+        <span class="n">ListNode</span><span class="o">(</span><span class="kt">int</span> <span class="n">val</span><span class="o">)</span> <span class="o">{</span> <span class="k">this</span><span class="o">.</span><span class="na">val</span> <span class="o">=</span> <span class="n">val</span><span class="o">;</span> <span class="o">}</span>
+        <span class="n">ListNode</span><span class="o">(</span><span class="kt">int</span> <span class="n">val</span><span class="o">,</span> <span class="n">ListNode</span> <span class="n">next</span><span class="o">)</span> <span class="o">{</span> <span class="k">this</span><span class="o">.</span><span class="na">val</span> <span class="o">=</span> <span class="n">val</span><span class="o">;</span> <span class="k">this</span><span class="o">.</span><span class="na">next</span> <span class="o">=</span> <span class="n">next</span><span class="o">;</span> <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="n">ListNode</span> <span class="nf">createInstance</span><span class="o">(</span><span class="kt">int</span> <span class="n">n</span><span class="o">){</span>
+        <span class="n">ListNode</span> <span class="n">head</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ListNode</span><span class="o">(</span><span class="n">1</span><span class="o">);</span>
+        <span class="n">ListNode</span> <span class="n">current</span> <span class="o">=</span> <span class="n">head</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">2</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="n">current</span><span class="o">.</span><span class="na">next</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ListNode</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
+            <span class="n">current</span> <span class="o">=</span> <span class="n">current</span><span class="o">.</span><span class="na">next</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">head</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">printList</span><span class="o">(</span><span class="n">ListNode</span> <span class="n">head</span><span class="o">){</span>
+        <span class="n">ListNode</span> <span class="n">current</span> <span class="o">=</span> <span class="n">head</span><span class="o">;</span>
+        <span class="k">while</span><span class="o">(</span><span class="n">current</span><span class="o">.</span><span class="na">next</span><span class="o">!=</span><span class="kc">null</span><span class="o">){</span>
+            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="n">current</span><span class="o">.</span><span class="na">val</span><span class="o">);</span>
+            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="s">&#34;-&gt;&#34;</span><span class="o">);</span>
+            <span class="n">current</span> <span class="o">=</span> <span class="n">current</span><span class="o">.</span><span class="na">next</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">current</span><span class="o">.</span><span class="na">val</span><span class="o">);</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="n">ListNode</span> <span class="nf">reverse</span><span class="o">(</span><span class="n">ListNode</span> <span class="n">head</span><span class="o">){</span>
+        <span class="n">ListNode</span> <span class="n">pre</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+        <span class="n">ListNode</span> <span class="n">current</span> <span class="o">=</span> <span class="n">head</span><span class="o">;</span>
+        <span class="n">ListNode</span> <span class="n">next</span><span class="o">;</span>
+        <span class="k">while</span><span class="o">(</span><span class="n">current</span><span class="o">!=</span><span class="kc">null</span><span class="o">){</span>
+            <span class="n">next</span> <span class="o">=</span> <span class="n">current</span><span class="o">.</span><span class="na">next</span><span class="o">;</span>
+            <span class="n">current</span><span class="o">.</span><span class="na">next</span> <span class="o">=</span> <span class="n">pre</span><span class="o">;</span>
+            <span class="n">pre</span> <span class="o">=</span> <span class="n">current</span><span class="o">;</span>
+            <span class="n">current</span> <span class="o">=</span> <span class="n">next</span><span class="o">;</span>
+        <span class="o">}</span>
+       <span class="k">return</span> <span class="n">pre</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="n">ListNode</span> <span class="nf">mergeList</span><span class="o">(</span><span class="n">ListNode</span> <span class="n">l1</span><span class="o">,</span><span class="n">ListNode</span> <span class="n">l2</span><span class="o">){</span>
+        <span class="n">ListNode</span> <span class="n">head</span> <span class="o">=</span> <span class="n">l1</span><span class="o">;</span>
+        <span class="n">ListNode</span> <span class="n">l1Next</span><span class="o">;</span>
+        <span class="n">ListNode</span> <span class="n">l2Next</span><span class="o">;</span>
+        <span class="k">while</span><span class="o">(</span><span class="n">l1</span><span class="o">!=</span><span class="kc">null</span><span class="o">&amp;&amp;</span><span class="n">l2</span><span class="o">!=</span><span class="kc">null</span><span class="o">){</span>
+            <span class="n">l1Next</span> <span class="o">=</span> <span class="n">l1</span><span class="o">.</span><span class="na">next</span><span class="o">;</span>
+            <span class="n">l2Next</span> <span class="o">=</span> <span class="n">l2</span><span class="o">.</span><span class="na">next</span><span class="o">;</span>
+
+            <span class="n">l1</span><span class="o">.</span><span class="na">next</span> <span class="o">=</span> <span class="n">l2</span><span class="o">;</span>
+            <span class="n">l2</span><span class="o">.</span><span class="na">next</span> <span class="o">=</span> <span class="n">l1Next</span><span class="o">;</span>
+
+            <span class="n">l1</span> <span class="o">=</span> <span class="n">l1Next</span><span class="o">;</span>
+            <span class="n">l2</span> <span class="o">=</span> <span class="n">l2Next</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">head</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="n">ListNode</span> <span class="nf">reverseHalf</span><span class="o">(</span><span class="n">ListNode</span> <span class="n">head</span><span class="o">){</span>
+        <span class="n">ListNode</span> <span class="n">fast</span> <span class="o">=</span> <span class="n">head</span><span class="o">;</span>
+        <span class="n">ListNode</span> <span class="n">slow</span> <span class="o">=</span> <span class="n">head</span><span class="o">;</span>
+        <span class="k">while</span><span class="o">(</span><span class="n">fast</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">){</span>
+            <span class="k">if</span><span class="o">(</span><span class="n">fast</span><span class="o">.</span><span class="na">next</span> <span class="o">==</span> <span class="kc">null</span><span class="o">){</span>
+                <span class="k">break</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="k">if</span><span class="o">(</span><span class="n">fast</span><span class="o">.</span><span class="na">next</span><span class="o">.</span><span class="na">next</span> <span class="o">==</span> <span class="kc">null</span><span class="o">){</span>
+                <span class="k">break</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="n">fast</span> <span class="o">=</span> <span class="n">fast</span><span class="o">.</span><span class="na">next</span><span class="o">.</span><span class="na">next</span><span class="o">;</span>
+            <span class="n">slow</span> <span class="o">=</span> <span class="n">slow</span><span class="o">.</span><span class="na">next</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="n">ListNode</span> <span class="n">half</span> <span class="o">=</span> <span class="n">reverse</span><span class="o">(</span><span class="n">slow</span><span class="o">.</span><span class="na">next</span><span class="o">);</span>
+        <span class="n">slow</span><span class="o">.</span><span class="na">next</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+
+        <span class="k">return</span> <span class="n">mergeList</span><span class="o">(</span><span class="n">head</span><span class="o">,</span><span class="n">half</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">ListNode</span> <span class="n">head</span> <span class="o">=</span> <span class="n">createInstance</span><span class="o">(</span><span class="n">7</span><span class="o">);</span>
+        <span class="n">printList</span><span class="o">(</span><span class="n">head</span><span class="o">);</span>
+        <span class="n">head</span> <span class="o">=</span> <span class="n">reverseHalf</span><span class="o">(</span><span class="n">head</span><span class="o">);</span>
+        <span class="n">printList</span><span class="o">(</span><span class="n">head</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div><h4 id="题目二">题目二</h4>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">import</span> <span class="nn">java.util.LinkedList</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Queue</span><span class="o">;</span>
+
+<span class="cm">/**
+</span><span class="cm"> * @author lizhixuan
+</span><span class="cm"> * @version 1.0
+</span><span class="cm"> * @date 2021/12/1 17:24
+</span><span class="cm"> */</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">BalanceCheck</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">TreeNode</span><span class="o">{</span>
+        <span class="kt">int</span> <span class="n">val</span><span class="o">;</span>
+        <span class="n">TreeNode</span> <span class="n">left</span><span class="o">;</span>
+        <span class="n">TreeNode</span> <span class="n">right</span><span class="o">;</span>
+        <span class="n">TreeNode</span><span class="o">(</span><span class="kt">int</span> <span class="n">val</span><span class="o">){</span><span class="k">this</span><span class="o">.</span><span class="na">val</span> <span class="o">=</span> <span class="n">val</span><span class="o">;}</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="n">TreeNode</span> <span class="nf">listToTree</span><span class="o">(</span><span class="n">String</span> <span class="n">src</span><span class="o">){</span>
+        <span class="n">src</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="na">substring</span><span class="o">(</span><span class="n">1</span><span class="o">,</span><span class="n">src</span><span class="o">.</span><span class="na">length</span><span class="o">()-</span><span class="n">1</span><span class="o">);</span>
+        <span class="n">String</span><span class="o">[]</span> <span class="n">strList</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="na">split</span><span class="o">(</span><span class="s">&#34;,&#34;</span><span class="o">);</span>
+
+        <span class="n">TreeNode</span> <span class="n">root</span>  <span class="o">;</span>
+        <span class="n">TreeNode</span> <span class="n">result</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+        <span class="n">Queue</span><span class="o">&lt;</span><span class="n">TreeNode</span><span class="o">&gt;</span> <span class="n">queue</span> <span class="o">=</span> <span class="k">new</span> <span class="n">LinkedList</span><span class="o">&lt;&gt;();</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span><span class="n">0</span> <span class="o">;</span> <span class="n">i</span><span class="o">&lt;</span> <span class="n">strList</span><span class="o">.</span><span class="na">length</span> <span class="o">;</span> <span class="n">i</span><span class="o">++){</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">i</span> <span class="o">==</span> <span class="n">0</span><span class="o">){</span>
+                <span class="n">root</span> <span class="o">=</span> <span class="k">new</span> <span class="n">TreeNode</span><span class="o">(</span><span class="n">Integer</span><span class="o">.</span><span class="na">parseInt</span><span class="o">(</span><span class="n">strList</span><span class="o">[</span><span class="n">i</span><span class="o">]));</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="n">root</span><span class="o">;</span>
+                <span class="n">queue</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">root</span><span class="o">);</span>
+            <span class="o">}</span>
+            <span class="k">if</span> <span class="o">(!</span><span class="n">queue</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">()){</span>
+                <span class="n">root</span> <span class="o">=</span> <span class="n">queue</span><span class="o">.</span><span class="na">poll</span><span class="o">();</span>
+            <span class="o">}</span><span class="k">else</span> <span class="o">{</span>
+                <span class="k">break</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="k">if</span> <span class="o">(</span> <span class="n">i</span><span class="o">+</span><span class="n">1</span> <span class="o">&lt;</span> <span class="n">strList</span><span class="o">.</span><span class="na">length</span>  <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">strList</span><span class="o">[</span><span class="n">i</span><span class="o">+</span><span class="n">1</span><span class="o">].</span><span class="na">equals</span><span class="o">(</span> <span class="s">&#34;null&#34;</span><span class="o">)){</span>
+                <span class="n">root</span><span class="o">.</span><span class="na">left</span> <span class="o">=</span> <span class="k">new</span> <span class="n">TreeNode</span><span class="o">(</span><span class="n">Integer</span><span class="o">.</span><span class="na">parseInt</span><span class="o">(</span><span class="n">strList</span><span class="o">[</span><span class="n">i</span> <span class="o">+</span><span class="n">1</span><span class="o">]));</span>
+                <span class="n">queue</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">left</span><span class="o">);</span>
+            <span class="o">}</span>
+            <span class="k">if</span> <span class="o">(</span> <span class="n">i</span> <span class="o">+</span> <span class="n">2</span> <span class="o">&lt;</span> <span class="n">strList</span><span class="o">.</span><span class="na">length</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">strList</span><span class="o">[</span><span class="n">i</span><span class="o">+</span><span class="n">2</span><span class="o">].</span><span class="na">equals</span><span class="o">(</span> <span class="s">&#34;null&#34;</span><span class="o">)){</span>
+                <span class="n">root</span><span class="o">.</span><span class="na">right</span> <span class="o">=</span> <span class="k">new</span> <span class="n">TreeNode</span><span class="o">(</span><span class="n">Integer</span><span class="o">.</span><span class="na">parseInt</span><span class="o">(</span><span class="n">strList</span><span class="o">[</span><span class="n">i</span> <span class="o">+</span><span class="n">2</span><span class="o">]));</span>
+                <span class="n">queue</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">right</span><span class="o">);</span>
+            <span class="o">}</span>
+            <span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span><span class="n">1</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">result</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">int</span> <span class="nf">getHeight</span><span class="o">(</span><span class="n">TreeNode</span> <span class="n">root</span><span class="o">){</span>
+        <span class="k">if</span><span class="o">(</span><span class="n">root</span><span class="o">==</span><span class="kc">null</span><span class="o">){</span>
+            <span class="k">return</span> <span class="n">0</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">getHeight</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">left</span><span class="o">),</span><span class="n">getHeight</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">right</span><span class="o">))+</span><span class="n">1</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">boolean</span> <span class="nf">isBalanced</span><span class="o">(</span><span class="n">TreeNode</span> <span class="n">root</span><span class="o">){</span>
+        <span class="k">if</span><span class="o">(</span><span class="n">root</span><span class="o">==</span><span class="kc">null</span><span class="o">){</span>
+            <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="kt">int</span> <span class="n">leftHeight</span> <span class="o">=</span> <span class="n">getHeight</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">left</span><span class="o">);</span>
+        <span class="kt">int</span> <span class="n">rightHeight</span> <span class="o">=</span> <span class="n">getHeight</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">right</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">Math</span><span class="o">.</span><span class="na">abs</span><span class="o">(</span><span class="n">leftHeight</span><span class="o">-</span><span class="n">rightHeight</span><span class="o">)&lt;=</span><span class="n">1</span> <span class="o">&amp;&amp;</span> <span class="n">isBalanced</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">left</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="n">isBalanced</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">right</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">String</span> <span class="n">tree</span> <span class="o">=</span> <span class="s">&#34;[3,9,20,null,null,15,7]&#34;</span><span class="o">;</span>
+        <span class="n">TreeNode</span> <span class="n">root</span> <span class="o">=</span> <span class="n">listToTree</span><span class="o">(</span><span class="n">tree</span><span class="o">);</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">isBalanced</span><span class="o">(</span><span class="n">root</span><span class="o">));</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div><h3 id="一些知识点">一些知识点</h3>
+<ul>
+<li>
+<p>java内部类：</p>
+<ul>
+<li>成员内部类中不能存在任何static的变量和方法</li>
+<li>成员内部类是依附于外围类的，所以只有先创建了外围类才能够创建内部类</li>
+</ul>
+</li>
+<li>
+<p>java的static关键字</p>
+<ul>
+<li>static变量也称作静态变量，静态变量被所有的对象所共享，在内存中只有一个副本，它当且仅当在类初次加载时会被初始化。</li>
+<li>为什么说static块可以用来优化程序性能，是因为它的特性:只会在类加载的时候执行一次。</li>
+<li>在C/C++中static是可以作用域局部变量的，但是在Java中切记：static是不允许用来修饰局部变量。</li>
+</ul>
+</li>
+</ul>
+<h3 id="反思">反思</h3>
+<ul>
+<li>自己还是缺乏代码经验，代码写不出来，面试官明显十分失望，失去耐心之后多次叹气捂脸，说实话压力还是挺大的，毕竟确实挺丢脸的。以后也要多写一点代码。</li>
+<li>打算把自己的学习总结下来，于是也有了这篇博客，希望自己可以坚持写博客，说实话，面试完压力挺大，感觉自己就是一个无敌铁废物，写博客写出来感觉好一些了。</li>
+</ul>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/%E9%9D%A2%E8%AF%95/">面试</a>
+        
+            <a href="/tags/%E5%AD%97%E8%8A%82%E8%B7%B3%E5%8A%A8/">字节跳动</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+        <link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.css"integrity="sha384-RZU/ijkSsFbcmivfdRBQDtwuwVqK7GMOw6IMvKyeWL2K5UAlyp6WonmB8m7Jd0Hn"crossorigin="anonymous"
+            ><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.js"integrity="sha384-pK1WpvzWVBQiP0/GjnvRxV4mOb0oxFuyRxJlk6vVw146n3egcN5C925NCP7a7BY8"crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/contrib/auto-render.min.js"integrity="sha384-vZTG03m&#43;2yp6N6BNi5iM4rW4oIwk5DfcNdFfxkk9ZWpDriOkXX8voJBFrAO7MpVl"crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        renderMathInElement(document.querySelector(`.article-content`), {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ]
+        });})
+</script>
+    
+</article>
+
+    <aside class="related-contents--wrapper">
+    
+    
+        <h2 class="section-title">Related contents</h2>
+        <div class="related-contents">
+            <div class="flex article-list--tile">
+                
+                    
+<article class="has-image">
+    <a href="/p/%E5%AE%9E%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%98%BF%E9%87%8C%E5%AE%9E%E4%B9%A0%E4%BA%8C%E9%9D%A2/">
+        
+        
+            <div class="article-image">
+                
+                    <img src="https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202305061520436.png" loading="lazy" data-key="" data-hash="https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202305061520436.png"/>
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">【实习面试】阿里实习二面</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="has-image">
+    <a href="/p/%E5%AE%9E%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%98%BF%E9%87%8C%E5%AE%9E%E4%B9%A0%E7%94%9F%E9%9D%A2%E8%AF%95/">
+        
+        
+            <div class="article-image">
+                
+                    <img src="https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202305061520436.png" loading="lazy" data-key="" data-hash="https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202305061520436.png"/>
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">【实习面试】阿里实习生面试</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="has-image">
+    <a href="/p/%E5%AE%9E%E4%B9%A0%E9%9D%A2%E8%AF%95%E8%93%9D%E6%B9%96%E9%9D%A2%E8%AF%95%E5%87%89%E7%BB%8F/">
+        
+        
+            <div class="article-image">
+                
+                    <img src="https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/image-20211201214555354.png" loading="lazy" data-key="" data-hash="https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/image-20211201214555354.png"/>
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">【实习面试】蓝湖面试凉经</h2>
+        </div>
+    </a>
+</article>
+                
+            </div>
+        </div>
+    
+</aside>
+
+     
+    
+        
+    <script
+    src="https://giscus.app/client.js"
+    data-repo="Tweakzx/Tweakzx.github.io"
+    data-repo-id="MDEwOlJlcG9zaXRvcnkzMjY5MTY1NTE="
+    data-category="Announcements"
+    data-category-id="DIC_kwDOE3xZx84CTfL-"
+    data-mapping="title"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-theme="light_tritanopia"
+    crossorigin="anonymous"
+    async
+></script>
+<script>
+    function setGiscusTheme(theme) {
+        let giscus = document.querySelector('iframe.giscus-frame');
+        if (giscus) {
+            giscus.contentWindow.postMessage(
+                { 
+                    giscus: {
+                        setConfig: { 
+                            theme: theme 
+                        }
+                    }
+                },
+                "https://giscus.app"
+            );
+        };
+    };
+
+    (function(){
+        addEventListener('message', (e) => {
+            if (event.origin !== 'https://giscus.app') return;
+            handler()
+        });
+        window.addEventListener('onColorSchemeChange', handler);
+
+        function handler() {
+            if (document.documentElement.dataset.scheme === "light") {
+                setGiscusTheme('light_tritanopia');
+            } else {
+                setGiscusTheme('dark_tritanopia');
+            };
+        };
+    }());
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2023 Tweakzx
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.5.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
+            >
+
+            </main>
+    
+        <aside class="sidebar right-sidebar sticky">
+            <section class="widget archives">
+                <div class="widget-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+                </div>
+                <h2 class="widget-title section-title">Table of contents</h2>
+                
+                <div class="widget--toc">
+                    <nav id="TableOfContents">
+  <ol>
+    <li><a href="#为什么会投递字节实习">为什么会投递字节实习</a></li>
+    <li><a href="#面试过程">面试过程</a></li>
+    <li><a href="#总结">总结</a>
+      <ol>
+        <li><a href="#首先还是把这两道题的代码写写吧">首先还是把这两道题的代码写写吧</a>
+          <ol>
+            <li><a href="#题目一">题目一</a></li>
+            <li><a href="#题目二">题目二</a></li>
+          </ol>
+        </li>
+        <li><a href="#一些知识点">一些知识点</a></li>
+        <li><a href="#反思">反思</a></li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+                </div>
+            </section>
+        </aside>
+    
+
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
+                defer="false"
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

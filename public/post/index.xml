@@ -1,1 +1,416 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on Tweakzx</title><link>https://tweakzx.github.io/post/</link><description>Recent content in Posts on Tweakzx</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Tue, 27 Jun 2023 14:57:42 +0800</lastBuildDate><atom:link href="https://tweakzx.github.io/post/index.xml" rel="self" type="application/rss+xml"/><item><title>【Kubernetes】部署gaiaGPU（vCUDA）</title><link>https://tweakzx.github.io/p/kubernetes%E9%83%A8%E7%BD%B2gaiagpuvcuda/</link><pubDate>Tue, 27 Jun 2023 14:57:42 +0800</pubDate><guid>https://tweakzx.github.io/p/kubernetes%E9%83%A8%E7%BD%B2gaiagpuvcuda/</guid><description>部署GaiaGPU 前置工作 配置好GPU环境 配置好k8s集群环境 gpu-admission 部署deployment 创建文件gpu-quota-admission.ya</description></item><item><title>【论文笔记】HUVM论文阅读笔记</title><link>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0huvm%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link><pubDate>Sun, 25 Jun 2023 16:38:08 +0800</pubDate><guid>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0huvm%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</guid><description>Memory Harvesting in Multi-GPU Systems with Hierarchical Unified Virtual Memory 摘要 随着对 GPU 需求的不断增长，大多数组织允许用户共享多 GPU 服务器。 然而，我们观察到，当合并显示高度不同的资源需求的各种工作负</description></item><item><title>【论文笔记】DeepUM论文阅读笔记</title><link>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0deepum%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link><pubDate>Sun, 18 Jun 2023 20:54:03 +0800</pubDate><guid>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0deepum%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</guid><description>DeepUM: Tensor Migration and Prefetching in Unified Memory 摘要 深层神经网络(DNN)正在继续变得越来越广泛和深入。因此，它需要大量的 GPU 内存和计算能力。 本文提出了一个利用 CUDA 统一存储器(</description></item><item><title>【论文笔记】Zico论文阅读笔记</title><link>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0zico%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link><pubDate>Sun, 11 Jun 2023 23:02:04 +0800</pubDate><guid>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0zico%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</guid><description>Zico: Efficient GPU Memory Sharing for Concurrent DNN Training 摘要 最近的一些工作提出了跨多个并发 DNN 培训作业共享 GPU 资源的解决方案 但是没有一个解决这种作业共处引入的快速增长的内存占用问题 这</description></item><item><title>【论文笔记】gshare论文笔记</title><link>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0gshare%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/</link><pubDate>Mon, 05 Jun 2023 10:47:21 +0800</pubDate><guid>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0gshare%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/</guid><description>gShare: A centralized GPU memory management framework to enable GPU memory sharing for containers 摘要 现有的容器软件并不关心每个容器如何分配 GPU 内存。 因此，如果某个容器消耗了大部分 GPU 内存，其他容器可能因为内存不足</description></item><item><title>【论文笔记】HiveD论文阅读笔记</title><link>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0hived%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link><pubDate>Mon, 29 May 2023 10:37:17 +0800</pubDate><guid>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0hived%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</guid><description>HiveD: Sharing a GPU Cluster for Deep Learning with Guarantees 摘要 生产多租户集群中存在严重的共享异常现象 在这种情况下，一些租户中的作业所经历的排队延迟比它们在拥有其分配的 GPU 的私有集群</description></item><item><title>【论文笔记】MLsys Paper List</title><link>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0mlsys-paper-list/</link><pubDate>Sun, 21 May 2023 21:38:00 +0800</pubDate><guid>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0mlsys-paper-list/</guid><description>A reading list for machine learning systems Frameworks [VLDB &amp;lsquo;20] PyTorch Distributed: Experiences on Accelerating Data Parallel Training [NeurIPS &amp;lsquo;19] PyTorch: An Imperative Style, High-Performance Deep Learning Library [OSDI &amp;lsquo;18] Ray: A Distributed Framework for Emerging AI Applications [OSDI &amp;lsquo;16] TensorFlow: A System for Large-Scale Machine Learning Parallelism &amp;amp; Distributed Systems [NSDI &amp;lsquo;23] ARK: GPU-driven Code Execution for Distributed Deep Learning [OSDI &amp;lsquo;22] Unity: Accelerating DNN Training Through Joint Optimization</description></item><item><title>【论文笔记】Shockwave论文阅读笔记</title><link>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0shockwave%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link><pubDate>Fri, 19 May 2023 17:55:06 +0800</pubDate><guid>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0shockwave%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</guid><description>Shockwave: Fair and Efficient Cluster Scheduling for Dynamic Adaptation in Machine Learning 摘要 动态自适应已经成为加速分布式机器学习(ML)训练的关键技术 最近的研究表明，动态调整模型结构(例如，彩票假设[16</description></item><item><title>【论文笔记】Horus论文笔记</title><link>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0horus%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/</link><pubDate>Mon, 15 May 2023 09:45:37 +0800</pubDate><guid>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0horus%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/</guid><description>摘要 背景 为了加速深度学习(Deep Learning，DL)模型的培训，使用配备 GPU 等硬件加速器的机器集群来减少执行时间。 需要最先进的资源管理器</description></item><item><title>【论文笔记】TGS论文阅读笔记</title><link>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0tgs%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link><pubDate>Sat, 06 May 2023 15:38:04 +0800</pubDate><guid>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0tgs%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</guid><description>Transparent GPU Sharing in Container Clouds for Deep Learning Workloads 摘要 容器广泛用于数据中心中的资源管理。 支持容器云中的深度学习(DL)训练的一个常见实践是静态地将 GPU 完全绑定到容器上。 由于</description></item><item><title>【论文笔记】Aryl论文阅读笔记</title><link>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0aryl%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link><pubDate>Mon, 24 Apr 2023 09:48:20 +0800</pubDate><guid>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0aryl%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</guid><description>Aryl: An Elastic Cluster Scheduler for Deep Learning 摘要 训练和推理中的问题: 当流量负载较低时，推理集群的 GPU 利用率较低 由于缺乏资源，训练作业往往需要较长的排队时间 我们引入了 Ary</description></item><item><title>【Kubernetes】ubuntu脚本安装k8s集群</title><link>https://tweakzx.github.io/p/kubernetesubuntu%E8%84%9A%E6%9C%AC%E5%AE%89%E8%A3%85k8s%E9%9B%86%E7%BE%A4/</link><pubDate>Fri, 21 Apr 2023 16:06:05 +0800</pubDate><guid>https://tweakzx.github.io/p/kubernetesubuntu%E8%84%9A%E6%9C%AC%E5%AE%89%E8%A3%85k8s%E9%9B%86%E7%BE%A4/</guid><description>安装k8s-1.18.9版本的脚本 下载之后最好修改 KUBE_VERSION=&amp;ldquo;1.18.9&amp;rdquo; 以安装自己想要的版本 MASTER1_IP= 自己的master IP NODE1_IP= 集群的节点IP 可以自定义修改， 但是也可以不动</description></item><item><title>【论文笔记】Lucid论文阅读笔记</title><link>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0lucid%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link><pubDate>Sat, 01 Apr 2023 19:51:18 +0800</pubDate><guid>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0lucid%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</guid><description>Lucid: A Non-intrusive, Scalable and Interpretable Scheduler for Deep Learning Training Jobs 摘要 虽然最近的深度学习工作负载调度器表现出很好的性能，但在实际应用中很难部署它们，是由于 缺乏灵活的入侵方式、 过高的集</description></item><item><title>【Kubernetes】如何访问集群etcd</title><link>https://tweakzx.github.io/p/kubernetes%E5%A6%82%E4%BD%95%E8%AE%BF%E9%97%AE%E9%9B%86%E7%BE%A4etcd/</link><pubDate>Fri, 31 Mar 2023 10:04:38 +0800</pubDate><guid>https://tweakzx.github.io/p/kubernetes%E5%A6%82%E4%BD%95%E8%AE%BF%E9%97%AE%E9%9B%86%E7%BE%A4etcd/</guid><description>生成客户端证书 etcd 的证书包括了多种类型的证书，其中包括 peer.crt 和 etcd-client.crt 两种证书。peer.crt 证书是用于 etcd 集群中节点之间的身份验证和加密通信的，而 etcd-client.crt 则</description></item><item><title>【论文笔记】Singularity论文笔记</title><link>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0singularity%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/</link><pubDate>Fri, 17 Mar 2023 11:37:06 +0800</pubDate><guid>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0singularity%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/</guid><description>Singularity: Planet-Scale, Preemptive and Elastic Scheduling of AI Workloads Abstract Singularity 微软的全球分布式调度服务，高效和可靠地执行深度学习训练和推理工作负载 核心：是一个新颖的、工作负载感知的调度器，它可以透</description></item><item><title>【指令】魔法指令</title><link>https://tweakzx.github.io/p/%E6%8C%87%E4%BB%A4%E9%AD%94%E6%B3%95%E6%8C%87%E4%BB%A4/</link><pubDate>Wed, 22 Feb 2023 10:43:18 +0800</pubDate><guid>https://tweakzx.github.io/p/%E6%8C%87%E4%BB%A4%E9%AD%94%E6%B3%95%E6%8C%87%E4%BB%A4/</guid><description>Github520 crontab -e 0 0 * * * sed -i &amp;#34;/# GitHub520 Host Start/Q&amp;#34; /etc/hosts &amp;amp;&amp;amp; curl https://raw.hellogithub.com/hosts &amp;gt;&amp;gt; /etc/hosts 安装Go wget -c https://dl.google.com/go/go1.14.2.linux-amd64.tar.gz -O - | sudo tar -xz -C /usr/local vim /etc/profile export PATH=$PATH:/usr/local/go/bin export GOPROXY=https://goproxy.cn,direct export GO111MODULE=on source /etc/profile go version 安装MiniConda(python 3.8) wget https://repo.anaconda.com/miniconda/Miniconda3-py38_23.1.0-1-Linux-x86_64.sh &amp;amp;&amp;amp; sh</description></item><item><title>【论文笔记】Gavel论文阅读笔记</title><link>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0gavel%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link><pubDate>Sun, 19 Feb 2023 19:57:52 +0800</pubDate><guid>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0gavel%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</guid><description>Heterogeneity-Aware Cluster Scheduling Policies for Deep Learning Workloads Abstract 背景 加速器，如 GPU、 TPU、 FPGA 和定制 ASIC 表现出跨模型架构的异构性能行为。 现有的针对加速器集群的调度器(用于在许多用户之间仲</description></item><item><title>【博客】Hugo+Typora+PicGO+Github搭建个人博客</title><link>https://tweakzx.github.io/p/%E5%8D%9A%E5%AE%A2hugo-typora-picgo-github%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/</link><pubDate>Tue, 07 Feb 2023 10:57:40 +0800</pubDate><guid>https://tweakzx.github.io/p/%E5%8D%9A%E5%AE%A2hugo-typora-picgo-github%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/</guid><description>Hugo+Typora+PicGO+Github搭建个人博客 我之前使用过typecho来搭建个人博客，由于是搭建在服务器上，我需要使用宝塔l</description></item><item><title>【Obsidian】win+ipad+andriod利用坚果云三端同步</title><link>https://tweakzx.github.io/p/obsidianwin-ipad-andriod%E5%88%A9%E7%94%A8%E5%9D%9A%E6%9E%9C%E4%BA%91%E4%B8%89%E7%AB%AF%E5%90%8C%E6%AD%A5/</link><pubDate>Sat, 04 Feb 2023 15:07:34 +0800</pubDate><guid>https://tweakzx.github.io/p/obsidianwin-ipad-andriod%E5%88%A9%E7%94%A8%E5%9D%9A%E6%9E%9C%E4%BA%91%E4%B8%89%E7%AB%AF%E5%90%8C%E6%AD%A5/</guid><description>利用坚果云实现Obsidian的多端同步 win端下载插件Remotely Save 启用obsidian的第三方插件 浏览社区插件市场并安装Remote</description></item><item><title>【Kubernetes】在k8s集群中挂载基于NFS的StorageClass</title><link>https://tweakzx.github.io/p/kubernetes%E5%9C%A8k8s%E9%9B%86%E7%BE%A4%E4%B8%AD%E6%8C%82%E8%BD%BD%E5%9F%BA%E4%BA%8Enfs%E7%9A%84storageclass/</link><pubDate>Tue, 10 Jan 2023 11:24:28 +0800</pubDate><guid>https://tweakzx.github.io/p/kubernetes%E5%9C%A8k8s%E9%9B%86%E7%BE%A4%E4%B8%AD%E6%8C%82%E8%BD%BD%E5%9F%BA%E4%BA%8Enfs%E7%9A%84storageclass/</guid><description>如何在k8s集群中挂载基于NFS的StorageClass 配置NFS服务器 查看系统版本 # cat /etc/redhat-release CentOS Linux release 7.7.1908 (Core) CentOS 7.4 以后，支持 NFS v4.2 不需要 rpcbind 了，但是如果</description></item><item><title>【Kubernetes】在k8s集群安装测试adaptdl</title><link>https://tweakzx.github.io/p/kubernetes%E5%9C%A8k8s%E9%9B%86%E7%BE%A4%E5%AE%89%E8%A3%85%E6%B5%8B%E8%AF%95adaptdl/</link><pubDate>Mon, 09 Jan 2023 21:15:48 +0800</pubDate><guid>https://tweakzx.github.io/p/kubernetes%E5%9C%A8k8s%E9%9B%86%E7%BE%A4%E5%AE%89%E8%A3%85%E6%B5%8B%E8%AF%95adaptdl/</guid><description>在k8s集群上部署测试Adaptdl 环境配置 Centos Linux realease 7.9.2009 三台（GPU节点），CentOS Linux release 7.7.1908 一台（Master节点） 内核：3.10.0-106</description></item><item><title>【Kubernetes】如何让kubernetes集群使用GPU</title><link>https://tweakzx.github.io/p/kubernetes%E5%A6%82%E4%BD%95%E8%AE%A9kubernetes%E9%9B%86%E7%BE%A4%E4%BD%BF%E7%94%A8gpu/</link><pubDate>Mon, 09 Jan 2023 20:06:52 +0800</pubDate><guid>https://tweakzx.github.io/p/kubernetes%E5%A6%82%E4%BD%95%E8%AE%A9kubernetes%E9%9B%86%E7%BE%A4%E4%BD%BF%E7%94%A8gpu/</guid><description>在Kubernetes集群中使用GPU资源 在前文中， 我们搭建了k8s集群， 但是k8s原生不支持GPU资源， 需要使用各大GPU厂商开发的插件才</description></item><item><title>【论文笔记】Harmony论文阅读笔记</title><link>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0harmony%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link><pubDate>Wed, 04 Jan 2023 10:16:46 +0800</pubDate><guid>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0harmony%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</guid><description>基于深度学习的机器学习集群的任务放置 这是一篇发表在INFOCOM'2019上的论文， 特点是使用了强化学习进行任务放置。 Abstract 背景 虽然作业之间的服</description></item><item><title>【论文笔记】Tiresias论文阅读笔记</title><link>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0tiresias%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link><pubDate>Tue, 27 Dec 2022 09:46:16 +0800</pubDate><guid>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0tiresias%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</guid><description>Tiresias 论文阅读笔记 Abstract 深度学习 (DL) 训练作业给现有的集群管理器带来了一些独特的挑战，例如 不可预测的训练时间 全有或全无的执行模型 GPU 共享的不灵活性 我们对生</description></item><item><title>【代码分析】Tensorflow的session执行分析</title><link>https://tweakzx.github.io/p/%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90tensorflow%E7%9A%84session%E6%89%A7%E8%A1%8C%E5%88%86%E6%9E%90/</link><pubDate>Fri, 23 Dec 2022 18:57:14 +0800</pubDate><guid>https://tweakzx.github.io/p/%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90tensorflow%E7%9A%84session%E6%89%A7%E8%A1%8C%E5%88%86%E6%9E%90/</guid><description>Tensorflow kernal launch 的过程 分析session执行的过程， 并分析Antman对执行过程的修改 函数调用链 Run()&amp;ndash;&amp;gt;RunInternel()&amp;ndash;&amp;gt;RunAsync()&amp;ndash;&amp;gt;ScheduleReady()&amp;ndash;&amp;gt;Process() 修改了direct_session.cc , 在sess</description></item><item><title>【代码分析】Antman对Tensorflow的修改</title><link>https://tweakzx.github.io/p/%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90antman%E5%AF%B9tensorflow%E7%9A%84%E4%BF%AE%E6%94%B9/</link><pubDate>Sun, 04 Dec 2022 23:08:20 +0800</pubDate><guid>https://tweakzx.github.io/p/%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90antman%E5%AF%B9tensorflow%E7%9A%84%E4%BF%AE%E6%94%B9/</guid><description>Antman对Tensorflow的代码修改 总体的关系图，主要包括两个实现， 内存方面的GPUResourceManagement以及算力方面</description></item><item><title>【论文笔记】EasyScale论文阅读笔记</title><link>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0easyscale%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link><pubDate>Wed, 09 Nov 2022 15:09:23 +0800</pubDate><guid>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0easyscale%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</guid><description>EasyScale 论文阅读笔记 Abstract 分布式同步GPU训练通常被用于深度学习。 使用固定GPU的资源约束 使得大规模的深度学习训练工作受到影响 降低了集群的利用率 纳入资</description></item><item><title>【论文笔记】Gandiva论文阅读笔记</title><link>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0gandiva%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link><pubDate>Tue, 08 Nov 2022 09:59:52 +0800</pubDate><guid>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0gandiva%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</guid><description>Gandiva 论文阅读笔记 Abstract Gandiva: 一个集群调度框架，使用特定领域知识，优化了GPU集群训练深度学习模型的延迟与效率 深度学习job的特征 1）反馈驱动的探索： 一</description></item><item><title>【Docker】Docker用法</title><link>https://tweakzx.github.io/p/dockerdocker%E7%94%A8%E6%B3%95/</link><pubDate>Tue, 01 Nov 2022 16:44:33 +0800</pubDate><guid>https://tweakzx.github.io/p/dockerdocker%E7%94%A8%E6%B3%95/</guid><description>docker 的使用方法 docker的安装 docker的版本比较多， 大家可以自行搜索安装方式， 以下只是参考。 Ubuntu 安装docker.io比较方便 查询可安装版</description></item><item><title>【心及】一些往事</title><link>https://tweakzx.github.io/p/%E5%BF%83%E5%8F%8A%E4%B8%80%E4%BA%9B%E5%BE%80%E4%BA%8B/</link><pubDate>Fri, 21 Oct 2022 15:52:45 +0800</pubDate><guid>https://tweakzx.github.io/p/%E5%BF%83%E5%8F%8A%E4%B8%80%E4%BA%9B%E5%BE%80%E4%BA%8B/</guid><description>突发恶疾 关于手头的工作 现在在工位上摸鱼，准备在别人的代码（gaiaGPU）上增加一些功能。 但是自己看相关的代码，论文，知识已经过去好久了，始</description></item><item><title>【论文笔记】AntMan论文阅读笔记</title><link>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0antman%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link><pubDate>Mon, 29 Aug 2022 15:41:42 +0800</pubDate><guid>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0antman%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</guid><description>《AntMan: Dynamic Scaling on GPU Clusters for Deep Learning》论文阅读笔记 Abstract 如何在大规模GPU集群上有效调度深度学习工作， 对于工作性能，系统吞吐量和硬件利</description></item><item><title>【论文笔记】GaiaGPU论文阅读笔记</title><link>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0gaiagpu%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link><pubDate>Fri, 26 Aug 2022 17:20:32 +0800</pubDate><guid>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0gaiagpu%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</guid><description>《GaiaGPU：Sharing GPUs in Container Clouds》论文笔记 Abstract 对于云服务的提供商， 如何在容器间共享GPU， 是一个有吸引力的问题 容器的轻量与伸</description></item><item><title>【Kubernetes】ubuntu安装k8s集群</title><link>https://tweakzx.github.io/p/kubernetesubuntu%E5%AE%89%E8%A3%85k8s%E9%9B%86%E7%BE%A4/</link><pubDate>Mon, 13 Jun 2022 14:57:42 +0800</pubDate><guid>https://tweakzx.github.io/p/kubernetesubuntu%E5%AE%89%E8%A3%85k8s%E9%9B%86%E7%BE%A4/</guid><description>在ubuntu上k8s集群部署实践 centos 上安装建议看 后端 - CentOS 搭建 K8S，一次性成功，收藏了！_个人文章 - SegmentFault 思否 一、机器配置 配置主机名 sudo hostnamectl set-hostname &amp;#34;k8s-master&amp;#34; // Run</description></item><item><title>【Golang】自动机的实现</title><link>https://tweakzx.github.io/p/golang%E8%87%AA%E5%8A%A8%E6%9C%BA%E7%9A%84%E5%AE%9E%E7%8E%B0/</link><pubDate>Sat, 12 Mar 2022 16:59:39 +0800</pubDate><guid>https://tweakzx.github.io/p/golang%E8%87%AA%E5%8A%A8%E6%9C%BA%E7%9A%84%E5%AE%9E%E7%8E%B0/</guid><description>题目描述 请你来实现一个 myAtoi(string s) 函数，使其能将字符串转换成一个 32 位有符号整数（类似 C/C++ 中的 atoi 函数）。 函数 myAtoi(string s) 的算法如下： 读入字符串并丢弃无用的前导空</description></item><item><title>【Golang】Go语言之旅</title><link>https://tweakzx.github.io/p/golanggo%E8%AF%AD%E8%A8%80%E4%B9%8B%E6%97%85/</link><pubDate>Tue, 22 Feb 2022 17:20:32 +0800</pubDate><guid>https://tweakzx.github.io/p/golanggo%E8%AF%AD%E8%A8%80%E4%B9%8B%E6%97%85/</guid><description>旅行起点 Go 语言之旅 (go-zh.org) 上方链接是一个Go语言学习的Playground，快点击它，开启一场Go语言之旅吧 旅行开始 练习：循环与函数 为了练习函数与</description></item><item><title>【论文笔记】PolarDB-Serverless论文阅读报告</title><link>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0polardb-serverless%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E6%8A%A5%E5%91%8A/</link><pubDate>Wed, 22 Dec 2021 14:17:12 +0800</pubDate><guid>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0polardb-serverless%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E6%8A%A5%E5%91%8A/</guid><description>PolarDB Serverless论文阅读报告 摘要 数据库管理系统的上云是近期很火的研究趋势，因为这样可以获得更高的弹性，可用性以及更低的成本，传统的独块</description></item><item><title>【分布式与并行计算】并行作业-3</title><link>https://tweakzx.github.io/p/%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%8E%E5%B9%B6%E8%A1%8C%E8%AE%A1%E7%AE%97%E5%B9%B6%E8%A1%8C%E4%BD%9C%E4%B8%9A-3/</link><pubDate>Tue, 14 Dec 2021 13:55:35 +0800</pubDate><guid>https://tweakzx.github.io/p/%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%8E%E5%B9%B6%E8%A1%8C%E8%AE%A1%E7%AE%97%E5%B9%B6%E8%A1%8C%E4%BD%9C%E4%B8%9A-3/</guid><description>1 HPL（High Performance Linpack) 假设要使用HPL程序在4个进程上解一个4096 * 4096的方程组（4096 * 4096的矩阵加一列方程组的右端项b），按</description></item><item><title>【分布式与并行计算】CUDA加速课程题目</title><link>https://tweakzx.github.io/p/%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%8E%E5%B9%B6%E8%A1%8C%E8%AE%A1%E7%AE%97cuda%E5%8A%A0%E9%80%9F%E8%AF%BE%E7%A8%8B%E9%A2%98%E7%9B%AE/</link><pubDate>Mon, 13 Dec 2021 19:03:20 +0800</pubDate><guid>https://tweakzx.github.io/p/%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%8E%E5%B9%B6%E8%A1%8C%E8%AE%A1%E7%AE%97cuda%E5%8A%A0%E9%80%9F%E8%AF%BE%E7%A8%8B%E9%A2%98%E7%9B%AE/</guid><description>1 加速向量加法 #include &amp;lt;stdio.h&amp;gt;#include &amp;lt;assert.h&amp;gt; inline cudaError_t checkCuda(cudaError_t result) { if (result != cudaSuccess) { fprintf(stderr, &amp;#34;CUDA Runtime Error: %s\n&amp;#34;, cudaGetErrorString(result)); assert(result == cudaSuccess); } return result; } void initWith(float num, float *a, int N) { for(int i = 0; i &amp;lt; N; ++i) { a[i] = num; } } __global__ void addVectorsInto(float *result, float *a, float *b, int N) { int initIndex = threadIdx.x</description></item><item><title>【分布式与并行计算】并行作业-2</title><link>https://tweakzx.github.io/p/%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%8E%E5%B9%B6%E8%A1%8C%E8%AE%A1%E7%AE%97%E5%B9%B6%E8%A1%8C%E4%BD%9C%E4%B8%9A-2/</link><pubDate>Sat, 11 Dec 2021 18:01:26 +0800</pubDate><guid>https://tweakzx.github.io/p/%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%8E%E5%B9%B6%E8%A1%8C%E8%AE%A1%E7%AE%97%E5%B9%B6%E8%A1%8C%E4%BD%9C%E4%B8%9A-2/</guid><description>1 矩阵向量乘法（6分） 矩阵向量乘法(gemv)如何用OpenMP或pthread对其并行化(OpenMP和pthread任选一种即可)？假设</description></item><item><title>【分布式与并行计算】并行作业-1</title><link>https://tweakzx.github.io/p/%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%8E%E5%B9%B6%E8%A1%8C%E8%AE%A1%E7%AE%97%E5%B9%B6%E8%A1%8C%E4%BD%9C%E4%B8%9A-1/</link><pubDate>Fri, 10 Dec 2021 11:28:33 +0800</pubDate><guid>https://tweakzx.github.io/p/%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%8E%E5%B9%B6%E8%A1%8C%E8%AE%A1%E7%AE%97%E5%B9%B6%E8%A1%8C%E4%BD%9C%E4%B8%9A-1/</guid><description>1矩阵向量乘法（4分） 讲义55页所示结果Y，如果要作为下一次矩阵向量乘法的输入X，切分到不同的列进程，并且复制到每一行进程，应如何操作？可写</description></item><item><title>【分布式与并行计算】分布式作业</title><link>https://tweakzx.github.io/p/%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%8E%E5%B9%B6%E8%A1%8C%E8%AE%A1%E7%AE%97%E5%88%86%E5%B8%83%E5%BC%8F%E4%BD%9C%E4%B8%9A/</link><pubDate>Tue, 07 Dec 2021 14:21:24 +0800</pubDate><guid>https://tweakzx.github.io/p/%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%8E%E5%B9%B6%E8%A1%8C%E8%AE%A1%E7%AE%97%E5%88%86%E5%B8%83%E5%BC%8F%E4%BD%9C%E4%B8%9A/</guid><description>1 逻辑时钟与一致割集 下图中，直线上小黑点给出了时钟计数，请分别用Lamport 逻辑时钟和向量时钟给图上的事件设置时间戳，并给出一致割集和非一</description></item><item><title>【实习面试】阿里实习二面</title><link>https://tweakzx.github.io/p/%E5%AE%9E%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%98%BF%E9%87%8C%E5%AE%9E%E4%B9%A0%E4%BA%8C%E9%9D%A2/</link><pubDate>Sat, 04 Dec 2021 18:31:16 +0800</pubDate><guid>https://tweakzx.github.io/p/%E5%AE%9E%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%98%BF%E9%87%8C%E5%AE%9E%E4%B9%A0%E4%BA%8C%E9%9D%A2/</guid><description>时间：2021-12-2 下午5点半 方式：阿里会议视频面试 岗位：研究型实习生-智能存储 面试过程 这次面试主要是在聊项目，聊兴趣啥的。没有什么算法</description></item><item><title>【实习面试】阿里实习生面试</title><link>https://tweakzx.github.io/p/%E5%AE%9E%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%98%BF%E9%87%8C%E5%AE%9E%E4%B9%A0%E7%94%9F%E9%9D%A2%E8%AF%95/</link><pubDate>Wed, 01 Dec 2021 21:49:57 +0800</pubDate><guid>https://tweakzx.github.io/p/%E5%AE%9E%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%98%BF%E9%87%8C%E5%AE%9E%E4%B9%A0%E7%94%9F%E9%9D%A2%E8%AF%95/</guid><description>时间：2021-11-30 下午2点 方式：阿里会议视频面试 岗位：研究型实习生-智能存储 为什么会参加这次面试？ 因为想要亲身参与真实的科研活动或者</description></item><item><title>【实习面试】蓝湖面试凉经</title><link>https://tweakzx.github.io/p/%E5%AE%9E%E4%B9%A0%E9%9D%A2%E8%AF%95%E8%93%9D%E6%B9%96%E9%9D%A2%E8%AF%95%E5%87%89%E7%BB%8F/</link><pubDate>Wed, 01 Dec 2021 20:56:54 +0800</pubDate><guid>https://tweakzx.github.io/p/%E5%AE%9E%E4%B9%A0%E9%9D%A2%E8%AF%95%E8%93%9D%E6%B9%96%E9%9D%A2%E8%AF%95%E5%87%89%E7%BB%8F/</guid><description>时间：2021-11-26 下午六点 方式：飞书视频面试 岗位：后端开发 为什么会面试蓝湖 心血来潮想要出去实习，在校友群内发了求助。24号中午，本科</description></item><item><title>【实习面试】字节面试凉经</title><link>https://tweakzx.github.io/p/%E5%AE%9E%E4%B9%A0%E9%9D%A2%E8%AF%95%E5%AD%97%E8%8A%82%E9%9D%A2%E8%AF%95%E5%87%89%E7%BB%8F/</link><pubDate>Mon, 29 Nov 2021 16:52:26 +0800</pubDate><guid>https://tweakzx.github.io/p/%E5%AE%9E%E4%B9%A0%E9%9D%A2%E8%AF%95%E5%AD%97%E8%8A%82%E9%9D%A2%E8%AF%95%E5%87%89%E7%BB%8F/</guid><description>时间：2021-11-29下午三点 方式：飞书视频面试 岗位：后端开发实习生-业务中台职位 为什么会投递字节实习 ​ 因为中科院的研究所大多不让实习，</description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts on Tweakzx</title>
+    <link>https://tweakzx.github.io/post/</link>
+    <description>Recent content in Posts on Tweakzx</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Tue, 27 Jun 2023 14:57:42 +0800</lastBuildDate><atom:link href="https://tweakzx.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>【Kubernetes】部署gaiaGPU（vCUDA）</title>
+      <link>https://tweakzx.github.io/p/kubernetes%E9%83%A8%E7%BD%B2gaiagpuvcuda/</link>
+      <pubDate>Tue, 27 Jun 2023 14:57:42 +0800</pubDate>
+      
+      <guid>https://tweakzx.github.io/p/kubernetes%E9%83%A8%E7%BD%B2gaiagpuvcuda/</guid>
+      <description>部署GaiaGPU 前置工作 配置好GPU环境 配置好k8s集群环境 gpu-admission 部署deployment 创建文件gpu-quota-admission.ya</description>
+    </item>
+    
+    <item>
+      <title>【论文笔记】HUVM论文阅读笔记</title>
+      <link>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0huvm%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link>
+      <pubDate>Sun, 25 Jun 2023 16:38:08 +0800</pubDate>
+      
+      <guid>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0huvm%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</guid>
+      <description>Memory Harvesting in Multi-GPU Systems with Hierarchical Unified Virtual Memory 摘要 随着对 GPU 需求的不断增长，大多数组织允许用户共享多 GPU 服务器。 然而，我们观察到，当合并显示高度不同的资源需求的各种工作负</description>
+    </item>
+    
+    <item>
+      <title>【论文笔记】DeepUM论文阅读笔记</title>
+      <link>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0deepum%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link>
+      <pubDate>Sun, 18 Jun 2023 20:54:03 +0800</pubDate>
+      
+      <guid>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0deepum%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</guid>
+      <description>DeepUM: Tensor Migration and Prefetching in Unified Memory 摘要 深层神经网络(DNN)正在继续变得越来越广泛和深入。因此，它需要大量的 GPU 内存和计算能力。 本文提出了一个利用 CUDA 统一存储器(</description>
+    </item>
+    
+    <item>
+      <title>【论文笔记】Zico论文阅读笔记</title>
+      <link>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0zico%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link>
+      <pubDate>Sun, 11 Jun 2023 23:02:04 +0800</pubDate>
+      
+      <guid>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0zico%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</guid>
+      <description>Zico: Efficient GPU Memory Sharing for Concurrent DNN Training 摘要 最近的一些工作提出了跨多个并发 DNN 培训作业共享 GPU 资源的解决方案 但是没有一个解决这种作业共处引入的快速增长的内存占用问题 这</description>
+    </item>
+    
+    <item>
+      <title>【论文笔记】gshare论文笔记</title>
+      <link>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0gshare%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/</link>
+      <pubDate>Mon, 05 Jun 2023 10:47:21 +0800</pubDate>
+      
+      <guid>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0gshare%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/</guid>
+      <description>gShare: A centralized GPU memory management framework to enable GPU memory sharing for containers 摘要 现有的容器软件并不关心每个容器如何分配 GPU 内存。 因此，如果某个容器消耗了大部分 GPU 内存，其他容器可能因为内存不足</description>
+    </item>
+    
+    <item>
+      <title>【论文笔记】HiveD论文阅读笔记</title>
+      <link>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0hived%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link>
+      <pubDate>Mon, 29 May 2023 10:37:17 +0800</pubDate>
+      
+      <guid>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0hived%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</guid>
+      <description>HiveD: Sharing a GPU Cluster for Deep Learning with Guarantees 摘要 生产多租户集群中存在严重的共享异常现象 在这种情况下，一些租户中的作业所经历的排队延迟比它们在拥有其分配的 GPU 的私有集群</description>
+    </item>
+    
+    <item>
+      <title>【论文笔记】MLsys Paper List</title>
+      <link>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0mlsys-paper-list/</link>
+      <pubDate>Sun, 21 May 2023 21:38:00 +0800</pubDate>
+      
+      <guid>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0mlsys-paper-list/</guid>
+      <description>A reading list for machine learning systems Frameworks [VLDB &amp;lsquo;20] PyTorch Distributed: Experiences on Accelerating Data Parallel Training [NeurIPS &amp;lsquo;19] PyTorch: An Imperative Style, High-Performance Deep Learning Library [OSDI &amp;lsquo;18] Ray: A Distributed Framework for Emerging AI Applications [OSDI &amp;lsquo;16] TensorFlow: A System for Large-Scale Machine Learning Parallelism &amp;amp; Distributed Systems [NSDI &amp;lsquo;23] ARK: GPU-driven Code Execution for Distributed Deep Learning [OSDI &amp;lsquo;22] Unity: Accelerating DNN Training Through Joint Optimization</description>
+    </item>
+    
+    <item>
+      <title>【论文笔记】Shockwave论文阅读笔记</title>
+      <link>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0shockwave%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link>
+      <pubDate>Fri, 19 May 2023 17:55:06 +0800</pubDate>
+      
+      <guid>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0shockwave%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</guid>
+      <description>Shockwave: Fair and Efficient Cluster Scheduling for Dynamic Adaptation in Machine Learning 摘要 动态自适应已经成为加速分布式机器学习(ML)训练的关键技术 最近的研究表明，动态调整模型结构(例如，彩票假设[16</description>
+    </item>
+    
+    <item>
+      <title>【论文笔记】Horus论文笔记</title>
+      <link>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0horus%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/</link>
+      <pubDate>Mon, 15 May 2023 09:45:37 +0800</pubDate>
+      
+      <guid>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0horus%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/</guid>
+      <description>摘要 背景 为了加速深度学习(Deep Learning，DL)模型的培训，使用配备 GPU 等硬件加速器的机器集群来减少执行时间。 需要最先进的资源管理器</description>
+    </item>
+    
+    <item>
+      <title>【论文笔记】TGS论文阅读笔记</title>
+      <link>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0tgs%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link>
+      <pubDate>Sat, 06 May 2023 15:38:04 +0800</pubDate>
+      
+      <guid>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0tgs%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</guid>
+      <description>Transparent GPU Sharing in Container Clouds for Deep Learning Workloads 摘要 容器广泛用于数据中心中的资源管理。 支持容器云中的深度学习(DL)训练的一个常见实践是静态地将 GPU 完全绑定到容器上。 由于</description>
+    </item>
+    
+    <item>
+      <title>【论文笔记】Aryl论文阅读笔记</title>
+      <link>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0aryl%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link>
+      <pubDate>Mon, 24 Apr 2023 09:48:20 +0800</pubDate>
+      
+      <guid>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0aryl%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</guid>
+      <description>Aryl: An Elastic Cluster Scheduler for Deep Learning 摘要 训练和推理中的问题: 当流量负载较低时，推理集群的 GPU 利用率较低 由于缺乏资源，训练作业往往需要较长的排队时间 我们引入了 Ary</description>
+    </item>
+    
+    <item>
+      <title>【Kubernetes】ubuntu脚本安装k8s集群</title>
+      <link>https://tweakzx.github.io/p/kubernetesubuntu%E8%84%9A%E6%9C%AC%E5%AE%89%E8%A3%85k8s%E9%9B%86%E7%BE%A4/</link>
+      <pubDate>Fri, 21 Apr 2023 16:06:05 +0800</pubDate>
+      
+      <guid>https://tweakzx.github.io/p/kubernetesubuntu%E8%84%9A%E6%9C%AC%E5%AE%89%E8%A3%85k8s%E9%9B%86%E7%BE%A4/</guid>
+      <description>安装k8s-1.18.9版本的脚本 下载之后最好修改 KUBE_VERSION=&amp;ldquo;1.18.9&amp;rdquo; 以安装自己想要的版本 MASTER1_IP= 自己的master IP NODE1_IP= 集群的节点IP 可以自定义修改， 但是也可以不动</description>
+    </item>
+    
+    <item>
+      <title>【论文笔记】Lucid论文阅读笔记</title>
+      <link>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0lucid%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link>
+      <pubDate>Sat, 01 Apr 2023 19:51:18 +0800</pubDate>
+      
+      <guid>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0lucid%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</guid>
+      <description>Lucid: A Non-intrusive, Scalable and Interpretable Scheduler for Deep Learning Training Jobs 摘要 虽然最近的深度学习工作负载调度器表现出很好的性能，但在实际应用中很难部署它们，是由于 缺乏灵活的入侵方式、 过高的集</description>
+    </item>
+    
+    <item>
+      <title>【Kubernetes】如何访问集群etcd</title>
+      <link>https://tweakzx.github.io/p/kubernetes%E5%A6%82%E4%BD%95%E8%AE%BF%E9%97%AE%E9%9B%86%E7%BE%A4etcd/</link>
+      <pubDate>Fri, 31 Mar 2023 10:04:38 +0800</pubDate>
+      
+      <guid>https://tweakzx.github.io/p/kubernetes%E5%A6%82%E4%BD%95%E8%AE%BF%E9%97%AE%E9%9B%86%E7%BE%A4etcd/</guid>
+      <description>生成客户端证书 etcd 的证书包括了多种类型的证书，其中包括 peer.crt 和 etcd-client.crt 两种证书。peer.crt 证书是用于 etcd 集群中节点之间的身份验证和加密通信的，而 etcd-client.crt 则</description>
+    </item>
+    
+    <item>
+      <title>【论文笔记】Singularity论文笔记</title>
+      <link>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0singularity%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/</link>
+      <pubDate>Fri, 17 Mar 2023 11:37:06 +0800</pubDate>
+      
+      <guid>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0singularity%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/</guid>
+      <description>Singularity: Planet-Scale, Preemptive and Elastic Scheduling of AI Workloads Abstract Singularity 微软的全球分布式调度服务，高效和可靠地执行深度学习训练和推理工作负载 核心：是一个新颖的、工作负载感知的调度器，它可以透</description>
+    </item>
+    
+    <item>
+      <title>【指令】魔法指令</title>
+      <link>https://tweakzx.github.io/p/%E6%8C%87%E4%BB%A4%E9%AD%94%E6%B3%95%E6%8C%87%E4%BB%A4/</link>
+      <pubDate>Wed, 22 Feb 2023 10:43:18 +0800</pubDate>
+      
+      <guid>https://tweakzx.github.io/p/%E6%8C%87%E4%BB%A4%E9%AD%94%E6%B3%95%E6%8C%87%E4%BB%A4/</guid>
+      <description>Github520 crontab -e 0 0 * * * sed -i &amp;#34;/# GitHub520 Host Start/Q&amp;#34; /etc/hosts &amp;amp;&amp;amp; curl https://raw.hellogithub.com/hosts &amp;gt;&amp;gt; /etc/hosts 安装Go wget -c https://dl.google.com/go/go1.14.2.linux-amd64.tar.gz -O - | sudo tar -xz -C /usr/local vim /etc/profile export PATH=$PATH:/usr/local/go/bin export GOPROXY=https://goproxy.cn,direct export GO111MODULE=on source /etc/profile go version 安装MiniConda(python 3.8) wget https://repo.anaconda.com/miniconda/Miniconda3-py38_23.1.0-1-Linux-x86_64.sh &amp;amp;&amp;amp; sh</description>
+    </item>
+    
+    <item>
+      <title>【论文笔记】Gavel论文阅读笔记</title>
+      <link>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0gavel%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link>
+      <pubDate>Sun, 19 Feb 2023 19:57:52 +0800</pubDate>
+      
+      <guid>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0gavel%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</guid>
+      <description>Heterogeneity-Aware Cluster Scheduling Policies for Deep Learning Workloads Abstract 背景 加速器，如 GPU、 TPU、 FPGA 和定制 ASIC 表现出跨模型架构的异构性能行为。 现有的针对加速器集群的调度器(用于在许多用户之间仲</description>
+    </item>
+    
+    <item>
+      <title>【博客】Hugo&#43;Typora&#43;PicGO&#43;Github搭建个人博客</title>
+      <link>https://tweakzx.github.io/p/%E5%8D%9A%E5%AE%A2hugo-typora-picgo-github%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/</link>
+      <pubDate>Tue, 07 Feb 2023 10:57:40 +0800</pubDate>
+      
+      <guid>https://tweakzx.github.io/p/%E5%8D%9A%E5%AE%A2hugo-typora-picgo-github%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/</guid>
+      <description>Hugo+Typora+PicGO+Github搭建个人博客 我之前使用过typecho来搭建个人博客，由于是搭建在服务器上，我需要使用宝塔l</description>
+    </item>
+    
+    <item>
+      <title>【Obsidian】win&#43;ipad&#43;andriod利用坚果云三端同步</title>
+      <link>https://tweakzx.github.io/p/obsidianwin-ipad-andriod%E5%88%A9%E7%94%A8%E5%9D%9A%E6%9E%9C%E4%BA%91%E4%B8%89%E7%AB%AF%E5%90%8C%E6%AD%A5/</link>
+      <pubDate>Sat, 04 Feb 2023 15:07:34 +0800</pubDate>
+      
+      <guid>https://tweakzx.github.io/p/obsidianwin-ipad-andriod%E5%88%A9%E7%94%A8%E5%9D%9A%E6%9E%9C%E4%BA%91%E4%B8%89%E7%AB%AF%E5%90%8C%E6%AD%A5/</guid>
+      <description>利用坚果云实现Obsidian的多端同步 win端下载插件Remotely Save 启用obsidian的第三方插件 浏览社区插件市场并安装Remote</description>
+    </item>
+    
+    <item>
+      <title>【Kubernetes】在k8s集群中挂载基于NFS的StorageClass</title>
+      <link>https://tweakzx.github.io/p/kubernetes%E5%9C%A8k8s%E9%9B%86%E7%BE%A4%E4%B8%AD%E6%8C%82%E8%BD%BD%E5%9F%BA%E4%BA%8Enfs%E7%9A%84storageclass/</link>
+      <pubDate>Tue, 10 Jan 2023 11:24:28 +0800</pubDate>
+      
+      <guid>https://tweakzx.github.io/p/kubernetes%E5%9C%A8k8s%E9%9B%86%E7%BE%A4%E4%B8%AD%E6%8C%82%E8%BD%BD%E5%9F%BA%E4%BA%8Enfs%E7%9A%84storageclass/</guid>
+      <description>如何在k8s集群中挂载基于NFS的StorageClass 配置NFS服务器 查看系统版本 # cat /etc/redhat-release CentOS Linux release 7.7.1908 (Core) CentOS 7.4 以后，支持 NFS v4.2 不需要 rpcbind 了，但是如果</description>
+    </item>
+    
+    <item>
+      <title>【Kubernetes】在k8s集群安装测试adaptdl</title>
+      <link>https://tweakzx.github.io/p/kubernetes%E5%9C%A8k8s%E9%9B%86%E7%BE%A4%E5%AE%89%E8%A3%85%E6%B5%8B%E8%AF%95adaptdl/</link>
+      <pubDate>Mon, 09 Jan 2023 21:15:48 +0800</pubDate>
+      
+      <guid>https://tweakzx.github.io/p/kubernetes%E5%9C%A8k8s%E9%9B%86%E7%BE%A4%E5%AE%89%E8%A3%85%E6%B5%8B%E8%AF%95adaptdl/</guid>
+      <description>在k8s集群上部署测试Adaptdl 环境配置 Centos Linux realease 7.9.2009 三台（GPU节点），CentOS Linux release 7.7.1908 一台（Master节点） 内核：3.10.0-106</description>
+    </item>
+    
+    <item>
+      <title>【Kubernetes】如何让kubernetes集群使用GPU</title>
+      <link>https://tweakzx.github.io/p/kubernetes%E5%A6%82%E4%BD%95%E8%AE%A9kubernetes%E9%9B%86%E7%BE%A4%E4%BD%BF%E7%94%A8gpu/</link>
+      <pubDate>Mon, 09 Jan 2023 20:06:52 +0800</pubDate>
+      
+      <guid>https://tweakzx.github.io/p/kubernetes%E5%A6%82%E4%BD%95%E8%AE%A9kubernetes%E9%9B%86%E7%BE%A4%E4%BD%BF%E7%94%A8gpu/</guid>
+      <description>在Kubernetes集群中使用GPU资源 在前文中， 我们搭建了k8s集群， 但是k8s原生不支持GPU资源， 需要使用各大GPU厂商开发的插件才</description>
+    </item>
+    
+    <item>
+      <title>【论文笔记】Harmony论文阅读笔记</title>
+      <link>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0harmony%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link>
+      <pubDate>Wed, 04 Jan 2023 10:16:46 +0800</pubDate>
+      
+      <guid>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0harmony%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</guid>
+      <description>基于深度学习的机器学习集群的任务放置 这是一篇发表在INFOCOM&#39;2019上的论文， 特点是使用了强化学习进行任务放置。 Abstract 背景 虽然作业之间的服</description>
+    </item>
+    
+    <item>
+      <title>【论文笔记】Tiresias论文阅读笔记</title>
+      <link>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0tiresias%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link>
+      <pubDate>Tue, 27 Dec 2022 09:46:16 +0800</pubDate>
+      
+      <guid>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0tiresias%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</guid>
+      <description>Tiresias 论文阅读笔记 Abstract 深度学习 (DL) 训练作业给现有的集群管理器带来了一些独特的挑战，例如 不可预测的训练时间 全有或全无的执行模型 GPU 共享的不灵活性 我们对生</description>
+    </item>
+    
+    <item>
+      <title>【代码分析】Tensorflow的session执行分析</title>
+      <link>https://tweakzx.github.io/p/%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90tensorflow%E7%9A%84session%E6%89%A7%E8%A1%8C%E5%88%86%E6%9E%90/</link>
+      <pubDate>Fri, 23 Dec 2022 18:57:14 +0800</pubDate>
+      
+      <guid>https://tweakzx.github.io/p/%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90tensorflow%E7%9A%84session%E6%89%A7%E8%A1%8C%E5%88%86%E6%9E%90/</guid>
+      <description>Tensorflow kernal launch 的过程 分析session执行的过程， 并分析Antman对执行过程的修改 函数调用链 Run()&amp;ndash;&amp;gt;RunInternel()&amp;ndash;&amp;gt;RunAsync()&amp;ndash;&amp;gt;ScheduleReady()&amp;ndash;&amp;gt;Process() 修改了direct_session.cc , 在sess</description>
+    </item>
+    
+    <item>
+      <title>【代码分析】Antman对Tensorflow的修改</title>
+      <link>https://tweakzx.github.io/p/%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90antman%E5%AF%B9tensorflow%E7%9A%84%E4%BF%AE%E6%94%B9/</link>
+      <pubDate>Sun, 04 Dec 2022 23:08:20 +0800</pubDate>
+      
+      <guid>https://tweakzx.github.io/p/%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90antman%E5%AF%B9tensorflow%E7%9A%84%E4%BF%AE%E6%94%B9/</guid>
+      <description>Antman对Tensorflow的代码修改 总体的关系图，主要包括两个实现， 内存方面的GPUResourceManagement以及算力方面</description>
+    </item>
+    
+    <item>
+      <title>【论文笔记】EasyScale论文阅读笔记</title>
+      <link>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0easyscale%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link>
+      <pubDate>Wed, 09 Nov 2022 15:09:23 +0800</pubDate>
+      
+      <guid>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0easyscale%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</guid>
+      <description>EasyScale 论文阅读笔记 Abstract 分布式同步GPU训练通常被用于深度学习。 使用固定GPU的资源约束 使得大规模的深度学习训练工作受到影响 降低了集群的利用率 纳入资</description>
+    </item>
+    
+    <item>
+      <title>【论文笔记】Gandiva论文阅读笔记</title>
+      <link>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0gandiva%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link>
+      <pubDate>Tue, 08 Nov 2022 09:59:52 +0800</pubDate>
+      
+      <guid>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0gandiva%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</guid>
+      <description>Gandiva 论文阅读笔记 Abstract Gandiva: 一个集群调度框架，使用特定领域知识，优化了GPU集群训练深度学习模型的延迟与效率 深度学习job的特征 1）反馈驱动的探索： 一</description>
+    </item>
+    
+    <item>
+      <title>【Docker】Docker用法</title>
+      <link>https://tweakzx.github.io/p/dockerdocker%E7%94%A8%E6%B3%95/</link>
+      <pubDate>Tue, 01 Nov 2022 16:44:33 +0800</pubDate>
+      
+      <guid>https://tweakzx.github.io/p/dockerdocker%E7%94%A8%E6%B3%95/</guid>
+      <description>docker 的使用方法 docker的安装 docker的版本比较多， 大家可以自行搜索安装方式， 以下只是参考。 Ubuntu 安装docker.io比较方便 查询可安装版</description>
+    </item>
+    
+    <item>
+      <title>【心及】一些往事</title>
+      <link>https://tweakzx.github.io/p/%E5%BF%83%E5%8F%8A%E4%B8%80%E4%BA%9B%E5%BE%80%E4%BA%8B/</link>
+      <pubDate>Fri, 21 Oct 2022 15:52:45 +0800</pubDate>
+      
+      <guid>https://tweakzx.github.io/p/%E5%BF%83%E5%8F%8A%E4%B8%80%E4%BA%9B%E5%BE%80%E4%BA%8B/</guid>
+      <description>突发恶疾 关于手头的工作 现在在工位上摸鱼，准备在别人的代码（gaiaGPU）上增加一些功能。 但是自己看相关的代码，论文，知识已经过去好久了，始</description>
+    </item>
+    
+    <item>
+      <title>【论文笔记】AntMan论文阅读笔记</title>
+      <link>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0antman%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link>
+      <pubDate>Mon, 29 Aug 2022 15:41:42 +0800</pubDate>
+      
+      <guid>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0antman%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</guid>
+      <description>《AntMan: Dynamic Scaling on GPU Clusters for Deep Learning》论文阅读笔记 Abstract 如何在大规模GPU集群上有效调度深度学习工作， 对于工作性能，系统吞吐量和硬件利</description>
+    </item>
+    
+    <item>
+      <title>【论文笔记】GaiaGPU论文阅读笔记</title>
+      <link>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0gaiagpu%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link>
+      <pubDate>Fri, 26 Aug 2022 17:20:32 +0800</pubDate>
+      
+      <guid>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0gaiagpu%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</guid>
+      <description>《GaiaGPU：Sharing GPUs in Container Clouds》论文笔记 Abstract 对于云服务的提供商， 如何在容器间共享GPU， 是一个有吸引力的问题 容器的轻量与伸</description>
+    </item>
+    
+    <item>
+      <title>【Kubernetes】ubuntu安装k8s集群</title>
+      <link>https://tweakzx.github.io/p/kubernetesubuntu%E5%AE%89%E8%A3%85k8s%E9%9B%86%E7%BE%A4/</link>
+      <pubDate>Mon, 13 Jun 2022 14:57:42 +0800</pubDate>
+      
+      <guid>https://tweakzx.github.io/p/kubernetesubuntu%E5%AE%89%E8%A3%85k8s%E9%9B%86%E7%BE%A4/</guid>
+      <description>在ubuntu上k8s集群部署实践 centos 上安装建议看 后端 - CentOS 搭建 K8S，一次性成功，收藏了！_个人文章 - SegmentFault 思否 一、机器配置 配置主机名 sudo hostnamectl set-hostname &amp;#34;k8s-master&amp;#34; // Run</description>
+    </item>
+    
+    <item>
+      <title>【Golang】自动机的实现</title>
+      <link>https://tweakzx.github.io/p/golang%E8%87%AA%E5%8A%A8%E6%9C%BA%E7%9A%84%E5%AE%9E%E7%8E%B0/</link>
+      <pubDate>Sat, 12 Mar 2022 16:59:39 +0800</pubDate>
+      
+      <guid>https://tweakzx.github.io/p/golang%E8%87%AA%E5%8A%A8%E6%9C%BA%E7%9A%84%E5%AE%9E%E7%8E%B0/</guid>
+      <description>题目描述 请你来实现一个 myAtoi(string s) 函数，使其能将字符串转换成一个 32 位有符号整数（类似 C/C++ 中的 atoi 函数）。 函数 myAtoi(string s) 的算法如下： 读入字符串并丢弃无用的前导空</description>
+    </item>
+    
+    <item>
+      <title>【Golang】Go语言之旅</title>
+      <link>https://tweakzx.github.io/p/golanggo%E8%AF%AD%E8%A8%80%E4%B9%8B%E6%97%85/</link>
+      <pubDate>Tue, 22 Feb 2022 17:20:32 +0800</pubDate>
+      
+      <guid>https://tweakzx.github.io/p/golanggo%E8%AF%AD%E8%A8%80%E4%B9%8B%E6%97%85/</guid>
+      <description>旅行起点 Go 语言之旅 (go-zh.org) 上方链接是一个Go语言学习的Playground，快点击它，开启一场Go语言之旅吧 旅行开始 练习：循环与函数 为了练习函数与</description>
+    </item>
+    
+    <item>
+      <title>【论文笔记】PolarDB-Serverless论文阅读报告</title>
+      <link>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0polardb-serverless%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E6%8A%A5%E5%91%8A/</link>
+      <pubDate>Wed, 22 Dec 2021 14:17:12 +0800</pubDate>
+      
+      <guid>https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0polardb-serverless%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E6%8A%A5%E5%91%8A/</guid>
+      <description>PolarDB Serverless论文阅读报告 摘要 数据库管理系统的上云是近期很火的研究趋势，因为这样可以获得更高的弹性，可用性以及更低的成本，传统的独块</description>
+    </item>
+    
+    <item>
+      <title>【分布式与并行计算】并行作业-3</title>
+      <link>https://tweakzx.github.io/p/%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%8E%E5%B9%B6%E8%A1%8C%E8%AE%A1%E7%AE%97%E5%B9%B6%E8%A1%8C%E4%BD%9C%E4%B8%9A-3/</link>
+      <pubDate>Tue, 14 Dec 2021 13:55:35 +0800</pubDate>
+      
+      <guid>https://tweakzx.github.io/p/%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%8E%E5%B9%B6%E8%A1%8C%E8%AE%A1%E7%AE%97%E5%B9%B6%E8%A1%8C%E4%BD%9C%E4%B8%9A-3/</guid>
+      <description>1 HPL（High Performance Linpack) 假设要使用HPL程序在4个进程上解一个4096 * 4096的方程组（4096 * 4096的矩阵加一列方程组的右端项b），按</description>
+    </item>
+    
+    <item>
+      <title>【分布式与并行计算】CUDA加速课程题目</title>
+      <link>https://tweakzx.github.io/p/%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%8E%E5%B9%B6%E8%A1%8C%E8%AE%A1%E7%AE%97cuda%E5%8A%A0%E9%80%9F%E8%AF%BE%E7%A8%8B%E9%A2%98%E7%9B%AE/</link>
+      <pubDate>Mon, 13 Dec 2021 19:03:20 +0800</pubDate>
+      
+      <guid>https://tweakzx.github.io/p/%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%8E%E5%B9%B6%E8%A1%8C%E8%AE%A1%E7%AE%97cuda%E5%8A%A0%E9%80%9F%E8%AF%BE%E7%A8%8B%E9%A2%98%E7%9B%AE/</guid>
+      <description>1 加速向量加法 #include &amp;lt;stdio.h&amp;gt;#include &amp;lt;assert.h&amp;gt; inline cudaError_t checkCuda(cudaError_t result) { if (result != cudaSuccess) { fprintf(stderr, &amp;#34;CUDA Runtime Error: %s\n&amp;#34;, cudaGetErrorString(result)); assert(result == cudaSuccess); } return result; } void initWith(float num, float *a, int N) { for(int i = 0; i &amp;lt; N; ++i) { a[i] = num; } } __global__ void addVectorsInto(float *result, float *a, float *b, int N) { int initIndex = threadIdx.x</description>
+    </item>
+    
+    <item>
+      <title>【分布式与并行计算】并行作业-2</title>
+      <link>https://tweakzx.github.io/p/%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%8E%E5%B9%B6%E8%A1%8C%E8%AE%A1%E7%AE%97%E5%B9%B6%E8%A1%8C%E4%BD%9C%E4%B8%9A-2/</link>
+      <pubDate>Sat, 11 Dec 2021 18:01:26 +0800</pubDate>
+      
+      <guid>https://tweakzx.github.io/p/%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%8E%E5%B9%B6%E8%A1%8C%E8%AE%A1%E7%AE%97%E5%B9%B6%E8%A1%8C%E4%BD%9C%E4%B8%9A-2/</guid>
+      <description>1 矩阵向量乘法（6分） 矩阵向量乘法(gemv)如何用OpenMP或pthread对其并行化(OpenMP和pthread任选一种即可)？假设</description>
+    </item>
+    
+    <item>
+      <title>【分布式与并行计算】并行作业-1</title>
+      <link>https://tweakzx.github.io/p/%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%8E%E5%B9%B6%E8%A1%8C%E8%AE%A1%E7%AE%97%E5%B9%B6%E8%A1%8C%E4%BD%9C%E4%B8%9A-1/</link>
+      <pubDate>Fri, 10 Dec 2021 11:28:33 +0800</pubDate>
+      
+      <guid>https://tweakzx.github.io/p/%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%8E%E5%B9%B6%E8%A1%8C%E8%AE%A1%E7%AE%97%E5%B9%B6%E8%A1%8C%E4%BD%9C%E4%B8%9A-1/</guid>
+      <description>1矩阵向量乘法（4分） 讲义55页所示结果Y，如果要作为下一次矩阵向量乘法的输入X，切分到不同的列进程，并且复制到每一行进程，应如何操作？可写</description>
+    </item>
+    
+    <item>
+      <title>【分布式与并行计算】分布式作业</title>
+      <link>https://tweakzx.github.io/p/%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%8E%E5%B9%B6%E8%A1%8C%E8%AE%A1%E7%AE%97%E5%88%86%E5%B8%83%E5%BC%8F%E4%BD%9C%E4%B8%9A/</link>
+      <pubDate>Tue, 07 Dec 2021 14:21:24 +0800</pubDate>
+      
+      <guid>https://tweakzx.github.io/p/%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%8E%E5%B9%B6%E8%A1%8C%E8%AE%A1%E7%AE%97%E5%88%86%E5%B8%83%E5%BC%8F%E4%BD%9C%E4%B8%9A/</guid>
+      <description>1 逻辑时钟与一致割集 下图中，直线上小黑点给出了时钟计数，请分别用Lamport 逻辑时钟和向量时钟给图上的事件设置时间戳，并给出一致割集和非一</description>
+    </item>
+    
+    <item>
+      <title>【实习面试】阿里实习二面</title>
+      <link>https://tweakzx.github.io/p/%E5%AE%9E%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%98%BF%E9%87%8C%E5%AE%9E%E4%B9%A0%E4%BA%8C%E9%9D%A2/</link>
+      <pubDate>Sat, 04 Dec 2021 18:31:16 +0800</pubDate>
+      
+      <guid>https://tweakzx.github.io/p/%E5%AE%9E%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%98%BF%E9%87%8C%E5%AE%9E%E4%B9%A0%E4%BA%8C%E9%9D%A2/</guid>
+      <description>时间：2021-12-2 下午5点半 方式：阿里会议视频面试 岗位：研究型实习生-智能存储 面试过程 这次面试主要是在聊项目，聊兴趣啥的。没有什么算法</description>
+    </item>
+    
+    <item>
+      <title>【实习面试】阿里实习生面试</title>
+      <link>https://tweakzx.github.io/p/%E5%AE%9E%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%98%BF%E9%87%8C%E5%AE%9E%E4%B9%A0%E7%94%9F%E9%9D%A2%E8%AF%95/</link>
+      <pubDate>Wed, 01 Dec 2021 21:49:57 +0800</pubDate>
+      
+      <guid>https://tweakzx.github.io/p/%E5%AE%9E%E4%B9%A0%E9%9D%A2%E8%AF%95%E9%98%BF%E9%87%8C%E5%AE%9E%E4%B9%A0%E7%94%9F%E9%9D%A2%E8%AF%95/</guid>
+      <description>时间：2021-11-30 下午2点 方式：阿里会议视频面试 岗位：研究型实习生-智能存储 为什么会参加这次面试？ 因为想要亲身参与真实的科研活动或者</description>
+    </item>
+    
+    <item>
+      <title>【实习面试】蓝湖面试凉经</title>
+      <link>https://tweakzx.github.io/p/%E5%AE%9E%E4%B9%A0%E9%9D%A2%E8%AF%95%E8%93%9D%E6%B9%96%E9%9D%A2%E8%AF%95%E5%87%89%E7%BB%8F/</link>
+      <pubDate>Wed, 01 Dec 2021 20:56:54 +0800</pubDate>
+      
+      <guid>https://tweakzx.github.io/p/%E5%AE%9E%E4%B9%A0%E9%9D%A2%E8%AF%95%E8%93%9D%E6%B9%96%E9%9D%A2%E8%AF%95%E5%87%89%E7%BB%8F/</guid>
+      <description>时间：2021-11-26 下午六点 方式：飞书视频面试 岗位：后端开发 为什么会面试蓝湖 心血来潮想要出去实习，在校友群内发了求助。24号中午，本科</description>
+    </item>
+    
+    <item>
+      <title>【实习面试】字节面试凉经</title>
+      <link>https://tweakzx.github.io/p/%E5%AE%9E%E4%B9%A0%E9%9D%A2%E8%AF%95%E5%AD%97%E8%8A%82%E9%9D%A2%E8%AF%95%E5%87%89%E7%BB%8F/</link>
+      <pubDate>Mon, 29 Nov 2021 16:52:26 +0800</pubDate>
+      
+      <guid>https://tweakzx.github.io/p/%E5%AE%9E%E4%B9%A0%E9%9D%A2%E8%AF%95%E5%AD%97%E8%8A%82%E9%9D%A2%E8%AF%95%E5%87%89%E7%BB%8F/</guid>
+      <description>时间：2021-11-29下午三点 方式：飞书视频面试 岗位：后端开发实习生-业务中台职位 为什么会投递字节实习 ​ 因为中科院的研究所大多不让实习，</description>
+    </item>
+    
+  </channel>
+</rss>
