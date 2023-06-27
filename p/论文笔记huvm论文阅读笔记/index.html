@@ -1,17 +1,18 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
     <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='生成客户端证书 etcd 的证书包括了多种类型的证书，其中包括 peer.crt 和 etcd-client.crt 两种证书。peer.crt 证书是用于 etcd 集群中节点之间的身份验证和加密通信的，而 etcd-client.crt 则'><title>【Kubernetes】如何访问集群etcd</title>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='Memory Harvesting in Multi-GPU Systems with Hierarchical Unified Virtual Memory 摘要 随着对 GPU 需求的不断增长，大多数组织允许用户共享多 GPU 服务器。 然而，我们观察到，当合并显示高度不同的资源需求的各种工作负'><title>【论文笔记】HUVM论文阅读笔记</title>
 
-<link rel='canonical' href='https://tweakzx.github.io/p/kubernetes%E5%A6%82%E4%BD%95%E8%AE%BF%E9%97%AE%E9%9B%86%E7%BE%A4etcd/'>
+<link rel='canonical' href='https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0huvm%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/'>
 
-<link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='【Kubernetes】如何访问集群etcd'>
-<meta property='og:description' content='生成客户端证书 etcd 的证书包括了多种类型的证书，其中包括 peer.crt 和 etcd-client.crt 两种证书。peer.crt 证书是用于 etcd 集群中节点之间的身份验证和加密通信的，而 etcd-client.crt 则'>
-<meta property='og:url' content='https://tweakzx.github.io/p/kubernetes%E5%A6%82%E4%BD%95%E8%AE%BF%E9%97%AE%E9%9B%86%E7%BE%A4etcd/'>
+<link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='【论文笔记】HUVM论文阅读笔记'>
+<meta property='og:description' content='Memory Harvesting in Multi-GPU Systems with Hierarchical Unified Virtual Memory 摘要 随着对 GPU 需求的不断增长，大多数组织允许用户共享多 GPU 服务器。 然而，我们观察到，当合并显示高度不同的资源需求的各种工作负'>
+<meta property='og:url' content='https://tweakzx.github.io/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0huvm%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/'>
 <meta property='og:site_name' content='Tweakzx'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='etcd' /><meta property='article:published_time' content='2023-03-31T10:04:38&#43;08:00'/><meta property='article:modified_time' content='2023-03-31T10:04:38&#43;08:00'/>
-<meta name="twitter:title" content="【Kubernetes】如何访问集群etcd">
-<meta name="twitter:description" content="生成客户端证书 etcd 的证书包括了多种类型的证书，其中包括 peer.crt 和 etcd-client.crt 两种证书。peer.crt 证书是用于 etcd 集群中节点之间的身份验证和加密通信的，而 etcd-client.crt 则">
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2023-06-25T16:38:08&#43;08:00'/><meta property='article:modified_time' content='2023-06-25T16:38:08&#43;08:00'/><meta property='og:image' content='https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202306261236383.png' />
+<meta name="twitter:title" content="【论文笔记】HUVM论文阅读笔记">
+<meta name="twitter:description" content="Memory Harvesting in Multi-GPU Systems with Hierarchical Unified Virtual Memory 摘要 随着对 GPU 需求的不断增长，大多数组织允许用户共享多 GPU 服务器。 然而，我们观察到，当合并显示高度不同的资源需求的各种工作负"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202306261236383.png' />
     </head>
     <body class="
     article-page has-toc
@@ -58,22 +59,22 @@
         </div>
     
 <main class="main full-width">
-    <article class="main-article">
+    <article class="has-image main-article">
     <header class="article-header">
+        <div class="article-image">
+            <a href="/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0huvm%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/">
+                
+                    <img src="https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202306261236383.png" loading="lazy" alt="Featured image of post 【论文笔记】HUVM论文阅读笔记" />
+                
+            </a>
+        </div>
+    
 
     <div class="article-details">
     
-    <header class="article-category">
-        
-            <a href="/categories/kubernetes/" >
-                kubernetes
-            </a>
-        
-    </header>
-    
 
     <h2 class="article-title">
-        <a href="/p/kubernetes%E5%A6%82%E4%BD%95%E8%AE%BF%E9%97%AE%E9%9B%86%E7%BE%A4etcd/">【Kubernetes】如何访问集群etcd</a>
+        <a href="/p/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0huvm%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/">【论文笔记】HUVM论文阅读笔记</a>
     </h2>
 
     
@@ -91,7 +92,7 @@
   <path d="M3 11h16" />
   <path d="M18 16.496v1.504l1 1" />
 </svg>
-                <time class="article-time--published">Mar 31, 2023</time>
+                <time class="article-time--published">Jun 25, 2023</time>
             </div>
         
 
@@ -106,7 +107,7 @@
 
 
                 <time class="article-time--reading">
-                    1 minute read
+                    5 minute read
                 </time>
             </div>
         
@@ -119,51 +120,137 @@
 </header>
 
     <section class="article-content">
-    <h2 id="生成客户端证书">生成客户端证书</h2>
-<p>etcd 的证书包括了多种类型的证书，其中包括 <code>peer.crt</code> 和 <code>etcd-client.crt</code> 两种证书。<code>peer.crt</code> 证书是用于 etcd 集群中节点之间的身份验证和加密通信的，而 <code>etcd-client.crt</code> 则是用于客户端与 etcd 之间的身份验证和加密通信的。</p>
-<p>如果你已经生成了 etcd 集群节点之间的证书，那么你可以使用以下命令生成 <code>etcd-client.crt</code>：</p>
-<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">$ openssl genrsa -out etcd-client.key <span class="m">2048</span>
-$ openssl req -new -key etcd-client.key -out etcd-client.csr <span class="se">\
-</span><span class="se"></span>    -subj <span class="s2">&#34;/CN=etcd-client/O=example.com&#34;</span>
-$ openssl x509 -req -in etcd-client.csr -CA ca.crt -CAkey ca.key <span class="se">\
-</span><span class="se"></span>    -CAcreateserial -out etcd-client.crt -days <span class="m">365</span>
-
-</code></pre></div><p>其中，<code>ca.crt</code> 和 <code>ca.key</code> 是用于签名证书的根证书和私钥，需要和 etcd 集群中节点之间的证书一起使用。<code>etcd-client.key</code> 是生成的客户端证书的私钥，<code>etcd-client.csr</code> 是证书签名请求，<code>etcd-client.crt</code> 是签名后的证书。</p>
-<p>在生成 <code>etcd-client.crt</code> 之后，你可以将其和根证书一起用于访问 etcd，例如</p>
-<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">import etcd3
-
-<span class="nv">etcd_host</span> <span class="o">=</span> <span class="s1">&#39;https://192.168.0.10:2379,https://192.168.0.11:2379&#39;</span>
-<span class="nv">ca_cert</span> <span class="o">=</span> <span class="s1">&#39;/path/to/ca.crt&#39;</span>
-<span class="nv">client_cert</span> <span class="o">=</span> <span class="s1">&#39;/path/to/etcd-client.crt&#39;</span>
-<span class="nv">client_key</span> <span class="o">=</span> <span class="s1">&#39;/path/to/etcd-client.key&#39;</span>
-
-<span class="c1"># 创建 etcd3 客户端</span>
-<span class="nv">client</span> <span class="o">=</span> etcd3.client<span class="o">(</span>
-    <span class="nv">host</span><span class="o">=</span>etcd_host,
-    <span class="nv">ca_cert</span><span class="o">=</span>ca_cert,
-    <span class="nv">cert_key</span><span class="o">=</span>client_key,
-    <span class="nv">cert_cert</span><span class="o">=</span>client_cert
-<span class="o">)</span>
-
-<span class="c1"># 访问 etcd 的 API</span>
-<span class="nv">key</span> <span class="o">=</span> <span class="s1">&#39;/registry/services/specs/default/kubernetes&#39;</span>
-value, <span class="nv">metadata</span> <span class="o">=</span> client.get<span class="o">(</span>key<span class="o">)</span>
-
-<span class="c1"># 打印结果</span>
-print<span class="o">(</span>value<span class="o">)</span>
-</code></pre></div><p>注意，在使用 <code>openssl</code> 生成证书时，应该按照实际情况修改证书的主题和有效期限等信息。此外，生成的证书应该严格保密，避免泄露给未经授权的人员使用</p>
+    <h1 id="memory-harvesting-in-multi-gpu-systems-with-hierarchical-unified-virtual-memory">Memory Harvesting in Multi-GPU Systems with Hierarchical Unified Virtual Memory</h1>
+<p><strong>摘要</strong></p>
+<ul>
+<li>
+<p>随着对 GPU 需求的不断增长，大多数组织允许用户共享多 GPU 服务器。</p>
+<ul>
+<li>然而，我们观察到，当合并显示高度不同的资源需求的各种工作负载时，跨 GPU 的内存空间没有得到充分有效的利用。</li>
+<li>这是因为当前的内存管理技术仅仅是为单个 GPU 设计的，而不是为共享多 GPU 环境设计的。</li>
+</ul>
+</li>
+<li>
+<p>本研究提出一种新颖的方法，通过结合相邻 GPU 的暂时空闲内存，为 GPU 提供一种虚拟内存空间的错觉，称为分层统一虚拟内存(HUVM)。</p>
+<ul>
+<li>由于现代的 GPU 通过快速互连相互连接，与通过 PCIe 的主机内存相比，它提供了较低的访问相邻 GPU 内存的延迟。</li>
+<li>在 HUVM 之上，我们设计了一个新的内存管理器，称为 memHarvester，以有效和高效地获取临时可用的邻居 GPU 的内存。</li>
+<li>对于不同的整合情景与 DNN 训练和图分析工作负载，我们的实验结果显示，高达2.71倍的性能改善相比，以前的方法在多 GPU 环境中。</li>
+</ul>
+</li>
+</ul>
+<h2 id="引言">引言</h2>
+<ul>
+<li>
+<p>随着对 GPU 需求的爆炸式增长，在学术界和工业界，在一台服务器上安装多个 GPU 并使其可共享已经成为一种常见的做法。</p>
+<ul>
+<li>业内许多企业已经建立了由一组多 GPU 服务器组成的大型 GPU 集群，以满足从深度学习[1,13,18,26,36]到图形应用[6,10,19,31]的各种工作负载的需求，同时通过共享节省基础设施成本。</li>
+<li>在这样的多 GPU 服务器中实现高 GPU 资源效率仍然是一个挑战。</li>
+<li>图1表明，当前的内存管理技术对于共享多 GPU 来说不够有效多个作业在 GPU 之间独立运行的环境。虽然在一个或几个 GPU 中，从几百 MB 到几 GB 的少量内存仍然处于空闲状态，但是在内存压力较大的情况下，其他 GPU 依赖主机内存作为交换设备，这比同一服务器中的远程 GPU 要慢得多。</li>
+<li><figure 
+	>
+	<a href="https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202306260942806.png" >
+		<img src="https://cdn.jsdelivr.net/gh/Tweakzx/ImageHost@main/img/202306260942806.png"
+			
+			
+			
+			loading="lazy"
+			alt="image-20230626093958673">
+	</a>
+	
+	<figcaption>image-20230626093958673</figcaption>
+	
+</figure></li>
+</ul>
+</li>
+<li>
+<p>GPU 供应商也面临着扩展单个 GPU 内存容量的挑战。</p>
+<ul>
+<li>为了克服 GPU 的有限容量，以前的一系列研究旨在利用主机内存给任务提供了一种无限内存的错觉[11,14,17,25,28]。</li>
+<li>然而，在商品化的多 GPU 系统中，这些工作都没有利用相邻 GPU 的空闲内存。</li>
+<li>由于现代 GPU 服务器通常配备8 ~ 16个 GPU，通过 NVLink 等高速互连连接，访问相邻 GPU 的空闲内存要比访问主机的空闲内存快得多。
+<ul>
+<li>例如，NVIDIA DGX-2有16个 GPU，通过 NVLink 3.0进行点对点连接，在600GB/s 的双向带宽下产生512GB 的 GPU 内存池[23]。</li>
+<li>另一方面，通过最新的 PCIe 4.0将 GPU 内存交换到主机 DRAM 可以只利用32GB/s 的带宽。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>在本研究中，我们介绍一种新的方法，为 GPU 提供虚拟内存空间的假象，称为分层统一虚拟内存(HUVM)</p>
+<ul>
+<li>它由本地 GPU、相邻 GPU 的空闲内存和主机内存组成</li>
+<li>HUVM 通过以最小的性能开销增加有效的内存空间，为内存虚拟化开辟了一个新的机会。
+<ul>
+<li>当本地 GPU 内存没有空闲空间时，HUVM 利用相邻 GPU 中的空余内存作为 GPU 和主机之间的受害者缓存，而不是直接将数据交换到主机内存。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>然而，由于空闲内存的数量是高度可变的，并且是先验未知的，因此要有效和高效地获取相邻 GPU 内存中的零星可用的一小部分是具有挑战性的。</p>
+<ul>
+<li>从单一 GPU 的角度出发，重新设计了现代多 GPU 服务器的内存管理方案。</li>
+<li>HUVM 系统必须找到最好的利用内存的一小部分，同时尽量减少对相邻 GPU 中运行的工作负载的性能影响。</li>
+</ul>
+</li>
+<li>
+<p>为此，我们提出了一个 HUVM 的内存管理器，称为 memHarvester，在 GPU 驱动层实现。MemHarvester 在 HUVM 中作为数据路径的集中协调器。</p>
+<ul>
+<li>作为 memHarvester 的一个重要组成部分，我们提出了一种新的多路并行预取器，它利用了 HUVM 的路径分集，包括 PCIe 和 NVLink。
+<ul>
+<li>与以前的许多方法[11,14,17,25,28]不同，memHarvester 首先通过 NVLink 从空闲内存预取数据到本地 GPU。</li>
+<li>同时，如果连接到邻居 GPU 的 PCIe 通道不竞争，memHarvester 允许通过 PCIe 通道并行地从主机内存预取数据到邻居 GPU 的空闲内存。</li>
+<li>因此，我们可以有效地将从主机存储器获取数据的延迟转换为空闲存储器的延迟。</li>
+</ul>
+</li>
+<li>MemHarvester 管理收获内存的空间。
+<ul>
+<li>由于空闲内存空间有限，memHarvester 无法将所有被驱逐的数据保留在收获内存中，最终导致主机内存交换。</li>
+<li>为了减少从 GPU 到主机的数据清除的性能开销，memHarvester 支持在主机内存中清除2MB 大的页面，而不是4KB 的基本页面</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>当 HUVM 和 memHarvester 承载多个工作负载时, 它可以提高内存利用率和整体服务器效率。</p>
+<ul>
+<li>然而，不利的一面是，memHarvester 可能会对运行在 GPU 上的应用程序造成性能干扰，从而产生空闲内存。
+<ul>
+<li>因此，memHarvester 立即回收空闲内存，以最小的延迟将其返回到原始物理内存空间，只要在产生 GPU 上运行的应用程序需要额外内存，从而最小化性能干扰。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>我们在 NVIDIA 的统一虚拟内存(UVM)驱动程序版本460.67的基础上实现了我们的原型系统，该版本是可公开访问的[29]。</p>
+<ul>
+<li>MemHarvester 不需要对应用程序或机器学习平台进行任何修改
+<ul>
+<li>就可以透明地检测备用内存的可用性，并动态地构建一个新的内存阶层</li>
+</ul>
+</li>
+<li>我们使用 HUVM 量化 memHarvester 在 AWS p3.8 xlarge 实例上的不同整合场景的有效性。
+<ul>
+<li>该服务器有四个通过 NVLink 连接的 NVIDIA V100(16GB)图形处理器。</li>
+</ul>
+</li>
+<li>我们的实验结果表明，memHarvester 可以实现显著的吞吐量改善的大型图形分析工作负载。
+<ul>
+<li>对于 DNN 训练和图形分析工作负载的不同整合场景，我们的实验结果显示，与多 GPU 环境下的先前方法相比，在同一服务器上运行的其他工作负载的干扰最小的情况下，性能提高了2.71倍。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="动机和背景">动机和背景</h2>
+<h2 id="huvm-结构化的内存分配">HUVM 结构化的内存分配</h2>
 
 </section>
 
 
     <footer class="article-footer">
     
-    <section class="article-tags">
-        
-            <a href="/tags/etcd/">etcd</a>
-        
-    </section>
-
 
     
     <section class="article-copyright">
@@ -208,25 +295,6 @@ print<span class="o">(</span>value<span class="o">)</span>
 
     <aside class="related-contents--wrapper">
     
-    
-        <h2 class="section-title">Related contents</h2>
-        <div class="related-contents">
-            <div class="flex article-list--tile">
-                
-                    
-<article class="">
-    <a href="/p/kubernetes%E9%83%A8%E7%BD%B2gaiagpuvcuda/">
-        
-        
-
-        <div class="article-details">
-            <h2 class="article-title">【Kubernetes】部署GaiaGPU（vCUDA)</h2>
-        </div>
-    </a>
-</article>
-                
-            </div>
-        </div>
     
 </aside>
 
@@ -397,7 +465,9 @@ print<span class="o">(</span>value<span class="o">)</span>
                 <div class="widget--toc">
                     <nav id="TableOfContents">
   <ol>
-    <li><a href="#生成客户端证书">生成客户端证书</a></li>
+    <li><a href="#引言">引言</a></li>
+    <li><a href="#动机和背景">动机和背景</a></li>
+    <li><a href="#huvm-结构化的内存分配">HUVM 结构化的内存分配</a></li>
   </ol>
 </nav>
                 </div>
