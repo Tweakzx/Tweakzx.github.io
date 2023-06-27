@@ -3,7 +3,7 @@ languageCode: zh-cn
 theme: hugo-theme-stack
 title: Tweakzx
 
-paginate: 1
+paginate: 5
 
 # Change it to your Disqus shortname before using
 disqusShortname: hugo-theme-stack
