@@ -1,0 +1,31 @@
+title = "主要技术方向"
+
+[[skill]]
+title = "大模型系统调度与编排"
+icon = "bx-network-chart"
+text = "关注 LLM 训练/推理场景下的资源调度、工作负载编排、系统稳定性和自动化运维能力。"
+
+[[skill]]
+title = "Kubernetes 与云原生"
+icon = "bxl-kubernetes"
+text = "熟悉 Device Plugin、Scheduler、CRD、Controller、Docker、Helm 等云原生基础设施能力。"
+
+[[skill]]
+title = "GPU/NPU 资源管理"
+icon = "bx-chip"
+text = "围绕昇腾、NVIDIA 等异构算力，参与资源注册、健康探针、网络信息采集、可信计算域和虚拟化管理。"
+
+[[skill]]
+title = "AI 基础设施"
+icon = "bx-cube-alt"
+text = "实践方向包括 GPU/NPU 虚拟化、Volcano、kthena、LLM 推理负载编排与生产集群适配。"
+
+[[skill]]
+title = "工程实现"
+icon = "bx-code-alt"
+text = "主要使用 Go 和 Python，偏好把系统问题拆成清晰的控制面、数据面和自动化运维能力。"
+
+[[skill]]
+title = "技术写作"
+icon = "bx-edit-alt"
+text = "长期记录建站、Kubernetes、Go、分布式系统、CUDA、论文阅读和工程踩坑。"

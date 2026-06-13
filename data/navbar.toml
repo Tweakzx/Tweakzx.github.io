@@ -1,0 +1,30 @@
+title = "李志轩 | Tweakzx"
+logo = "img/avatar.png"
+logoLink = "/"
+
+[[menu]]
+text = "Home"
+description = "Portfolio home"
+link = "/"
+target = "_self"
+
+[[menu]]
+text = "Post"
+description = "Technical posts"
+link = "/post/"
+target = "_self"
+
+[[menu]]
+text = "Project"
+description = "GitHub projects"
+link = "/projects/"
+target = "_self"
+
+[button]
+enabled = false
+text = "Download CV"
+link = "/files/resume-cn.pdf"
+target = "_blank"
+
+[themeToggle]
+enabled = true

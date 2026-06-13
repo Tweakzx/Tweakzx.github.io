@@ -1,0 +1,11 @@
+title1 = "LLM SYSTEMS"
+text1 = "最近在字节跳动从事大模型系统的调度与编排开发，关注训练/推理场景下的资源调度、工作负载编排、系统稳定性与自动化运维。"
+
+title2 = "李志轩"
+text2 = "Tweakzx"
+avatar = "img/avatar.png"
+
+title3 = "AI INFRA"
+text3 = "过往工作聚焦 Kubernetes 上的异构算力管理、GPU/NPU 虚拟化、Device Plugin、Volcano 与 LLM 推理负载编排。"
+
+description = "我是李志轩，云原生 AI 基础设施工程师。这个站点整理我的技术博客、代表项目、简历经历和工程复盘：既展示做过什么，也沉淀我如何理解复杂系统。"

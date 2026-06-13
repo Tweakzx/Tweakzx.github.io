@@ -1,0 +1,51 @@
+title = "GitHub 项目"
+
+[[project]]
+title = "agentflow"
+summary = "面向编码 Agent 的阶段化控制与项目级任务治理插件。"
+text = [
+  "把多仓库/多阶段开发过程拆成可追踪的任务流，适合展示 AI 工具链、产品思考和工程实现能力。"
+]
+tags = ["AI Agent", "Workflow", "Developer Tool"]
+link = "https://github.com/Tweakzx/agentflow"
+repo = "Tweakzx/agentflow"
+
+[[project]]
+title = "kthena"
+summary = "Kubernetes-native AI serving platform for scalable model serving."
+text = [
+  "围绕模型服务、推理负载管理、控制器逻辑和云原生 AI 基础设施展开探索。"
+]
+tags = ["Kubernetes", "Model Serving", "AI Infra"]
+link = "https://github.com/Tweakzx/kthena"
+repo = "Tweakzx/kthena"
+
+[[project]]
+title = "k8s-wizard"
+summary = "Kubernetes 相关工具与实验集合。"
+text = [
+  "用于沉淀 Kubernetes 工具链、集群操作和工程自动化方面的实践。"
+]
+tags = ["Kubernetes", "Tooling", "Automation"]
+link = "https://github.com/Tweakzx/k8s-wizard"
+repo = "Tweakzx/k8s-wizard"
+
+[[project]]
+title = "agentcube"
+summary = "Agent 开发框架与 Sandbox 能力探索。"
+text = [
+  "参与 Sandbox Python SDK、code-interpreter 类能力和 Agent 工具链方向建设。"
+]
+tags = ["Agent", "Sandbox", "Python SDK"]
+link = "https://github.com/Tweakzx/agentcube"
+repo = "Tweakzx/agentcube"
+
+[[project]]
+title = "Tweakzx.github.io"
+summary = "个人博客与作品集站点。"
+text = [
+  "基于 Hugo 和 GitHub Pages，承载技术文章、项目复盘、简历经历和长期工程笔记。"
+]
+tags = ["Hugo", "GitHub Pages", "Writing"]
+link = "https://github.com/Tweakzx/Tweakzx.github.io"
+repo = "Tweakzx/Tweakzx.github.io"

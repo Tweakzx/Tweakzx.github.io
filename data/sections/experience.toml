@@ -1,0 +1,33 @@
+title = "工作经历"
+
+[[company]]
+name = "字节跳动"
+icon = "bx bx-chip"
+logo = "/images/orgs/bytedance-color.svg"
+date = "2026/05 - 现在"
+role = "大模型系统调度与编排开发"
+text = [
+  "目前在字节跳动从事大模型系统的调度与编排开发。工作重点放在大模型训练与推理场景下的资源调度、工作负载编排、系统稳定性和自动化运维能力建设。"
+]
+
+[[company]]
+name = "华为"
+icon = "bx bx-cloud"
+logo = "/images/orgs/huawei.svg"
+date = "2024/07 - 2026/05"
+role = "云计算工程师，容器与 Serverless 域 / 基础设施产品线"
+text = [
+  "在华为期间，我主要围绕云原生 AI 基础设施展开工作，方向包括异构算力管理、GPU/NPU 虚拟化、推理负载编排和生产集群适配。",
+  "参与和负责的主要项目包括异构资源管理 Device Plugin、vNPU 虚拟化管理组件、kthena 推理负载管理、agentcube Sandbox SDK 和 NPU 虚拟化预研。"
+]
+
+[[company]]
+name = "百度"
+icon = "bx bx-code-block"
+logo = "/images/orgs/baidu.svg"
+date = "2023/02 - 2023/06"
+role = "AI 平台研发实习生，BML / AI 平台部"
+text = [
+  "在百度 AI 平台部实习期间，我参与 BML 可视化 AI 工作流平台研发，主要方向是扩展工作流组件能力。",
+  "工作内容集中在模型算子组件和分支节点组件，包括数据源与执行方式适配，以及基于条件表达式的工作流路由能力。"
+]

@@ -1,0 +1,3 @@
+[submodule "themes/tweakzx-porto"]
+	path = themes/tweakzx-porto
+	url = https://github.com/Tweakzx/tweakzx-porto.git

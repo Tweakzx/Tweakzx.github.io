@@ -1,0 +1,40 @@
+[[section]]
+id = "hero"
+enabled = true
+weight = 1
+
+[[section]]
+id = "skills"
+enabled = true
+weight = 2
+
+[[section]]
+id = "experience"
+enabled = true
+weight = 3
+
+[[section]]
+id = "education"
+enabled = true
+weight = 4
+
+[[section]]
+id = "projects"
+enabled = true
+weight = 5
+limit = 3
+moreLink = "/projects/"
+moreText = "More projects"
+
+[[section]]
+id = "posts"
+enabled = true
+weight = 6
+limit = 3
+moreLink = "/post/"
+moreText = "查看更多文章"
+
+[[section]]
+id = "testimonials"
+enabled = false
+weight = 7

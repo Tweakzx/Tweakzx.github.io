@@ -1,0 +1,23 @@
+title = "教育经历"
+
+[[education]]
+title = "中国科学院 计算技术研究所"
+icon = "bx bxs-graduation"
+logo = "/images/orgs/ict.png"
+date = "2021/09 - 2024/07"
+role = "硕士，计算机软件与理论"
+text = [
+  "推荐免试入学。硕士阶段的研究兴趣集中在基于 Kubernetes 的深度学习 GPU 集群、GPU 虚拟化与调度。",
+  "这段经历也奠定了我后来持续关注云原生 AI 基础设施和异构资源调度的技术主线。"
+]
+
+[[education]]
+title = "西安交通大学"
+icon = "bx bxs-school"
+logo = "/images/orgs/xjtu.png"
+date = "2017/08 - 2021/07"
+role = "学士，软件工程"
+text = [
+  "本科阶段学习软件工程，GPA 3.75，排名 10/108。",
+  "曾获西安交通大学优秀毕业生、校二等奖学金 2 次、三等奖学金 1 次、优秀学生 3 次，并推荐免试攻读硕士。"
+]
